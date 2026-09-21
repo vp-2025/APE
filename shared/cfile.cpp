@@ -50,7 +50,50 @@ CEncoding CFile::DetectEncoding() {
         }
     }
     SetFilePointer(hFile, (long) skip, nullptr, FILE_BEGIN);
+    // No BOM and no encoding hint: the default encoding is UTF-8 (without BOM),
+    // as it is for new documents. Only text that cannot be UTF-8 at all is
+    // opened as ANSI, so legacy ANSI/Latin files stay readable.
+    if( enc==encAnsi && IsValidUtf8() )
+        enc = encUtf8NoBOM;
     return enc;
+}
+
+// Is the rest of the file valid UTF-8? Used to tell a BOM-less UTF-8 file from a
+// legacy 8-bit one. The file pointer is left where it was.
+bool CFile::IsValidUtf8() {
+    DWORD pos0 = SetFilePointer(hFile, 0, nullptr, FILE_CURRENT);
+    char buf[64 * 1024];
+    int nNeed = 0;              // continuation bytes still expected
+    bool bValid = true;
+    while( bValid ) {
+        DWORD len = Read(buf, sizeof(buf));
+        if( !len ) break;
+        for( DWORD i = 0; i < len; i++ ) {
+            unsigned char ch = (unsigned char) buf[i];
+            if( nNeed ) {
+                if( ch < 0x80 || ch > 0xBF ) {  // not a continuation byte
+                    bValid = false;
+                    break;
+                }
+                nNeed--;
+            } else if( ch < 0x80 ) {
+                // ascii
+            } else if( ch >= 0xC2 && ch <= 0xDF ) {
+                nNeed = 1;
+            } else if( ch >= 0xE0 && ch <= 0xEF ) {
+                nNeed = 2;
+            } else if( ch >= 0xF0 && ch <= 0xF4 ) {
+                nNeed = 3;
+            } else {                            // 0x80..0xC1, 0xF5..0xFF
+                bValid = false;
+                break;
+            }
+        }
+    }
+    if( bValid && nNeed )
+        bValid = false;                     // the file ends inside a character
+    SetFilePointer(hFile, (long) pos0, nullptr, FILE_BEGIN);
+    return bValid;
 }
 
 void CFile::WriteEncodingBOM(CEncoding enc) {

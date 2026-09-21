@@ -53,5 +53,6 @@ public:
     }
 
     CEncoding DetectEncoding();
+    bool IsValidUtf8();
     void WriteEncodingBOM(CEncoding enc);
 };
