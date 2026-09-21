@@ -8,7 +8,7 @@ int CXmlMatchedTagsHighlighter::getFirstTokenPosFrom(int targetStart, int target
 	_pEditView->Call(SCI_SETTARGETSTART, targetStart);
 	_pEditView->Call(SCI_SETTARGETEND, targetEnd);
 	_pEditView->Call(SCI_SETSEARCHFLAGS, SCFIND_REGEXP|SCFIND_POSIX);
-	int posFind = _pEditView->Call(SCI_SEARCHINTARGET, token.length(), (int)token.c_str());
+	int posFind = _pEditView->Call(SCI_SEARCHINTARGET, token.length(), (intptr_t)token.c_str());
 	if (posFind != -1)
 	{
 		foundPos.first = _pEditView->Call(SCI_GETTARGETSTART);

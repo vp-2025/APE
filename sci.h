@@ -218,7 +218,7 @@ public:
 
 // functions from Capital are calls to Scintilla; Scintilla functions are splited in groups (like in Doc)
 	int Call( unsigned int msg, uintptr_t wParam=0, intptr_t lParam=0 ) const
-	{ return (int)sci_fn( sci_ptr, msg, wParam, lParam ); }
+	{ return sci_fn( sci_ptr, msg, wParam, lParam ); }
 
 	void AddText( const char* sz, int len=-1 ) {
 		if( len==-1 ) len = strlen(sz);
