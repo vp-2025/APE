@@ -1,0 +1,12 @@
+# Editor local state (repo root is src/)
+/.idea/editor.xml
+/.idea/workspace.xml
+/.idea/shelf/
+/.idea/httpRequests/
+/.idea/dataSources*
+
+# CLion build dirs (they also carry their own CLion-generated .gitignore)
+/cmake-build-*/
+
+# Visual Studio user settings
+*.user
