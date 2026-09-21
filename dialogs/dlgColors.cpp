@@ -78,7 +78,7 @@ void CColorsDlg::onInit() {
     g_lang.translateDlg(m_hWnd);
 
     HDC hdc = GetDC(m_hWnd);
-    EnumFontFamilies(hdc, nullptr, EnumFontProc, (LONG) this);
+    EnumFontFamilies(hdc, nullptr, EnumFontProc, (LPARAM) this);
     ReleaseDC(m_hWnd, hdc);
 
     CStatic stcSample;

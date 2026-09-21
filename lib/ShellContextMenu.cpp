@@ -119,7 +119,7 @@ UINT CShellContextMenu::ShowContextMenu(HWND hWnd, POINT pt)
 	// subclass window to handle menurelated messages in CShellContextMenu 
 	if (iMenuType > 1)	// only subclass if its version 2 or 3
 	{
-		g_OldWndProc = (WNDPROC)SetWindowLong(hWnd, GWLP_WNDPROC, (DWORD) HookWndProc);
+		g_OldWndProc = (WNDPROC)SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR) HookWndProc);
 		if( iMenuType == 2 )
 			g_IContext2 = (LPCONTEXTMENU2)pContextMenu;
 		if( iMenuType == 3 )
@@ -129,7 +129,7 @@ UINT CShellContextMenu::ShowContextMenu(HWND hWnd, POINT pt)
 	UINT idCommand = TrackPopupMenu(m_hMenu, TPM_RETURNCMD | TPM_LEFTALIGN, pt.x, pt.y, 0, hWnd, NULL);
 
 	if( g_OldWndProc ) // unsubclass
-		SetWindowLong(hWnd, GWLP_WNDPROC, (DWORD)g_OldWndProc);
+		SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)g_OldWndProc);
 
 	if (idCommand >= MIN_ID && idCommand <= MAX_ID)	// see if returned idCommand belongs to shell menu entries
 	{

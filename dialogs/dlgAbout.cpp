@@ -19,11 +19,24 @@ void CAboutDlg::onInit() {
               << 'v' << version << "\n\n"
               << vi.getLegalCopyright() << ' '
               << vi.getCompanyName() << "\n\n"
-              << "Built on " << __DATE__ << ' ' << __TIME__ << " with "
+              << "Built on " << __DATE__ << ' ' << __TIME__;
+        label << "\nwith "
 #ifdef CLION
-              << "CLion";
+            << "CLion";
 #else
-        << "VS";
+            << "MSVC";
+#endif
+        label << ' '
+#ifdef _M_X64
+            << "x64";
+#else
+            << "x86";
+#endif
+        label << ' '
+#ifdef NDEBUG
+            << "Release";
+#else
+            << "Debug";
 #endif
         CStatic().Attach(m_hWnd, ID_ABOUT_LABEL).SetText(label);
     }

@@ -19,7 +19,7 @@ void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
 			"Scintilla","", WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_CLIPCHILDREN,
 			x,y,w,h,hParent,(HMENU)(WORD)id, g_hInst, nullptr);
 
-	sci_fn = (int (__cdecl *)(void *,int,int,int))SendMessage( hSci,SCI_GETDIRECTFUNCTION,0,0);
+	sci_fn = (int (__cdecl *)(void *,unsigned int,uintptr_t,intptr_t))SendMessage( hSci,SCI_GETDIRECTFUNCTION,0,0);
 	sci_ptr = (void *)SendMessage(hSci,SCI_GETDIRECTPOINTER,0,0);
 
 	UsePopup( false );
@@ -312,7 +312,7 @@ bool CSciWrapper::saveToFile( const string& sFile, CTime& tm, int64_t& size )
 		if (grabSize > BLOCK_SIZE)
 			grabSize = BLOCK_SIZE;
 		grabSize = GetPositionBefore(i + grabSize + 1) - i;
-		Call(SCI_GETTEXTRANGE, 0, (int)(void*)&CSciTextRange(i, i+grabSize, data) );
+		Call(SCI_GETTEXTRANGE, 0, (intptr_t)&CSciTextRange(i, i+grabSize, data) );
 		if( m_encoding==encUtf16LE || m_encoding==encUtf16BE ) {
 			string s( data, grabSize );
 			wstring ws = utf2w(s);
@@ -409,7 +409,7 @@ void CSciWrapper::GetTextRange( int p1, int p2, string& s )
 	tr.chrg.cpMax=p2;  
 	char* buf = new char[p2-p1+1];
 	tr.lpstrText = buf;
-	Call(SCI_GETTEXTRANGE,0,(int)(void*)&tr);
+	Call(SCI_GETTEXTRANGE,0,(intptr_t)&tr);
 	s = tr.lpstrText;
 	delete[] buf;
 }
@@ -428,7 +428,7 @@ int CSciWrapper::FindText( int flags, Sci_TextToFind& ttf, bool boostRegExp )
 		ttf.chrgText.cpMax = what[0].second.getPos();
 		return ttf.chrgText.cpMin;
 	} else
-		return Call(SCI_FINDTEXT,flags,(int)(void*)&ttf); 
+		return Call(SCI_FINDTEXT,flags,(intptr_t)&ttf); 
 }
 
 void CSciWrapper::replaceTargetBoostRE( const string& sFind, const string& sReplace ) 

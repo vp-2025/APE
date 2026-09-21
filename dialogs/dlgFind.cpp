@@ -100,7 +100,7 @@ void CFindDlg::Find(bool bReplace, bool bInFiles) {
         return;
 
     if( !m_hWnd || !IsWindow(m_hWnd) )
-        m_hWnd = CreateDialogParam(g_hInst, MAKEINTRESOURCE(IDD_FIND), pEditor->hWnd(), CFindDlg::Proc, (LONG) this);
+        m_hWnd = CreateDialogParam(g_hInst, MAKEINTRESOURCE(IDD_FIND), pEditor->hWnd(), CFindDlg::Proc, (LPARAM) this);
     CenterWindow(m_hWnd);
     ShowWindow(SW_SHOW);
 

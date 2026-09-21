@@ -8,5 +8,9 @@
 # CLion build dirs (they also carry their own CLion-generated .gitignore)
 /cmake-build-*/
 
+# Visual Studio x64 build output (OutDir/IntDir of the x64 configurations) and IDE state
+/x64/
+/.vs/
+
 # Visual Studio user settings
 *.user

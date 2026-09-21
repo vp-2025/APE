@@ -25,7 +25,7 @@ using namespace std;
 
 class CScintilla {
 public:
-	virtual int Call( int msg, int wParam=0, int lParam=0 ) const = 0;
+	virtual int Call( unsigned int msg, uintptr_t wParam=0, intptr_t lParam=0 ) const = 0;
 };
 
 class CSciStyle {
@@ -34,7 +34,7 @@ class CSciStyle {
 public:
 	CSciStyle(CScintilla& sci_, int idx_) : sci(sci_), idx(idx_) {}
 
-	CSciStyle& Font(LPCSTR font) { sci.Call(SCI_STYLESETFONT,idx,(int)(void*)font); return *this; }
+	CSciStyle& Font(LPCSTR font) { sci.Call(SCI_STYLESETFONT,idx,(intptr_t)font); return *this; }
 	CSciStyle& Font( const string& s ) { Font(s.c_str()); return *this; }
 	CSciStyle& Size( int size ) { sci.Call(SCI_STYLESETSIZE,idx,size); return *this; }
 	CSciStyle& Bold( bool b ) { sci.Call(SCI_STYLESETBOLD,idx,b); return *this; }
@@ -81,7 +81,7 @@ public:
 class CSciWrapper : public CScintilla
 {
 	HWND hSci;
-	int (*sci_fn)(void*,int,int,int);
+	int (*sci_fn)(void*,unsigned int,uintptr_t,intptr_t);
 	void* sci_ptr;
 	int m_iLexer;
 	bool m_bBraceHL, m_bBraceHLd, m_bBraceMatched; // Brace Highlight flags
@@ -217,17 +217,17 @@ public:
 	void CopyAsHex();
 
 // functions from Capital are calls to Scintilla; Scintilla functions are splited in groups (like in Doc)
-	int Call( int msg, int wParam=0, int lParam=0 ) const
-	{ return sci_fn( sci_ptr, msg, wParam, lParam ); }
+	int Call( unsigned int msg, uintptr_t wParam=0, intptr_t lParam=0 ) const
+	{ return (int)sci_fn( sci_ptr, msg, wParam, lParam ); }
 
 	void AddText( const char* sz, int len=-1 ) {
 		if( len==-1 ) len = strlen(sz);
-		Call( SCI_ADDTEXT, len, (int)(void*)sz );
+		Call( SCI_ADDTEXT, len, (intptr_t)sz );
 	}
 	void AddText( const string& s ) { 
 		AddText( s.c_str(), s.size() );
 	}
-	void InsertText( int pos, const char* sz ) { Call( SCI_INSERTTEXT, pos, (int)(void*)sz ); }
+	void InsertText( int pos, const char* sz ) { Call( SCI_INSERTTEXT, pos, (intptr_t)sz ); }
 	void DeleteRange( int pos, int len ) { Call(SCI_DELETERANGE, pos, len); }
 
 // Text retrieval and modification
@@ -241,7 +241,7 @@ public:
 	void GetTextRange( int p1, int p2, string& s );
 	string GetTextRange( int p1, int p2 ) { string s; GetTextRange(p1,p2,s); return s; }
 
-	void ReplaceSel( const string& s ) { Call(SCI_REPLACESEL, 0, (int)(void*)s.c_str() ); }
+	void ReplaceSel( const string& s ) { Call(SCI_REPLACESEL, 0, (intptr_t)s.c_str() ); }
 
 // Searching
 	int FindText( int flags, Sci_TextToFind& ttf, bool boostRegExp=false );
@@ -258,7 +258,7 @@ public:
 	int GetTargetLength() { return GetTargetEnd()-GetTargetStart(); }
 	void TargetFromSelection() { Call(SCI_TARGETFROMSELECTION); }
 	void SelectionFromTarget() { SetSel(GetTargetStart(),GetTargetEnd()); }
-	void ReplaceTarget(const string& s, bool bRegExp=false) { Call( bRegExp?SCI_REPLACETARGETRE:SCI_REPLACETARGET, -1, (int)(void*)s.c_str() ); }
+	void ReplaceTarget(const string& s, bool bRegExp=false) { Call( bRegExp?SCI_REPLACETARGETRE:SCI_REPLACETARGET, -1, (intptr_t)s.c_str() ); }
 
 	string getTargetText() { return GetTextRange(GetTargetStart(),GetTargetEnd()); }
 	void replaceTargetBoostRE( const string& sFind, const string& sReplace );
@@ -414,15 +414,15 @@ public:
 	void SetLexer(int l);
 
 // autoComplete
-	void AutoCShow(int len, const string& s) { Call(SCI_AUTOCSHOW,len,(int)(void*)s.c_str()); }
-	void AutoCSelect(const string& s) { Call(SCI_AUTOCSELECT,0,(int)(void*)s.c_str()); }
+	void AutoCShow(int len, const string& s) { Call(SCI_AUTOCSHOW,len,(intptr_t)s.c_str()); }
+	void AutoCSelect(const string& s) { Call(SCI_AUTOCSELECT,0,(intptr_t)s.c_str()); }
 	void AutoComplete(const string& sItems, const string& sSelect) { if(sItems.empty()) return; AutoCShow(sSelect.size(), sItems); if(!sSelect.empty()) AutoCSelect(sSelect); }
 
 	void ClearRegisteredImages() { Call(SCI_CLEARREGISTEREDIMAGES); }
-	void RegisterImage(int idx, const char** sz) { Call(SCI_REGISTERIMAGE,idx,(int)(void*)sz); }
+	void RegisterImage(int idx, const char** sz) { Call(SCI_REGISTERIMAGE,idx,(intptr_t)sz); }
 
 // Calltip
-	void CalltipShow(int pos, const string& s) { Call(SCI_CALLTIPSHOW, pos, (int)(void*)s.c_str() ); }
+	void CalltipShow(int pos, const string& s) { Call(SCI_CALLTIPSHOW, pos, (intptr_t)s.c_str() ); }
 	void CalltipSetHlt(int start, int end) { Call( SCI_CALLTIPSETHLT, start, end ); }
 	void CalltipCancel() { if( Call(SCI_CALLTIPACTIVE) ) Call(SCI_CALLTIPCANCEL); }
 
