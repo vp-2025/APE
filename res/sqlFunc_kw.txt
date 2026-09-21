@@ -1,0 +1,10 @@
+avg
+count
+decode
+lag lead
+min max
+nvl
+over
+rpad rownum rowid round
+sysdate sum
+to_char to_date to_number trim

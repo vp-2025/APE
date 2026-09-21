@@ -1,0 +1,17 @@
+color
+cursor
+display visibility
+clear
+float
+position
+background-color
+z-index
+font font-family font-style font-weight font-size
+overflow
+opacity
+margin margin-left margin-right margin-top margin-bottom
+padding padding-left padding-right padding-top padding-bottom
+border border-left border-right border-top border-bottom border-color border-style border-width
+border-radius
+text-decoration text-align text-shadow
+left top right bottom width height

@@ -1,0 +1,755 @@
+; ?1 property
+; ?2 method
+; ?3 event
+; ?4 class
+; ?5 keyword
+
+JSON?4
+	parse?2	(string)	Parses string into JSON-object	
+	stringify?2	(object)	Write JSON-object to string
+document?4
+	anchors?1	[index]	Returns an array of all the anchors in the document
+	body?4		Returns Body object
+	createElement?2	(tagName)	Creates HTML element
+	createElementNS?2	(ns,tagName)	Creates HTML element from namespace
+	createTextNode?2	(text)	Creates text node
+	forms?1	[index]	Returns an array of all the forms in the document
+	images?1	[index]	Returns an array of all the images in the document
+	links?1	[index]	Returns an array of all the links in the document
+	cookie?1		Returns all name/value pairs of cookies in the document
+	documentMode?1		Returns the mode used by the browser to render the document
+	domain?1		Returns the domain name of the server that loaded the document
+	lastModified?1		Returns the date and time the document was last modified
+	readyState?1		Returns the (loading) status of the document
+	referrer?1		Returns the URL of the document that loaded the current document
+	title?1		Sets or returns the title of the document
+	URL?1		Returns the full URL of the document
+	close?2	()	Closes the output stream previously opened with document.open()
+	getElementById?2	(id)	Accesses the first element with the specified id
+	getElementsByName?2	(name)	Accesses all elements with the specified name
+	getElementsByTagName?2	(tagName)	Accesses all elements with the specified tag name
+	getElementsByClassName?2	(className)	Accesses all elements with the specified class name
+	open?2	(MIMEtype,replace)	Opens an output stream to collect the output from document.write() or document.writeln()
+	write?2	(exp1,exp2,exp3,...)	Writes HTML expressions or JavaScript code to a document
+	writeln?2	(exp1,exp2,exp3,...)	Identical to the write() method, with the addition of writing a new line character after each expression
+	onclick?3		Script to be run on a mouse click
+window?4
+	closed?1		Returns a Boolean value indicating whether a window has been closed or not
+	defaultStatus?1		Sets or returns the default text in the statusbar of a window
+	document?4		Returns the Document object for the window
+	event?4			Returns the Event object
+	frames?1		Returns an array of all the frames (including iframes) in the current window
+	history?4		Returns the History object for the window
+	innerHeight?1		Sets or returns the the inner height of a window's content area
+	innerWidth?1		Sets or returns the the inner width of a window's content area
+	length?1		Returns the number of frames (including iframes) in a window
+	location?4		Returns the Location object for the window (See Location object)
+	name?1		Sets or returns the name of a window
+	opener?1		Returns a reference to the window that created the window
+	outerHeight?1		Sets or returns the outer height of a window, including toolbars/scrollbars
+	outerWidth?1		Sets or returns the outer width of a window, including toolbars/scrollbars
+	pageXOffset?1		Returns the pixels the current document has been scrolled (horizontally) from the upper left corner of the window
+	pageYOffset?1		Returns the pixels the current document has been scrolled (vertically) from the upper left corner of the window
+	parent?1		Returns the parent window of the current window
+	screen?4		Returns the Screen object for the window
+	screenLeft?1		Returns the x coordinate of the window relative to the screen
+	screenTop?1		Returns the y coordinate of the window relative to the screen
+	screenX?1		Returns the x coordinate of the window relative to the screen
+	screenY?1		Returns the y coordinate of the window relative to the screen
+	self?1		Returns the current window
+	status?1		Sets the text in the statusbar of a window
+	top?1		Returns the topmost browser window
+	alert?2	(message)	Displays an alert box with a message and an OK button
+	blur?2	()	Removes focus from the current window
+	clearInterval?2	(id_of_setinterval)	Clears a timer set with setInterval()
+	clearTimeout?2	(id_of_settimeout)	Clears a timer set with setTimeout()
+	close?2	()	Closes the current window
+	confirm?2	(message)	Displays a dialog box with a message and an OK and a Cancel button
+	createPopup?2	()	Creates a pop-up window
+	focus?2	()	Sets focus to the current window
+	moveBy?2	(x,y)	Moves a window relative to its current position
+	moveTo?2	(x,y)	Moves a window to the specified position
+	open?2	(URL,name,specs,replace)	Opens a new browser window
+	print?2	()	Prints the content of the current window
+	prompt?2	(msg,defaultText)	Displays a dialog box that prompts the visitor for input
+	resizeBy?2	(width,height)	Resizes the window by the specified pixels
+	resizeTo?2	(width,height)	Resizes the window to the specified width and height
+	scrollBy?2	(xnum,ynum)	Scrolls the content by the specified number of pixels
+	scrollTo?2	(xpos,ypos)	Scrolls the content to the specified coordinates
+	setInterval?2	(code,millisec,lang)	Calls a function or evaluates an expression at specified intervals (in milliseconds)
+	setTimeout?2	(code,millisec,lang)	Calls a function or evaluates an expression after a specified number of milliseconds
+	onload?3	(callback)	called when page loaded
+	onpopstate?3	(callback)	called when active history entry changes
+navigator?4
+	appCodeName?1		Code name of the browser
+	appName?1			Name of the browser
+	appVersion?1		Version information of the browser
+	cookieEnabled?1		Determines whether cookies are enabled in the browser
+	geolocation?1		Geolocation object that can be used to locate the user's position
+	language?1			Language of the browser
+	onLine?1			Determines whether the browser is online
+	platform?1			Which platform the browser is compiled
+	product?1			Engine name of the browser
+	userAgent?1			User-agent header sent by the browser to the server
+	javaEnabled?2	()	Specifies whether or not the browser has Java enabled
+	taintEnabled?2	()	Specifies whether or not the browser has data tainting enabled
+screen?4
+	availTop?1		Returns the top of the screen (excluding the Windows Taskbar)
+	availLeft?1		Returns the left of the screen (excluding the Windows Taskbar)
+	availWidth?1		Returns the width of the screen (excluding the Windows Taskbar)
+	availHeight?1		Returns the height of the screen (excluding the Windows Taskbar)
+	colorDepth?1		Returns the bit depth of the color palette for displaying images
+	height?1		Returns the total height of the screen
+	pixelDepth?1		Returns the color resolution (in bits per pixel) of the screen
+	width?1		Returns the total width of the screen
+history?4
+	length?1		Returns the number of URLs in the history list
+	back?2	()	Loads the previous URL in the history list
+	forward?2	()	Loads the next URL in the history list
+	go?2	(number|URL)	Loads a specific URL from the history list
+	state?1		Returns current state
+	pushState?2	(state|title|URL)	Push new state
+	replaceState?2	(state|title|URL)	Replace current state wiht new state
+location?4
+	hash?1		Returns the anchor portion of a URL
+	host?1		Returns the hostname and port of a URL
+	hostname?1		Returns the hostname of a URL
+	href?1		Returns the entire URL
+	pathname?1		Returns the path name of a URL
+	port?1		Returns the port number the server uses for a URL
+	protocol?1		Returns the protocol of a URL
+	search?1		Returns the query portion of a URL
+	assign?2	(URL)	Loads a new document
+	reload?2	()	Reloads the current document
+	replace?2	(newURL)	Replaces the current document with a new one
+console?4
+	log?2	(string)
+	info?2	(string)
+	warn?2	(string)
+	error?2	(string)
+@browser
+	msie?1		true if user agent is identified as MS IE
+	mozilla?1		true if user agent is identified as any Mozilla-based browser
+	safari?1		true if user agent is identified as any WebKit-based browser
+	opera?1		true if user agent is identified as Opera
+	version?1		version number of rendering engine for the browser
+@body?4
+	appendChild?2	(el)	Appends HTML element
+	background?1
+	bgColor?1
+	clientLeft?1
+	clientTop?1
+	clientWidth?1
+	clientHeight?1
+	offsetLeft?1
+	offsetTop?1
+	offsetWidth?1
+	offsetHeight?1
+	scrollHeight?1
+	scrollLeft?1
+	scrollTop?1
+	scrollWidth?1
+	leftMargin?1
+	rightMargin?1
+	topMargin?1
+	bottomMargin?1
+	cursor?1
+	hideFocus?1
+	innerHTML?1
+	innerText?1
+	isDisabled?1
+	firstChild?1
+	lastChild?1
+	readyState?1
+	aLink?1
+	vLink?1
+	onclick?3
+	ondblclick?3
+	onmousedown?3
+	onmousemove?3
+	onmouseout?3
+	onmouseover?3
+	onmouseup?3
+	onkeydown?3
+	onkeypress?3
+	onkeyup?3
+	onload?3
+	onunload?3
+	oncontextmenu?3
+	ondrag?3
+	ondragstart?3
+	ondragend?3
+	ondragenter?3
+	ondragleave?3
+	ondragover?3
+@style?4
+	left?1
+	top?1
+	width?1
+	height?1
+	visibility?1		<empty> | visible | hidden |
+	display?1		<empty> | none | inline | block | table | inherit
+	position?1
+	cursor?1		auto | crosshair | default | help | move | pointer | progress | text | wait | n/e/s/w-resize
+	border?1
+	background?1
+	margin?1
+	padding?1
+	color?1
+	display?1
+	font?1
+	fontFamily?1
+	fontStyle?1
+	fontWeight?1
+	zIndex?1
+@event?4
+	altKey?1		Returns whether or not the "ALT" key was pressed when an event was triggered
+	ctrlKey?1		Returns whether or not the "CTRL" key was pressed when an event was triggered
+	shiftKey?1		Returns whether or not the "SHIFT" key was pressed when an event was triggered
+	metaKey?1		Returns whether or not the "meta" key was pressed when an event was triggered
+	button?1		Returns which mouse button was clicked when an event was triggered
+	relatedTarget?1		Returns the element related to the element that triggered the event
+	clientX?1		Returns the horizontal coordinate of the mouse pointer when an event was triggered
+	clientY?1		Returns the vertical coordinate of the mouse pointer when an event was triggered
+	screenX?1		Returns the horizontal coordinate of the mouse pointer when an event was triggered
+	screenY?1		Returns the vertical coordinate of the mouse pointer when an event was triggered
+	pageX?1
+	pageY?1
+	keyCode?1		Key code
+	preventDefault?2	()	Cancels the event if it is cancelable, without stopping further propagation of the event, Cancel the default action of the event from happening.
+	stopPropagation?2	()	Prevents further propagation of the current event.
+	cancelBubble?1		cancelBubble Indicates if event bubbling for this event has been canceled or not, cancelBubble is set to false by default.
+	returnValue?1		return value from event
+	timeStamp?1		timestamp in ms when event was created
+.event;evt=event
+.$event;$evt=event
+	currentTarget?1		current element during bubble phase
+	data?1		value passed to bind() as data
+	pageX?1		horizontal coordinate of mouse relative to page
+	pageY?1		vertical coordinate of mouse relative to page
+	relatedTarget?1		for mouse events identifies the elment that the cursor enter or left
+	result?1		most recent value returned from previous event handler
+	target?1		identifies element for which event triggered
+	type?1		specifies type of event that was triggered
+	which?1		for keyboard events specifies key-code, for mouse events - buttons
+.dt;tm
+	getDate?2	()	Returns the day of the month (from 1-31)
+	getDay?2	()	Returns the day of the week (from 0-6)
+	getFullYear?2	()	Returns the year (four digits)
+	getHours?2	()	Returns the hour (from 0-23)
+	getMilliseconds?2	()	Returns the milliseconds (from 0-999)
+	getMinutes?2	()	Returns the minutes (from 0-59)
+	getMonth?2	()	Returns the month (from 0-11)
+	getSeconds?2	()	Returns the seconds (from 0-59)
+	getTime?2	()	Returns the number of milliseconds since midnight Jan 1, 1970
+	getTimezoneOffset?2	()	Returns the time difference between GMT and local time, in minutes
+	getUTCDate?2	()	Returns the day of the month, according to universal time (from 1-31)
+	getUTCDay?2	()	Returns the day of the week, according to universal time (from 0-6)
+	getUTCFullYear?2	()	Returns the year, according to universal time (four digits)
+	getUTCHours?2	()	Returns the hour, according to universal time (from 0-23)
+	getUTCMilliseconds?2	()	Returns the milliseconds, according to universal time (from 0-999)
+	getUTCMinutes?2	()	Returns the minutes, according to universal time (from 0-59)
+	getUTCMonth?2	()	Returns the month, according to universal time (from 0-11)
+	getUTCSeconds?2	()	Returns the seconds, according to universal time (from 0-59)
+	parse?2	(string)	Parses a date string and returns the number of milliseconds since midnight of January 1, 1970
+	setDate?2	(day)	Sets the day of the month (from 1-31)
+	setFullYear?2	(year)	Sets the year (four digits)
+	setHours?2	(hour)	Sets the hour (from 0-23)
+	setMilliseconds?2	(ms)	Sets the milliseconds (from 0-999)
+	setMinutes?2	(min)	Set the minutes (from 0-59)
+	setMonth?2	(month)	Sets the month (from 0-11)
+	setSeconds?2	(sec)	Sets the seconds (from 0-59)
+	setTime?2	(tm)	Sets a date and time by adding or subtracting a specified number of milliseconds to/from midnight January 1, 1970
+	setUTCDate?2	(dt)	Sets the day of the month, according to universal time (from 1-31)
+	setUTCFullYear?2	(year)	Sets the year, according to universal time (four digits)
+	setUTCHours?2	(hour)	Sets the hour, according to universal time (from 0-23)
+	setUTCMilliseconds?2	(ms)	Sets the milliseconds, according to universal time (from 0-999)
+	setUTCMinutes?2	(min)	Set the minutes, according to universal time (from 0-59)
+	setUTCMonth?2	(month)	Sets the month, according to universal time (from 0-11)
+	setUTCSeconds?2	(sec)	Set the seconds, according to universal time (from 0-59)
+	toDateString?2	()	Converts the date portion of a Date object into a readable string
+	toLocaleDateString?2	()	Returns the date portion of a Date object as a string, using locale conventions
+	toLocaleTimeString?2	()	Returns the time portion of a Date object as a string, using locale conventions
+	toLocaleString?2	()	Converts a Date object to a string, using locale conventions
+	toString?2	()	Converts a Date object to a string
+	toTimeString?2	()	Converts the time portion of a Date object to a string
+	toUTCString?2	()	Converts a Date object to a string, according to universal time
+	UTC?2	(year,month,day,hours,minutes,seconds,ms)	Returns the number of milliseconds in a date string since midnight of January 1, 1970, according to universal time
+	valueOf?2	()	Returns the primitive value of a Date object
+	getYear?2	()	Deprecated. Use the getFullYear() method instead
+	setYear?2	(year)	Deprecated. Use the setFullYear() method instead
+	toGMTString?2	()	Deprecated. Use the toUTCString() method instead
+.str;s
+	length?1		Returns the length of a string
+	charAt?2	(index)	Returns the character at the specified index
+	charCodeAt?2	(index)	Returns the Unicode of the character at the specified index
+	concat?2	(string[s])	Joins two or more strings, and returns a copy of the joined strings
+	fromCharCode?2	(code[s])	Converts Unicode values to characters
+	indexOf?2	(char)	Returns the position of the first found occurrence of a specified value in a string
+	lastIndexOf?2	(char)	Returns the position of the last found occurrence of a specified value in a string
+	match?2	(regexp)	Searches for a match between a regular expression and a string, and returns the matches
+	replace?2	(regexp,newstring)	Searches for a match between a substring (or regular expression) and a string, and replaces the matched substring with a new substring
+	search?2	(regexp)	Searches for a match between a regular expression and a string, and returns the position of the match
+	slice?2	(begin,end)	Extracts a part of a string and returns a new string
+	split?2	(separator,limit)	Splits a string into an array of substrings
+	substr?2	(start,length)	Extracts the characters from a string, beginning at a specified start position (0-based), and through the specified number of character
+	substring?2	(start,end)	Extracts the characters from a string, between two specified indices (0-based)
+	toLowerCase?2	()	Converts a string to lowercase letters
+	toUpperCase?2	()	Converts a string to uppercase letters
+	valueOf?2	()	Returns the primitive value of a String object
+	anchor?2	(name)	Creates an anchor
+	big?2	()	Displays a string using a big font
+	blink?2	()	Displays a blinking string
+	bold?2	()	Displays a string in bold
+	fixed?2	()	Displays a string using a fixed-pitch font
+	fontcolor?2	(color)	Displays a string using a specified color
+	fontsize?2	(size)	Displays a string using a specified size
+	italics?2	()	Displays a string in italic
+	link?2	(url)	Displays a string as a hyperlink
+	small?2	()	Displays a string using a small font
+	strike?2	()	Displays a string with a strikethrough
+	sub?2	()	Displays a string as subscript text
+	sup?2	()	Displays a string as superscript text
+	startsWith?2	(searchString)	Determines whether a string begins with the characters of a specified string
+	endsWith?2	(searchString)	Determines whether a string ends with the characters of a specified string
+.num;n
+	MAX_VALUE?1		Returns the largest number possible in JavaScript
+	MIN_VALUE?1		Returns the smallest number possible in JavaScript
+	NEGATIVE_INFINITY?1		Represents negative infinity (returned on overflow)
+	POSITIVE_INFINITY?1		Represents infinity (returned on overflow)
+	toExponential?2	(x)	Converts a number into an exponential notation
+	toFixed?2	(x)	Formats a number with x numbers of digits after the decimal point
+	toPrecision?2	(x)	Formats a number to x length
+	toString?2	()	Converts a Number object to a string
+	valueOf?2	()	Returns the primitive value of a Number object
+.arr
+	length?1		Sets or returns the number of elements in an array
+	concat?2	(array2)	Joins two or more arrays, and returns a copy of the joined arrays
+	join?2	(separator)	Joins all elements of an array into a string
+	pop?2	()	Removes the last element of an array, and returns that element
+	push?2	(element[s])	Adds new elements to the end of an array, and returns the new length
+	reverse?2	()	Reverses the order of the elements in an array
+	shift?2	()	Removes the first element of an array, and returns that element
+	slice?2	(from,to)	Selects a part of an array, and returns the new array
+	sort?2	()	Sorts the elements of an array
+	splice?2	(from,to,element)	Adds/Removes elements from an array
+	toString?2	()	Converts an array to a string, and returns the result
+	unshift?2	(element[s])	Adds new elements to the beginning of an array, and returns the new length
+	valueOf?2	()	Returns the primitive value of an array
+	indexOf?2	(value)	Returns index of value in array
+.col
+	length?1		Sets or returns the number of elements in an collection
+.boo;is
+	toString?2	()	Converts a Boolean value to a string, and returns the result
+	valueOf?2	()	Returns the primitive value of a Boolean object
+.XMLHttp;xhr
+	abort?2	()	Cancels the current request
+	getAllResponseHeaders?2	()	Returns header information
+	getResponseHeader?2	(name)	Returns specific header information
+	open?2	(method,url,async,username,password)	method: GET or POST,  url: the location of the file on the server,  async: true or false
+	send?2	(content)	Sends the request off to the server. String only used for POST requests
+	setRequestHeader?2	(name,value)	Adds a label/value pair to the header to be sent
+	onreadystatechange?1		Stores a function (or the name of a function) to be called automatically each time the readyState property changes
+	readyState?1		Holds the status of the XMLHttpRequest. 0-request not initialized 1-server connection established 2-request received 3-processing request 4-request finished and response is ready
+	responseText?1		Returns the response data as a string
+	responseXML?1		Returns the response data as XML data
+	status?1		Returns the status-number (e.g. "404" for "Not Found" or "200" for "OK")
+	statusText?1		Returns the status-text (e.g. "Not Found" or "OK")
+.cmb;lb
+	id?1		Specifies a unique id for an element
+	disabled?1		Specifies that an input element should be disabled when the page loads
+	title?1		Specifies extra information about an element
+	type?1
+	style?4
+	size?1		Specifies the number of visible options in a drop-down list
+	selectedIndex?1
+	value?1		Specifies the value of selected item
+	options?4
+	onblur?3		Script to be run when an element loses focus
+	onchange?3		Script to be run when an element change
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onfocus?3		Script to be run when an element gets focus
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.btn
+	id?1		Specifies a unique id for an element
+	disabled?1		Specifies that an input element should be disabled when the page loads
+	title?1		Specifies extra information about an element
+	type?1
+	value?1		Specifies the text of button
+	style?4
+	onblur?3		Script to be run when an element loses focus
+	onchange?3		Script to be run when an element change
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onfocus?3		Script to be run when an element gets focus
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.ed
+	id?1		Specifies a unique id for an element
+	disabled?1		Specifies that an input element should be disabled when the page loads
+	readonly?1		Specifies that an input field should be read-only
+	maxlength?1		Specifies the maximum length (in characters) of an input field
+	size?1		Specifies the width of an input field
+	title?1		Specifies extra information about an element
+	type?1
+	style?4
+	onblur?3		Script to be run when an element loses focus
+	onchange?3		Script to be run when an element change
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onfocus?3		Script to be run when an element gets focus
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.chk
+	id?1		Specifies a unique id for an element
+	disabled?1		Specifies that an input element should be disabled when the page loads
+	checked?1		Specifies that an input element should be preselected when the page loads
+	title?1		Specifies extra information about an element
+	type?1
+	style?4
+	onblur?3		Script to be run when an element loses focus
+	onchange?3		Script to be run when an element change
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onfocus?3		Script to be run when an element gets focus
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.lbl
+	id?1
+	htmlFor?1
+	innerHTML?1
+	title?1		Specifies extra information about an element
+	style?4
+	onblur?3		Script to be run when an element loses focus
+	onchange?3		Script to be run when an element change
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onfocus?3		Script to be run when an element gets focus
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.tbl;table
+	cellPadding?1		cell padding attribute
+	cellSpacing?1		cell spacing attribute
+	getElementsByTagName?2	(tag)	Get child elements by tag-name
+	rows?1		rows of table
+	innerHTML?1
+	className?1
+	id?1
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.tr
+	cells?1		cells of row
+	innerHTML?1
+	className?1
+	id?1
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+.td
+	innerHTML?1
+	className?1
+	cellIndex?1
+	id?1
+	onclick?3		Script to be run on a mouse click
+	ondblclick?3		Script to be run on a mouse double-click
+	onmousedown?3		Script to be run when mouse button is pressed
+	onmousemove?3		Script to be run when mouse pointer moves
+	onmouseout?3		Script to be run when mouse pointer moves out of an element
+	onmouseover?3		Script to be run when mouse pointer moves over an element
+	onmouseup?3		Script to be run when mouse button is released
+	onkeydown?3		Script to be run when a key is pressed
+	onkeypress?3		Script to be run when a key is pressed and released
+	onkeyup?3		Script to be run when a key is released
+Math?4
+	E?1	Returns Euler's number (approx. 2.718)
+	LN2?1	Returns the natural logarithm of 2 (approx. 0.693)
+	LN10?1	Returns the natural logarithm of 10 (approx. 2.302)
+	LOG2E?1	Returns the base-2 logarithm of E (approx. 1.442)
+	LOG10E?1	Returns the base-10 logarithm of E (approx. 0.434)
+	PI?1	Returns PI (approx. 3.14159)
+	SQRT1_2?1	Returns the square root of 1/2 (approx. 0.707)
+	SQRT2?1	Returns the square root of 2 (approx. 1.414)
+	abs?2	(x)	Returns the absolute value of x
+	acos?2	(x)	Returns the arccosine of x, in radians
+	asin?2	(x)	Returns the arcsine of x, in radians
+	atan?2	(x)	Returns the arctangent of x as a numeric value between -PI/2 and PI/2 radians
+	atan2?2	(y,x)	Returns the arctangent of the quotient of its arguments
+	ceil?2	(x)	Returns x, rounded upwards to the nearest integer
+	cos?2	(x)	Returns the cosine of x (x is in radians)
+	exp?2	(x)	Returns the value of Ex
+	floor?2	(x)	Returns x, rounded downwards to the nearest integer
+	log?2	(x)	Returns the natural logarithm (base E) of x
+	max?2	(x,y,z,...,n)	Returns the number with the highest value
+	min?2	(x,y,z,...,n)	Returns the number with the lowest value
+	pow?2	(x,y)	Returns the value of x to the power of y
+	random?2	()	Returns a random number between 0 and 1
+	round?2	(x)	Rounds x to the nearest integer
+	sin?2	(x)	Returns the sine of x (x is in radians)
+	sqrt?2	(x)	Returns the square root of x
+	tan?2	(x)	Returns the tangent of an angle
+
+Infinity?1		A numeric value that represents positive/negative infinity
+NaN?1		"Not-a-Number" value
+undefined?1		Indicates that a variable has not been assigned a value
+
+decodeURI?2	(uri)	Decodes a URI
+decodeURIComponent?2	(uri)	Decodes a URI component
+encodeURI?2	(uri)	Encodes a URI
+encodeURIComponent?2	(uri)	Encodes a URI component
+escape?2	(string)	Encodes a string
+eval?2	(string)	Evaluates a string and executes it as if it was script code
+isFinite?2	(value)	Determines whether a value is a finite, legal number
+isNaN?2	(value)	Determines whether a value is an illegal number
+Number?2	(object)	Converts an object's value to a number
+parseFloat?2	(string)	Parses a string and returns a floating point number
+parseInt?2	(string,radix)	Parses a string and returns an integer
+String?2	(object)	Converts an object's value to a string
+unescape?2	(string)	Decodes an encoded string
+
+alert?2	(message)
+prompt?2	(msg,defaultText)
+confirm?2	(message)
+debugger?2
+
+break?5
+case?5
+catch?5
+continue?5
+const?5
+do?5
+default?5
+delete?5
+else?5
+for?5
+function?5
+false?5
+finally?5
+if?5
+in?5
+instanceof?5
+new?5
+null?5
+return?5
+switch?5
+this?5
+try?5
+throw?5
+true?5
+typeof?5
+var?5
+void?5
+while?5
+with?5
+
+@$()
+	ready?2	(func)
+	length?1		count of items
+	size?2	()	count of items
+	get?2	(index)
+	eq?2	(index)
+	first?2	()	return wrapped set with only first element
+	last?2	()	return wrapped set with only last elements
+	toArray?2	()	returns as array of DOM elements
+	index?2	(element)	returns ordinal index
+	add?2	(expression,context)	adds elements to wrapped set
+	not?2	(expression)	removes elements from wrapped set
+	filter?2	(expression)	filter elements from wrapped set
+	slice?2	(begin,end)	slice wrapped set from begin to end
+	has?2	(test)	filter elements by descendents from wrapped set
+	map?2	(callback)	returns wrapped set of return values of our function
+	each?2	(iterator)	invoke iterator for each element
+	find?2	(selector)	returns wrapped set found descendents of current wrapped set
+	is?2	(selector)	if any element in wrapped set matches passed expression selector
+	end?2	()	returns wrapped set to previously returned set
+	andSelf?2	()	merges two previous wrapped sets
+	attr?2	(name)	get value of attribute of 1st element in the matched set
+	attr?2	(name,value)	set value for atrribute for all wrapped set
+	attr?2	(attributes)	set attributes in JSON-format
+	removeAttr?2	(name)	remove attribute for all elements in wrapped set
+	data?2	(name)	returns data for 1st element from wrapped set
+	data?2	(name,value)	sets custom data for wrapped set
+	removeData?2	(name)	remove previously stored data for wrapped set
+	addClass?2	(names)	adds classname(s) to wrapped set
+	removeClass?2	(names)	remove classname(s) for all elements of wrapped set
+	toggleClass?2	(names)	toggle classname(s) for all elements of wrapped set
+	toggleClass?2	(names,switch)	toggle classname(s) depending on switch-expression for wrapped set
+	hasClass?2	(name)	determines if any element has specified class name
+	css?2	(attr)	get CSS value of 1st element
+	css?2	(attr,value)	set CSS with value for all elements
+	css?2	(properties)	set CSS in JSON form for all elements
+	width?2	(value)	sets width; value: number/string/function
+	height?2	(value)	sets height; value: number/string/function
+	width?2	()	returns width of 1st element
+	height?2	()	return height of 1st element
+	innerHeight?2	()	returns inner height of 1st element
+	innerWidth?2	()	returns inner width of 1st element
+	outerHeight?2	(margin)	return outer height of 1st element; true/false - margin is included of omitted
+	outerWidth?2	(margin)	return outer height of 1st element; true/false - margin is included of omitted
+	offset?2	()	returns position of 1st element relative to document origin
+	position?2	()	returns position of 1st element relative to closest offset parent
+	html?2	()	obtains HTML content on 1st element
+	html?2	(content)	sets HTML content for wrapped set
+	text?2	()	concatenates all text content of wrapped elements
+	text?2	(content)	sets text content for all elements
+	append?2	(content)	appends content to all elements
+	prepend?2	(content)	prepends content to all elements
+	before?2	(content)	insert content as sibling of target elements
+	after?2	(content)	insert content as sibling of target elements, positioned after the targets
+	appendTo?2	(targets)	adds all elements from wrapped set to target(s)
+	prependTo?2	(targets)	adds all elements from wrapped set to begining of content of target(s)
+	insertBefore?2	(targets)
+	insertAfter?2	(targets)
+	wrap?2	(wrapper)	wraps elements of wrapped set with passed HTML tags
+	wrapAll?2	(wrapper)
+	wrapInner?2	(wrapper)	wrap inner content with HTML tags
+	unwrap?2	()
+	remove?2	(selector)	remove all elements from page DOM
+	detach?2	(selector)	remove all elements from page DOM, retaining events & jQuery data
+	empty?2	()	remove all elements in wrapped set
+	clone?2	(copyEventHandlers)	create copies of elements & return new wrapped set; children are copied
+	replaceWith?2	(content)	replace every element with content
+	replaceAll?2	(selector)
+	val?2	()	return value of 1st element
+	val?2	(value)	sets value to all elements
+	val?2	(values)	sets value of elements from array
+	bind?2	(eventType,data,handler)
+	bind?2	(eventType,handler)
+	bind?2	(eventMap)
+	unbind?2	(eventType,listener)
+	unbind?2	(event)
+	one?2	(eventType,data,handler)
+	one?2	(eventType,handler)
+	live?2	(eventType,data,handler)
+	live?2	(eventType,handler)
+	die?2	(eventType,listener)
+	trigger?2	(eventType,data)
+	triggerHandler?2	(eventType,data)
+	toggle?2	(listener1,listener2,...)
+	hover?2	(enterHandler,leaveHandler)
+	hover?2	(handler)
+	show?2	(speed,callback)	shows elements
+	hide?2	(speed,callback)	hides elements
+	toggle?2	(speed,callback)	shows or hides elements
+	toggle?2	(condition)	shows or hides elements based upon evalutation of the passed condition
+	fadeIn?2	(speed,callback)
+	fadeOut?2	(speed,callback)
+	fadeTo?2	(speed,opacity,callback)
+	slideDown?2	(speed,callback)
+	slideUp?2	(speed,callback)
+	slideToggle?2	(speed,callback)
+	stop?2	(clearQueue,gotoEnd)	stop animations
+	animate?2	(properties [, duration ] [, easing ] [, complete ])	Perform a custom animation of a set of CSS properties.
+	ajaxStart?2	(callback)	triggered when AJAX request started as long as no other requests are active
+	ajaxSend?2	(callback)	triggered prior to initiating the request in order to allow modification of the XHR
+	ajaxSuccess?2	(callback)	triggered when request returns success
+	ajaxError?2	(callback)	triggered when request returns error
+	ajaxComplete?2	(callback)	triggered when request completes, regardless of status
+	ajaxStop?2	(callback)	triggered when request completes and there are no other requests active
+	parent?2	()	returns parent
+	parents?2	(tag)	returns parents
+	blur?3	(callback)	called when event
+	change?3	(callback)	called when event
+	click?3	(callback)	called when event
+	dblclick?3	(callback)	called when event
+	error?3	(callback)	called when event
+	focus?3	(callback)	called when event
+	focusin?3	(callback)	called when event
+	focusout?3	(callback)	called when event
+	keydown?3	(callback)	called when event
+	keypress?3	(callback)	called when event
+	keyup?3	(callback)	called when event
+	load?3	(callback)	called when event
+	mousedown?3	(callback)	called when event
+	mousemove?3	(callback)	called when event
+	mouseup?3	(callback)	called when event
+	mouseenter?3	(callback)	called when event
+	mouseleave?3	(callback)	called when event
+	mouseout?3	(callback)	called when event
+	mouseover?3	(callback)	called when event
+	touchstart?3	(callback)	called when event; only mobile
+	touchmove?3	(callback)	called when event; only mobile
+	touchend?3	(callback)	called when event; only mobile
+	ready?3	(callback)	called when event
+	resize?3	(callback)	called when event
+	scroll?3	(callback)	called when event
+	scrollTop?2	()|(value)	get/set vertical position of the scroll bar
+	select?3	(callback)	called when event
+	submit?3	(callback)	called when event
+	unload?3	(callback)	called when event
+@$
+	fx.off?1		enables or disables effects
+	support?1		details suported features
+	browser?4
+	noConflict?2	(jqueryToo)
+	trim?2	(value)
+	each?2	(container,callback)
+	grep?2	(array,callback,invert)
+	map?2	(array,callcback)
+	inArray?2	(value,array)	 Search for a specified value within an array and return its index (or -1 if not found)
+	makeArray?2	(object)
+	unique?2	(array)
+	merge?2	(array1,array2)
+	noop?2	()	no operation
+	contains?2	(container,containee)
+	data?2	(element,name,value)
+	removeData?2	(element,name)
+	parseJSON?2	(json)
+	globalEval?2	(code)
+	getScript?2	(url,callback)
+	get?2	(url,parameters,callback,type)
+	getJSON?2	(url,parameters,callback)
+	post?2	(url,parameters,callback,type)
+	ajax?2	(options)
+	ajaxSetup?2	(options)
+	param?2	(object)	convert params-object to string
+	cookie?2	(name)|(name,value,expires)	get/set cookie
+	removeCookie?2	(name)	remove cookie
+	isEmptyObject?2	(object)	check if object is empty
+	isArray?2	(obj)	check if obj is array

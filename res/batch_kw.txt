@@ -1,0 +1,14 @@
+copy call cd
+del dir
+exist
+if
+else
+mkdir move
+not
+rename rm
+set
+nul
+exist
+errorlevel
+echo
+goto

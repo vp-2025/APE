@@ -1,0 +1,11 @@
+auto absolute fixed relative
+bold block
+pointer move default wait text
+solid
+hidden
+none normal underline center justify
+black white red green blue grey silver yellow magenta
+left top right bottom
+dotted
+nowrap
+outset

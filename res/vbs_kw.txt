@@ -1,0 +1,17 @@
+and
+byref byval
+call class const case cdbl cstr cint clng
+dim do
+end else elseif explicit each erase exit error empty
+for false function
+get goto
+if in is isNull isNumeric isEmpty
+len loop let
+mod
+not nothing next nothing null new
+option on or
+private public property
+redim rem randomize resume
+set stop sub select
+then to true
+while wend with

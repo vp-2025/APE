@@ -1,0 +1,14 @@
+__stdcall __declspec __cdecl __uuidof __fastcall __published __property 
+bool char int long float double unsigned void __int8 __int16 __int32 __int64
+true  false
+break const case continue
+do default dynamic_cast
+else enum extern explicit
+friend for if inline
+new delete namespace operator
+public private protected 
+return register
+sizeof static struct short switch static_cast
+typedef this typename
+union using virtual while
+try throw catch except

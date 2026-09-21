@@ -1,0 +1,10 @@
+begin
+close cursor
+declare
+end exception execute exit
+for fetch
+if is immediate
+loop
+open
+then
+when

@@ -1,0 +1,620 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\txt">
+      <UniqueIdentifier>{e4a519ca-8c50-4ab5-85a1-8eb2e82c4fc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scintilla">
+      <UniqueIdentifier>{9e5fea8a-447b-4dad-980d-bf4ff369a23e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scintilla\src">
+      <UniqueIdentifier>{76103cb0-6e7f-4368-9cc3-8f3131ebafde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scintilla\lexlib">
+      <UniqueIdentifier>{92ffba09-4095-4281-9587-9d679fa8413c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scintilla\win32">
+      <UniqueIdentifier>{72e06b5b-27e7-4219-8409-edc185b70f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{ed895183-0777-4f98-9cb7-439ea9ca5a83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lexBase">
+      <UniqueIdentifier>{42c573eb-2185-45a6-b219-5f25f1bf03b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{bf46b1d2-f394-47e6-83fa-04cef8f88303}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs">
+      <UniqueIdentifier>{e9101982-8c43-4617-93be-c2b983cfe0cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="windows">
+      <UniqueIdentifier>{0a5a9350-79e4-4a63-b2f8-8b684f42cc32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lexers">
+      <UniqueIdentifier>{f168863f-d215-4107-a661-9716105d188d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lexers\cpp">
+      <UniqueIdentifier>{5dcf7704-7b17-42d1-bff7-e7003299bc0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lexers\L">
+      <UniqueIdentifier>{ffc8f583-80db-4417-8eb1-3f18fd8ed695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shared">
+      <UniqueIdentifier>{b980073e-93c2-4401-92d9-895bd5ef3cb5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ape++.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ape.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ape_sm.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ilCloseBtn.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\manifest.xml">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\notepad.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\toolbar_fold.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\toolbar_misc.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\toolbar_search.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\toolbar_wnd.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\wincmd.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\apeLng.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\batch_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\cpp_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\cs_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\css_api.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\css_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\css_val.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\idl_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\java_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\js_api.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\make_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\nsis_api.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\pascal_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\plsql_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\proto_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\rc_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\sql_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\sqlFunc_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="res\vbs_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </None>
+    <None Include="..\history.txt" />
+    <None Include="..\todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ctime.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="export2HTML.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="options.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="progress.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="sci.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="xmlMatchedTagHL.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="xpm_img.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\lexBase.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\lexCSS.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\lexers.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\lexerStyles.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\lexJS.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\lexNSIS.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\stylesCSS.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\stylesXHTML.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\AccelMenu.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\BitmapMenu.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\fileMask.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\lang.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\mru.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\ShellContextMenu.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\versionInfo.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\vsstream.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgAbout.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgColors.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgFind.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgGoto.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgIntegr.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgOptions.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgSort.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgTabs.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="tabs.h">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgIndicators.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgCheckList.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="sciiterator.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\myLexers.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\ctime.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\str.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\win.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\cfile.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\platform.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="scintilla\src\AutoComplete.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\CallTip.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Catalogue.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\CellBuffer.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\CharClassify.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\ContractionState.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Decoration.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Document.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Editor.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\ExternalLexer.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Indicator.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\KeyMap.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\LineMarker.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\PerLine.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\PositionCache.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\RESearch.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\RunStyles.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\ScintillaBase.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Selection.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\Style.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\UniConversion.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\ViewStyle.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\XPM.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\Accessor.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\CharacterSet.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\LexerBase.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\LexerModule.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\LexerNoExceptions.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\LexerSimple.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\PropSetSimple.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\StyleContext.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\WordList.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\win32\PlatWin.cxx">
+      <Filter>scintilla\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\win32\ScintillaWin.cxx">
+      <Filter>scintilla\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="ape++.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="export2HTML.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="options.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="progress.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="sci.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="xmlMatchedTagHL.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="xpm_img.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexBase.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexCSS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexers.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexerStyles.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexJS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexNSIS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\AccelMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\BitmapMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\fileMask.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\lang.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\mru.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ShellContextMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\versionInfo.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgAbout.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgColors.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgFind.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgGoto.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgIntegr.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgOptions.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgSort.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgTabs.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="tabs.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerBATCH.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerCONF.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerCPP.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerCSS.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerINI.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerMAKE.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerMSBuild.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerNSIS.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\lexerPascal.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\lexerSQL.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerTXT.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerXHTML.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerXML.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgIndicators.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerJS.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\EditModel.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\EditView.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\MarginView.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\CaseFolder.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\win32\HanjaDic.cxx">
+      <Filter>scintilla\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\CaseConvert.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgCheckList.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\lexlib\CharacterCategory.cxx">
+      <Filter>scintilla\lexlib</Filter>
+    </ClCompile>
+    <ClCompile Include="scintilla\src\DBCS.cxx">
+      <Filter>scintilla\src</Filter>
+    </ClCompile>
+    <ClCompile Include="shared\str.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="shared\win.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="shared\cfile.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="shared\platform.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\testLib.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="shared\testShared.cpp">
+      <Filter>shared</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="lexers\LexerBATCH.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerCONF.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerCPP.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerCSS.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerINI.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerMAKE.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerMSBuild.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerNSIS.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\lexerPascal.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\lexerSQL.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerTXT.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerXHTML.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerXML.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerJS.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="res\c_kw.txt">
+      <Filter>Resource Files\txt</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

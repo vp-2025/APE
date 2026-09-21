@@ -1,0 +1,319 @@
+color	Specifies the color
+	#000000	black
+	black
+	#FF0000	red
+	red
+	#00FF00	green
+	green
+	#0000FF	blue
+	blue
+	#FFFF00	yellow
+	yellow
+	#00FFFF	cyan
+	cyan
+	#FF00FF	magenta
+	magenta
+	#FFFFFF	white
+	white	
+	#C0C0C0	silver
+	silver
+	#D3D3D3	lightgrey
+	#A9A9A9	darkgrey
+	#808080	grey
+	grey
+cursor	The cursor property specifies the type of cursor to be displayed when pointing on an element
+	auto	Default. The browser sets a cursor
+	crosshair	The cursor render as a crosshair
+	default	The default cursor
+	help	The cursor indicates that help is available
+	move	The cursor indicates something that should be moved
+	text	The cursor indicates text
+	wait	The cursor indicates that the program is busy
+	pointer	The cursor render as a pointer
+	progress	The cursor indicates that the program is busy (in progress)
+	e-resize	The cursor indicates that an edge of a box is to be moved right (east)
+	n-resize	The cursor indicates that an edge of a box is to be moved up (north)
+	s-resize	The cursor indicates that an edge of a box is to be moved down (south)
+	w-resize	The cursor indicates that an edge of a box is to be moved left (west)
+	ne-resize	The cursor indicates that an edge of a box is to be moved up and right (north/east)
+	nw-resize	The cursor indicates that an edge of a box is to be moved up and left (north/west)
+	se-resize	The cursor indicates that an edge of a box is to be moved down and right (south/east)
+	sw-resize	The cursor indicates that an edge of a box is to be moved down and left (south/west)
+	inherit	Specifies that the value of the cursor property should be inherited from the parent element
+display	The display property specifies the type of box an element should generate
+	none	The element will generate no box at all
+	block	The element will generate a block box (a line break before and after the element)
+	inline	The element will generate an inline box (no line break before or after the element). This is default
+	inline-block	The element will generate a block box, laid out as an inline box
+	inline-table	The element will generate an inline box (like <table>, with no line break before or after)
+	list-item	The element will generate a block box, and an inline box for the list marker
+	run-in	The element will generate a block or inline box, depending on context
+	table	The element will behave like a table (like <table>, with a line break before and after)
+	table-caption	The element will behave like a table caption (like <caption>)
+	table-cell	The element will behave like a table cell
+	table-column	The element will behave like a table column
+	table-column-group	The element will behave like a table column group (like <colgroup>)
+	table-footer-group	The element will behave like a table footer row group
+	table-header-group	The element will behave like a table header row group
+	table-row	The element will behave like a table row
+	table-row-group	The element will behave like a table row group
+	inherit	Specifies that the value of the display property should be inherited from the parent element
+visibility	The visibility property specifies whether or not an element is visible
+	visible	The element is visible. This is default
+	hidden	The element is invisible (but still takes up space)
+	collapse	Only for table elements. collapse removes a row or column, but it does not affect the table layout. The space taken up by the row or column will be available for other content. If collapse is used on other elements, it renders as "hidden"
+	inherit	Specifies that the value of the visibility property should be inherited from the parent element
+clear	Specifies which sides of an element where other floating elements are not allowed
+	left
+	right
+	both
+	none
+	inherit
+float	Specifies whether or not a box should float
+	left
+	right
+	none
+	inherit
+position	Specifies the type of positioning for an element
+	absolute
+	fixed
+	relative
+	static
+	inherit
+background	Sets all the background properties in one declaration	
+background-color	Specifies the background color
+	$(color)
+	transparent
+background-image
+	url('URL')	The URL to the image
+	none	No background image will be displayed. This is default
+	inherit	Specifies that the background image should be inherited from the parent element
+background-repeat	Background-repeat property sets if/how a background image will be repeated.
+	repeat	The background image will be repeated both vertically and horizontally. This is default
+	repeat-x	The background image will be repeated only horizontally
+	repeat-y	The background image will be repeated only vertically
+	no-repeat	The background-image will not be repeated
+	inherit	Specifies that the setting of the background-repeat property should be inherited from the parent element
+background-attachment	Sets whether a background image is fixed or scrolls with the rest of the page.
+	scroll	The background image scrolls with the rest of the page. This is default
+	fixed	The background image is fixed
+	inherit	Specifies that the setting of the background-attachment property should be inherited from the parent element
+background-position	Sets the starting position of a background image
+	left
+	left top
+	left center
+	left bottom
+	right
+	right top
+	right center
+	right bottom
+	center
+	center top
+	center center
+	center bottom
+	x% y%	The first value is the horizontal position and the second value is the vertical. The top left corner is 0% 0%. The right bottom corner is 100% 100%. If you only specify one value, the other value will be 50%. . Default value is: 0% 0%
+	xpos ypos	The first value is the horizontal position and the second value is the vertical. The top left corner is 0 0. Units can be pixels (0px 0px) or any other CSS units. If you only specify one value, the other value will be 50%. You can mix % and positions
+	inherit	Specifies that the setting of the background-position property should be inherited from the parent element
+z-index	specifies the stack order of an element.
+font	Sets all the font properties in one declaration
+font-family	Specifies the font family for text
+font-size	Specifies the font size of text
+	xx-small	Sets the font-size to an xx-small size
+	x-small	Sets the font-size to an extra small size
+	small	Sets the font-size to a small size
+	medium	Sets the font-size to a medium size. This is default
+	large	Sets the font-size to a large size
+	x-large	Sets the font-size to an extra large size
+	xx-large	Sets the font-size to an xx-large size
+	smaller	Sets the font-size to a smaller size than the parent element
+	larger	Sets the font-size to a larger size than the parent element
+	length	Sets the font-size to a fixed size in px, cm, etc.
+	%	Sets the font-size to a percent of  the parent element's font size
+	inherit	Specifies that the font size should be inherited from the parent element
+font-style	Specifies the font style for text
+	normal	The browser displays a normal font style. This is default
+	italic	The browser displays an italic font style
+	oblique	The browser displays an oblique font style
+	inherit	Specifies that the font style should be inherited from the parent element
+font-variant	Specifies whether or not a text should be displayed in a small-caps font
+	normal	The browser displays a normal font. This is default
+	small-caps	The browser displays a small-caps font
+	inherit	Specifies that the font variant should be inherited from the parent element
+font-weight	Specifies the weight of a font
+	normal	Defines normal characters. This is default
+	bold	Defines thick characters
+	bolder	Defines thicker characters
+	lighter	Defines lighter characters
+	100
+	200
+	300
+	400	is the same as normal
+	500
+	600
+	700	is the same as bold
+	800
+	900
+	inherit	Specifies that the font weight should be inherited from the parent element
+
+overflow	specifies what happens if content overflows an element's box
+	visible	The overflow is not clipped. It renders outside the element's box. This is default
+	hidden	The overflow is clipped, and the rest of the content will be invisible
+	scroll	The overflow is clipped, but a scroll-bar is added to see the rest of the content
+	auto	If overflow is clipped, a scroll-bar should be added to see the rest of the content
+	inherit	Specifies that the value of the overflow property should be inherited from the parent element
+	initial	Sets this property to its default value
+overflow-x	specifies what happens if content overflows an element's box
+	visible	The overflow is not clipped. It renders outside the element's box. This is default
+	hidden	The overflow is clipped, and the rest of the content will be invisible
+	scroll	The overflow is clipped, but a scroll-bar is added to see the rest of the content
+	auto	If overflow is clipped, a scroll-bar should be added to see the rest of the content
+	inherit	Specifies that the value of the overflow property should be inherited from the parent element
+	initial	Sets this property to its default value
+overflow-y	specifies what happens if content overflows an element's box
+	visible	The overflow is not clipped. It renders outside the element's box. This is default
+	hidden	The overflow is clipped, and the rest of the content will be invisible
+	scroll	The overflow is clipped, but a scroll-bar is added to see the rest of the content
+	auto	If overflow is clipped, a scroll-bar should be added to see the rest of the content
+	inherit	Specifies that the value of the overflow property should be inherited from the parent element
+	initial	Sets this property to its default value
+
+opacity	is a CSS3 property for transparency
+
+margin	A shorthand property for setting the margin properties in one declaration
+margin-bottom	Sets the bottom margin of an element
+margin-left	Sets the left margin of an element
+margin-right	Sets the right margin of an element
+margin-top	Sets the top margin of an element
+
+padding	A shorthand property for setting all the padding properties in one declaration
+padding-bottom	Sets the bottom padding of an element
+padding-left	Sets the left padding of an element
+padding-right	Sets the right padding of an element
+padding-top	Sets the top padding of an element
+
+border	Sets all the border properties in one declaration
+border-color	Sets the color of the four borders
+	$(color)
+	transparent
+border-style	Sets the style of the four borders
+	none	Specifies no border
+	hidden	The same as "none", except in border conflict resolution for table elements
+	dotted	Specifies a dotted border
+	dashed	Specifies a dashed border
+	solid	Specifies a solid border
+	double	Specifies a double border
+	groove	Specifies a 3D grooved border. The effect depends on the border-color value
+	ridge	Specifies a 3D ridged border. The effect depends on the border-color value
+	inset	Specifies a 3D inset border. The effect depends on the border-color value
+	outset	Specifies a 3D outset border. The effect depends on the border-color value
+	inherit	Specifies that the border style should be inherited from the parent element
+border-width	Sets the width of the four borders	
+border-bottom	Sets all the bottom border properties in one declaration
+border-bottom-color	Sets the color of the bottom border
+	$(border-color)
+border-bottom-style	Sets the style of the bottom border
+	$(border-style)
+border-bottom-width	Sets the width of the bottom border
+border-left	Sets all the left border properties in one declaration
+border-left-color	Sets the color of the left border
+	$(border-color)
+border-left-style	Sets the style of the left border
+	$(border-style)
+border-left-width	Sets the width of the left border
+border-right	Sets all the right border properties in one declaration
+border-right-color	Sets the color of the right border
+	$(border-color)
+border-right-style	Sets the style of the right border
+	$(border-style)
+border-right-width	Sets the width of the right border
+border-top	Sets all the top border properties in one declaration
+border-top-color	Sets the color of the top border
+	$(border-color)
+border-top-style	Sets the style of the top border
+	$(border-style)
+border-top-width	Sets the width of the top border
+border-radius	is CSS3 a shorthand property for setting the four border-*-radius properties
+
+letter-spacing	increases or decreases the space between characters in a text
+	normal	No extra space between characters. This is default
+	length	Defines an extra space between characters (negative values are allowed)
+	inherit	Specifies that the value of the letter-spacing property should be inherited from the parent element
+line-height	specifies the line height
+	normal	A normal line height. This is default
+	number	A number that will be multiplied with the current font size to set the line height
+	length	A fixed line height in px, pt, cm, etc.
+	%	A line height in percent of the current font size
+	inherit	Specifies that the value of the line-height property should be inherited from the parent element
+word-spacing	increases or decreases the white space between words
+	normal	Defines normal space between words . This is default
+	length	Defines an extra space between words in px, pt, cm, em, etc. Negative values are allowed 
+	inherit	Specifies that the value of the word-spacing property should be inherited from the parent element
+white-space	specifies how white-space inside an element is handled
+	normal	Sequences of whitespace will collapse into a single whitespace. Text will wrap when necessary. This is default
+	nowrap	Sequences of whitespace will collapse into a single whitespace. Text will never wrap to the next line. The text continues on the same line until a <br /> tag is encountered
+	pre	Whitespace is preserved by the browser. Text will only wrap on line breaks Acts like the <pre> tag in HTML
+	pre-line	Sequences of whitespace will collapse into a single whitespace. Text will wrap when necessary, and on line breaks
+	pre-wrap	Whitespace is preserved by the browser. Text will wrap when necessary, and on line breaks
+	inherit	Specifies that the value of the white-space property should be inherited from the parent element
+text-align	specifies the horizontal alignment of text in an element
+	left	Aligns the text to the left
+	right	Aligns the text to the right
+	center	Centers the text
+	justify	Stretches the lines so that each line has equal width (like in newspapers and magazines)
+	inherit	Specifies that the value of the text-align property should be inherited from the parent element
+text-decoration	specifies the decoration added to text
+	none	Defines a normal text. This is default
+	underline	Defines a line below the text
+	overline	Defines a line above the text
+	line-through	Defines a line through the text
+	blink	Defines a blinking text
+	inherit	Specifies that the value of the text-decoration property should be inherited from the parent element
+text-shadow	is CSS3 property, applies shadow to text. Sample: h-shadow v-shadow blur color
+text-indent	specifies the indentation of the first line in a text-block
+text-transform	controls the capitalization of text
+	none	No capitalization. The text renders as it is. This is default
+	capitalize	Transforms the first character of each word to uppercase
+	uppercase	Transforms all characters to uppercase
+	lowercase	Transforms all characters to lowercase
+	inherit	Specifies that the value of the text-transform property should be inherited from the parent element
+vertical-align	sets the vertical alignment of an element
+	length	Raises or lower an element by the specified length. Negative values are allowed
+	%	Raises or lower an element in a percent of the "line-height" property. Negative values are allowed
+	baseline	Align the baseline of the element with the baseline of the parent element. This is default
+	sub	Aligns the element as it was subscript
+	super	Aligns the element as it was superscript
+	top	The top of the element is aligned with the top of the tallest element on the line
+	text-top	The top of the element is aligned with the top of the parent element's font
+	middle	The element is placed in the middle of the parent element
+	bottom	The bottom of the element is aligned with the lowest element on the line
+	text-bottom	The bottom of the element is aligned with the bottom of the parent element's font
+	inherit	Specifies that the value of the vertical-align property should be inherited from the parent element
+	
+left	For absolutely positioned elements
+right	For absolutely positioned elements
+top	For absolutely positioned elements
+bottom	For absolutely positioned elements
+width	sets the width of an element
+height	sets the height of an element
+
+direction	specifies the text direction/writing direction
+	ltr	The writing direction is left-to-right. This is default
+	rtl	The writing direction is right-to-left
+	inherit	Specifies that the value of the direction property should be inherited from the parent element
+	
+max-height	sets the maximum height of an element
+min-height	sets the minimum height of an element
+max-width	sets the maximum width of an element
+min-width	sets the minimum width of an element
+
+box-sizing	allows you to define certain elements to fit an area in a certain way
+	content-box
+	border-box
+	inherit
+
+text-overflow	specifies how overflowed content that is not displayed should be signaled to the user
+	clip	Default value. Clips the text
+	ellipsis	Render an ellipsis ("...") to represent clipped text
+	STRING	Render the given string to represent clipped text
+	initial	Sets this property to its default value
+	inherit	Inherits this property from its parent element

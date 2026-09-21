@@ -1,0 +1,20 @@
+and as add alter
+by
+create commit constraint connect cascade
+delete drop distinct
+escape
+from foreign
+group go
+insert index into in is
+key
+like
+matherializaed
+not null nologging nocache
+or on order
+primary pctfree prior prompt print procedure
+rollback references replace
+select storage set start
+table tablespace truncate to
+union update using
+view values
+where with

@@ -1,0 +1,17 @@
+bool break
+class const char case catch continue
+do delete double default
+else enum extern explicit
+friend false float for finally foreach
+get long
+if int inline in internal
+lock
+new namespace null
+operator object override
+public private protected
+return readonly partial
+sizeof static struct short switch set string
+try throw template true typedef this typeof
+union unsigned using
+void virtual var
+while

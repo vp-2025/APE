@@ -1,0 +1,18 @@
+appobject
+bool
+char const coclass
+double default defaultvalue dispinterface dual
+enum
+float
+hidden helpcontext helpstring helpfile
+int id in interface importlib import
+long library
+methods
+noncreatable
+out optional object
+propget propput properties pointer_default
+retval
+short source
+typedef
+uuid unique unsigned
+void version

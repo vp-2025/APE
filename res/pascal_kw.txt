@@ -1,0 +1,17 @@
+and array as AnsiString abstract
+begin boolean break Byte
+class const continue case Cardinal Comp Currency constructor cdecl
+do Double destructor dispinterface dispid deprecated default
+else end except exit Extended exports
+finally for function false finalization
+if implementation interface initialization in is Int64 Integer inherited interface
+Longint Longword library
+not nil
+on or of object override overload
+private procedure protected public published program pascal property packed
+record repeat Real Real48 raise register readonly read resourcestring result reintroduce
+Shortint ShortString Single Smallint String safecall stdcall set self stored
+then to try type true ThreadVar
+unit uses until
+var virtual
+while WideString Word with write

@@ -1,0 +1,144 @@
+﻿English	Русский	Deutsch
+
+; general
+Cancel	Отмена	Abbrechen
+Close	Закрыть	Schließen
+
+&File	Файл	Datei
+&New	Новый	Neu
+&Open...	Открыть...	Öffnen
+&Save	Сохранить	Sichern
+Save &As...	Сохранить как...	Save As
+&Close	Закрыть	Schließen
+Save &All	Сохранить Все	Alle speichern
+Export to &HTML...	Экспорт в HTML...	Ausfuhr in HTML
+Recent Files	Последние Файлы	Neueste Dateien
+&Clear	Очистить	Klar
+Open &All	Открыть Все	Alle Öffnen
+E&xit	Выход	Beenden
+
+&Edit	Редактирование	Edit
+Undo	Отмена	Rückgängig 
+Redo	Переделать	Redo
+Cut	Вырезать	Schneiden 
+Copy	Копировать	Kopieren 
+Copy as HTML	Копировать как HTML	Als HTML kopieren
+Paste	Вставить	Paste 
+Delete	Удалить	Löschen 
+Select All	Выделить Все	Alle auswählen
+Read Only	Только Чтение	Lesen Sie nur
+Select Lexer	Выбрать Лексер	Wählen Sie Lexer
+UPPERCASE	ВЕРХНИЙ РЕГИСТР	GROSSBUCHSTABEN
+lowercase	нижний регистр		kleinbuchstaben
+Auto Complete	Авто Завершение	Auto-Vervollständigen
+Format Indent	Форматировать Отступы	Format Einzug
+
+&Search	Поиск	Suche
+Find...	Поиск...	Suchen...
+Replace...	Замена...	Ersetzen...
+Find in Files...	Поиск в Файлах...	Suchen in Dateien...
+Replace in Files...	Замена в файлах...	Ersetzen in Dateien...
+Find Next	Поиск Следующий	Weitersuchen 
+Find Previous	Поиск Предыдущий	Rückwärts suchen
+Go to...	Переход...	Springen...
+Go to Matching Brace	Перейти на парную скобку	Springen Matching Brace
+Go to Matching Fold	Перейти на парный слой	Springen Passende Fold
+
+&View	Вид	Anzeigen
+Always on Top	Всегда на Верху
+Full Screen	Весь Экран
+Whitespace Off	Пробелы Выкл
+Whitespace Partitial	Пробелы Частично
+Whitespace All	Пробелы Все	Whitespace Alle
+Line Endings	Окончания Строк
+Line Numbers	Номера Строк	Zeilennummern
+Line Highlight	Подсветка Строки
+Brace Highlight	Подсветка Скобок
+Indent Guides	Показывать Отступ	Indent-Ratgeber
+Folding	Фолдинг	Folding
+Toggle	Переключить
+Collapse	Схлопнуть
+Expand	Развернуть
+Toggle All	Переключить Все	Toggle Alle
+Collapse All	Схлопнуть Все	Collapse Alle
+Expand All	Развернуть Все	Expand Alle
+
+&Window	Окно	Anzeigen
+Next	Следующее	Nächster
+Previous	Предыдущее	Zurück
+Close	Закрыть	Schließen
+Close Group	Закрыть группу	Schließen Gruppe
+Close All	Закрыть Все	Alle schließen
+Close All Except	Закрыть Все кроме	Schließen Sie alle, ausgenommen
+
+&Options	Опции	Optionen
+Integration...	Интеграция...	Integrierung...
+Languages	Языки	Sprachen
+Detect	Обнаружить	Detect
+
+&Help	Помощь	Hilfe
+&About...	О программе...	Über...
+About	О программе	Über
+
+; tab menu
+Select	Выбрать
+Alternate	Переключить
+Shell Menu	Системное меню
+Set Current Directory	Установить Текущую Директорию
+
+; sci menu
+Open File	Открыть Файл	Open File
+Style Text	Стилизовать текст	Style Text
+Clear Style	Очистить стилизацию	Frei Style
+Jump to	Перейти к	Wechseln zu
+
+; find dialog
+Find	Поиск
+Fi&nd what	Что искать
+Re&place with	Заменять на
+In Files	В файлах
+In Folder	В папке
+Match whole &words	целые слова
+Match &case	учитыв. регистр
+;Regular &expression	регулярные выражения
+Direction	Направл.
+&Up	Вверх
+&Down	Вниз
+Replace in	Заменять в
+&Selection	Выделение
+Whole &file	Весь файл
+Look in subfolders	в подпапках
+Output to new pane	в новую панель
+Create '.bak' files	делать '.bak' файлы 
+&Find	Искать
+&Replace	Заменять
+Replace &All	Заменять Все
+Select Directory	Выберете Папку
+Passed the end of the file	Проход через конец файла
+Cannot find the string	Невозможно найти текст
+Search string is part of Replace, operation can be recursive, Continue?	Текст для поиска является частью замены, операция может быть рекурсивной, Продолжить?
+%i Replacements were made	Было сделано %i замен
+
+; goto dialog
+Goto	Переход	Springen
+&Position	Позиция	Position
+&Line	Строка	Zeile
+Current position is:	Текущая позиция:	Aktuelle Position: 
+Last position is:	Последняя позиция:	Letzte Position ist: 
+Current line is:	Текущая строка:	Aktuelle Zeile: 
+Last line is:	Последняя строка:	Letzte Zeile: 
+&Go to	Идти на	Gehe zu
+
+; integration dialog
+Register	Зарегестрировать
+Unregister	Разрегестрировать
+Set	Установить
+Remove	Убрать
+Clear	Сбросить
+Notepad Replacement	Замена Блокнота
+Total Commander Editor	Редактор для Total Commander
+Context Menu : Edit with APE++	Системное меню : Редактировать с APE++
+After change - restart Total Commander	После изменения - перезапустите TC
+
+Can't load from file	Не могу загрузить из файла
+Can't save to file	Не могу сохранить в файл

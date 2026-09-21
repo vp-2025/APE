@@ -1,0 +1,17 @@
+abstract
+boolean break byte
+case catch char class const continue
+default do double
+else extends
+final finally float for future false
+generic goto
+if implements import inner instanceof int interface
+long
+native new null
+operator outer
+package private protected public
+rest return
+short static super switch synchronized
+this throw throws transient try true
+var void volatile
+while

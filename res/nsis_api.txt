@@ -1,0 +1,1064 @@
+; ===============================================================
+; General installer configuration
+; ===============================================================
+
+OutFile install.exe
+	Specifies the output file that the MakeNSIS should write the installer to.
+	This is just the file that MakeNSIS writes, it doesn't effect the contents of the
+	installer.
+
+Name name
+	Sets the name of the installer. The name is usually simply the product name such
+	as 'MyApp' or 'CrapSoft MyApp'. 
+
+Caption caption
+	Sets what the titlebars of the installer will display. 
+	By default, it is 'Name Setup', where Name is specified with the Name command. 
+	You can, however, override it with 'MyApp Installer' or whatever. 
+	If you specify an empty string (""), the default will be used (you can however 
+	specify " " to achieve a blank string) 
+
+SubCaption page_number subcaption
+	Overrides the subcaptions for each of the installer pages 
+	(0=": License Agreement",1=": Installation Options",2=": Installation Directory",
+	3=": Installing Files", 4=": Completed"). 
+	If you specify an empty string (""), the default will be used (you can however 
+	specify " " to achieve a blank string) 
+
+BrandingText text
+	Sets the text that is shown (by default it is 'Nullsoft Install System vX.XX') in
+	the bottom of the install window. Setting this to an empty string ("") uses the 
+	default; to set the string to blank, use " " (a space). If it doesn't matter to 
+	you, leave it the default so that everybody can know why the installer didn't 
+	suck. heh. 
+
+Icon path_to_icon.ico
+	Sets the icon of the installer. 
+	The icon MUST contain a 32x32x16 color icon resource (it can also contain other
+	icons, but they will be discarded). 
+
+WindowIcon on | off
+	Sets whether or not the installer's icon is in the upper left corner of the 
+	installer. 
+
+BGGradient [off] | [topc botc[textcolor | notext]]
+	Specifies whether or not to use a gradient background window. 
+	If 'off', the installer will not show a background window, if no parameters are 
+	specified, the default black to blue gradient is used, and otherwise the 
+	top_color or bottom_color are used to make a gradient. Top_color and bottom_color 
+	are specified using the form RRGGBB (in hexadecimal, as in HTML, only minus the 
+	leading '#', since # can be used for comments). 'textcolor' can be specified as 
+	well, or 'notext' can be specified to turn the big background text off. 
+
+SilentInstall normal | silent | silentlog
+	Specifies whether or not the installer should be silent. If it is 'silent' or 
+	'silentlog', all sections are installed quietly, with no screen output from the 
+	installer itself (MessageBoxes are still displayed on error, and the script can 
+	still display whatever it wants). Note that if this is set to 'normal' and the 
+	user runs the installer with /S on the command line, it will behave as if 
+	SilentInstall 'silent' was used. Note: see also LogSet. 
+
+SilentUnInstall normal | silent
+	Specifies whether or not the uninstaller should be silent. 
+
+CRCCheck on | off
+	Specifies whether or not the installer will perform a CRC on itself before allowing
+	an install. Valid options are 'on' and 'off'. Note that if the user uses /NCRC on 
+	the command line when executing the installer, the CRC will not occur, and the 
+	user will be allowed to install a (potentially) corrupted installer. 
+
+MiscButtonText [back button text] [next button text] [cancel button text] [close button text]
+	Replaces the default text strings for the four buttons (< Back, Next >, Cancel 
+	and Close). If parameters are omitted, the defaults are used. 
+
+InstallButtonText [install button text]
+	If parameter is specified, overrides the default install button text (of "Install") 
+	with the specified text. 
+
+FileErrorText [file error text]
+	Replaces the default text that comes up when a file cannot be written to. 
+	This string can contain a reference to $0, which is the filename ($0 is 
+	temporarily changed to this value). 
+	Example: "Can not write to file $\r$\n$0$\r$\ngood luck, bitch.". 
+
+XPStyle on|off
+	Sets whether or not an XP manifest will be added to the installer. 
+	An XP manifest makes the installer controls use the new XP style 
+	when running on Windows XP. This affects the uninstaller too.
+
+SetFont [/LANG=lang_id] font_face_name font_size
+	Sets the installer font. Please remember that the font you choose must be present 
+	on the user's machine as well. Don't use rare fonts that only you have.
+
+; ===============================================================
+;Install directory configuration
+; ===============================================================
+
+InstallDir definstdir
+	Sets the default installation directory is. See the variables section for variables 
+	that can be used to make this string (especially $PROGRAMFILES). Note that the 
+	part of this string following the last \ will be used if the user selects
+	'browse', and may be appended back on to the string at install time (to disable 
+	this, end the directory with a \ (which will require the entire parameter to be 
+	enclosed with quotes). If this doesn't make any sense, play around with the 
+	browse button a bit. 
+
+InstallDirRegKey root_key subkey key_name
+	This attribute tells the installer to check a string in the registry, and use it
+	for the install dir if that string is valid. If this attribute is present, it 
+	will override the InstallDir attribute if the registry key is valid, otherwise it 
+	will fall back to the InstallDir default. When querying the registry, this 
+	command will automatically remove any quotes. If the string ends in ".exe", it 
+	will automatically remove the filename component of the string (i.e. if the 
+	string is "C:\program files\poop\poop.exe", it will know to use "C:\program
+	files\poop"). For more advanced install directory configuration, set $INSTDIR in 
+	.onInit. 
+
+; ===============================================================
+; License page configuration
+; ===============================================================
+
+LicenseText text [button_text]
+	Specifies a string that is above the license text. Omit this to not have a 
+	license displayed. If button_text is specified, it will override the default 
+	button text of "I Agree". 
+
+LicenseData licdata.txt
+	Specifies a text file to use for the license that the user can read. Omit this 
+	to not have a license displayed. Note that the file must be in the evil DOS text 
+	format (\r\n, yeah!) 
+
+; ===============================================================
+; Component page configuration
+; ===============================================================
+
+ComponentText  [text] [subtext] [subtext2]
+	Specifies a string that is above the component list. 
+	This can be something that notifies the user what it is they are actually 
+	installing. Note that if no parameter is specified, or if the ComponentText 
+	command is omitted, then the component page will not be visible, 
+	and all of the sections will be installed. Note: if text is specified and 
+	non-empty and you leave subtext or subtext2 empty, the defaults will be used 
+	(to set one to blank, use a string like " "). empty strings mean default on 
+	subtext and subtext2. Likewise, if you wish to enable the component page, but 
+	don't want any text on the top line, set text to " ". 
+
+InstType  install_type_name | /NOCUSTOM | /CUSTOMSTRING=str | /COMPONENTS....ONLYONCUSTOM
+	Adds an install type to the install type list, or disables the custom install type.
+	There can be as many as 8 types, each one specifying the name of the install. 
+	The first type is the default (generally 'Typical'). Each type is numbered, starting
+	at 1. 
+	See SectionIn for information on how those numbers are used. If the /NOCUSTOM switch
+	is specified, then the "custom" 
+	install type is disabled, and the user has to choose one of the pre-defined install
+	types. 
+	Alternatively, if the /CUSTOMSTRING switch is specified, the parameter will override
+	the "Custom" install type text. 
+	Alternatively, if the /COMPONENTSONLYONCUSTOM flag is specified, the component list
+	will only be shown if the "Custom" 
+	install type is selected. 
+
+EnabledBitmap  bitmap.bmp
+	Sets the enabled state of the listbox for the component page. It MUST be a 16 color
+	bitmap (it can be any size, but 20x20 is preferred -- all others will be resized 
+	down... poorly). 
+
+DisabledBitmap  bitmap.bmp
+	Sets the disabled state of the listbox for the component page. 
+	It MUST be a 16 color bitmap (it can be any size, but 20x20 is preferred -- all 
+	others will be resized down... poorly). 
+
+SpaceTexts  [req text] [avail text]
+	If parameters are specified, overrides the space required and space available text 
+	("Space required: " and "Space available: " by default). 
+
+; ===============================================================
+; Directory page configuration
+; ===============================================================
+
+DirShow show | hide
+	Specifies whether or not the user will see the directory selection page. Note 
+	that if 'hide' is specified, the installer will still check the validity of the 
+	installation path (using internal logic and .onVerifyInstDir if it is declared). 
+	If the path is deemed invalid, the directory page will be shown. To completely 
+	disable the Directory page (and install without prompting, even if a valid 
+	installation path is not available), specify DirText with no parameter (this 
+	might be useful if the installer installs everything into $SYSDIR or something 
+	like that). 
+
+DirText [text] [subtext] [browse text]
+	Specifies a string that is above the directory selection area. If this command is 
+	not specified, or no parameter is specified, then the directory page is never 
+	visible to the user (even if DirShow show is specified). If subtext is specified 
+	and not empty, it overrides the default text above the path entry box ("Select 
+	the directory to install MyApp in:"). If browse button text is specified but not 
+	empty, it overrides the default browse button text ("Browse..."). 
+
+AllowRootDirInstall true|false
+	Controls whether or not installs are enabled to the root directory of a drive, or 
+	directly into a network share. Set to 'true' to change the default (safe) behavior, 
+	which prevents users from selecting C:\ or \\server\share as an install (and 
+	later on, uninstall) directory. 
+
+; ===============================================================
+;Install page configuration
+; ===============================================================
+
+InstallColors /windows | foreground background
+	Sets the colors to use for the install info screen (the default is 00FF00 000000. 
+	Use the form RRGGBB (in hexadecimal, as in HTML, only minus the leading '#', 
+	since # can be used for comments). Note that if "/windows" is specified as the 
+	only parameter, the default windows colors will be used. 
+
+InstProgressFlags [flag [...]]
+	Valid values for flag are "smooth" (smooth the progress bar) or "colored" (color 
+	the progress bar with the colors set by InstallColors. Examples: 
+	"InstProgressFlags" (default old-school windows look), "InstProgressFlags smooth" 
+	(new smooth look), "InstProgressFlags smooth colored" (colored smooth look whee). 
+
+AutoCloseWindow true | false
+	Sets whether or not the install window automatically closes when completed. Can 
+	be 'false' or 'true'. This is overrideable from a section using SetAutoClose. 
+
+ShowInstDetails hide | show | nevershow
+	Sets whether or not the details of the install are shown. Can be 'hide' (the 
+	default) to hide the details by default, allowing the user to view them, or 
+	'show' to show them by default, or 'nevershow', to prevent the user from ever 
+	seeing them. Note that sections can override this using SetDetailsView. 
+
+DetailsButtonText [show details text]
+	Replaces the default details button text of "Show details", if parameter is 
+	specified (otherwise the default is used). 
+
+CompletedText [Completed text]
+	Replaces the default text ("Completed") that is printed at the end of the install 
+	if parameter is specified. Otherwise, the default is used. 
+
+; ===============================================================
+; Uninstall configuration
+; ===============================================================
+
+UninstallText text [subtext]
+	Specifies the text on the first page of the uninstaller. If subtext is specified 
+	and not empty, it will replace the default secondary text on that page, 
+	"Uninstall from:". 
+
+UninstallIcon path_to_icon.ico
+	Sets the icon of the uninstaller. Again, the icon MUST contain a 32x32x16 color 
+	icon resource (it can also contain other icons, but they will be discarded). 
+
+UninstallCaption caption
+	Sets what the titlebars of the uninstaller will display. By default, it is 'Name 
+	Uninstall', where Name is specified with the Name command. You can, however, 
+	override it with 'MyApp uninstaller' or whatever. If you specify an empty string 
+	(""), the default will be used (you can however specify " " to achieve a blank 
+	string) 
+
+UninstallSubCaption page_number subcaption
+	Overrides the subcaptions for each of the uninstaller pages (0=": Confirmation",
+	1=": Uninstalling Files",2=": Completed"). If you specify an empty string (""), 
+	the default will be used (you can however specify " " to achieve a blank string) 
+
+ShowUninstDetails hide | show | nevershow
+	Sets whether or not the details of the uninstall are shown. Can be 'hide' (the 
+	default) to hide the details by default, allowing the user to view them, or 'show' 
+	to show them by default, or 'nevershow', to prevent the user from ever seeing them. 
+	Note that sections can override this using SetDetailsView. 
+
+UninstallButtonText [button text]
+	Changes the text of the button that by default says "Uninstall" in the uninstaller. 
+	If no parameter is specified, the default text is used. 
+
+; ===============================================================
+; Compiler flags:
+; ===============================================================
+
+SetOverwrite on | off | try | ifnewer
+	This command sets the overwrite flag which is used by the File command to 
+	determine whether or not the file should overwrite any existing files that are 
+	present. If overwriteflag is 'on', files are overwritten (this is the default). 
+	If overwriteflag is 'off', files that are already present are not overwritten. 
+	If overwriteflag is 'try', files are overwritten if possible (meaning that if 
+	the file is not able to be written to, it is skipped without any user interaction). 
+	If overwriteflag is 'ifnewer', then files are only overwritten if the existing 
+	file is older than the new file (note that when in 'ifnewer' mode, the 
+	destination file's date is set, regardless of what SetDateSave is set to). 
+
+SetCompress auto | force | off
+	This command sets the compress flag which is used by the installer to determine 
+	whether or not data should be compressed. Typically the SetCompress flag will 
+	effect the commands after it, and the last SetCompress command in the file also 
+	determines whether or not the install info section and uninstall data of the 
+	installer is compressed. If compressflag is 'auto', then files are compressed if 
+	the compressed size is smaller than the uncompressed size. If compressflag is 
+	set to 'force', then the compressed version is always used. If compressflag is 
+	'off' then compression is not used (which can be faster). 
+
+SetCompressor [/SOLID] [/FINAL] zlib|bzip2|lzma
+	This command sets the compression algorithm used to compress files/data in the installer. 
+	It can only be used outside of sections and functions and before any data is compressed. 
+	Different compression methods can not be used for different files in the same installer. 
+	It is recommended to use it on the very top of the script to avoid compilation errors
+
+SetDatablockOptimize on | off
+	This command tells the compiler whether or not to do datablock optimizations. 
+	Datablock optimizations have the compiler check to see if any data being added to 
+	the data block is already in the data block, and if so, it is simply referenced 
+	as opposed to added (can save a little bit of size). 
+
+SetDateSave on | off
+	This command sets the file date/time saving flag which is used by the File 
+	command to determine whether or not to save the last write date and time of the 
+	file, so that it can be restored on installation. Valid flags are 'on' and 'off'.
+	'on' is the default. 
+
+; ===============================================================
+; Sections
+; ===============================================================
+
+Section [section_name]
+	Begins annd opens a new section. If section_name is empty, omitted, or begins 
+	with a -, then it is a required section and the user will not see it, nor have 
+	the option of disabling it. If the section name is 'Uninstall', then it is a 
+	special Uninstall Section. 
+
+SectionIn section_index [section_index] [RO]
+	This command specifies which Install Types (see InstType) the current section 
+	defaults to the enabled state in. Multiple SectionIn commands can be specified 
+	(they are combined). If you specify RO as a parameter, then the section will be 
+	Read-Only, meaning it will always be set to install. 
+
+SectionEnd
+	This command closes the current open section
+
+AddSize size_kb
+	Tells the installer that the current section needs an additional "size_kb" 
+	kilobytes of disk space. Only valid within a section (will have no effect 
+	outside of a section or in a function). 
+
+SubSection
+	obsolete, use SectionGroup & SectionGroupEnd
+
+SubSectionEnd
+	obsolete, use SectionGroup & SectionGroupEnd
+
+SectionGroup [/e] section_group_name [index_output]
+	This command inserts a section group. The section group must be closed with 
+	SectionGroupEnd, and should contain 1 or more sections. If the section group 
+	name begins with a !, its name will be displayed with a bold font. 
+	If /e is present, the section group will be expanded by default. 
+	If index_output is specified, the parameter will be !defined with the section 
+	index (that can be used for SectionSetText etc). If the name is prefixed 
+	with 'un.' the section group is an uninstaller section group.
+
+SectionGroupEnd
+	Closes a section group opened with SectionGroup
+
+; ===============================================================
+; Functions
+; ===============================================================
+
+Function function_name
+	Creates and opens a function named function_name. 
+
+FunctionEnd
+	Ends the current open function. 
+
+; ===============================================================
+; General purpose, basic instructions
+; ===============================================================
+
+SetOutPath outpath
+	Sets the output path ($OUTDIR) and creates it (recursively if necessary), if it 
+	does not exist. Must be a full pathname, usually is just $INSTDIR (you can 
+	specify $INSTDIR if you are lazy with a single "-"). 
+
+File ([/r] file|wildcard [...]) | (/oname=file.dat infile.dat)
+	Adds file(s) to be extracted to the current output path ($OUTDIR). 
+	
+	- Note that the output file name is $OUTDIR\filename_portion_of_file. 
+	- If the /oname=X switch is used, the output name becomes $OUTDIR\X. When using 
+	the /oname= switch, only one file can be specified, and the file name can contain 
+	variables (or a fully qualified path, i.e. $SYSDIR\whatever.dll). 
+	- Wildcards are supported. 
+	- If the /r switch is used, files and directories are added recursively. If is no 
+	trailing wildcard (i.e. File /r C:\whatever\mydir), then the whole tree of mydir 
+	will go in $OUTDIR\mydir. To put it in $OUTDIR, use File /r C:\whatever\mydir\*.*
+	
+	The File command sets the error flag if overwrite mode is set to 'try' and the 
+	file could not be overwritten, or if the overwrite mode is set to 'on' and the 
+	file could not be overwritten and the user selects ignore. 
+
+Exec command
+	Execute the specfied program and continue immediately. Note that the file 
+	specified must exist on the target system, not the compiling system. $OUTDIR is 
+	used for the working directory. The error flag is set if the process could not 
+	be launched. Note, if the command could have spaces, you may with to put it in 
+	quotes to delimit it from parameters. i.e.: Exec '"$INSTDIR\command.exe" parameters'. 
+
+ExecWait command [user_var(exit code)]
+	Execute the specfied program and wait for the executed process to quit. See Exec 
+	for more information. If no output variable is specified ExecWait sets the error 
+	flag if the program executed returns a nonzero error code, or if there is an 
+	error. If an output variable is specified, ExecWait sets the variable with the 
+	exit code (and only sets the error flag if an error occurs; if an error occurs 
+	the contents of the user variable are undefined). Note, if the command could have 
+	spaces, you may with to put it in quotes to delimit it from parameters. i.e.: 
+	ExecWait '"$INSTDIR\command.exe" parameters'
+
+ExecShell action command [parameters] [SW_SHOWNORMAL | SW_SHOWMAXIMIZED | SW_SHOWMINIMIZED]
+	Execute the specfied program using ShellExecute. Note that action is usually 
+	"open", "print", etc, but can be an empty string to use the default action. 
+	Parameters and the show type are optional. $OUTDIR is used for the working 
+	directory. The error flag is set if the process could not be launched. 
+
+Rename [/REBOOTOK] source_file dest_file
+	Rename source_file to dest_file. Functions just like the win32 API MoveFile, 
+	which means you can move a file from anywhere on the system to anywhere else, 
+	and you can move a directory to somewhere else on the same drive. If /REBOOTOK 
+	is specified, and the file cannot be overwritten, then the file is moved when 
+	the system reboots -- if the file will be moved on a reboot, the reboot flag 
+	will be set. The error flag is set if the file cannot be renamed (and /REBOOTOK 
+	is not used) or if the source file does not exist. 
+
+Delete [/REBOOTOK] file
+	Delete file (which can be a file or wildcard, but should be specified with a 
+	full path) from the target system. If /REBOOTOK is specified and the file cannot 
+	be deleted then the file is deleted when the system reboots -- if the file will 
+	be deleted on a reboot, the reboot flag will be set. The error flag is set if 
+	files are found and cannot be deleted. The error flag is not set from trying to 
+	delete a file that does not exist. 
+
+RMDir [/r] directory
+	Remove the directory (which should be a full path). If /r is specified, it will 
+	recursively remove the directory. The error flag is set if the directory exists 
+	and cannot be removed. 
+
+; ===============================================================
+; Registry, INI file reading/writing/deleting instructions
+; ===============================================================
+
+WriteRegStr root_key subkey key_name value
+	Write a string to the registry. Root_key must be one of:
+		
+	- HKCR or HKEY_CLASSES_ROOT 
+	- HKLM or HKEY_LOCAL_MACHINE 
+	- HKCU or HKEY_CURRENT_USER 
+	- HKU or HKEY_USERS 
+	- HKCC or HKEY_CURRENT_CONFIG 
+	- HKDD or HKEY_DYN_DATA 
+	- HKPD or HKEY_PERFORMANCE_DATA 
+		
+	The error flag is set if the string could not be written to the registry. The 
+	type of the string will be REG_SZ for WriteRegStr, or REG_EXPAND_STR for 
+	WriteRegExpandStr. 
+
+WriteRegExpandStr root_key subkey key_name value
+	Write a string to the registry. Root_key must be one of:
+		
+	- HKCR or HKEY_CLASSES_ROOT 
+	- HKLM or HKEY_LOCAL_MACHINE 
+	- HKCU or HKEY_CURRENT_USER 
+	- HKU or HKEY_USERS 
+	- HKCC or HKEY_CURRENT_CONFIG 
+	- HKDD or HKEY_DYN_DATA 
+	- HKPD or HKEY_PERFORMANCE_DATA 
+		
+	The error flag is set if the string could not be written to the registry. The 
+	type of the string will be REG_SZ for WriteRegStr, or REG_EXPAND_STR for 
+	WriteRegExpandStr. 
+
+WriteRegDWORD root_key subkey key_name value
+	This command writes a dword (32 bit integer) to the registry (a user variable can 
+	be specified). Root_key must be one of:
+		
+	- HKCR or HKEY_CLASSES_ROOT 
+	- HKLM or HKEY_LOCAL_MACHINE 
+	- HKCU or HKEY_CURRENT_USER 
+	- HKU or HKEY_USERS 
+	- HKCC or HKEY_CURRENT_CONFIG 
+	- HKDD or HKEY_DYN_DATA 
+	- HKPD or HKEY_PERFORMANCE_DATA 
+		
+	Valid values for root_key are listed under WriteRegStr. The error flag is set if 
+	the dword could not be written to the registry. 
+
+WriteRegBin root_key subkey key_name valuedata
+	This command writes a block of binary data to the registry. Root_key must be one of:
+		
+	- HKCR or HKEY_CLASSES_ROOT 
+	- HKLM or HKEY_LOCAL_MACHINE 
+	- HKCU or HKEY_CURRENT_USER 
+	- HKU or HKEY_USERS 
+	- HKCC or HKEY_CURRENT_CONFIG 
+	- HKDD or HKEY_DYN_DATA 
+	- HKPD or HKEY_PERFORMANCE_DATA 
+		
+	Valuedata is in hexadecimal (i.e. DEADBEEF01223211151). The error flag is set if 
+	the binary data could not be written to the registry. 
+
+WriteINIStr ini_filename section_name entry_name value
+	Writes entry_name=value into [section_name] of ini_filename. The error flag 
+	is set if the string could not be written to the ini file. 
+
+ReadRegStr user_var(output) root_key sub_key name
+	Reads from the registry into the user variable $x. Root_key must be one of:
+		
+	- HKCR or HKEY_CLASSES_ROOT 
+	- HKLM or HKEY_LOCAL_MACHINE 
+	- HKCU or HKEY_CURRENT_USER 
+	- HKU or HKEY_USERS 
+	- HKCC or HKEY_CURRENT_CONFIG 
+	- HKDD or HKEY_DYN_DATA 
+	- HKPD or HKEY_PERFORMANCE_DATA 
+		
+	The error flag will be set and $x will be set to an empty string ("") if the 
+	string is not present. If the value is present, but is of type REG_DWORD, it 
+	will be read and converted to a string and the error flag will be set. 
+
+ReadRegDWORD user_var(output) root_key sub_key name
+	Reads a 32 bit DWORD from the registry into the user variable $x. Root_key must 
+	be one of:
+	
+	- HKCR or HKEY_CLASSES_ROOT 
+	- HKLM or HKEY_LOCAL_MACHINE 
+	- HKCU or HKEY_CURRENT_USER 
+	- HKU or HKEY_USERS 
+	- HKCC or HKEY_CURRENT_CONFIG 
+	- HKDD or HKEY_DYN_DATA 
+	- HKPD or HKEY_PERFORMANCE_DATA 
+		
+	The error flag will be set and $x will be set to an empty string ("" which is 0) 
+	if the DWORD is not present. If the value is present, but is not a DWORD, it 
+	will be read as a string and the error flag will be set. 
+
+ReadINIStr user_var(output) ini_filename section_name entry_name
+	Reads from entry_name in [section_name] of ini_filename and stores the value 
+	into user variable $x. The error flag will be set and $x will be assigned to an 
+	empty string if the entry is not found. 
+
+ReadEnvStr user_var(output) name
+	Reads from the environment string "name" and sets the value into the user 
+	variable $x. If there is an error reading the string, the user variable is set 
+	to empty, and the error flag is set. 
+
+ExpandEnvStrings user_var(output) string
+	Expands environment variables in "string" into the user variable $x. If error, 
+	the variable is set to empty, and the error flag is set.
+
+DeleteRegValue root_key subkey key_name
+	Deletes a registry value. Valid values for root_key are listed under WriteRegStr. 
+	The error flag is set if the value could not be removed from the registry (or 
+	if it didn't exist to begin with). 
+
+DeleteRegKey [/ifempty] root_key subkey
+	Deletes a registry key. If /ifempty is specified, the registry key will only be 
+	deleted if it has no subkeys (otherwise, the whole registry tree will be removed). 
+	Valid values for root_key are listed under WriteRegStr. The error flag is set if 
+	the key could not be removed from the registry (or if it didn't exist to begin with). 
+
+EnumRegKey user_var(output) root_key subkey index
+	Set user variable $x with the name of the 'index'th registry key in root_key\subkey. 
+	Valid values for root_key are listed under WriteRegStr. Returns an empty string 
+	if there are no more keys, and returns an empty string and sets the error flag 
+	if there is an error. 
+
+EnumRegValue user_var(output) root_key subkey index
+	Set user variable $x with the name of the 'index'th registry value in root_key\subkey. 
+	Valid values for root_key are listed under WriteRegStr. Returns an empty string 
+	if there are no more values, and returns an empty string and sets the error flag 
+	if there is an error. 
+
+DeleteINISec ini_filename section_name
+	Deletes the entire section [section_name] from ini_filename. If the section 
+	could not be removed from the ini file, the error flag is set.  
+
+DeleteINIStr ini_filename section_name str_name
+	Deletes the string str_name from section [section_name] from ini_filename. If 
+	the string could not be removed from the ini file, the error flag is set. 
+
+; ===============================================================
+; General purpose, advanced instructions
+; ===============================================================
+
+CreateDirectory path_to_create
+	Creates (recursively if necessary) the specified directory. 
+
+CopyFiles [/SILENT] [/FILESONLY] filespec_on_destsys destination_path [size_of_files_in_kb]
+	Copies files from the source to the destination on the installing system. 
+	Useful with $EXEDIR if you want to copy from installation media, or to copy from 
+	one place to another on the system. Uses SHFileOperation, so the user might see 
+	a status window of the copy operation if it is large (to disable this, use 
+	/SILENT). The last parameter specifies how big the copy is (in kilobytes), so 
+	that the installer can approximate the disk space requirements. On error, or if 
+	the user cancels the copy (only possible when /SILENT was omitted), the error 
+	flag is set. If /FILESONLY is specified, only files are copied. 
+
+SetFileAttributes filename attribute1|attribute2|...
+	Sets the file attributes of 'filename' (which can contain wildcards). Valid 
+	attributes can be combined with | and are:
+	
+	- NORMAL or FILE_ATTRIBUTE_NORMAL (you can use 0 to abbreviate this) 
+	- ARCHIVE or FILE_ATTRIBUTE_ARCHIVE 
+	- HIDDEN or FILE_ATTRIBUTE_HIDDEN 
+	- OFFLINE or FILE_ATTRIBUTE_OFFLINE 
+	- READONLY or FILE_ATTRIBUTE_READONLY 
+	- SYSTEM or FILE_ATTRIBUTE_SYSTEM 
+	- TEMPORARY or FILE_ATTRIBUTE_TEMPORARY 
+	
+	The error flag will be set if the file's attributes cannot be set (i.e. the file 
+	doesn't exist, or you don't have the right permissions) 
+
+CreateShortCut link.lnk target.file [parameters] [icon.file] [icon_index_number] [start_options] [keyboard_shortcut]
+	Creates a shortcut 'link.lnk' that links to 'target.file', with optional parameters 
+	'parameters'. 
+		
+	- The icon used for the shortcut is 'icon.file,icon_index_number'; for default 
+	icon settings use empty strings for both icon.file and icon_index_number. 
+	- start_options should be one of: SW_SHOWNORMAL, SW_SHOWMAXIMIZED, 
+	SW_SHOWMINIMIZED, or an empty string. 
+	- keyboard_shortcut should be in the form of 'flag|c' where flag can be a 
+	combination (using |) of: ALT, CONTROL, EXT, or SHIFT. c is the character to use 
+	(a-z, A-Z, 0-9, F1-F24, etc). Note that no spaces are allowed in this string. 
+	
+	A good example is "ALT|CONTROL|F8". $OUTDIR is used for the working directory. 
+	
+	The error flag is set if the shortcut cannot be created (i.e. the path does not exist, or some other error). 
+
+GetFullPathName [/SHORT] user_var(output) path_or_file
+	Assign to the user variable $x, the full path of the file specified. If the 
+	path portion of the parameter is not found, the error flag will be set and 
+	$x will be empty. If /SHORT is specified, the path is converted to the short 
+	filename form. 
+
+SearchPath user_var(output) filename
+	Assign to the user variable $x, the full path of the file named by the second 
+	parameter. The error flag will be set and $x will be empty if the file cannot be 
+	found. Uses SearchPath() to search the system paths for the file. 
+
+GetTempFileName user_var(output)
+	Assign to the user variable $x, the name of a temporary file. The file will have 
+	been created, so you can then overwrite it with what you please. The name of the 
+	temporary file is guaranteed to be unique. Delete the file when done with it. 
+
+CallInstDLL dllfile function
+	Calls a NSIS extension DLL. See Contrib\ExDLL for an example of how to make one. 
+	Extension DLLs can access the stack and variables. 
+
+RegDLL dllfile [entrypoint_name]
+	Loads the specified DLL and calls DllRegisterServer (or entrypoint_name if 
+	specified). The error flag is set if an error occurs (i.e. it can't load the DLL, 
+	initialize OLE, or find the entry point). 
+
+UnRegDLL dllfile
+	Loads the specified DLL and calls DllUnregisterServer. The error flag is set if 
+	an error occurs (i.e. it can't load the DLL, initialize OLE, or find the entry point). 
+
+
+GetDLLVersion filename user_var(high dword output) user_var(low dword output)
+	Gets the version information from the DLL in "filename". Sets the user output 
+	variables with the high and low dwords of version information on success; on 
+	failure the outputs are empty and the error flag is set. 
+
+GetDLLVersionLocal localfilename user_var(high dword output) user_var(low dword output)
+	This is similar to GetDLLVersion, only it acts on the system building the 
+	installer (it actually compiles into two StrCpy commands). Sets the two output 
+	variables with the DLL version information of the DLL on the build system. 
+
+GetFileTime filename user_var(high dword output) user_var(low dword output)
+	Gets the last write time of "filename". Sets the user output variables with the 
+	high and low dwords of the timestamp on success; on failure the outputs are 
+	empty and the error flag is set. 
+
+GetFileTimeLocal localfilename user_var(high dword output) user_var(low dword output)
+	This is similar to GetFileTime, only it acts on the system building the installer 
+	(it actually compiles into two StrCpy commands). Sets the two output variables 
+	with the file timestamp of the file on the build system. 
+
+; ===============================================================
+; Branching, flow control, error checking, user interaction, etc instructions
+; ===============================================================
+
+Goto label_to_jump_to | +offset | -offset | user_var(target)
+	If label is specified, goto the label 'label_to_jump_to:'. 
+	If +offset or -offset is specified, jump is relative by offset instructions. 
+	Goto +1 goes to the next instruction, Goto -1 goes to the previous instruction, 
+	etc. If a user variable is specified, jumps to absolute address (generally you 
+	will want to get this value from a function like GetLabelAddress. I Compiler 
+	flag commands and SectionIn aren't instructions so jumping over them has no effect. 
+
+Call function_name |:label_name 
+	Calls the function named function_name. If in the Uninstall section, Call can 
+	only be used with function names beginning with "un.". If the parameter starts 
+	with a ':' it will be treated as a label (so you can call to a label in your 
+	function - this is probably not going to be used most of the time).  
+
+Return  
+	Returns from a function or section.  
+
+IfErrors jumpto_iferror [jumpto_ifnoerror] 
+	Checks and clears the error flag, and if it is set, it will goto jumpto_iferror, 
+	otherwise it will goto jumpto_ifnoerror. The error flag is set by other 
+	instructions when a recoverable error (such as trying to delete a file that is 
+	in use) occurs.  
+
+ClearErrors  
+	Clears the error flag. 
+
+SetErrors  
+	Sets the error flag.  
+
+FindWindow user_var(hwnd output) windowclass [windowtitle] [windowparent] [childafter] 
+	Searches for a window. Behaves like the win32 FindWindowEx(). Seaches by 
+	windowclass (and/or windowtitle if specified). If windowparent or childafter are 
+	specified, the search will be restricted as such. If windowclass or windowtitle 
+	is specified as "", they will not be used for the search. If the window is not 
+	found, the user variable returned is 0. To accomplish old-style FindWindow 
+	behavior, use FindWindow with SendMessage.  
+
+SendMessage HWND msg wparam lparam [user_var(return value)] 
+	Sends a message to HWND. If a user variable $x is specified as the last parameter, 
+	the return value of SendMessage will be stored to it. Note that when specifying 
+	'msg' you must just use the integer value of the message. Here are a few example 
+	messages and their values:
+	- WM_CLOSE 16
+	- WM_COMMAND 273
+	- WM_USER 1024 
+ 
+IsWindow HWND jump_if_window [jump_if_not_window] 
+	If HWND is a window, Gotos jump_if_window, otherwise, Gotos jump_if_not_window 
+	(if specified).  
+
+IfFileExists file_to_check_for jump_if_present [jump_otherwise] 
+	Checks for existence of file(s) file_to_check_for (which can be a wildcard, or a 
+	directory), and Gotos jump_if_present if the file exists, otherwise Gotos 
+	jump_otherwise. If you want to check to see if a file is a directory, use 
+	IfFileExists DIRECTORY\*.*  
+
+MessageBox mb_option_list messagebox_text [return_check jumpto] [return_check_2 jumpto_2] 
+	Displays a MessageBox containing the text "messagebox_text". mb_option_list must 
+	be one or more of the following, delimited by |s (i.e. MB_YESNO|MB_ICONSTOP). 
+	if the return value of the MessageBox is return_check, the installer will Goto jumpto.  
+		
+	- MB_OK - Display with an OK button 
+	- MB_OKCANCEL - Display with an OK and a cancel button 
+	- MB_ABORTRETRYIGNORE - Display with abort, retry, ignore buttons 
+	- MB_RETRYCANCEL - Display with retry and cancel buttons 
+	- MB_YESNO - Display with yes and no buttons 
+	- MB_YESNOCANCEL - Display with yes, no, cancel buttons 
+	- MB_ICONEXCLAMATION - Display with exclamation icon 
+	- MB_ICONINFORMATION - Display with information icon 
+	- MB_ICONQUESTION - Display with question mark icon 
+	- MB_ICONSTOP - Display with stop icon 
+	- MB_TOPMOST - Make messagebox topmost 
+	- MB_SETFOREGROUND - Set foreground 
+	- MB_RIGHT - Right align text 
+	- MB_DEFBUTTON1 - Button 1 is default 
+	- MB_DEFBUTTON2 - Button 2 is default 
+	- MB_DEFBUTTON3 - Button 3 is default 
+	- MB_DEFBUTTON4 - Button 4 is default 
+		
+	return_check can be 0 (or empty, or left off), or one of the following: 
+		
+	- IDABORT - Abort button 
+	- IDCANCEL - Cancel button 
+	- IDIGNORE - Ignore button 
+	- IDNO - No button 
+	- IDOK - OK button 
+	- IDRETRY - Retry button 
+	- IDYES - Yes button 
+		
+	if the return value of the MessageBox is return_check, the installer will Goto jumpto. 
+
+StrCmp str1 str2 jump_if_equal [jump_if_not_equal] 
+	Compares (case insensitively) str1 to str2. If str1 and str2 are equal, Gotos 
+	jump_if_equal, otherwise Gotos jump_if_not_equal.  
+
+IntCmp val1 val2 jump_if_equal [jump_if_val1_less] [jump_if_val1_more] 
+	Compares two integers val1 and val2. If val1 and val2 are equal, 
+	Gotos jump_if_equal, otherwise if val1 < val2, Gotos jump_if_val1_less, 
+	otherwise if val1 > val2, Gotos jump_if_val1_more.  
+
+IntCmpU val1 val2 jump_if_equal [jump_if_val1_less] [jump_if_val1_more] 
+	Compares two unsigned integers val1 and val2. If val1 and val2 are equal, 
+	Gotos jump_if_equal, otherwise if val1 < val2, Gotos jump_if_val1_less, 
+	otherwise if val1 > val2, Gotos jump_if_val1_more. Performs the comparison as 
+	unsigned integers.  
+
+Abort user_message 
+	Cancels the install, stops execution of script, and displays user_message in the 
+	status display. Note: you can use this from Callback Functions to do special 
+	things. Note 2: When using from .onNextPage or .onPrevPage, the parameter to 
+	Abort can be an integer that specifies how many pages to skip.  
+
+Quit  
+	Causes the installer to exit as soon as possible. After Quit is called, the 
+	installer will exit (no callback functions will get a chance to run).  
+
+GetFunctionAddress user_var(output) function_name 
+	Gets the address of the function and stores it in the output user variable. 
+	This user variable then can be passed to Call or Goto. Note that if you Goto an 
+	address which is the output of GetFunctionAddress, 
+	your function will never be returned to (when the function you Goto'd to returns, 
+	you return instantly).  
+
+GetLabelAddress user_var(output) label 
+	Gets the address of the label and stores it in the output user variable. This 
+	user variable then can be passed to Call or Goto. Note that you may only call 
+	this with labels accessible from your function, but you can call it from anywhere 
+	(which is potentially dangerous). Note that if you Call the output of 
+	GetLabelAddress, code will be executed until it Return's (explicitly or 
+	implicitly at the end of a function), and then you will be returned to the 
+	statement after the Call.  
+
+GetCurrentAddress user_var(output) 
+	Gets the address of the current instruction (the GetCurrentAddress) and stores 
+	it in the output user variable. This user variable then can be passed to Call 
+	or Goto.  
+
+; =================================================================
+; File and directory i/o instructions 
+; =================================================================
+
+FindFirst user_var(handle output) user_var(filename output) filespec 
+	Performs a search for 'filespec', placing the first file found in filename_output 
+	(a user variable). It also puts the handle of the search into handle_output 
+	(also a user variable). If no files are found, both outputs are set to empty, 
+	and the error flag is set. Best used with FindNext and FindClose. 
+	Note that the filename output is without path.  
+
+FindNext handle user_var(filename_output) 
+	Continues a search began with FindFirst. handle should be the handle_output_variable 
+	returned by FindFirst. If the search is completed (there are no more files), 
+	filename_output is set to empty, and the error flag is set. Note that the 
+	filename output is without path.  
+
+FindClose handle 
+	Closes a search opened with FindFirst.  
+
+FileOpen user_var(handle output) filename openmode 
+	Opens a file named "filename", and sets the handle output variable with the 
+	handle. The openmode should be one of "r" (read) "w" (write, all contents of 
+	file are destroyed) or "a" (append, meaning opened for both read and write, 
+	contents preserved). In all open modes, the file pointer is placed at the 
+	beginning of the file. If the file cannot be opened, the handle output is set 
+	to empty, and the error flag is set.  
+
+FileClose handle 
+	Closes a file handle opened with FileOpen.  
+
+FileRead handle user_var(output) [maxlen] 
+	Reads a string from a file opened with FileOpen. The string is read until either 
+	a newline (or carriage return newline pair) occurs, or until a null byte is read, 
+	or until maxlen is met (if specified). Strings are limited to 1024 characters. 
+	If the end of file is read and no more data is available, the output string will 
+	be empty, and the error flag will be set.  
+
+FileWrite handle string 
+	Writes a string to a file opened with FileOpen. If an error occurs writing, 
+	the error flag will be set.  
+
+FileReadByte handle user_var(output) 
+	Reads a byte from a file opened with FileOpen. The byte is stored in the 
+	output as an integer (0-255). If the end of file is read and no more data is 
+	available, the output will be empty, and the error flag will be set.
+
+FileWriteByte handle string 
+	Writes the integer interpretation of 'string' to a file opened with FileOpen. 
+	If an error occurs writing, the error flag will be set. Note that the low 
+	byte of the integer is used, i.e. writing 256 is the same as writing 0, etc.  
+
+FileSeek handle offset [mode] [user_var(new position)] 
+	Seeks a file opened with FileOpen. If mode is omitted or specified as SET, 
+	the file is positioned to "offset". If mode is specified as CUR, then the 
+	file pointer is moved by offset. If mode is specified as END, the file 
+	pointer is set to a position relative to EOF. If the final parameter 
+	"new position" is specified, the new file position will be stored to that 
+	variable.  
+
+; =================================================================
+; Misc instructions 
+; =================================================================
+
+SetDetailsView show | hide 
+	Shows or hides the details, depending on which parameter you pass. Overrides 
+	the default details view, which is set via ShowInstDetails  
+SetDetailsPrint none | listonly | textonly | both 
+	Sets mode at which commands print their status. None has commands be quiet, 
+	listonly has status text only added to the listbox, textonly has status text 
+	only printed to the status bar, and both enables both (the default). For 
+	extracting many small files, textonly is recommended (especially on win9x 
+	with smooth scrolling enabled).  
+
+SetAutoClose true | false 
+	Overrides the default auto window-closing flag (specified for the installer 
+	using AutoCloseWindow, and false for the uninstaller). Specify 'true' to 
+	have the install window immediately disappear after the install has completed, 
+	or 'false' to make it require a manual close.  
+
+DetailPrint user_message 
+	Adds the string "user_message" to the details view of the installer.  
+
+Sleep sleeptime_in_ms 
+	Pauses execution in the installer for sleeptime_in_ms milliseconds. 
+	sleeptime_in_ms can be a variable, i.e. "$0" or a number, i.e. "666".  
+
+BringToFront  
+	Makes the installer window visible and brings it to the top of the window list 
+	(i.e. if a command was executed that shows itself in front of the 
+	installer, a BringToFront would bring the installer back in focus).  
+
+HideWindow
+	Hides the installer.  
+
+SetShellVarContext current | all 
+	Sets the context of $SMPROGRAMS and other shell folders. If set to 'current' 
+	(the default), the current user's shell folders are used. If set to 'all', 
+	the 'all users' shell folder is used. The all users folder may not be 
+	supported on all OSes. If the all users folder is not found, the current user 
+	folder will be used.  
+
+; =================================================================
+; String manipulation support 
+; =================================================================
+
+StrCpy user_var(destination) str [maxlen] [start_offset] 
+	Sets the user variable $x with str. Note that str can contain other variables, 
+	or the user variable being set (concatenating strings this way is possible, 
+	etc). If maxlen is specified, the string will be a maximum of maxlen 
+	characters (if maxlen is negative, the string will be truncated abs(maxlen) 
+	characters from the end). If start_offset is specified, the source is offset 
+	by it (if start_offset is negative, it will start abs(start_offset) from the 
+	end of the string).  
+
+StrLen user_var(length output) str 
+	Sets user variable $x with the length of str.  
+
+; =================================================================
+; Stack support 
+; =================================================================
+
+Push string 
+	Pushes a string onto the stack. The string can then be Popped off of the stack.  
+
+Pop user_var(out) 
+	Pops a string off of the stack into user variable $x. If the stack is empty, 
+	the error flag will be set.  
+
+Exch [user_var] | stack_index 
+	When no parmater is specified, exchanges the top two elements of the stack. 
+	When a parameter is specified and is a user variable, exchanges the top 
+	element of the stack with the parameter. When a parameter is specified and 
+	is a positive integer, the parameter specifies which item on the stack that 
+	the top of the stack is swapped with. If there are not enough items on the 
+	stack to accomplish the exchange, a fatal error will occur (to help you 
+	debug your code :).  
+
+; =================================================================
+; Integer manipulation support 
+; =================================================================
+
+IntOp user_var(output) value1 OP [value2] 
+	Combines value1 and (depending on OP) value2 into the user variable $x. OP is 
+	defined as one of the following:
+		
+	+ ADDs value1 and value2 
+	- SUBTRACTs value2 from value1 
+	* MULTIPLIES value1 and value2 
+	/ DIVIDEs value1 by value2 
+	% MODULUSs value1 by value2 
+	| BINARY ORs value1 and value2 
+	& BINARY ANDs value1 and value2 
+	^ BINARY XORs value1 and value2 
+	~ BITWISE NEGATEs value1 (i.e. 7 becomes 4294917288) 
+	! LOGICALLY NEGATEs value1 (i.e. 7 becomes 0) 
+	|| LOGICALLY ORs value1 and value2 
+	&& LOGICALLY ANDs value1 and value2 
+
+IntFmt user_var(output) format numberstring 
+	Formats the number in "numberstring" using the format "format", and sets the 
+	output to user variable $x. Example format strings include "%08X" "%u" etc.  
+
+; =================================================================
+; Rebooting support 
+; =================================================================
+
+Reboot  
+	Reboots the computer. Be careful with this one. If there is an error rebooting, 
+	this function sets the error flag and continues. If the reboot is sucessful, 
+	this instruction does not return.  
+
+IfRebootFlag [jump_if_set] [jump_if_not_set] 
+	Checks the reboot flag, and jumps to jump_if_set if the reboot flag is set, 
+	otherwise jumps to jump_if_not_set. The reboot flag can be set by Delete and 
+	Rename, or manually with SetRebootFlag.  
+
+SetRebootFlag true | false 
+	Sets the reboot flag to either true or false.  
+
+; =================================================================
+; Uninstaller instructions 
+; =================================================================
+
+WriteUninstaller [Path\]exename.exe 
+	Writes the uninstaller to the filename (and optionally path) specified. 
+	Only valid from within an install section or function, and requires that you 
+	have an uninstall section in your script. See also Uninstall configuration. 
+	You can call this one or more times to write out one or more copies of the 
+	uninstaller.  
+
+; =================================================================
+; Install logging instructions 
+; =================================================================
+
+LogSet on|off 
+	Sets whether install logging to $INSTDIR\install.log will happen. Note that 
+	NSIS_CONFIG_LOG must be set in the installer configuration (it is not by 
+	default) to support this.  
+
+LogText text 
+	If installer logging is enabled, inserts text "text" into the log file.  
+
+; =================================================================
+; Section management instructions 
+; =================================================================
+
+SectionSetFlags section_index section_flags 
+	Sets the section's flags. The flag is a 32 bit integer. The low 30 bits 
+	represent whether the section is in the (as many as) 30 file types. The top 
+	bit (0x80000000) represents whether the section is currently enabled, and the 
+	second to top bit (0x40000000) represents whether or not the section is 
+	read-only. The error flag will be set if an out of range section is specified.  
+
+SectionGetFlags section_index user_var(output) 
+	Retrieves the section's flags. See above for a description of the flag. The 
+	error flag will be set if an out of range section is specified.  
+
+SectionSetText section_index section_text 
+	Sets the description for the section section_index. If section_text is set 
+	to an empty string (""), the section will no longer be visible. If the 
+	section is not visible, you can make it visible by setting it to a valid 
+	string. You can even make a section into a divider by beginning the string 
+	with a "-" (which isn't really recommended)!. Note that hidden sections may 
+	still be executed if the sectin's flag is still set. Section text strings 
+	may contain variables, but the variable will not determine whether or not 
+	the section is visible or a divider. The error flag will be set if an out of 
+	range section is specified.  
+
+SectionGetText section_index user_var(output) 
+	Stores the text description of the section section_index into the output. 
+	If the section is hidden, stores an empty string. If the section is a divider, 
+	the string will begin with a "-". The error flag will be set if an out of 
+	range section is specified.  
+
+; =================================================================
+; NSIS 2.0
+; =================================================================
+
+Page license | components | directory | instfiles
+
+UninstPage uninstConfirm | instfiles
+
+SectionGroup [section_group_name]
+
+SectionGroupEnd
