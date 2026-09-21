@@ -37,7 +37,7 @@ bool InstanceCheck(HWND hWnd) {
 	cds.cbData = sizeof(data);
 	cds.lpData = &data;
 	DWORD res;
-	bool b = SendMessageTimeout(hWnd, WM_COPYDATA, 0, (LPARAM) &cds, SMTO_ABORTIFHUNG, 1000, (PDWORD_PTR)&res) != 0;
+	bool b = SendMessageTimeout(hWnd, WM_COPYDATA, 0, (LPARAM) &cds, SMTO_ABORTIFHUNG, 1000, &res) != 0;
 	return b && res;
 }
 

@@ -17,6 +17,7 @@ enum {
 	LEX_XHTML,
 	LEX_XML,
 	LEX_CSS,
+	LEX_MD,
 	LEX_PASCAL,
 	LEX_CONF,
 	LEX_INI,

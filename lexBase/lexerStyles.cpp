@@ -36,8 +36,6 @@
 #define STL_EOL				0xC0
 #define STL_HOTSPOT			0x0300
 
-#define STYLE_EX(id,szName,iSize,iFont)		{id,szName,0,-1,-1,iSize,iFont}
-
 #define STYLE(id,szName)					{id,szName,0,-1,-1}
 #define STYLE2(id,szName,clrFore)			{id,szName,0,clrFore,-1}
 #define STYLE3(id,szName,clrFore,clrBack)	{id,szName,0,clrFore,clrBack}
@@ -334,6 +332,40 @@ CLexerStyle styleGradle[] = {
 	{ 0 }
 };
 
+#define STYLE_BOLD_EX(id,szName,clrFore,iSize,szFont)	{id,szName,STL_BOLD,clrFore,-1,iSize,szFont}
+#define STYLE_BOLDITALIC(id,szName,clrFore)				{id,szName,STL_BOLD|STL_ITALIC,clrFore,-1}
+
+/* style ids must match LexerMD.L */
+CLexerStyle styleMD[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_BOLD_EX( 1, "Heading 1", RGB(0x00,0x00,0xC0), 13, "Consolas" ),
+	STYLE_BOLD_EX( 2, "Heading 2", RGB(0x00,0x40,0xC0), 12, "Consolas" ),
+	STYLE_BOLD_EX( 3, "Heading 3", RGB(0x00,0x60,0xC0), 12, "Consolas" ),
+	STYLE_BOLD_EX( 4, "Heading 4", RGB(0x00,0x80,0xC0), 11, "Consolas" ),
+	STYLE_BOLD_EX( 5, "Heading 5", RGB(0x00,0x80,0x80), 11, "Consolas" ),
+	STYLE_BOLD_EX( 6, "Heading 6", RGB(0x60,0x60,0x60), 11, "Consolas" ),
+	STYLE_BOLD( 7, "Bold", -1 ),
+	STYLE_ITALIC( 8, "Italic", -1 ),
+	STYLE_BOLDITALIC( 9, "Bold Italic", -1 ),
+	STYLE2( 10, "Strikethrough", clrGrey ),
+	STYLE3( 11, "Inline Code", RGB(0xA3,0x15,0x15), RGB(0xF6,0xF6,0xF6) ),
+	STYLE_EOL( 12, "Code Block", RGB(0x20,0x20,0x20), RGB(0xF0,0xF0,0xF0) ),
+	STYLE_LINK( 13, "Link", RGB(0x00,0x00,0xE0) ),
+	STYLE2( 14, "URL", RGB(0x00,0x60,0xC0) ),
+	STYLE2_BOLD( 15, "List Marker", RGB(0xC0,0x60,0x00) ),
+	STYLE_ITALIC( 16, "Blockquote", RGB(0x50,0x80,0x50) ),
+	STYLE2_BOLD( 17, "Horizontal Rule", clrGrey ),
+	STYLE2( 18, "Table", clrSymbol ),
+	STYLE2( 19, "HTML", clrChar ),
+	STYLE2( 20, "Escape", clrVar ),
+	STYLE2_BOLD( 21, "Task Checkbox", RGB(0x00,0x80,0x00) ),
+	STYLE2( 22, "Markers", clrLtGrey ),
+	STYLE2( 23, "Link Reference", clrGrey ),
+	STYLE_ITALIC( 24, "Front Matter", RGB(0x80,0x60,0x80) ),
+	{ 0 }
+};
+
 CLexerStyles g_styles[] = {
 	{"Global", "global", styleGlobal},
 	{"C/C++", "cpp", styleCPP},
@@ -349,6 +381,7 @@ CLexerStyles g_styles[] = {
 	{"NSIS", "nsis", styleNSIS},
 	{"Make", "mak", styleMAKE},
 	{ "Gradle", "gradle", styleGradle },
+	{"Markdown", "markdown", styleMD },
 	{"MSBuild", "msbuild", styleMSBuild},
 	{NULL}
 };
@@ -372,6 +405,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_XHTML: return styleHTML;
 		case LEX_XML: return styleXML;
 		case LEX_CSS: return styleCSS;
+		case LEX_MD: return styleMD;
 
 		case LEX_PASCAL: return stylePascal;
 		case LEX_CONF: return styleConf;

@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.24)
 project(ape++)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../binClion)
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../binClion)
+else()
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY c:/tools/ape++)
+endif()
+
 set(CMAKE_CXX_STANDARD 14)
 
 add_definitions(-DWIN32 -DSCI_LEXER) # -D_WINDOWS -DUNICODE -D_UNICODE

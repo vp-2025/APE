@@ -1,7 +1,9 @@
-"# APE" 
+# APE++ 
 
-APE can be compiled in VS (ape++.sln) or CLion (CMakeLists.txt)
-Now it's 32-bit
-It uses https://scintilla.org
-It small + fast and can be used as replacement for Notepad
-Same idea as Notepad++, but made for own needs
+APE++ is Advanced Programmers Editor
+It can be compiled in VS (ape++.sln) or CLion (CMakeLists.txt).
+Now it's 32-bit.
+It uses https://scintilla.org.
+It uses flex to create lexers for syntax HL.
+It small + fast and can be used as replacement for Notepad.
+Same idea as Notepad++, but made for own needs.

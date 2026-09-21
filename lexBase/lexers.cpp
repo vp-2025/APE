@@ -37,6 +37,12 @@ typedef  CSciLexer<css_FlexLexer>	CLexerCSS;
 
 #undef	yyFlexLexerOnce
 #undef   yyFlexLexer
+#define  yyFlexLexer	md_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<md_FlexLexer>	CLexerMD;
+
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
 #define  yyFlexLexer	pascal_FlexLexer
 #include "FlexLexer.h"
 typedef  CSciLexer<pascal_FlexLexer>	CLexerPascal;
@@ -104,6 +110,7 @@ CLexerInfo g_lexers[]={
 	{LEX_XHTML,"HTML", {"*.html","*.htm","*.php",0} },
 	{LEX_XML,"XML", {"*.xml","*.xsl","*.xsd","*.svg","*.osm","*.xul","*.vcproj*","*.vcxproj*",0} }, // xsl=XML stylesheet lang xsd=XML schema definition
 	{LEX_CSS,"CSS", {"*.css",0} },
+	{LEX_MD,"Markdown", {"*.md","*.markdown","*.mdown","*.mkd","*.mdx",0} },
 	{LEX_SEPARATOR},
 	{LEX_PASCAL,"Pascal", {"*.pas","*.inc",0} },
 	{LEX_SQL,"SQL", {"*.sql",0} },
@@ -228,6 +235,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 //		case LEX_HTML:	{ CLexerHTML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_XML:	{ CLexerXML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_CSS:	{ CLexerCSS lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_MD:	{ CLexerMD lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 
 		case LEX_PASCAL:{ CLexerPascal lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_CONF:	{ 
