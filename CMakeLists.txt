@@ -1,13 +1,17 @@
 cmake_minimum_required(VERSION 3.24)
 project(ape++)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../binClion)
-else()
-	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY c:/tools/ape++)
-endif()
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../binClion)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+if(MSVC)
+	# /std:c++20 implies conformance mode, which drops the MSVC extension the
+	# "string() << ..." idiom needs (binding a temporary to std::string&)
+	add_compile_options(/Zc:referenceBinding-)
+	# "using namespace std" + the SDK's byte typedef conflict with std::byte in c++17+
+	add_definitions(-D_HAS_STD_BYTE=0)
+endif()
 
 add_definitions(-DWIN32 -DSCI_LEXER) # -D_WINDOWS -DUNICODE -D_UNICODE
 add_definitions(-DCLION)
@@ -31,4 +35,13 @@ set_property(TARGET ape++ PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG
 SET_TARGET_PROPERTIES(ape++ PROPERTIES LINK_FLAGS " /MANIFEST:NO") # manifest is in resources
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set_target_properties(ape++ PROPERTIES OUTPUT_NAME ape++D)
+endif()
+
+set(APE_DEPLOY_DIR "C:/tools/ape++" CACHE PATH "Release exe is copied here after the build")
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+	add_custom_command(TARGET ape++ POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E make_directory "${APE_DEPLOY_DIR}"
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different "$<TARGET_FILE:ape++>" "${APE_DEPLOY_DIR}/ape++.exe"
+		COMMENT "Copying ape++ to ${APE_DEPLOY_DIR}"
+		VERBATIM)
 endif()

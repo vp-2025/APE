@@ -44,9 +44,9 @@ class CSciLexer : protected LEXER {
     int m_levelDec;        // fold dec--
     int m_levelIncreasedFirst;    // -1 = undef, 1 = inc, 0 = dec
 
-    int MatchStart() { return m_posSave + (yytext - yy_current_buffer->yy_ch_buf); }
-    int MatchEnd() { return MatchStart() + yyleng; }
-    int MatchLine() { return m_pStylingContext->GetLine(MatchStart()); }
+    int MatchStart() { return m_posSave + (this->yytext - this->yy_current_buffer->yy_ch_buf); }
+    int MatchEnd() { return MatchStart() + this->yyleng; }
+    int MatchLine() { return m_pStyler->GetLine(MatchStart()); }
 
 // level
     void levelIncrease() {
@@ -74,13 +74,13 @@ class CSciLexer : protected LEXER {
             m_foldLine = 0;
             m_foldLevel = SC_FOLDLEVELBASE;
             //
-            yy_start = State2YYState(0);
+            this->yy_start = State2YYState(0);
         } else {
             // folding
             m_foldLine = m_pStyler->GetLine(posCur);
             m_foldLevel = m_pStyler->GetLevel(m_foldLine) & SC_FOLDLEVELNUMBERMASK;
             //
-            yy_start = m_foldLine > 0 ? m_pStyler->GetLineState(m_foldLine) : State2YYState(0);
+            this->yy_start = m_foldLine > 0 ? m_pStyler->GetLineState(m_foldLine) : State2YYState(0);
         }
         m_levelInc = m_levelDec = 0;
         m_levelIncreasedFirst = -1;
@@ -102,7 +102,7 @@ protected:
     void AfterAction(const char* pszMatchText, int nMatchLength);
 
     virtual int LexerInput(char* buf, int max_size) {
-        m_posSave = m_pStyler->GetStylingPos() - (buf - yy_current_buffer->yy_ch_buf);
+        m_posSave = m_pStyler->GetStylingPos() - (buf - this->yy_current_buffer->yy_ch_buf);
         return m_pStyler->GetText(buf, max_size);
     }
     virtual void LexerOutput(const char* buf, int size) {}
@@ -121,7 +121,7 @@ protected:
             m_pProgress->next(m_pStyler->GetStylingPos());
     }
     void SetStyle() {
-        m_pStyler->SetStyle(MatchStart(), MatchEnd(), YYState2Style(yy_start));
+        m_pStyler->SetStyle(MatchStart(), MatchEnd(), YYState2Style(this->yy_start));
         if( m_pProgress )
             m_pProgress->next(m_pStyler->GetStylingPos());
     }
@@ -138,7 +138,7 @@ public:
     void Style(int posTo) {
         m_pStyler->StartStyling(posTo);
         SetLexerState();
-        yy_flush_buffer(yy_current_buffer);
+        this->yy_flush_buffer(this->yy_current_buffer);
 
         if( posTo - m_pStyler->GetStylingPos() > 1000000 )
             m_pProgress = new CProgress("Styling", m_pStyler->GetStylingPos(), posTo);
@@ -193,7 +193,7 @@ void CSciLexer<LEXER>::BeforeAction(const char* pszMatchText, int nMatchLength) 
 template<class LEXER>
 void CSciLexer<LEXER>::AfterAction(const char* pszMatchText, int nMatchLength) {
     if( pszMatchText[nMatchLength - 1] == '\n' ) {
-        m_pStyler->SetLineState(m_foldLine, yy_start);
+        m_pStyler->SetLineState(m_foldLine, this->yy_start);
     }
 }
 

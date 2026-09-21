@@ -312,7 +312,8 @@ bool CSciWrapper::saveToFile( const string& sFile, CTime& tm, int64_t& size )
 		if (grabSize > BLOCK_SIZE)
 			grabSize = BLOCK_SIZE;
 		grabSize = GetPositionBefore(i + grabSize + 1) - i;
-		Call(SCI_GETTEXTRANGE, 0, (intptr_t)&CSciTextRange(i, i+grabSize, data) );
+		CSciTextRange tr(i, i+grabSize, data);
+		Call(SCI_GETTEXTRANGE, 0, (intptr_t)&tr );
 		if( m_encoding==encUtf16LE || m_encoding==encUtf16BE ) {
 			string s( data, grabSize );
 			wstring ws = utf2w(s);

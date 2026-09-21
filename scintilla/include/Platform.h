@@ -9,6 +9,8 @@
 #ifndef PLATFORM_H
 #define PLATFORM_H
 
+// std::clamp is provided by the standard library since C++17
+#if (defined(_MSVC_LANG) ? _MSVC_LANG : __cplusplus) < 201703L
 namespace std {
 	template<class T>
 	constexpr const T& clamp( const T& v, const T& lo, const T& hi )
@@ -22,6 +24,7 @@ namespace std {
 		return assert( !comp(hi, lo) ), comp(v, lo) ? lo : comp(hi, v) ? hi : v;
 	}
 }
+#endif
 
 // PLAT_GTK = GTK+ on Linux or Win32
 // PLAT_GTK_WIN32 is defined additionally when running PLAT_GTK under Win32
