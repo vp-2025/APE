@@ -5,9 +5,6 @@
 class CIntegrationDlg : public CDialog {
     CButton btnReg, btnUnreg;
     CButton btnSet, btnRemove;
-    CButton btnWcSet, btnWcClear;
-    CStatic lblWc;
-    std::string m_sWinCmdIni;
     bool m_bSkip{};
 public:
     CIntegrationDlg() { m_IDD=IDD_INTEGR; }

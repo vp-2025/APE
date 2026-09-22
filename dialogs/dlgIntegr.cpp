@@ -84,22 +84,6 @@ void setNotepadReplacement(bool b, bool bShowError) {
 }
 
 ///////////////////////////////////////////////////////////
-// WinCmd Editor
-
-const char* szSection = "Configuration";
-const char* szValue = "Editor";
-
-bool isWinCmdEditor(const string& sWinCmdIni) {
-    strbuf sBuf(MAX_PATH);
-    DWORD len = GetPrivateProfileStringA(szSection, szValue, "", sBuf.buf(), sBuf.size(), sWinCmdIni.c_str());
-    return GetExeFileName() == sBuf.str(len); // len without ending zero
-}
-
-void setWinCmdEditor(const string& sWinCmdIni, bool b) {
-    WritePrivateProfileStringA(szSection, szValue, b ? GetExeFileName().c_str() : "", sWinCmdIni.c_str());
-}
-
-///////////////////////////////////////////////////////////
 
 void CIntegrationDlg::onInit() {
     CenterWindow(m_hWnd);
@@ -109,9 +93,6 @@ void CIntegrationDlg::onInit() {
     btnUnreg.Attach(m_hWnd, IDC_BTN_CM_UNREG);
     btnSet.Attach(m_hWnd, IDC_BTN_NOTE_SET);
     btnRemove.Attach(m_hWnd, IDC_BTN_NOTE_REMOVE);
-    btnWcSet.Attach(m_hWnd, IDC_BTN_WC_SET);
-    btnWcClear.Attach(m_hWnd, IDC_BTN_WC_CLEAR);
-    lblWc.Attach(m_hWnd, IDC_LBL_WC);
 
     m_bSkip = false;
     {
@@ -149,16 +130,6 @@ void CIntegrationDlg::onInit() {
             MsgBoxError(s);
         }
     }
-    m_sWinCmdIni = GetWinDir() + "\\wincmd.ini";
-    if( !IsFileExists(m_sWinCmdIni) ) {
-        m_sWinCmdIni = "c:\\wincmd\\wincmd.ini";
-        if( !IsFileExists(m_sWinCmdIni) ) {
-            m_sWinCmdIni = "c:\\total\\wincmd.ini";
-            if( !IsFileExists(m_sWinCmdIni) )
-                m_sWinCmdIni.clear();
-        }
-    }
-    lblWc.SetText(m_sWinCmdIni);
     UpdateBtnState();
 }
 
@@ -180,12 +151,6 @@ void CIntegrationDlg::onCommand(int cmd, int) {
         case IDC_BTN_NOTE_REMOVE:
             setNotepadReplacement(false);
             break;
-        case IDC_BTN_WC_SET:
-            setWinCmdEditor(m_sWinCmdIni, true);
-            break;
-        case IDC_BTN_WC_CLEAR:
-            setWinCmdEditor(m_sWinCmdIni, false);
-            break;
     }
     UpdateBtnState();
 }
@@ -201,7 +166,4 @@ void CIntegrationDlg::UpdateBtnState() {
         btnSet.Enable(!b);
         btnRemove.Enable(b);
     }
-    b = isWinCmdEditor(m_sWinCmdIni);
-    btnWcSet.Enable(!b);
-    btnWcClear.Enable(b);
 }

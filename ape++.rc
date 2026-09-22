@@ -31,8 +31,6 @@ IDI_APE                 ICON                    "res\\ape.ico"
 
 IDI_APE_SM              ICON                    "res\\ape_sm.ico"
 
-IDI_WINCMD              ICON                    "res\\wincmd.ico"
-
 IDI_NOTEPAD             ICON                    "res\\notepad.ico"
 
 
@@ -458,7 +456,7 @@ BEGIN
     LTEXT           "1234",IDC_GOTO_LAST,80,36,32,10,SS_CENTERIMAGE
 END
 
-IDD_INTEGR DIALOGEX 0, 0, 228, 133
+IDD_INTEGR DIALOGEX 0, 0, 228, 80
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Integration"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
@@ -467,15 +465,9 @@ BEGIN
     PUSHBUTTON      "Unregister",IDC_BTN_CM_UNREG,88,16,72,14
     PUSHBUTTON      "Set",IDC_BTN_NOTE_SET,12,52,52,14
     PUSHBUTTON      "Remove",IDC_BTN_NOTE_REMOVE,72,52,52,14
-    PUSHBUTTON      "Set",IDC_BTN_WC_SET,12,100,52,14
-    PUSHBUTTON      "Clear",IDC_BTN_WC_CLEAR,72,100,52,14
     DEFPUSHBUTTON   "Close",IDOK,172,12,50,14
     GROUPBOX        "Context Menu : Edit with APE++",-1,4,4,160,32
     GROUPBOX        "Notepad Replacement",-1,4,40,160,32
-    GROUPBOX        "Total Commander Editor",-1,4,76,160,52
-    LTEXT           "Static",IDC_LBL_WC,8,88,124,8
-    LTEXT           "After change - restart Total Commander",-1,8,116,130,8
-    ICON            IDI_WINCMD,-1,136,92,20,20
     ICON            IDI_NOTEPAD,-1,136,46,20,20
 END
 

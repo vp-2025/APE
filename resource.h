@@ -44,7 +44,6 @@
 #define IDC_STATIC                      206
 #define IDC_STATIC2                     207
 #define IDR_TOOLBAR                     207
-#define IDI_WINCMD                      207
 #define IDI_NOTEPAD                     208
 #define IDC_GOTO_NUMBER                 210
 #define IDC_GOTO_POS                    212
@@ -70,8 +69,6 @@
 #define IDC_BTN_CM_UNREG                1004
 #define IDC_BTN_NOTE_SET                1005
 #define IDC_BTN_NOTE_REMOVE             1006
-#define IDC_BTN_WC_SET                  1007
-#define IDC_BTN_WC_CLEAR                1008
 #define IDC_EDITORHL_TREE               1010
 #define IDC_EDITORHL_BOLD               1011
 #define IDC_EDITORHL_ITALIC             1012
@@ -165,7 +162,6 @@
 #define ID_SEARCH_MATCHFOLD             32892
 #define ID_EDIT_JUMP                    32893
 #define ID_OPTIONS_INTEGR               32933
-#define IDC_LBL_WC                      32934
 #define ID_OPTIONS_LANGUAGES            32935
 #define ID_LANG_FIRST                   32940
 #define ID_LANG_LAST                    32970

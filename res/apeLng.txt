@@ -1,4 +1,4 @@
-﻿English	Русский	Deutsch
+English	Русский	Deutsch
 
 ; general
 Cancel	Отмена	Abbrechen
@@ -134,11 +134,8 @@ Register	Зарегестрировать
 Unregister	Разрегестрировать
 Set	Установить
 Remove	Убрать
-Clear	Сбросить
 Notepad Replacement	Замена Блокнота
-Total Commander Editor	Редактор для Total Commander
 Context Menu : Edit with APE++	Системное меню : Редактировать с APE++
-After change - restart Total Commander	После изменения - перезапустите TC
 
 Can't load from file	Не могу загрузить из файла
 Can't save to file	Не могу сохранить в файл
