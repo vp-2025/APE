@@ -21,7 +21,7 @@
 #include "lexNSIS.h"
 #include "lexJS.h"
 #include "lexCSS.h"
-#include <boost/regex.hpp>
+#include <regex>
 #include "sciIterator.h"
 
 #define ID_CHECK_RELOAD	1234
@@ -1022,10 +1022,10 @@ public:
 
 string findStrRE( const string& s, const char* szRE)
 {
-	boost::regex expr( szRE );
-	boost::match_results<string::const_iterator> what;
-	if( boost::regex_search(s, what, expr ) )
-		return what[1];
+	std::regex expr( szRE );
+	std::smatch what;
+	if( std::regex_search(s, what, expr ) )
+		return what[1].str();
 	return {};
 }
 
@@ -1076,12 +1076,12 @@ void parseIncludes(CSciWrapper& sci, vector<CInclude>& v)
 	{
 		int start = 0;
 		CSciIterator itB(&sci,sci.GetTextLength());
-		boost::regex expr( R"(([a-zA-Z0-9][a-zA-Z0-9/\\-]*\.htm[l]?)[^A-Za-z0-9]+)" );
+		std::regex expr( R"(([a-zA-Z0-9][a-zA-Z0-9/\\-]*\.htm[l]?)[^A-Za-z0-9]+)" );
 		while( true )
 		{
-			boost::match_results<CSciIterator> what;
+			std::match_results<CSciIterator> what;
 			CSciIterator itA(&sci,start);
-			if( !boost::regex_search(itA, itB, what, expr ) )
+			if( !std::regex_search(itA, itB, what, expr ) )
 				break;
 			start = what[0].second.getPos();
 			string html = GetTextRange(what[1]);
@@ -2217,14 +2217,14 @@ void CEditor::fillFuncs_int( CTabPage& page, int start, int end )
 		stySymbol = 43;
 	}
 
-	boost::regex expr( "function[ \\t]+([a-zA-Z0-9_#$]+)[ \\t]*(\\([^)]*\\))|"
+	std::regex expr( "function[ \\t]+([a-zA-Z0-9_#$]+)[ \\t]*(\\([^)]*\\))|"
 			"([a-zA-Z0-9_#$.]+)[ \\t]*=[ \\t]*function[ \\t]*(\\([^)]*\\))|"
 			"([a-zA-Z0-9_#$]+)[ \\t]*:[ \\t]*function[ \\t]*(\\([^)]*\\))" );
 	while( true )
 	{
-		boost::match_results<CSciIterator> what;
+		std::match_results<CSciIterator> what;
 		CSciIterator itA(&sci,start), itB(&sci,end);
-		if( !boost::regex_search(itA, itB, what, expr, boost::match_default ) )
+		if( !std::regex_search(itA, itB, what, expr ) )
 			break;
 		if( what[0].first.getStyleAt()==styComment )
 		{

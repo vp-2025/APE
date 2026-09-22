@@ -9,7 +9,7 @@
 #include "export2html.h"
 #include "lang.h"
 #include "shared/str.h"
-#include <boost/regex.hpp>
+#include <regex>
 #include "sciIterator.h"
 
 void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
@@ -414,13 +414,14 @@ void CSciWrapper::GetTextRange( int p1, int p2, string& s )
 	delete[] buf;
 }
 
-int CSciWrapper::FindText( int flags, Sci_TextToFind& ttf, bool boostRegExp ) 
-{ 
-	if( boostRegExp ) {
-		boost::regex expr(ttf.lpstrText, flags&SCFIND_MATCHCASE ? 0 : boost::regex::icase );
+int CSciWrapper::FindText( int flags, Sci_TextToFind& ttf, bool bRegExp ) {
+	if( bRegExp ) {
+		std::regex::flag_type reFlags = std::regex_constants::ECMAScript;
+		if( !(flags&SCFIND_MATCHCASE) ) reFlags |= std::regex_constants::icase;
+		std::regex expr(ttf.lpstrText, reFlags);
 		CSciIterator itA(this,ttf.chrg.cpMin), itB(this,ttf.chrg.cpMax);
-		boost::match_results<CSciIterator> what;
-		if( !boost::regex_search(itA, itB, what, expr ) )
+		std::match_results<CSciIterator> what;
+		if( !std::regex_search(itA, itB, what, expr ) )
 			return -1;
 		if( what.empty() || !what[0].matched )
 			return -1;
@@ -431,9 +432,8 @@ int CSciWrapper::FindText( int flags, Sci_TextToFind& ttf, bool boostRegExp )
 		return Call(SCI_FINDTEXT,flags,(intptr_t)&ttf); 
 }
 
-void CSciWrapper::replaceTargetBoostRE( const string& sFind, const string& sReplace ) 
-{ 
-	string str = regex_replace( getTargetText(), boost::regex(sFind), sReplace );
+void CSciWrapper::replaceTargetRegExp( const string& sFind, const string& sReplace ) {
+	string str = std::regex_replace( getTargetText(), std::regex(sFind), sReplace );
 	ReplaceTarget( str, false );
 }
 

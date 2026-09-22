@@ -42,14 +42,13 @@ CREOpt replaceOptsSciRE[] = {
     {nullptr}
 };
 
-CREOpt findOptsBoostRE[] = {
+CREOpt findOptsStdRE[] = {
     {"Any Charachter",          "."},
     {"Charachter in Range",     "[ ]"},
     {"Charachter not in Range", "[^ ]"},
     {"Start of Line",           "^"},
     {"End of Line",             "$"},
-    {"Start of Word",           "\\<"},
-    {"End of Word",             "\\>"},
+    {"Word Boundary",           "\\b"},
     {"0 or 1 Matches",          "?"},
     {"0 or more Matches",       "*"},
     {"1 or more Matches",       "+"},
@@ -57,7 +56,19 @@ CREOpt findOptsBoostRE[] = {
     {nullptr}
 };
 
-CREOpt* replaceOptsBoostRE = replaceOptsSciRE;
+CREOpt replaceOptsStdRE[] = {
+    {"Whole Matching Text", "$&"},
+    {"Tagged Expression 1", "$1"},
+    {"Tagged Expression 2", "$2"},
+    {"Tagged Expression 3", "$3"},
+    {"Tagged Expression 4", "$4"},
+    {"Tagged Expression 5", "$5"},
+    {"Tagged Expression 6", "$6"},
+    {"Tagged Expression 7", "$7"},
+    {"Tagged Expression 8", "$8"},
+    {"Tagged Expression 9", "$9"},
+    {nullptr}
+};
 
 void InsertText(HWND hEdit, const char* sz) {
     while( *sz )
@@ -67,8 +78,11 @@ void InsertText(HWND hEdit, const char* sz) {
 void CFindDlg::popupOptRE(CREOpt* opts, HWND hDlg, HWND hBtn, HWND hEdit) {
     CMenu popup;
     popup.Create(true);
-    for( int i = 0; opts[i].szTitle && opts[i].szText; i++ )
-        popup.Append(i + 1, string(opts[i].szTitle) + '\t' + opts[i].szText);
+    for( int i = 0; opts[i].szTitle && opts[i].szText; i++ ) {
+        string sText = opts[i].szText;
+        replaceStr(sText,"&","&&");
+        popup.Append(i + 1, string(opts[i].szTitle) + '\t' + sText);
+    }
     CRect r;
     GetWindowRect(hBtn, &r);
     int ret = popup.TrackPopup(TPM_RETURNCMD, r.left, r.bottom, hDlg);
@@ -168,7 +182,7 @@ void CFindDlg::onInit() {
     cmbMode.AddString(tr("Normal"));
     cmbMode.AddString(tr(R"(Extended \r \n \t)"));
     cmbMode.AddString(tr("Scintilla RegExp"));
-    cmbMode.AddString(tr("Boost RegExp"));
+    cmbMode.AddString(tr("std::regex"));
     cmbMode.SetCurSel(0);
 
     chkSubFolders.Attach(m_hWnd, IDC_FIND_FILE_SUBDIRS);
@@ -214,7 +228,7 @@ void CFindDlg::onCommand(int cmd, int code) {
                 CREOpt* opts = nullptr;
                 if( cmbMode.GetCurSel() == 1 ) opts = findOptsExt;
                 if( cmbMode.GetCurSel() == 2 ) opts = findOptsSciRE;
-                if( cmbMode.GetCurSel() == 3 ) opts = findOptsBoostRE;
+                if( cmbMode.GetCurSel() == 3 ) opts = findOptsStdRE;
                 if( opts )
                     popupOptRE(opts, m_hWnd, btnSearchOpt.hWnd(), cmbSearch.hWnd());
                 UpdateControls();
@@ -225,7 +239,7 @@ void CFindDlg::onCommand(int cmd, int code) {
                 CREOpt* opts = nullptr;
                 if( cmbMode.GetCurSel() == 1 ) opts = replaceOptsExt;
                 if( cmbMode.GetCurSel() == 2 ) opts = replaceOptsSciRE;
-                if( cmbMode.GetCurSel() == 3 ) opts = replaceOptsBoostRE;
+                if( cmbMode.GetCurSel() == 3 ) opts = replaceOptsStdRE;
                 if( opts )
                     popupOptRE(opts, m_hWnd, btnReplaceOpt.hWnd(), cmbReplace.hWnd());
                 UpdateControls();
@@ -273,7 +287,7 @@ void CFindDlg::UpdateControls(bool bPrepare) {
     } else
         chkWholeWord.Enable(true);
 
-    bool b = !chkInFiles.IsChecked() && !isModeBoostRE();
+    bool b = !chkInFiles.IsChecked() && !isModeStdRE();
     rbtnUp.Enable(b);
     rbtnDown.Enable(b);
     if( !rbtnUp.IsEnabled() ) {
@@ -379,7 +393,7 @@ bool CFindDlg::onFind() {
 
     CWaitCursor cur;
     bool bLoop = false;
-    int ret = pSci->FindText(flags, ttf, isModeBoostRE());
+    int ret = pSci->FindText(flags, ttf, isModeStdRE());
     if( ret == -1 && rbtnWhole.IsChecked() ) {
         if( rbtnDown.IsChecked() ) {
             ttf.chrg.cpMin = 0;
@@ -388,7 +402,7 @@ bool CFindDlg::onFind() {
             ttf.chrg.cpMin = pSci->GetTextLength();
             ttf.chrg.cpMax = currentPos;
         }
-        ret = pSci->FindText(flags, ttf, isModeBoostRE());
+        ret = pSci->FindText(flags, ttf, isModeStdRE());
         bLoop = true;
     }
     if( ret != -1 ) {
@@ -419,8 +433,8 @@ void CFindDlg::onReplace() {
     string sReplace = getReplaceStr();
 
     pSci->TargetFromSelection();
-    if( isModeBoostRE() )
-        pSci->replaceTargetBoostRE(sFind, sReplace);
+    if( isModeStdRE() )
+        pSci->replaceTargetRegExp(sFind, sReplace);
     else
         pSci->ReplaceTarget(sReplace, isModeSciRE());
     pSci->SelectionFromTarget();
@@ -449,7 +463,7 @@ void CFindDlg::onFindAll() {
     }
 
     int cnt = 0;
-    while( pSci->FindText(flags, ttf, isModeBoostRE()) != -1 ) {
+    while( pSci->FindText(flags, ttf, isModeStdRE()) != -1 ) {
         cnt++;
         pSci->IndicatorFillRange(ttf.chrgText);
         ttf.chrg.cpMin = ttf.chrgText.cpMax;
@@ -463,7 +477,7 @@ void CFindDlg::onFindAll() {
 }
 
 int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sReplace, bool bWholeFile, bool isModeSciRE,
-        bool isModeBoostRE) {
+        bool isModeStdRE) {
     if( !pSci ) return 0;
     pSci->clearIndicator(INDIC_FIND);
     pSci->clearIndicator(INDIC_REPLACE);
@@ -485,12 +499,12 @@ int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sRe
 
     pSci->BeginUndoAction();
     int cnt = 0;
-    while( pSci->FindText(flags, ttf, isModeBoostRE) != -1 ) {
+    while( pSci->FindText(flags, ttf, isModeStdRE) != -1 ) {
         cnt++;
         pSci->SetTarget(ttf.chrgText);
         int l1 = pSci->GetTargetLength();
-        if( isModeBoostRE )
-            pSci->replaceTargetBoostRE(sFind, sReplace);
+        if( isModeStdRE )
+            pSci->replaceTargetRegExp(sFind, sReplace);
         else
             pSci->ReplaceTarget(sReplace, isModeSciRE);
         int l2 = pSci->GetTargetLength();
@@ -522,7 +536,7 @@ void replaceNormal(CSciWrapper* pSci, const string& sFind, const string& sReplac
 
 void CFindDlg::onReplaceAll() {
     int cnt = replace(pEditor->GetScintilla(), getFindFlags(), getFindStr(), getReplaceStr(),
-                      rbtnWhole.IsChecked(), isModeSciRE(), isModeBoostRE());
+                      rbtnWhole.IsChecked(), isModeSciRE(), isModeStdRE());
     pEditor->UpdateStatusText(Format( tr(L"%i Replacements were made").c_str(), cnt));
     if( !cnt )
         MessageBeep(MB_ICONASTERISK);

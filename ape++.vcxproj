@@ -101,7 +101,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;C:\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;SCI_LEXER;_DEBUG;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:referenceBinding- %(AdditionalOptions)</AdditionalOptions>
@@ -114,15 +114,15 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>imm32.lib;comctl32.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\boost\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>..\bin\$(ProjectName)D_32.exe</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;C:\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;SCI_LEXER;NDEBUG;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:referenceBinding- %(AdditionalOptions)</AdditionalOptions>
@@ -134,12 +134,12 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>imm32.lib;comctl32.lib;Msimg32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\boost\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>..\bin\$(ProjectName)_32.exe</OutputFile>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -152,7 +152,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;C:\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;SCI_LEXER;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:referenceBinding- %(AdditionalOptions)</AdditionalOptions>
@@ -176,7 +176,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;C:\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;SCI_LEXER;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:referenceBinding- %(AdditionalOptions)</AdditionalOptions>

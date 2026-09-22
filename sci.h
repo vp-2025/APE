@@ -243,7 +243,7 @@ public:
 	void ReplaceSel( const string& s ) { Call(SCI_REPLACESEL, 0, (intptr_t)s.c_str() ); }
 
 // Searching
-	int FindText( int flags, Sci_TextToFind& ttf, bool boostRegExp=false );
+	int FindText( int flags, Sci_TextToFind& ttf, bool regExp=false );
 
 // Search and replace using the target
 	bool hasTarget() { return GetTargetStart()!=GetTargetEnd(); }
@@ -260,7 +260,7 @@ public:
 	void ReplaceTarget(const string& s, bool bRegExp=false) { Call( bRegExp?SCI_REPLACETARGETRE:SCI_REPLACETARGET, -1, (intptr_t)s.c_str() ); }
 
 	string getTargetText() { return GetTextRange(GetTargetStart(),GetTargetEnd()); }
-	void replaceTargetBoostRE( const string& sFind, const string& sReplace );
+	void replaceTargetRegExp( const string& sFind, const string& sReplace );
 
 // Overtype
 	void SetOverType(bool b) { Call(SCI_SETOVERTYPE,b); }

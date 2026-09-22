@@ -26,7 +26,7 @@ class CFindDlg : public CDialog {
     bool isModeNormal() { return cmbMode.GetCurSel() == 0; }
     bool isModeExt() { return cmbMode.GetCurSel() == 1; }
     bool isModeSciRE() { return cmbMode.GetCurSel() == 2; }
-    bool isModeBoostRE() { return cmbMode.GetCurSel() == 3; }
+    bool isModeStdRE() { return cmbMode.GetCurSel() == 3; }
     bool isModeRE() { return cmbMode.GetCurSel() >= 2; }
 public:
     explicit CFindDlg(CEditor* pEditor_) : bFind(false), pEditor(pEditor_) {
