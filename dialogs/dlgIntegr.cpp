@@ -7,47 +7,49 @@
 
 using namespace std;
 
-///////////////////////////////////////////////////////////
-// Context Menu 
+const char* szApeKey = R"(*\shell\ape)";
+const char* szApeCmdKey = R"(*\shell\ape\command)";
+const char* szApeMenuText = "Edit with &APE++";
 
-typedef HRESULT ( WINAPI* PFN_DLLFunction )();
+string getApeMenuCommand() {
+    return '"' + GetExeFileName() + R"(" "%1")";
+}
 
-class CContextMenu {
-    HMODULE g_hDLL;
-    PFN_DLLFunction g_hRegisterServer, g_hUnregisterServer, g_hIsRegisteredServer;
-public:
-    CContextMenu() {
-        g_hDLL = 0;
-        g_hRegisterServer = g_hUnregisterServer = g_hIsRegisteredServer = 0;
-        string sDLL = GetExePath() + "apecm.dll";
-        g_hDLL = LoadLibrary(sDLL.c_str());
-        if( !g_hDLL ) return;
-        g_hRegisterServer = (PFN_DLLFunction) GetProcAddress(g_hDLL, "DllRegisterServer");
-        g_hUnregisterServer = (PFN_DLLFunction) GetProcAddress(g_hDLL, "DllUnregisterServer");
-        g_hIsRegisteredServer = (PFN_DLLFunction) GetProcAddress(g_hDLL, "DllIsRegisteredServer");
-    }
-    bool isContextMenu() {
-        if( !g_hDLL || !g_hIsRegisteredServer )
-            return false;
-        return g_hIsRegisteredServer() == S_OK;
-    }
-    void setContextMenu(bool b) {
-        if( !g_hDLL || !g_hRegisterServer || !g_hUnregisterServer )
-            return;
-        bool ok;
-        if( b )
-            ok = g_hRegisterServer() == S_OK;
-        else
-            ok = g_hUnregisterServer() == S_OK;
-        if( !ok )
-            return MsgBoxError("Error in SetContextMenu");
-        string sDLL = GetExePath() + "apecm64.dll";
-        if( IsFileExists(sDLL) )
-            CreateProcess(string("regsvr32 /s ") + (b ? "" : "/u ") + sDLL);
-    }
-};
+static bool ensureKey(HKEY hRoot, const char* szPath) {
+    CRegistry reg;
+    return reg.Create(hRoot, szPath);
+}
 
-CContextMenu contextMenu;
+static bool setKey(HKEY hRoot, const char* szPath, const char* szKey, const char* szValue) {
+    CRegistry reg;
+    if( !reg.Create(hRoot, szPath) )
+        return false;
+    reg.WriteStr(szKey, szValue);
+    return true;
+}
+
+bool isContextMenu() {
+    CRegistry regShell, regCmd;
+    if( !regShell.Open(HKEY_CLASSES_ROOT, szApeKey) || regShell.ReadStr("") != szApeMenuText )
+        return false;
+    if( !regCmd.Open(HKEY_CLASSES_ROOT, szApeCmdKey) )
+        return false;
+    return regCmd.ReadStr("") == getApeMenuCommand();
+}
+
+void setContextMenu(bool b) {
+    if( b ) {
+        if( !ensureKey(HKEY_CLASSES_ROOT, "*\\shell")
+                || !setKey(HKEY_CLASSES_ROOT, szApeKey, "", szApeMenuText)
+                || !setKey(HKEY_CLASSES_ROOT, szApeKey, "Icon", (GetExeFileName()+",0").c_str())
+                || !setKey(HKEY_CLASSES_ROOT, szApeCmdKey, "", getApeMenuCommand().c_str()) )
+            return MsgBoxError("Error in setContextMenu");
+    } else {
+        if( !CRegistry::Delete(HKEY_CLASSES_ROOT, szApeCmdKey)
+            || !CRegistry::Delete(HKEY_CLASSES_ROOT, szApeKey) )
+            return MsgBoxError("Error in delContextMenu");
+    }
+}
 
 ///////////////////////////////////////////////////////////
 // Notepad Replacement
@@ -140,10 +142,10 @@ void CIntegrationDlg::onCommand(int cmd, int) {
             EndDialog(m_hWnd, cmd);
             break;
         case IDC_BTN_CM_REG:
-            contextMenu.setContextMenu(true);
+            setContextMenu(true);
             break;
         case IDC_BTN_CM_UNREG:
-            contextMenu.setContextMenu(false);
+            setContextMenu(false);
             break;
         case IDC_BTN_NOTE_SET:
             setNotepadReplacement(true);
@@ -158,7 +160,7 @@ void CIntegrationDlg::onCommand(int cmd, int) {
 void CIntegrationDlg::UpdateBtnState() {
     bool b;
     if( !m_bSkip ) {
-        b = contextMenu.isContextMenu();
+        b = isContextMenu();
         btnReg.Enable(!b);
         btnUnreg.Enable(b);
 
