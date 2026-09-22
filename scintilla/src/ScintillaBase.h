@@ -8,12 +8,18 @@
 #ifndef SCINTILLABASE_H
 #define SCINTILLABASE_H
 
-namespace Scintilla {
+namespace Scintilla::Internal {
 
-#ifdef SCI_LEXER
+// For most platforms (not Cocoa) all IME indicators are drawn in same colour,
+// blue, with different patterns.
+constexpr ColourRGBA colourIME(0x0, 0x0, 0xffU);
+
+constexpr int IndicatorInput = static_cast<int>(Scintilla::IndicatorNumbers::Ime);
+constexpr int IndicatorTarget = IndicatorInput + 1;
+constexpr int IndicatorConverted = IndicatorInput + 2;
+constexpr int IndicatorUnknown = IndicatorInput + 3;
+
 class LexState;
-#endif
-
 /**
  */
 class ScintillaBase : public Editor, IListBoxDelegate {
@@ -32,47 +38,47 @@ protected:
 		idcmdSelectAll=16
 	};
 
-	enum { maxLenInputIME = 200 };
-
-	int displayPopupMenu;
+	Scintilla::PopUp displayPopupMenu;
 	Menu popup;
-	AutoComplete ac;
+	Scintilla::Internal::AutoComplete ac;
 
 	CallTip ct;
 
 	int listType;			///< 0 is an autocomplete list
 	int maxListWidth;		/// Maximum width of list, in average character widths
-	int multiAutoCMode; /// Mode for autocompleting when multiple selections are present
+	Scintilla::MultiAutoComplete multiAutoCMode; /// Mode for autocompleting when multiple selections are present
 
-#ifdef SCI_LEXER
 	LexState *DocumentLexState();
-	void SetLexer(uptr_t wParam);
-	void SetLexerLanguage(const char *languageName);
 	void Colourise(int start, int end);
-#endif
 
 	ScintillaBase();
 	// Deleted so ScintillaBase objects can not be copied.
-	explicit ScintillaBase(const ScintillaBase &) = delete;
+	ScintillaBase(const ScintillaBase &) = delete;
+	ScintillaBase(ScintillaBase &&) = delete;
 	ScintillaBase &operator=(const ScintillaBase &) = delete;
-	virtual ~ScintillaBase();
+	ScintillaBase &operator=(ScintillaBase &&) = delete;
+	// ~ScintillaBase() in public section
 	void Initialise() override {}
 	void Finalise() override;
 
-	void AddCharUTF(const char *s, unsigned int len, bool treatAsDBCS=false) override;
+	void InsertCharacter(std::string_view sv, Scintilla::CharacterSource charSource) override;
 	void Command(int cmdId);
 	void CancelModes() override;
-	int KeyCommand(unsigned int iMessage) override;
+	int KeyCommand(Scintilla::Message iMessage) override;
 
-	void AutoCompleteInsert(Sci::Position startPos, int removeLen, const char *text, int textLen);
-	void AutoCompleteStart(int lenEntered, const char *list);
+	void MoveImeCarets(Sci::Position offset) noexcept;
+	void DrawImeIndicator(int indicator, Sci::Position len);
+
+	void AutoCompleteInsert(Sci::Position startPos, Sci::Position removeLen, std::string_view text);
+	void AutoCompleteStart(Sci::Position lenEntered, const char *list);
 	void AutoCompleteCancel();
 	void AutoCompleteMove(int delta);
 	int AutoCompleteGetCurrent() const;
 	int AutoCompleteGetCurrentText(char *buffer) const;
 	void AutoCompleteCharacterAdded(char ch);
 	void AutoCompleteCharacterDeleted();
-	void AutoCompleteCompleted(char ch, unsigned int completionMethod);
+	void AutoCompleteNotifyCompleted(char ch, CompletionMethods completionMethod, Sci::Position firstPos, const char *text);
+	void AutoCompleteCompleted(char ch, Scintilla::CompletionMethods completionMethod);
 	void AutoCompleteMoveToCurrentWord();
 	void AutoCompleteSelection();
 	void ListNotify(ListBoxEvent *plbe) override;
@@ -85,15 +91,16 @@ protected:
 	bool ShouldDisplayPopup(Point ptInWindowCoordinates) const;
 	void ContextMenu(Point pt);
 
-	void ButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) override;
-	void RightButtonDownWithModifiers(Point pt, unsigned int curTime, int modifiers) override;
+	void ButtonDownWithModifiers(Point pt, unsigned int curTime, Scintilla::KeyMod modifiers) override;
+	void RightButtonDownWithModifiers(Point pt, unsigned int curTime, Scintilla::KeyMod modifiers) override;
 
 	void NotifyStyleToNeeded(Sci::Position endStyleNeeded) override;
-	void NotifyLexerChanged(Document *doc, void *userData) override;
 
 public:
+	~ScintillaBase() override;
+
 	// Public so scintilla_send_message can use it
-	sptr_t WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) override;
+	Scintilla::sptr_t WndProc(Scintilla::Message iMessage, Scintilla::uptr_t wParam, Scintilla::sptr_t lParam) override;
 };
 
 }

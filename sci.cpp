@@ -1,5 +1,4 @@
 #include "stdafx.h" 
-#include "platform.h"
 #include "scintilla.h"
 #include "sci.h"
 #include "shared/win.h"
@@ -26,7 +25,7 @@ void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
 
 	Call(SCI_SETVISIBLEPOLICY, VISIBLE_STRICT | VISIBLE_SLOP, 1);
 
-	Call( SCI_SETLEXER, 0 ); // SCLEX_CONTAINER
+	Call( SCI_SETILEXER, 0, 0 ); // no lexer: APE++ styles the text itself (container mode)
 	// Call( SCI_SETSTYLEBITS, 7 ); // deprecated
 
 	Call( SCI_SETTABWIDTH, g_options.iTabSize );

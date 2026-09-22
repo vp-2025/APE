@@ -3,7 +3,6 @@
 #include <windows.h>
 #include <cmath>
 
-#include "platform.h"
 #include "scintilla.h"
 
 #include "shared/ctime.h"

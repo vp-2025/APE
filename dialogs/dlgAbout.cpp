@@ -7,6 +7,11 @@
 
 using namespace std;
 
+// Version of the Scintilla component vendored in src\scintilla (Scintilla has no
+// version macro of its own, so this is updated by hand when it is upgraded)
+#define SCINTILLA_VERSION_STR "5.6.6"
+// todo: ScintRes.rc #define VERSION_SCINTILLA "5.6.6"
+
 void CAboutDlg::onInit() {
     CenterWindow(m_hWnd);
     g_lang.translateDlg(m_hWnd);
@@ -16,7 +21,8 @@ void CAboutDlg::onInit() {
         replaceStr(version, ", ", ".");
         string label;
         label << vi.getFileDescription() << ' '
-              << 'v' << version << "\n\n"
+              << 'v' << version << "\n"
+              << "Scintilla " SCINTILLA_VERSION_STR "\n\n"
               << vi.getLegalCopyright() << ' '
               << vi.getCompanyName() << "\n\n"
               << "Built on " << __DATE__ << ' ' << __TIME__;
