@@ -31,11 +31,20 @@ add_executable(ape++ WIN32 ${LOCAL_FILES} ${DLG_FILES} ${LEXBASE_FILES} ${LEXERS
 
 set_property(TARGET ape++ PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
-SET_TARGET_PROPERTIES(ape++ PROPERTIES LINK_FLAGS " /MANIFEST:NO") # manifest is in resources
+SET_TARGET_PROPERTIES(ape++ PROPERTIES LINK_FLAGS " /MANIFEST:NO /OPT:REF /OPT:ICF")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set_target_properties(ape++ PROPERTIES OUTPUT_NAME ape++D)
 endif()
+
+include(CheckIPOSupported)
+check_ipo_supported(RESULT APE_IPO_SUPPORTED OUTPUT APE_IPO_ERROR)
+if(APE_IPO_SUPPORTED)
+	set_property(TARGET ape++ PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+else()
+	message(WARNING "Interprocedural optimization unavailable: ${APE_IPO_ERROR}")
+endif()
+
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
 	set(APE_DEPLOY_DIR "C:/tools/ape++" CACHE PATH "Release exe is copied here after the build")
 	add_custom_command(TARGET ape++ POST_BUILD
