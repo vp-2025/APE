@@ -7,10 +7,7 @@
 
 using namespace std;
 
-// Version of the Scintilla component vendored in src\scintilla (Scintilla has no
-// version macro of its own, so this is updated by hand when it is upgraded)
-#define SCINTILLA_VERSION_STR "5.6.6"
-// todo: ScintRes.rc #define VERSION_SCINTILLA "5.6.6"
+#define SCINTILLA_VERSION_STR "5.6.6" // from scintilla/win32/ScintRes.rc
 
 void CAboutDlg::onInit() {
     CenterWindow(m_hWnd);

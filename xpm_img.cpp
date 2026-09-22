@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "xpm_img.h"
 
 const char * xpmData[] = {

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "lexNSIS.h"
 #include "shared/platform.h"
 #include "shared/str.h"

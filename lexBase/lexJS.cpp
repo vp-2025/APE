@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "lexJS.h"
 #include "shared/platform.h"
 #include "lexers.h"

@@ -141,8 +141,6 @@
     <None Include="res\vbs_kw.txt">
       <Filter>Resource Files\txt</Filter>
     </None>
-    <None Include="..\history.txt" />
-    <None Include="..\todo.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -175,6 +173,57 @@
     <ClInclude Include="xpm_img.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="tabs.h">
+      <Filter>windows</Filter>
+    </ClInclude>
+    <ClInclude Include="sciiterator.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\ctime.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\str.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\win.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\cfile.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="shared\platform.h">
+      <Filter>shared</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgAbout.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgCheckList.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgColors.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgFind.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgGoto.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgIndicators.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgIntegr.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgOptions.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgSort.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="dialogs\dlgTabs.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
     <ClInclude Include="lexBase\lexBase.h">
       <Filter>lexBase</Filter>
     </ClInclude>
@@ -191,6 +240,9 @@
       <Filter>lexBase</Filter>
     </ClInclude>
     <ClInclude Include="lexBase\lexNSIS.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
+    <ClInclude Include="lexBase\myLexers.h">
       <Filter>lexBase</Filter>
     </ClInclude>
     <ClInclude Include="lexBase\stylesCSS.h">
@@ -220,63 +272,6 @@
     <ClInclude Include="lib\versionInfo.h">
       <Filter>Lib</Filter>
     </ClInclude>
-    <ClInclude Include="lib\vsstream.h">
-      <Filter>Lib</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgAbout.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgColors.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgFind.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgGoto.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgIntegr.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgOptions.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgSort.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgTabs.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="tabs.h">
-      <Filter>windows</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgIndicators.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="dialogs\dlgCheckList.h">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="sciiterator.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="lexBase\myLexers.h">
-      <Filter>lexBase</Filter>
-    </ClInclude>
-    <ClInclude Include="shared\ctime.h">
-      <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="shared\str.h">
-      <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="shared\win.h">
-      <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="shared\cfile.h">
-      <Filter>shared</Filter>
-    </ClInclude>
-    <ClInclude Include="shared\platform.h">
-      <Filter>shared</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ape++.cpp">
@@ -302,69 +297,6 @@
     </ClCompile>
     <ClCompile Include="xpm_img.cpp">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="lexBase\lexBase.cpp">
-      <Filter>lexBase</Filter>
-    </ClCompile>
-    <ClCompile Include="lexBase\lexCSS.cpp">
-      <Filter>lexBase</Filter>
-    </ClCompile>
-    <ClCompile Include="lexBase\lexers.cpp">
-      <Filter>lexBase</Filter>
-    </ClCompile>
-    <ClCompile Include="lexBase\lexerStyles.cpp">
-      <Filter>lexBase</Filter>
-    </ClCompile>
-    <ClCompile Include="lexBase\lexJS.cpp">
-      <Filter>lexBase</Filter>
-    </ClCompile>
-    <ClCompile Include="lexBase\lexNSIS.cpp">
-      <Filter>lexBase</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\AccelMenu.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\BitmapMenu.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\fileMask.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\lang.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\mru.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\ShellContextMenu.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\versionInfo.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgAbout.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgColors.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgFind.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgGoto.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgIntegr.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgOptions.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgSort.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgTabs.cpp">
-      <Filter>Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="tabs.cpp">
       <Filter>windows</Filter>
@@ -411,14 +343,8 @@
     <ClCompile Include="lexers\LexerXML.cpp">
       <Filter>lexers\cpp</Filter>
     </ClCompile>
-    <ClCompile Include="dialogs\dlgIndicators.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="lexers\LexerJS.cpp">
       <Filter>lexers\cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="dialogs\dlgCheckList.cpp">
-      <Filter>Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="shared\str.cpp">
       <Filter>shared</Filter>
@@ -431,9 +357,6 @@
     </ClCompile>
     <ClCompile Include="shared\platform.cpp">
       <Filter>shared</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\testLib.cpp">
-      <Filter>Lib</Filter>
     </ClCompile>
     <ClCompile Include="shared\testShared.cpp">
       <Filter>shared</Filter>
@@ -557,6 +480,78 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgAbout.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgCheckList.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgColors.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgFind.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgGoto.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgIndicators.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgIntegr.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgOptions.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgSort.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="dialogs\dlgTabs.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexBase.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexCSS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexers.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexerStyles.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexJS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexNSIS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\AccelMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\BitmapMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\fileMask.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\lang.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\mru.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ShellContextMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\testLib.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\versionInfo.cpp">
+      <Filter>Lib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
