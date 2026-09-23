@@ -131,10 +131,8 @@ void CEditor::onCreate(HWND hWnd)
 	}
 	SetWindowPlacement( m_hWnd, &wp );
 
-	int lang=-1;
-	LoadInt( "", "lang", lang );
 	g_lang.init( ID_LANG_FIRST, ID_LANG_LAST );
-	g_lang.setLang( lang );
+	g_lang.setLang( LoadIntVal( "", "lang", -1 ) );
 	g_lang.translateMenu( hWnd );
 	m_accelMenu.proceedMenu( hWnd );
 
@@ -279,7 +277,7 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 	case ID_VIEW_ALWAYSONTOP: ViewAlwaysOnTop(); break;
 	case ID_VIEW_FULLSCREEN: ViewFullScreen(); break;
 
-	case ID_OPTIONS_INTEGR: CIntegrationDlg().doModal(m_hWnd); break;
+	case ID_OPTIONS_INTEGR: showIntegrationDlg(m_hWnd); break;
 	case ID_OPTIONS_COLORS: onColors(); break;
 	case ID_OPTIONS_INDICATORS: onIndicators(); break;
 	case ID_OPTIONS_OPTIONS: onOptions(); break;

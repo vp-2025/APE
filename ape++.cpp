@@ -1,10 +1,11 @@
-﻿#include "stdafx.h"
+#include "stdafx.h"
 #include "resource.h"
 #include "main.h"
 #include "dlgFind.h"
 #include <objbase.h> // CoInitialize
 #include "options.h"
 #include "dlgIntegr.h"
+#include "lang.h"
 
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
@@ -72,6 +73,22 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 //		MessageBoxW(nullptr, lpCmdLine, nullptr, MB_OK);
 		string sCmdLine = w2utf(lpCmdLine);
 		splitQ(sCmdLine, vCmdLine, ' ');
+
+		if( !vCmdLine.empty() && vCmdLine[0] == _INTEGR ) {
+			g_hInst = hInstance;
+			HWND hParent = nullptr;
+			if( vCmdLine.size() > 1 ) {
+				hParent = (HWND) (UINT_PTR) stoull(vCmdLine[1]);
+				if( !IsWindow(hParent) )
+					hParent = nullptr;
+			}
+			InitCommonControls();
+			g_lang.init(ID_LANG_FIRST, ID_LANG_LAST);
+			g_lang.setLang(LoadIntVal("", "lang", -1));
+			CIntegrationDlg().doModal(hParent);
+			return 0;
+		}
+
 		if( vCmdLine.size() >= 2 && vCmdLine[0] == "-d" && containsIC(vCmdLine[1], "notepad") ) {
 			if( vCmdLine.size() == 2 && isNotepadReplacement() ) {
 				setNotepadReplacement(false, false);

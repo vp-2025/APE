@@ -1695,6 +1695,13 @@ inline void LoadInt(const std::string &sSection, const char *szKey, int &val) {
         val = reg.ReadInt(szKey, val);
 }
 
+inline int LoadIntVal(const std::string &sSection, const char *szKey, int val) {
+    CRegistry reg;
+    if (reg.Open(g_hKey, g_szPath + sSection))
+        val = reg.ReadInt(szKey, val);
+    return val;
+}
+
 inline void SaveInt(const std::string &sSection, const char *szKey, int val) {
     CRegistry reg;
     if (reg.Create(g_hKey, g_szPath + sSection))

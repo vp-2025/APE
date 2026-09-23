@@ -16,3 +16,5 @@ private:
 
 bool isNotepadReplacement();
 void setNotepadReplacement(bool b, bool bShowError = true);
+
+void showIntegrationDlg(HWND hParent);

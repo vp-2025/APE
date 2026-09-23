@@ -27,4 +27,6 @@ constexpr auto _NEW = "-new";
 constexpr auto _TOP = "-top=";
 constexpr auto _POS = "-pos=";
 
+constexpr auto _INTEGR = "-integration";
+
 constexpr auto INSTANCE_CODE = 0xDEADBEEF;
