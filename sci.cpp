@@ -428,8 +428,8 @@ int CSciWrapper::FindText( int flags, Sci_TextToFind& ttf, bool bRegExp ) {
 		ttf.chrgText.cpMin = what[0].first.getPos();
 		ttf.chrgText.cpMax = what[0].second.getPos();
 		return ttf.chrgText.cpMin;
-	} else
-		return Call(SCI_FINDTEXT,flags,(intptr_t)&ttf); 
+	}
+	return Call(SCI_FINDTEXT, flags, (intptr_t) &ttf);
 }
 
 void CSciWrapper::replaceTargetRegExp( const string& sFind, const string& sReplace ) {

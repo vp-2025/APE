@@ -617,7 +617,7 @@ public:
 
     LPARAM GetComboEx() {
         int k = GetCurSel();
-        return k == -1 ? GetItemData(k) : (LPARAM) -1;
+        return k != -1 ? GetItemData(k) : (LPARAM) -1;
     }
 
     void UpdateMRU(int cnt = 10); // most recent usage: store last cnt(10) strings

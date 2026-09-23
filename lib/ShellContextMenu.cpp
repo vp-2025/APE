@@ -406,6 +406,7 @@ void _SHFree(void* p) {
 bool BrowseForFolder(HWND hWnd, string& sPath) {
 	string str = sPath;
 	delTailSlash(str);
+	wstring wstr = utf2w(str);
 
 	BROWSEINFOW bi {};
 	bi.hwndOwner = hWnd;
@@ -413,7 +414,7 @@ bool BrowseForFolder(HWND hWnd, string& sPath) {
 //	bi.lpszTitle = szTitle;
 	bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
 	bi.lpfn = BrowseCallbackProc;
-	bi.lParam = (LPARAM)utf2w(str).c_str();
+	bi.lParam = (LPARAM)wstr.c_str();
 
 	LPITEMIDLIST pIdl = SHBrowseForFolderW(&bi);
 

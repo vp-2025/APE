@@ -160,6 +160,7 @@ bool dlgOpenFile(HWND hWnd, string& sFile) {
     wstrbuf sBuf(MAX_PATH);
 	if( !sFile.empty() )
 		sBuf.set(utf2w(sFile));
+    const wstring initialDir = utf2w(GetCurDir());
     OPENFILENAMEW ofn {};
     ofn.lStructSize = sizeof(ofn);
     ofn.hInstance = g_hInst;
@@ -167,7 +168,7 @@ bool dlgOpenFile(HWND hWnd, string& sFile) {
     ofn.lpstrFilter = L"All Files (*.*)\0*.*\0\0";
     ofn.lpstrFile = sBuf.buf();
     ofn.nMaxFile = sBuf.size();
-    ofn.lpstrInitialDir = utf2w(GetCurDir()).c_str();
+    ofn.lpstrInitialDir = initialDir.c_str();
     ofn.Flags = OFN_HIDEREADONLY;
     bool ret = GetOpenFileNameW(&ofn) != 0;
 	if( ret )
@@ -179,6 +180,7 @@ bool dlgSaveFile(HWND hWnd, string& sFile) {
     wstrbuf sBuf(MAX_PATH);
     if( !sFile.empty() )
         sBuf.set(utf2w(sFile));
+    wstring initialDir = utf2w(GetCurDir());
     OPENFILENAMEW ofn {};
     ofn.lStructSize = sizeof(ofn);
     ofn.hInstance = g_hInst;
@@ -186,7 +188,7 @@ bool dlgSaveFile(HWND hWnd, string& sFile) {
     ofn.lpstrFilter = L"All Files (*.*)\0*.*\0\0";
     ofn.lpstrFile = sBuf.buf();
     ofn.nMaxFile = sBuf.size();
-    ofn.lpstrInitialDir = utf2w(GetCurDir()).c_str();
+    ofn.lpstrInitialDir = initialDir.c_str();
     ofn.Flags = OFN_HIDEREADONLY;
     bool ret = GetSaveFileNameW(&ofn) != 0;
 	if( ret )
