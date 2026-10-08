@@ -42,18 +42,18 @@ struct CDarkApi {
 			setWindowTheme = (FnSetWindowTheme)GetProcAddress(hUx, "SetWindowTheme");
 			// on older builds the same ordinals are other functions
 			if( build >= BUILD_1809 ) {
-				FARPROC p135 = GetProcAddress(hUx, MAKEINTRESOURCEA(135));
 				if( build >= BUILD_1903 )
-					setPreferredAppMode = (FnSetPreferredAppMode)p135;
+					setPreferredAppMode = (FnSetPreferredAppMode)GetProcAddress(hUx, MAKEINTRESOURCEA(135));
 				else
-					allowDarkModeForApp = (FnAllowDarkModeForApp)p135;
+					allowDarkModeForApp = (FnAllowDarkModeForApp)GetProcAddress(hUx, MAKEINTRESOURCEA(135));
+
 //				allowDarkModeForWindow = (FnAllowDarkModeForWindow)GetProcAddress(hUx, MAKEINTRESOURCEA(133));
 //				flushMenuThemes = (FnFlushMenuThemes)GetProcAddress(hUx, MAKEINTRESOURCEA(136));
 //				refreshImmersiveColorPolicyState = (FnRefreshImmersiveColorPolicyState)GetProcAddress(hUx, MAKEINTRESOURCEA(104));
 			}
 		}
-//		if( HMODULE hDwm = LoadLibraryExW(L"dwmapi.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32) )
-//			dwmSetWindowAttribute = (FnDwmSetWindowAttribute)GetProcAddress(hDwm, "DwmSetWindowAttribute");
+		if( HMODULE hDwm = LoadLibraryExW(L"dwmapi.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32) )
+			dwmSetWindowAttribute = (FnDwmSetWindowAttribute)GetProcAddress(hDwm, "DwmSetWindowAttribute");
 	}
 
 	static DWORD getBuildNumber() {
