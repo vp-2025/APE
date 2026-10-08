@@ -26,4 +26,5 @@ void COptions::ACX(bool bSave)
 	acx( OPT, "ViewXMLMatchTagHL", bViewXMLMatchTagHL, bSave );
 	acx( OPT, "ViewTokenHL", bViewTokenHL, bSave );
 	acx( OPT, "ViewWrapLongLines", bViewWrapLongLines, bSave );
+	acx( OPT, "Theme", iTheme, bSave );
 }

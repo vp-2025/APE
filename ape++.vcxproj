@@ -507,6 +507,7 @@
     <ClInclude Include="xmlMatchedTagHL.h" />
     <ClInclude Include="xpm_img.h" />
     <ClInclude Include="tabs.h" />
+    <ClInclude Include="theme.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dialogs\dlgAbout.cpp" />
@@ -532,6 +533,7 @@
     <ClCompile Include="progress.cpp" />
     <ClCompile Include="sci.cpp" />
     <ClCompile Include="tabs.cpp" />
+    <ClCompile Include="theme.cpp" />
     <ClCompile Include="xmlMatchedTagHL.cpp" />
     <ClCompile Include="xpm_img.cpp" />
     <ClCompile Include="lib\AccelMenu.cpp">

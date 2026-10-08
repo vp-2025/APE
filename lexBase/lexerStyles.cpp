@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "lexBase.h"
 #include "lexerStyles.h"
+#include "theme.h"
 
 #define STYLE_INVALID IStyler::styleInvalidText
 #define STYLE_WHITESPACE 40
@@ -449,9 +450,9 @@ void applyStyle( CSciWrapper& sci, CLexerStyle* pStyle, int id=0  )
 	if( pStyle->IsSize() )
 		stl.Size( pStyle->GetSize() );
 	if( pStyle->IsClrFore() )
-		stl.Fore( pStyle->GetClrFore() );
+		stl.Fore( g_theme.editorFore(pStyle->GetClrFore()) );
 	if( pStyle->IsClrBack() )
-		stl.Back( pStyle->GetClrBack() );
+		stl.Back( g_theme.editorBack(pStyle->GetClrBack()) );
 	if( pStyle->isHotSpot )
 		stl.HotSpot( pStyle->bHotSpot );
 }
@@ -472,8 +473,8 @@ void SetupLexerStyles( CSciWrapper& sci )
 		if( pStyle->id==STYLE_WHITESPACE ) {
 			bool bFore = pStyle->isFore;
 			bool bBack = pStyle->isBack;
-			sci.Call( SCI_SETWHITESPACEFORE, bFore, pStyle->clrFore );
-			sci.Call( SCI_SETWHITESPACEBACK, bBack, pStyle->clrBack );
+			sci.Call( SCI_SETWHITESPACEFORE, bFore, bFore ? g_theme.editorFore(pStyle->clrFore) : 0 );
+			sci.Call( SCI_SETWHITESPACEBACK, bBack, bBack ? g_theme.editorBack(pStyle->clrBack) : 0 );
 		} else
 		if( pStyle->id!=STYLE_DEFAULT )
 			applyStyle( sci, pStyle );
@@ -487,6 +488,19 @@ void SetupLexerStyles( CSciWrapper& sci )
 			}
 			applyStyle( sci, pStyle );
 		}
+
+// margins: Scintilla gives the line numbers the system button color, too light for the dark theme
+	if( g_theme.isDark() ) {
+		CLexerStyle* pLineNum = findStyle(styleGlobal, STYLE_LINENUMBER);
+		if( !pLineNum || !pLineNum->IsClrBack() )
+			sci.Style(STYLE_LINENUMBER).Back( CTheme::clrMargin );
+		sci.Call( SCI_SETFOLDMARGINCOLOUR, true, CTheme::clrMargin );
+		sci.Call( SCI_SETFOLDMARGINHICOLOUR, true, CTheme::clrMargin );
+	} else {
+		sci.Call( SCI_SETFOLDMARGINCOLOUR, false, 0 );
+		sci.Call( SCI_SETFOLDMARGINHICOLOUR, false, 0 );
+	}
+	sci.SetupFoldMarkers();
 
 // cursor color: background inverted
 	int clr = sci.StyleDefault().Back();
@@ -530,7 +544,7 @@ void SetupIndicators( CSciWrapper& sci )
 			.Style( g_indicators[i].style )
 			.Alpha( g_indicators[i].alpha*2.55 )
 			.OutlineAlpha( g_indicators[i].outlineAlpha*2.55 )
-			.Fore( g_indicators[i].color )
+			.Fore( g_theme.editorFore(g_indicators[i].color) )
 			.Under(true);
 	}
 }

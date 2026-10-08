@@ -6,6 +6,7 @@
 #include "options.h"
 #include "dlgIntegr.h"
 #include "lang.h"
+#include "theme.h"
 
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
@@ -121,6 +122,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	InitCommonControls();
 	CoInitialize(nullptr);
 	MyRegisterClass(hInstance);
+	g_theme.init(g_options.iTheme); // dark popup menus must be set before the window is created
 
 	HWND hWnd = CreateWindowW(APE_CLASS, APE_TITLE,
 	                          WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,

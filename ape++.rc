@@ -182,6 +182,12 @@ BEGIN
         MENUITEM "Syntax Highlight...",         ID_OPTIONS_COLORS
         MENUITEM "Indicators...",               ID_OPTIONS_INDICATORS
         MENUITEM "Integration...",              ID_OPTIONS_INTEGR
+        POPUP "Theme"
+        BEGIN
+            MENUITEM "Windows Default",             ID_VIEW_THEME_SYSTEM
+            MENUITEM "Light",                       ID_VIEW_THEME_LIGHT
+            MENUITEM "Dark",                        ID_VIEW_THEME_DARK
+        END
         POPUP "Languages"
         BEGIN
             MENUITEM "First",                       ID_LANG_FIRST

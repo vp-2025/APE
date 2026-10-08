@@ -133,6 +133,7 @@ public:
 	}
 
 	void Create( HWND hParent, int x=0, int y=0, int w=0, int h=0, WORD id=0 );
+	void SetupFoldMarkers(); // depends on the dark/light theme
 	void Destroy() { 
 		DestroyWindow(hSci);
 	}

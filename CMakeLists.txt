@@ -13,9 +13,9 @@ if(MSVC)
 	add_definitions(-D_HAS_STD_BYTE=0)
 endif()
 
-add_definitions(-DWIN32 -DSCI_LEXER)
+add_definitions(-DWIN32)
 add_definitions(-DCLION)
-include_directories(. lib flex lexBase lexers dialogs c:/boost scintilla/include scintilla/src)
+include_directories(. lib flex lexBase lexers dialogs scintilla/include scintilla/src)
 
 file(GLOB LOCAL_FILES "*.cpp" )
 file(GLOB DLG_FILES "dialogs/*.cpp" )
@@ -29,20 +29,13 @@ file(GLOB SCI_WIN32_FILES "scintilla/win32/*.cxx" )
 add_executable(ape++ WIN32 ${LOCAL_FILES} ${DLG_FILES} ${LEXBASE_FILES} ${LEXERS_FILES} ${LIB_FILES} ${SHARED_FILES}
 	${SCI_SRC_FILES} ${SCI_WIN32_FILES} ape++.rc)
 
-set_property(TARGET ape++ PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 SET_TARGET_PROPERTIES(ape++ PROPERTIES LINK_FLAGS " /MANIFEST:NO /OPT:REF /OPT:ICF")
 
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+	set_property(TARGET ape++ PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded")
+endif()
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	set_target_properties(ape++ PROPERTIES OUTPUT_NAME ape++D)
-endif()
-
-include(CheckIPOSupported)
-check_ipo_supported(RESULT APE_IPO_SUPPORTED OUTPUT APE_IPO_ERROR)
-if(APE_IPO_SUPPORTED)
-	set_property(TARGET ape++ PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
-else()
-	message(WARNING "Interprocedural optimization unavailable: ${APE_IPO_ERROR}")
 endif()
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")

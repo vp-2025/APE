@@ -115,6 +115,9 @@ public:
 	void onSort();
 	void DropFiles(HDROP hdrop);
 
+	void onSetTheme( int iMode );
+	void onThemeChanged( bool bInit=false ); // Windows dark/light mode
+
 	void ViewAlwaysOnTop();
 	void ViewFullScreen();
 	void SetFullScreen(bool bOn);

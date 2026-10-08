@@ -176,6 +176,9 @@
     <ClInclude Include="tabs.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="theme.h">
+      <Filter>windows</Filter>
+    </ClInclude>
     <ClInclude Include="sciiterator.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -299,6 +302,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="tabs.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="theme.cpp">
       <Filter>windows</Filter>
     </ClCompile>
     <ClCompile Include="lexers\LexerBATCH.cpp">

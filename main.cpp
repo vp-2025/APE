@@ -23,6 +23,7 @@
 #include "lexCSS.h"
 #include <regex>
 #include "sciIterator.h"
+#include "theme.h"
 
 #define ID_CHECK_RELOAD	1234
 #define ID_CMB_FUNC		1235
@@ -79,6 +80,7 @@ void CEditor::onCreate(HWND hWnd)
         partWidths[i] = (int)(partWidths[i]*dpiScale);
 
 	m_hWnd = hWnd;
+	g_theme.applyTitleBar( hWnd ); // before the window is shown
 
 // Toolbar ============================ todo : load from res
 	TBBUTTON tbButton[] =
@@ -120,6 +122,10 @@ void CEditor::onCreate(HWND hWnd)
 
 	m_pnl.Create( hWnd );
 	m_pnl.SetVisible( true );
+
+	g_theme.subclassReBar( m_rebar.hWnd(), m_toolbar.hWnd() );
+	g_theme.subclassStatusbar( m_statusbar.hWnd() );
+	onThemeChanged( true );
 
 // ====================================
 	CWindowPlacement wp;
@@ -276,6 +282,10 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 
 	case ID_VIEW_ALWAYSONTOP: ViewAlwaysOnTop(); break;
 	case ID_VIEW_FULLSCREEN: ViewFullScreen(); break;
+
+	case ID_VIEW_THEME_SYSTEM: onSetTheme( themeSystem ); break;
+	case ID_VIEW_THEME_LIGHT: onSetTheme( themeLight ); break;
+	case ID_VIEW_THEME_DARK: onSetTheme( themeDark ); break;
 
 	case ID_OPTIONS_INTEGR: showIntegrationDlg(m_hWnd); break;
 	case ID_OPTIONS_COLORS: onColors(); break;
@@ -1335,6 +1345,10 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.EnableCheck( ID_ENCODING_ANSI_CYR, b, enc==encAnsiCyr );
 
 	menu.EnableCheck( ID_OPTIONS_NOTONEINSTANCE, g_options.bOneInstanse, m_bNotOneInstance );
+
+	menu.EnableCheck( ID_VIEW_THEME_SYSTEM, true, g_theme.getMode()==themeSystem );
+	menu.EnableCheck( ID_VIEW_THEME_LIGHT, true, g_theme.getMode()==themeLight );
+	menu.EnableCheck( ID_VIEW_THEME_DARK, true, g_theme.getMode()==themeDark );
 }
 
 void CEditor::UpdateStatusbar()
@@ -1391,7 +1405,22 @@ void CEditor::UpdateTitle() {
 }
 
 LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+	LRESULT lr = 0;
+	if( g_theme.onMenuBarMsg(hWnd, msg, wParam, lParam, lr) )
+		return lr;
+
 	switch( msg ) {
+	case WM_SETTINGCHANGE:
+		if( CTheme::isThemeChangeMsg(msg, lParam) && g_theme.update() )
+			onThemeChanged();
+		return DefWindowProcW(hWnd, msg, wParam, lParam);
+
+	case WM_CTLCOLORSTATIC:
+		if( (HWND)lParam==m_pnl.hWnd() )
+			if( HBRUSH hbr = g_theme.onCtlColor((HDC)wParam) )
+				return (LRESULT)hbr;
+		return DefWindowProcW(hWnd, msg, wParam, lParam);
+
 	case WM_CLOSE:
 		if( WindowCanCloseAll() )
 			DestroyWindow(hWnd);
@@ -1984,6 +2013,31 @@ void CEditor::onSort() {
     if( sci.IsReadOnly() ) return;
 
 	CSortDlg(sci).doModal(m_hWnd);
+}
+
+void CEditor::onSetTheme( int iMode ) {
+	g_options.iTheme = iMode;
+	g_options.Save();
+	if( g_theme.setMode(g_options.iTheme) )
+		onThemeChanged();
+}
+
+void CEditor::onThemeChanged( bool bInit ) {
+	g_theme.applyTitleBar( m_hWnd, !bInit );
+	g_theme.applyCtrl( m_tabs.GetToolTips() );
+	g_theme.applyCtrl( (HWND)m_toolbar.SendMessage(TB_GETTOOLTIPS) );
+	g_theme.applyCtrl( m_cmbFunc.hWnd() );
+	if( bInit )
+		return;
+
+	for( auto& tabPage : m_vTabs ) {
+		g_theme.applySci( tabPage.sci.hWnd() );
+		SetupLexerStyles( tabPage.sci );
+		SetupIndicators( tabPage.sci );
+	}
+	ResizeScintilla();
+	DrawMenuBar( m_hWnd );
+	RedrawWindow( m_hWnd, nullptr, nullptr, RDW_INVALIDATE|RDW_ERASE|RDW_FRAME|RDW_ALLCHILDREN );
 }
 
 void CEditor::DropFiles(HDROP hdrop) {

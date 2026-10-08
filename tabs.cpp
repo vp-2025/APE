@@ -2,6 +2,7 @@
 #include "tabs.h"
 #include "resource.h"
 #include "options.h"
+#include "theme.h"
 
 void CTabCtrlAdv::applyOptions(bool bSelf) {
     if( g_options.bTabsCloseBtn )
@@ -77,6 +78,17 @@ LRESULT CTabCtrlAdv::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
         }
             break;
 
+        case WM_ERASEBKGND:
+            if( g_theme.isDark() )
+                return TRUE;
+            break;
+        case WM_PAINT:
+            if( g_theme.isDark() ) {
+                PaintDark();
+                return 0;
+            }
+            break;
+
         case WM_TIMER: // vp: sometimes when mouse out closeBtn it still is hovered; this is timer-fix
             if( m_iHoverTab != -1 ) {
                 CPoint pt = GetCursorPos();
@@ -109,7 +121,8 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
     GetItem(iTab, &tci);
 
     /**int bk =*/ SetBkMode(hDC, TRANSPARENT);
-    FillSolidRect(hDC, &r, GetSysColor(COLOR_BTNFACE));
+    bool bDark = g_theme.isDark();
+    FillSolidRect(hDC, &r, bDark ? (bSelected ? CTheme::clrCtrl : CTheme::clrBack) : GetSysColor(COLOR_BTNFACE));
 
     if( bSelected ) {
         CRect r2(r);
@@ -146,11 +159,20 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
 
     COLORREF clr;
     if( bNotExist ) {
-        clr = bSelected ? RGB(0, 0, 0) : RGB(0x40, 0x40, 0x40);
+        if( bDark )
+            clr = bSelected ? RGB(0xE0, 0xE0, 0xE0) : RGB(0xA0, 0xA0, 0xA0);
+        else
+            clr = bSelected ? RGB(0, 0, 0) : RGB(0x40, 0x40, 0x40);
     } else if( bRO ) {
-        clr = bSelected ? RGB(0xFF, 0, 0) : RGB(0x80, 0, 0);
+        if( bDark )
+            clr = bSelected ? RGB(0xFF, 0x70, 0x70) : RGB(0xC0, 0x50, 0x50);
+        else
+            clr = bSelected ? RGB(0xFF, 0, 0) : RGB(0x80, 0, 0);
     } else {
-        clr = bSelected ? RGB(0, 0, 0xFF) : RGB(0, 0, 0x80);
+        if( bDark )
+            clr = bSelected ? RGB(0x70, 0xB0, 0xFF) : RGB(0x50, 0x80, 0xC0);
+        else
+            clr = bSelected ? RGB(0, 0, 0xFF) : RGB(0, 0, 0x80);
     }
     SetTextColor(hDC, clr);
 
@@ -161,6 +183,49 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
     DrawTextW(hDC, tci.pszText, -1, &rText, DT_SINGLELINE | DT_CENTER | DT_VCENTER);
     if( bNotExist )
         SelectObject(hDC, hFontOld);
+}
+
+void CTabCtrlAdv::PaintDark() {
+    PAINTSTRUCT ps;
+    HDC hDC = BeginPaint(m_hWnd, &ps);
+    CRect rc = GetClientRect();
+
+    // double buffer: the close button hover repaints often
+    HDC hMem = CreateCompatibleDC(hDC);
+    HBITMAP hBmp = CreateCompatibleBitmap(hDC, rc.width(), rc.height());
+    HGDIOBJ hOldBmp = SelectObject(hMem, hBmp);
+    HGDIOBJ hOldFont = SelectObject(hMem, GetFont());
+    FillSolidRect(hMem, &rc, CTheme::clrBack);
+
+    int iSel = GetCurSel();
+    for( int i = 0, cnt = GetItemCount(); i < cnt; i++ ) {
+        CRect r = GetItemRect(i);
+        if( i == iSel ) { // as the tab control does: the selected tab is bigger
+            r.left -= dp(2);
+            r.right += dp(2);
+            r.top -= dp(2);
+        }
+        DRAWITEMSTRUCT dis{};
+        dis.CtlType = ODT_TAB;
+        dis.CtlID = m_id;
+        dis.itemID = i;
+        dis.itemAction = ODA_DRAWENTIRE;
+        dis.itemState = i == iSel ? ODS_SELECTED : 0;
+        dis.hwndItem = m_hWnd;
+        dis.hDC = hMem;
+        dis.rcItem = r;
+        ::SendMessage(GetParent(), WM_DRAWITEM, m_id, (LPARAM) &dis); // editor knows read-only & deleted files
+    }
+
+    CRect rLine(rc.left, rc.bottom - 1, rc.right, rc.bottom);
+    FillSolidRect(hMem, &rLine, CTheme::clrBorder);
+
+    BitBlt(hDC, 0, 0, rc.width(), rc.height(), hMem, 0, 0, SRCCOPY);
+    SelectObject(hMem, hOldFont);
+    SelectObject(hMem, hOldBmp);
+    DeleteObject(hBmp);
+    DeleteDC(hMem);
+    EndPaint(m_hWnd, &ps);
 }
 
 void CTabCtrlAdv::InvalidateOverRect(int tab) {

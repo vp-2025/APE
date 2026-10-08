@@ -11,6 +11,7 @@
 #include "shared/str.h"
 #include <regex>
 #include "sciIterator.h"
+#include "theme.h"
 
 void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
     m_dpiScale = GetScaleDPI();
@@ -70,15 +71,7 @@ void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
 //	Call(SCI_SETFOLDFLAGS, SC_FOLDFLAG_LINEAFTER_CONTRACTED | SC_FOLDFLAG_LEVELNUMBERS);
 //	Call(SCI_SETFOLDFLAGS, SC_FOLDFLAG_LINEAFTER_CONTRACTED | SC_FOLDFLAG_LINESTATE);
 //#endif
-	int fore = RGB(180, 210, 255);
-	int back = RGB(0, 0, 0);
-	DefineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_CIRCLEMINUS, fore, back );
-	DefineMarker(SC_MARKNUM_FOLDER, SC_MARK_CIRCLEPLUS, fore, back );
-	DefineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, fore, back );
-	DefineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, fore, back );
-	DefineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_CIRCLEPLUSCONNECTED, fore, back );
-	DefineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED, fore, back );
-	DefineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER, fore, back );
+	SetupFoldMarkers();
 	
 	Call( SCI_MARKERENABLEHIGHLIGHT, true );
 
@@ -106,13 +99,31 @@ void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
 	// SCI_SETPUNCTUATIONCHARS	
 
 	setEncoding(m_encoding);
+
+	g_theme.applySci(hSci);
+}
+
+void CSciWrapper::SetupFoldMarkers()
+{
+	// fore is the fill of the symbol, back is the lines and +/- sign
+	int fore = g_theme.isDark() ? RGB(0x3A, 0x4A, 0x66) : RGB(180, 210, 255);
+	int back = g_theme.isDark() ? RGB(0xA0, 0xB0, 0xC8) : RGB(0, 0, 0);
+	DefineMarker(SC_MARKNUM_FOLDEROPEN, SC_MARK_CIRCLEMINUS, fore, back );
+	DefineMarker(SC_MARKNUM_FOLDER, SC_MARK_CIRCLEPLUS, fore, back );
+	DefineMarker(SC_MARKNUM_FOLDERSUB, SC_MARK_VLINE, fore, back );
+	DefineMarker(SC_MARKNUM_FOLDERTAIL, SC_MARK_LCORNER, fore, back );
+	DefineMarker(SC_MARKNUM_FOLDEREND, SC_MARK_CIRCLEPLUSCONNECTED, fore, back );
+	DefineMarker(SC_MARKNUM_FOLDEROPENMID, SC_MARK_CIRCLEMINUSCONNECTED, fore, back );
+	DefineMarker(SC_MARKNUM_FOLDERMIDTAIL, SC_MARK_TCORNER, fore, back );
 }
 
 void CSciWrapper::SetLexer(int l) 
 { 
 	m_iLexer=l; 
 	string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_$";
-	chars += "�������������������������������������Ũ��������������������������";
+	// Russian letters in cp1251: lower case with yo, upper case with YO
+	chars += "\xE0\xE1\xE2\xE3\xE4\xE5\xB8\xE6\xE7\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF"
+	         "\xC0\xC1\xC2\xC3\xC4\xC5\xA8\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF";
 	if( m_iLexer==LEX_XHTML )
 		chars += '-';
 	SetWordChars( chars );

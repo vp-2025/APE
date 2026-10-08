@@ -1,5 +1,6 @@
 #include "BitmapMenu.h"
 #include "resource.h" // for ID_TAB_CHECKED
+#include "theme.h"
 using namespace std;
 
 extern HINSTANCE g_hInst;
@@ -43,19 +44,98 @@ void CBitmapMenu::OnInitMenuPopup( HMENU hMenu )
 {
 	if( m_toolbars.empty() ) return;
 
+	// HBMMENU_CALLBACK turns off the visual styles of the popup, so it is always light;
+	// in dark mode the items get 32-bit alpha bitmaps that the themed menu draws itself
+	bool bDark = g_theme.isDark();
 	MENUITEMINFO menuItemInfo = {0};
 	menuItemInfo.cbSize = sizeof(menuItemInfo);
-	menuItemInfo.fMask  = MIIM_BITMAP;
-	menuItemInfo.hbmpItem = HBMMENU_CALLBACK;
-	for( int i=0; i<GetMenuItemCount(hMenu); i++ )
+	for( int i=0; i<GetMenuItemCount(hMenu); i++ ) {
+		menuItemInfo.fMask = MIIM_BITMAP;
+		menuItemInfo.hbmpItem = HBMMENU_CALLBACK;
+		if( bDark ) {
+			menuItemInfo.hbmpItem = nullptr;
+			menuItemInfo.fMask = MIIM_ID | MIIM_STATE | MIIM_SUBMENU;
+			if( GetMenuItemInfo(hMenu, i, TRUE, &menuItemInfo) && !menuItemInfo.hSubMenu ) {
+				int imageID = -1;
+				HIMAGELIST hIL;
+				GetImage(menuItemInfo.wID, hIL, imageID);
+				if( imageID == -1 && m_pObj && m_OnGetImage )
+					m_OnGetImage(m_pObj, menuItemInfo.wID, hIL, imageID);
+				if( imageID != -1 ) // checked items without image get the check mark of the theme
+					menuItemInfo.hbmpItem = GetBitmap(hIL, imageID, (menuItemInfo.fState & MFS_DISABLED) != 0);
+			}
+			menuItemInfo.fMask = MIIM_BITMAP;
+		}
 		SetMenuItemInfo(hMenu, i, TRUE, &menuItemInfo);
+	}
 
 	MENUINFO menuInfo = {0};
 	menuInfo.cbSize = sizeof(menuInfo);
 	menuInfo.fMask = MIM_STYLE;
 	GetMenuInfo(hMenu, &menuInfo);
-	menuInfo.dwStyle |= MNS_NOCHECK;
+	menuInfo.dwStyle &= ~(MNS_NOCHECK | MNS_CHECKORBMP);
+	menuInfo.dwStyle |= bDark ? MNS_CHECKORBMP : MNS_NOCHECK;
 	SetMenuInfo(hMenu, &menuInfo);
+}
+
+// premultiplied 32-bit bitmap: the image is drawn on black and on white, the difference gives the alpha
+HBITMAP CBitmapMenu::GetBitmap( HIMAGELIST hIL, int imageID, bool bDisabled )
+{
+	auto key = std::make_tuple(hIL, imageID, bDisabled);
+	auto it = m_bitmaps.find(key);
+	if( it != m_bitmaps.end() )
+		return it->second;
+
+	int cx = 16, cy = 16;
+	ImageList_GetIconSize(hIL, &cx, &cy);
+	BITMAPINFO bmi = {0};
+	bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+	bmi.bmiHeader.biWidth = cx;
+	bmi.bmiHeader.biHeight = -cy; // top-down
+	bmi.bmiHeader.biPlanes = 1;
+	bmi.bmiHeader.biBitCount = 32;
+	bmi.bmiHeader.biCompression = BI_RGB;
+
+	HDC hDC = CreateCompatibleDC(nullptr);
+	BYTE* pBlack = nullptr;
+	BYTE* pWhite = nullptr;
+	HBITMAP hBlack = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void**)&pBlack, nullptr, 0);
+	HBITMAP hWhite = CreateDIBSection(hDC, &bmi, DIB_RGB_COLORS, (void**)&pWhite, nullptr, 0);
+	if( !hBlack || !hWhite ) {
+		if( hBlack ) DeleteObject(hBlack);
+		if( hWhite ) DeleteObject(hWhite);
+		DeleteDC(hDC);
+		return m_bitmaps[key] = nullptr;
+	}
+	RECT rc = {0, 0, cx, cy};
+	HGDIOBJ hOld = SelectObject(hDC, hBlack);
+	FillRect(hDC, &rc, (HBRUSH)GetStockObject(BLACK_BRUSH));
+	ImageList_Draw(hIL, imageID, hDC, 0, 0, ILD_TRANSPARENT);
+	SelectObject(hDC, hWhite);
+	FillRect(hDC, &rc, (HBRUSH)GetStockObject(WHITE_BRUSH));
+	ImageList_Draw(hIL, imageID, hDC, 0, 0, ILD_TRANSPARENT);
+	SelectObject(hDC, hOld);
+	DeleteDC(hDC);
+	GdiFlush();
+
+	for( int i=0; i<cx*cy; i++ ) {
+		BYTE* b = pBlack + i*4;
+		const BYTE* w = pWhite + i*4;
+		int a = 255 - (w[1] - b[1]); // green: the most precise channel
+		if( a < 0 ) a = 0;
+		if( a > 255 ) a = 255;
+		if( bDisabled ) { // grey and semi-transparent
+			int lum = (b[2]*30 + b[1]*59 + b[0]*11) / 100;
+			a = a * 45 / 100;
+			lum = lum * 45 / 100;
+			b[0] = b[1] = b[2] = (BYTE)lum;
+		}
+		for( int c=0; c<3; c++ )
+			if( b[c] > a ) b[c] = (BYTE)a;
+		b[3] = (BYTE)a; // the black background makes the colors premultiplied
+	}
+	DeleteObject(hWhite);
+	return m_bitmaps[key] = hBlack;
 }
 
 void CBitmapMenu::OnMeasureItem( MEASUREITEMSTRUCT* mi )
@@ -154,7 +234,7 @@ void CBitmapMenu::DrawButton( HDC dc, CSize &buttonSize )
 
 void CBitmapMenu::DrawChecked(HDC dc, CSize &buttonSize)
 {
-	HBRUSH brush = CreateSolidBrush(GetSysColor(COLOR_MENU));
+	HBRUSH brush = CreateSolidBrush(g_theme.isDark() ? CTheme::clrPressed : GetSysColor(COLOR_MENU));
 	HBRUSH oldBrush = (HBRUSH)SelectObject(dc, brush);
 	PatBlt(dc, 1, 1, buttonSize.cx, buttonSize.cy, PATCOPY);
 	SelectObject(dc, oldBrush);
@@ -213,7 +293,17 @@ void CBitmapMenu::DrawDisabled( HDC dc, HIMAGELIST& hIL, int imageID, CPoint &po
 	BitBlt( monoDC, 0, 0, size.cx, size.cy, colorDC, 0, 0, SRCCOPY );
 
 	// Draw the monochrome bitmap onto the menu.
+	// white pixels get the bk color of dc, black pixels the text color
+	COLORREF clrOldBk = 0, clrOldText = 0;
+	if( g_theme.isDark() ) {
+		clrOldBk = SetBkColor( dc, CTheme::clrMenu );
+		clrOldText = SetTextColor( dc, CTheme::clrTextDisabled );
+	}
 	BitBlt( dc, position.x, position.y, size.cx, size.cy, monoDC, 0, 0, SRCCOPY );
+	if( g_theme.isDark() ) {
+		SetBkColor( dc, clrOldBk );
+		SetTextColor( dc, clrOldText );
+	}
 
 	// Delete the color DC and bitmap.
 	SelectObject( colorDC, oldColorBmp );

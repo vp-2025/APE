@@ -94,6 +94,7 @@ public:
     static LRESULT CALLBACK WndProcStatic(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
     LRESULT WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
     void DrawItem(DRAWITEMSTRUCT* dis, bool bRO, bool bNotExist);
+    void PaintDark(); // whole control, the themed tab control draws light borders
 
     void InvalidateOverRect(int tab);
 
