@@ -4,8 +4,9 @@
 #include <string>
 #include <map>
 
-class CAccel2Menu
-{
+std::wstring accel2str( BYTE virt, WORD key ); // "Ctrl+Shift+C" style name of a single accelerator key
+
+class CAccel2Menu {
 	typedef std::map<int,std::wstring> mAccelType;
 	mAccelType m;
 public:

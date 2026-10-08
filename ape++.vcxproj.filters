@@ -260,6 +260,9 @@
     <ClInclude Include="lib\BitmapMenu.h">
       <Filter>Lib</Filter>
     </ClInclude>
+    <ClInclude Include="lib\ChordAccel.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
     <ClInclude Include="lib\fileMask.h">
       <Filter>Lib</Filter>
     </ClInclude>
@@ -539,6 +542,9 @@
       <Filter>Lib</Filter>
     </ClCompile>
     <ClCompile Include="lib\BitmapMenu.cpp">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\ChordAccel.cpp">
       <Filter>Lib</Filter>
     </ClCompile>
     <ClCompile Include="lib\fileMask.cpp">

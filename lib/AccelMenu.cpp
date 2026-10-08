@@ -1,4 +1,5 @@
 #include "AccelMenu.h"
+#include "ChordAccel.h"	// multi-key ("chord") shortcuts
 using namespace std;
 #include "shared/str.h"
 
@@ -23,8 +24,7 @@ wstring accel2str( BYTE virt, WORD key )
 	return ret;
 }
 
-CAccel2Menu::CAccel2Menu( UINT nAccelID )
-{
+CAccel2Menu::CAccel2Menu( UINT nAccelID ) {
 	HACCEL hAccel = LoadAccelerators(g_hInst, MAKEINTRESOURCE(nAccelID));
 	int nAccel = CopyAcceleratorTable( hAccel, nullptr, 0 );
 	if( nAccel ) {
@@ -34,6 +34,11 @@ CAccel2Menu::CAccel2Menu( UINT nAccelID )
 			m[pAccel[i].cmd] = accel2str( pAccel[i].fVirt, pAccel[i].key );
 		delete[] pAccel;
 	}
+
+//  multi-key shortcuts are handled outside of the accelerator table, but they
+//  are shown in the menus just like the ordinary ones (see ChordAccel.cpp)
+	for( const ChordAccel& ca : chordAccels() )
+		m[ca.cmd] = chordAccel2str(ca);
 }
 
 void CAccel2Menu::proceedMenu( HMENU hMenu )

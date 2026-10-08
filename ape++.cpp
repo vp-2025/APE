@@ -7,6 +7,7 @@
 #include "dlgIntegr.h"
 #include "lang.h"
 #include "theme.h"
+#include "ChordAccel.h" // multi-key ("chord") shortcuts
 
 HINSTANCE g_hInst;
 HWND g_hMainWnd;
@@ -152,10 +153,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	MSG msg;
 	while( GetMessage(&msg, nullptr, 0, 0) ) {
 		if( !editor.m_findDlg.isDlgMsg(msg) )
-			if( !TranslateAccelerator(g_hMainWnd, hAccelTable, &msg) ) {
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
+			if( !TranslateChordAccel(msg) )
+				if( !TranslateAccelerator(g_hMainWnd, hAccelTable, &msg) ) {
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
 	}
 
 	return (int) msg.wParam;
