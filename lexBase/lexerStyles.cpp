@@ -432,11 +432,10 @@ CLexerStyle* findStyle( CLexerStyle* pStyles, int id )
 	return NULL;
 }
 
-void applyStyle( CSciWrapper& sci, CLexerStyle* pStyle, int id=0  )
-{
+void applyStyle( CSciWrapper& sci, CLexerStyle* pStyle, int id=0  ) {
 	if( !pStyle ) return;
 	if( !id ) id=pStyle->id;
-	CSciStyle& stl = sci.Style(id);
+	CSciStyle stl = sci.Style(id); // a proxy - the setters call into Scintilla, a copy is fine
 	if( pStyle->IsBold() )
 		stl.Bold( pStyle->GetBold() );
 	if( pStyle->IsUnderline() )

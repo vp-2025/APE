@@ -44,7 +44,7 @@ public:
 	CSciStyle& Back( int clr ) { sci.Call(SCI_STYLESETBACK,idx,clr); return *this; }
 	CSciStyle& HotSpot( bool b ) { sci.Call(SCI_STYLESETHOTSPOT,idx,b); return *this; }
 
-	int Back() { return sci.Call(SCI_STYLEGETBACK,idx); }
+	int Back() const { return sci.Call(SCI_STYLEGETBACK,idx); }
 };
 
 class CSciMargin {
@@ -217,8 +217,8 @@ public:
 	void CopyAsHex();
 
 // functions from Capital are calls to Scintilla; Scintilla functions are splited in groups (like in Doc)
-	int Call( unsigned int msg, uintptr_t wParam=0, intptr_t lParam=0 ) const
-	{ return sci_fn( sci_ptr, msg, wParam, lParam ); }
+	int Call( unsigned int msg, uintptr_t wParam=0, intptr_t lParam=0 ) const {
+		return sci_fn( sci_ptr, msg, wParam, lParam ); }
 
 	void AddText( const char* sz, int len=-1 ) {
 		if( len==-1 ) len = strlen(sz);

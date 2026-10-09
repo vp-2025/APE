@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <utility>   // std::move / std::forward
 #include <windows.h> // CP_ACP
 
 inline void toLower(std::string& s) {
@@ -177,6 +178,22 @@ inline std::wstring& operator<<(std::wstring& str, int i) {
 }
 inline std::wstring& operator<<(std::wstring& str, int64_t i) {
 	return str << std::to_string(i);
+}
+
+// The two overloads below let a chain start from a temporary, as in
+//
+//		return string() << " font-family: " << s << ";";
+//
+// A temporary cannot bind to the non-const std::string& above, so the rvalue
+// gets its own overloads. They just forward to the ones above and keep the
+// chain an rvalue, so it can be returned (moved) as-is.
+template<class T> std::string&& operator<<(std::string&& str, T&& v) {
+	str << std::forward<T>(v);
+	return std::move(str);
+}
+template<class T> std::wstring&& operator<<(std::wstring&& wstr, T&& v) {
+	wstr << std::forward<T>(v);
+	return std::move(wstr);
 }
 
 std::string Format(const char* szFormat, ...);

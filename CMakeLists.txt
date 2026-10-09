@@ -6,9 +6,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../../binClion)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(MSVC)
-	# /std:c++20 implies conformance mode, which drops the MSVC extension the
-	# "string() << ..." idiom needs (binding a temporary to std::string&)
-	add_compile_options(/Zc:referenceBinding-)
 	# "using namespace std" + the SDK's byte typedef conflict with std::byte in c++17+
 	add_definitions(-D_HAS_STD_BYTE=0)
 endif()
