@@ -34,27 +34,18 @@ ATOM MyRegisterClass(HINSTANCE hInstance) {
 	return RegisterClassExW(&wcex);
 }
 
-bool InstanceCheck(HWND hWnd) {
+bool apeInstanceCheck(HWND hWnd) {
 	DWORD data = INSTANCE_CODE;
-	COPYDATASTRUCT cds{};
-	cds.cbData = sizeof(data);
-	cds.lpData = &data;
+	COPYDATASTRUCT cds{.cbData = sizeof(data), .lpData = &data};
 	DWORD_PTR res;
 	bool b = SendMessageTimeout(hWnd, WM_COPYDATA, 0, (LPARAM) &cds, SMTO_ABORTIFHUNG, 1000, &res) != 0;
 	return b && res;
 }
 
-bool InstanceCopyData(HWND hWnd, string s) {
-	COPYDATASTRUCT cds{};
-	cds.cbData = s.size();
-	cds.lpData = (void*) s.c_str();
-	return SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM) &cds) != 0;
-}
-
 BOOL CALLBACK enumProc(HWND hWnd, LPARAM lp) {
-	BOOL ret = hWnd && IsWindow(hWnd) && getClassNameW(hWnd) == APE_CLASS && InstanceCheck(hWnd);
+	BOOL ret = hWnd && IsWindow(hWnd) && getClassNameW(hWnd) == APE_CLASS && apeInstanceCheck(hWnd);
 	if( ret )
-		*((HWND*) lp) = hWnd;
+		*(HWND*) lp = hWnd;
 	return !ret;
 }
 
@@ -64,7 +55,12 @@ HWND apeFindWindow() {
 	return h;
 }
 
-int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow) {
+bool apeInstanceCopyData(HWND hWnd, const string &s) {
+	COPYDATASTRUCT cds{.cbData = (DWORD) s.size(), .lpData = (void *) s.c_str()};
+	return SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM) &cds) != 0;
+}
+
+int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int) {
 #ifdef _DEBUG
 	void testShared(); testShared();
 	void testLib(); testLib();
@@ -107,12 +103,17 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 		}
 		for( string& str: vCmdLine )
 			EnsureFilePath(str);
-		CEditor::bNewInstance = !vCmdLine.empty() && vCmdLine[0] == _NEW;
-		if( g_options.bOneInstanse && !CEditor::bNewInstance ) {
-			HWND hAPE = apeFindWindow();
-			if( hAPE && InstanceCopyData(hAPE, combine(vCmdLine, 0x9)) ) {
-				if( IsIconic(hAPE) )
-					ShowWindow(hAPE, SW_RESTORE);
+	}
+
+//	if another instance is already running, pass to it our files (if any) and exit.
+	bool bNewInstance = !vCmdLine.empty() && vCmdLine[0] == _NEW;
+	if( g_options.bOneInstanse && !bNewInstance ) {
+		HWND hAPE = apeFindWindow();
+		if( hAPE ) {
+			string sFiles = combine(vCmdLine, 0x9);
+			AllowSetForegroundWindow(ASFW_ANY); // allow that instance to bring itself to front
+			if( sFiles.empty() || apeInstanceCopyData(hAPE, sFiles) ) {
+				ShowWindow( hAPE, IsIconic(hAPE) ? SW_RESTORE : SW_SHOW );
 				::SetForegroundWindow(hAPE);
 				return 0;
 			}
@@ -136,7 +137,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 	g_hMainWnd = hWnd;
 
 	CEditor editor;
-	editor.onCreate(hWnd);
+	editor.onCreate(hWnd, bNewInstance);
 
 	if( vCmdLine.size() == 4 && vCmdLine[0] == _NEW && !vCmdLine[1].empty() &&
 			startsWith(vCmdLine[2], _TOP) && startsWith(vCmdLine[3], _POS) ) {

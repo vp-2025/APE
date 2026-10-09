@@ -34,8 +34,6 @@ int TOOLBAR_H = 0; // default for 96dpi is 26
 int STATUSBAR_H = 0; // default for 96dpi is 23
 int TAB_H = 27;
 
-bool CEditor::bNewInstance = false;
-
 template<class T>
 int getVectorIndex( const vector<T>& v, const T& item, int shift )
 {
@@ -66,8 +64,7 @@ bool CEditor::OnGetImage(UINT menuID, HIMAGELIST& hIL, int& imageID)
 	return true;
 }
 
-void CEditor::onCreate(HWND hWnd)
-{
+void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
     SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) this);
 
 	int partWidths[] = {380,40,100,120,100,-1};
@@ -1913,20 +1910,18 @@ void CEditor::SwitchToTab( int iTab, bool bReset )
 
 /////////////////////////////////////////////////////////////////////
 
-bool CEditor::onCopyData( COPYDATASTRUCT* pCDS )
-{
+bool CEditor::onCopyData( COPYDATASTRUCT* pCDS ) {
 	if( !pCDS->lpData || !pCDS->cbData )
 		return false;
 	if( pCDS->cbData==sizeof(DWORD) ) {
 		return *(DWORD*)pCDS->lpData==INSTANCE_CODE;
-	} else {
-		string s((const char*)pCDS->lpData, pCDS->cbData);
-		vector<string> vFiles;
-		split(s, vFiles, 0x9);
-		for( const auto& sFile: vFiles )
-			FileOpen(sFile, false);
-		return true;
 	}
+	string s((const char*)pCDS->lpData, pCDS->cbData);
+	vector<string> vFiles;
+	split(s, vFiles, 0x9);
+	for( const auto& sFile: vFiles )
+		FileOpen(sFile, false);
+	return true;
 }
 
 bool isExtModified(CTabPage& page)

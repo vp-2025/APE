@@ -29,7 +29,6 @@ class CEditor : public CWindow
 public:
 	vector<CTabPage> m_vTabs;
 	CFindDlg m_findDlg;
-	static bool bNewInstance;
 
 	CEditor()
 		: m_mru(ID_MRU_FIRST,ID_MRU_LAST)
@@ -38,7 +37,7 @@ public:
 		, m_findDlg(this)
 	{ m_bWasZoomed=m_bSortFuncsByName=false; }
 
-	void onCreate( HWND hWnd );
+	void onCreate( HWND hWnd, bool bNewInstance );	// bNewInstance - started via "-new"
 	void onDestroy();
 private:
 	void ResizeScintilla();	// called when switch tab, because only current sci is resized
