@@ -230,7 +230,6 @@
 #define ID_ENCODING_LATIN3              33631
 #define ID_ENCODING_ANSI_CYR            33645
 #define ID_VIEW_TOKEN                   33632
-#define ID_OPTIONS_NOTONEINSTANCE       33633
 #define ID_WINDOW_CLOSE_TORIGHT         33634
 #define ID_EDIT_FORMATXML               33635
 #define ID_OPTIONS_INDICATORS           33636

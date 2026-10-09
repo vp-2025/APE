@@ -26,7 +26,6 @@ class CEditor : public CWindow
 	CAccel2Menu m_accelMenu;
 	CComboBox m_cmbFunc;
 	bool m_bSortFuncsByName;
-	bool m_bNotOneInstance;
 public:
 	vector<CTabPage> m_vTabs;
 	CFindDlg m_findDlg;
@@ -37,7 +36,7 @@ public:
 		, m_pin(ID_PIN_FIRST,ID_PIN_LAST)
 		, m_accelMenu(IDC_ACCEL)
 		, m_findDlg(this)
-	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bNotOneInstance=false; }
+	{ m_bWasZoomed=m_bSortFuncsByName=false; }
 
 	void onCreate( HWND hWnd );
 	void onDestroy();

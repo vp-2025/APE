@@ -193,8 +193,6 @@ BEGIN
             MENUITEM "First",                       ID_LANG_FIRST
             MENUITEM "Last",                        ID_LANG_LAST
         END
-        MENUITEM SEPARATOR
-        MENUITEM "Not One Instance",            ID_OPTIONS_NOTONEINSTANCE
     END
     POPUP "&Window"
     BEGIN

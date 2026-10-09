@@ -291,7 +291,6 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 	case ID_OPTIONS_COLORS: onColors(); break;
 	case ID_OPTIONS_INDICATORS: onIndicators(); break;
 	case ID_OPTIONS_OPTIONS: onOptions(); break;
-	case ID_OPTIONS_NOTONEINSTANCE: m_bNotOneInstance=!m_bNotOneInstance; break;
 
 	case ID_TAB_SORT_BYNAME:
 	case ID_TAB_SORT_BYEXT:
@@ -1344,8 +1343,6 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.EnableCheck( ID_ENCODING_LATIN3, b, enc==encLatin3 );
 	menu.EnableCheck( ID_ENCODING_ANSI_CYR, b, enc==encAnsiCyr );
 
-	menu.EnableCheck( ID_OPTIONS_NOTONEINSTANCE, g_options.bOneInstanse, m_bNotOneInstance );
-
 	menu.EnableCheck( ID_VIEW_THEME_SYSTEM, true, g_theme.getMode()==themeSystem );
 	menu.EnableCheck( ID_VIEW_THEME_LIGHT, true, g_theme.getMode()==themeLight );
 	menu.EnableCheck( ID_VIEW_THEME_DARK, true, g_theme.getMode()==themeDark );
@@ -1536,7 +1533,7 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			HMENU hLexers = GetSubMenu(hMenu,c-4);
 			HMENU hTools = GetSubMenu(hMenu,c-3);
 			int cnt = GetMenuItemCount(hTools);
-			HMENU hLang = GetSubMenu(hTools,cnt-3);
+			HMENU hLang = GetSubMenu(hTools,cnt-1); // "Languages" is the last item of "Tools"
 
 			m_mru.UpdateMenu( hMRU );
 			m_pin.UpdateMenu( hPin );
@@ -1921,7 +1918,7 @@ bool CEditor::onCopyData( COPYDATASTRUCT* pCDS )
 	if( !pCDS->lpData || !pCDS->cbData )
 		return false;
 	if( pCDS->cbData==sizeof(DWORD) ) {
-		return *(DWORD*)pCDS->lpData==INSTANCE_CODE && !m_bNotOneInstance;
+		return *(DWORD*)pCDS->lpData==INSTANCE_CODE;
 	} else {
 		string s((const char*)pCDS->lpData, pCDS->cbData);
 		vector<string> vFiles;
