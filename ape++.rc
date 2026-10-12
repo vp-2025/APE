@@ -128,9 +128,7 @@ BEGIN
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
         MENUITEM SEPARATOR
-        MENUITEM "Whitespace Off",              ID_VIEW_WS_NONE
-        MENUITEM "Whitespace Partitial",        ID_VIEW_WS_PART
-        MENUITEM "Whitespace All",              ID_VIEW_WS_ALL
+        MENUITEM "Whitespace",                  ID_VIEW_WS
         MENUITEM "Line Endings",                ID_VIEW_EOL
         MENUITEM "Line Numbers",                ID_VIEW_NUMS
         MENUITEM "Indent Guides",               ID_VIEW_INDENT

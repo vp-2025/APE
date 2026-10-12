@@ -140,9 +140,7 @@
 #define ID_HELP_ABOUT                   32830
 #define ID_VIEW_ALWAYSONTOP             32840
 #define ID_VIEW_FULLSCREEN              32841
-#define ID_VIEW_WS_NONE                 32842
-#define ID_VIEW_WS_PART                 32843
-#define ID_VIEW_WS_ALL                  32844
+#define ID_VIEW_WS                      32842
 #define ID_VIEW_BRACE                   32845
 #define ID_VIEW_INDENT                  32846
 #define ID_VIEW_EOL                     32847

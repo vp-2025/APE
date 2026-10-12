@@ -498,17 +498,11 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 		onMove2NewApe( cmd==ID_TAB_MOVE2NEWAPE );
 		break;
 
-	case ID_VIEW_WS_NONE: 
-	case ID_VIEW_WS_PART:
-	case ID_VIEW_WS_ALL: 
-		switch( cmd ) {
-			case ID_VIEW_WS_NONE: g_options.iViewWS = SCWS_INVISIBLE; break;
-			case ID_VIEW_WS_PART: g_options.iViewWS = SCWS_VISIBLEAFTERINDENT; break;
-			case ID_VIEW_WS_ALL:  g_options.iViewWS = SCWS_VISIBLEALWAYS; break;
-		}
+	case ID_VIEW_WS:
+		g_options.iViewWS = g_options.iViewWS != SCWS_INVISIBLE ? SCWS_INVISIBLE : SCWS_VISIBLEALWAYS;
 		g_options.Save();
 		for(auto& tabPage : m_vTabs)
-            tabPage.sci.SetViewWS(g_options.iViewWS);
+			tabPage.sci.SetViewWS(g_options.iViewWS);
 		break;
 	case ID_VIEW_EOL: 
 		g_options.bViewEOL = !page.sci.GetViewEOL();
@@ -1286,9 +1280,7 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.Enable( ID_WINDOW_CLOSE_TORIGHT, pPage!=0 && m_tabs.GetCurSel()+1<m_tabs.GetItemCount() );
 	menu.Enable( ID_WINDOW_CLOSE_ALL, pPage!=0 );
 
-	menu.EnableCheck( ID_VIEW_WS_NONE, pPage!=0, pPage && pPage->sci.isViewWSNone() );
-	menu.EnableCheck( ID_VIEW_WS_PART, pPage!=0, pPage && pPage->sci.isViewWSPart() );
-	menu.EnableCheck( ID_VIEW_WS_ALL, pPage!=0, pPage && pPage->sci.isViewWSAll() );
+	menu.EnableCheck( ID_VIEW_WS, pPage!=0, pPage && pPage->sci.isViewWSAll() );
 	menu.EnableCheck( ID_VIEW_EOL, pPage!=0, pPage && pPage->sci.GetViewEOL() );
 	menu.EnableCheck( ID_VIEW_BRACE, pPage!=0, pPage && pPage->sci.isBraceHL() );
 	menu.EnableCheck( ID_VIEW_NUMS, pPage!=0, pPage && pPage->sci.isViewNums() );

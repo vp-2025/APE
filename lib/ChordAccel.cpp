@@ -30,6 +30,8 @@ static const ChordAccel s_chords[] = {
 
 	{'M', FCONTROL, 'A', FCONTROL, ID_FOLDING_COLLAPSEALL},
 	{'M', FCONTROL, 'X', FCONTROL, ID_FOLDING_EXPANDALL},
+
+	{'R', FCONTROL, 'W', FCONTROL, ID_VIEW_WS},
 };
 
 static const size_t s_chordCount = sizeof(s_chords)/sizeof(s_chords[0]);
