@@ -26,6 +26,7 @@ class CEditor : public CWindow
 	CAccel2Menu m_accelMenu;
 	CComboBox m_cmbFunc;
 	bool m_bSortFuncsByName;
+	bool m_bToolbar;	// View > Toolbar
 public:
 	vector<CTabPage> m_vTabs;
 	CFindDlg m_findDlg;
@@ -35,7 +36,7 @@ public:
 		, m_pin(ID_PIN_FIRST,ID_PIN_LAST)
 		, m_accelMenu(IDC_ACCEL)
 		, m_findDlg(this)
-	{ m_bWasZoomed=m_bSortFuncsByName=false; }
+	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; }
 
 	void onCreate( HWND hWnd, bool bNewInstance );	// bNewInstance - started via "-new"
 	void onDestroy();
@@ -119,6 +120,8 @@ public:
 	void ViewAlwaysOnTop();
 	void ViewFullScreen();
 	void SetFullScreen(bool bOn);
+	void ViewToolbar();
+	void ShowToolbar(bool bShow);
 
 	void onAutoComplete( CSciWrapper& sci );
 	void onCallTip( CSciWrapper& sci );

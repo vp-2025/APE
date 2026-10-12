@@ -38,7 +38,7 @@ WORD	{SWC}{WWC}*
 		levelIncrease();
 	}
 
-	=.*	{
+	=[^\r\n]*	{
 		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL );
 		SetStyle( MatchStart()+1, MatchEnd(), STYLE_VALUE );
 	}

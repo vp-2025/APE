@@ -124,6 +124,10 @@ void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
 	g_theme.subclassStatusbar( m_statusbar.hWnd() );
 	onThemeChanged( true );
 
+// the toolbar visibility has to be restored before the windows are laid out
+	LoadBool( "main", "Toolbar", m_bToolbar );
+	ShowToolbar( m_bToolbar );
+
 // ====================================
 	CWindowPlacement wp;
 	GetWindowPlacement( hWnd, &wp );
@@ -173,6 +177,7 @@ void CEditor::onDestroy()
 
 	m_findDlg.Destroy();
 	SaveBool( "main", "SortFuncsByName", m_bSortFuncsByName );
+	SaveBool( "main", "Toolbar", m_bToolbar );
 }
 
 void CEditor::ResizeScintilla()
@@ -189,13 +194,13 @@ void CEditor::onSize( int w, int h )
 {
 	m_rebar.Move( 0, 0, w, 0 );
 	m_statusbar.Move( 0, 0, 0, 0 );
-	TOOLBAR_H = m_rebar.getHeight();
+	TOOLBAR_H = m_rebar.IsVisible() ? m_rebar.getHeight() : 0;	// View > Toolbar
 	STATUSBAR_H = m_statusbar.getHeight();
 	m_tabs.Move( 0, TOOLBAR_H, w, TAB_H );
 	m_pnl.Move( 0, TOOLBAR_H, w, h-TOOLBAR_H-STATUSBAR_H );
 
 	int t = (TOOLBAR_H - m_cmbFunc.getHeight())/2;
-	if( t )
+	if( TOOLBAR_H && t )
 		m_cmbFunc.Move( 360, t, 300, 500 );
 
 	ResizeScintilla();
@@ -279,6 +284,7 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 
 	case ID_VIEW_ALWAYSONTOP: ViewAlwaysOnTop(); break;
 	case ID_VIEW_FULLSCREEN: ViewFullScreen(); break;
+	case ID_VIEW_TOOLBAR: ViewToolbar(); break;
 
 	case ID_VIEW_THEME_SYSTEM: onSetTheme( themeSystem ); break;
 	case ID_VIEW_THEME_LIGHT: onSetTheme( themeLight ); break;
@@ -1332,6 +1338,8 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.EnableCheck( ID_ENCODING_LATIN3, b, enc==encLatin3 );
 	menu.EnableCheck( ID_ENCODING_ANSI_CYR, b, enc==encAnsiCyr );
 
+	menu.EnableCheck( ID_VIEW_TOOLBAR, true, m_bToolbar );
+
 	menu.EnableCheck( ID_VIEW_THEME_SYSTEM, true, g_theme.getMode()==themeSystem );
 	menu.EnableCheck( ID_VIEW_THEME_LIGHT, true, g_theme.getMode()==themeLight );
 	menu.EnableCheck( ID_VIEW_THEME_DARK, true, g_theme.getMode()==themeDark );
@@ -2055,6 +2063,20 @@ void CEditor::ViewFullScreen()
 	bool bFS = !menu.isChecked(ID_VIEW_FULLSCREEN);
 	menu.Check(ID_VIEW_FULLSCREEN,bFS);
 	SetFullScreen( bFS );
+}
+
+void CEditor::ViewToolbar() {
+	m_bToolbar = !m_bToolbar;
+	CMenu menu( GetMenu(m_hWnd) );
+	menu.Check( ID_VIEW_TOOLBAR, m_bToolbar );
+	ShowToolbar( m_bToolbar );
+}
+
+void CEditor::ShowToolbar( bool bShow ) {
+	m_rebar.SetVisible( bShow );
+
+	CRect r = GetClientRect();
+	onSize( r.width(), r.height() );	// TOOLBAR_H changed, lay everything out again
 }
 
 void CEditor::SetFullScreen(bool bOn)
