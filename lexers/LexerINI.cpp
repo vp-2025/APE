@@ -196,12 +196,12 @@ int yyFlexLexer::yylex()
 
 /*********************************************************************************/
 /* start of data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 8
-#define YY_END_OF_BUFFER 9
-static yyconst short int yy_accept[21] =
+#define YY_NUM_RULES 7
+#define YY_END_OF_BUFFER 8
+static yyconst short int yy_accept[18] =
     {   0,
-        0,    0,    0,    0,    9,    7,    6,    7,    2,    1,
-        4,    7,    5,    7,    6,    4,    0,    3,    5,    0
+        0,    0,    0,    0,    8,    6,    5,    6,    2,    1,
+        4,    6,    5,    4,    0,    3,    0
     } ;
 
 static yyconst int yy_ec[256] =
@@ -241,34 +241,30 @@ static yyconst int yy_meta[9] =
         1,    2,    3,    1,    1,    1,    1,    1
     } ;
 
-static yyconst short int yy_base[24] =
+static yyconst short int yy_base[20] =
     {   0,
-        0,    0,    7,    9,   24,   25,   25,   21,   25,   25,
-        0,   14,   25,   19,   25,    0,   12,   11,   25,   25,
-       12,   16,   15
+        0,    0,    5,    0,   20,   21,   21,   17,   21,   21,
+        0,   10,   21,    0,    9,    8,   21,   13,   12
     } ;
 
-static yyconst short int yy_def[24] =
+static yyconst short int yy_def[20] =
     {   0,
-       20,    1,   21,   21,   20,   20,   20,   20,   20,   20,
-       22,   23,   20,   20,   20,   22,   23,   23,   20,    0,
-       20,   20,   20
+       17,    1,    1,    3,   17,   17,   17,   17,   17,   17,
+       18,   19,   17,   18,   19,   19,    0,   17,   17
     } ;
 
-static yyconst short int yy_nxt[34] =
+static yyconst short int yy_nxt[30] =
     {   0,
-        6,    7,    8,    9,   10,   11,   12,    6,   13,   14,
-       13,   14,    6,    6,    6,   17,   16,   17,   18,   18,
-       19,   18,   15,   20,    5,   20,   20,   20,   20,   20,
-       20,   20,   20
+        6,    7,    8,    9,   10,   11,   12,    6,    6,    6,
+        6,    6,   15,   14,   15,   16,   16,   16,   13,   17,
+        5,   17,   17,   17,   17,   17,   17,   17,   17
     } ;
 
-static yyconst short int yy_chk[34] =
+static yyconst short int yy_chk[30] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    3,    3,
-        4,    4,   21,   21,   21,   23,   22,   23,   18,   17,
-       14,   12,    8,    5,   20,   20,   20,   20,   20,   20,
-       20,   20,   20
+        3,    3,   19,   18,   19,   16,   15,   12,    8,    5,
+       17,   17,   17,   17,   17,   17,   17,   17,   17
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -290,6 +286,10 @@ static yyconst short int yy_chk[34] =
 #define STYLE_SECTION		2
 #define STYLE_VALUE			3
 #define STYLE_SYMBOL		4
+#line 27 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+//<SLCOMMENT>{
+//	{EOL}		SetStyle(STYLE_COMMENT); BEGIN(INITIAL);	// keep the EOL inside the comment style
+//}
 #line 294 "c:\\work\\ape++\\src\\lexers\\LexerINI.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
@@ -410,7 +410,7 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 26 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 32 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 
  /*************************************************************************************/
 
@@ -470,13 +470,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 21 )
+				if ( yy_current_state >= 18 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 25 );
+		while ( yy_base[yy_current_state] != 21 );
 /* end of code to set up and find next match                            */
 /************************************************************************/
 
@@ -519,18 +519,15 @@ do_action:  /* This label is used only to access EOF actions. */
 
 
 case 1:
-YY_RULE_SETUP
-#line 30 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
-BEGIN(SLCOMMENT); SetStyle();
-	YY_BREAK
+#line 37 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 case 2:
 YY_RULE_SETUP
-#line 31 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 37 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 BEGIN(SLCOMMENT); SetStyle();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 33 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 39 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 {
 		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL );
 		SetStyle( MatchStart()+1, MatchEnd()-1, STYLE_SECTION );
@@ -541,7 +538,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 41 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 47 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 {
 		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL );
 		SetStyle( MatchStart()+1, MatchEnd(), STYLE_VALUE );
@@ -551,25 +548,21 @@ YY_RULE_SETUP
 
 case 5:
 YY_RULE_SETUP
-#line 48 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
-BEGIN(INITIAL); SetStyle(); 
+#line 54 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+SetStyle(STYLE_COMMENT); BEGIN(INITIAL);
 	YY_BREAK
-
-
 case 6:
-#line 53 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
-case 7:
 YY_RULE_SETUP
-#line 53 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 55 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 SetStyle();
 	YY_BREAK
 
-case 8:
+case 7:
 YY_RULE_SETUP
-#line 56 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 58 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 ECHO;
 	YY_BREAK
-#line 573 "c:\\work\\ape++\\src\\lexers\\LexerINI.cpp"
+#line 566 "c:\\work\\ape++\\src\\lexers\\LexerINI.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SLCOMMENT):
 	yyterminate();
@@ -888,7 +881,7 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 21 )
+			if ( yy_current_state >= 18 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -922,11 +915,11 @@ yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 21 )
+		if ( yy_current_state >= 18 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 20);
+	yy_is_jam = (yy_current_state == 17);
 /* end ofcode to find the next state, and perhaps do backing up      */
 /*********************************************************************/
     return yy_is_jam ? 0 : yy_current_state;
@@ -1280,7 +1273,7 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 56 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
+#line 58 "c:\\work\\ape++\\src\\lexers\\LexerINI.L"
 
 /*************************************************************************************/
 

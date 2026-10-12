@@ -23,11 +23,17 @@ WORD	{SWC}{WWC}*
 #define STYLE_SYMBOL		4
 %}
 
+%{
+//<SLCOMMENT>{
+//	{EOL}		SetStyle(STYLE_COMMENT); BEGIN(INITIAL);	// keep the EOL inside the comment style
+//}
+%}
+
 %%
  /*************************************************************************************/
 
 <INITIAL>{
-	;						BEGIN(SLCOMMENT); SetStyle();
+	;	|
 	#						BEGIN(SLCOMMENT); SetStyle();
 	
 	\[.*\]	{
@@ -44,12 +50,8 @@ WORD	{SWC}{WWC}*
 	}
 }
 
-<SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle(); 
-}
-
 <*>{
-	{EOL} |
+	{EOL}		SetStyle(STYLE_COMMENT); BEGIN(INITIAL);
 	.			SetStyle();
 }
 
