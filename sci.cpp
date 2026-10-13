@@ -14,7 +14,6 @@
 #include "theme.h"
 
 void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
-    m_dpiScale = GetScaleDPI();
 	hSci = CreateWindowEx(WS_EX_CLIENTEDGE,
 			"Scintilla","", WS_CHILD | WS_VSCROLL | WS_HSCROLL | WS_CLIPCHILDREN,
 			x,y,w,h,hParent,(HMENU)(WORD)id, g_hInst, nullptr);

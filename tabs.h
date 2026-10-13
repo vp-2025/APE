@@ -4,18 +4,12 @@
 #include "shared/platform.h"
 #include "shared/str.h"
 #include <shellapi.h>
-#include <cmath>
 
 #define WM_TAB_CHANGING     (WM_USER+1)
 #define WM_TAB_CHANGED      (WM_USER+2)
 #define WM_TAB_REORDER      (WM_USER+3)
 #define WM_TAB_CLOSE        (WM_USER+4)
 #define WM_TAB_MOVE2NEWAPE  (WM_USER+5)
-
-// Metric for 96 dpi (100%) scaled to the current dpi
-inline int TabScale(int v, float k) {
-    return (int) ceil(v * k);
-}
 
 // Geometry of one owner-drawn tab item, relative to the item rect.
 // Kept in one place, so the painting and the close-button hit test cannot drift
@@ -27,37 +21,30 @@ struct CTabItemLayout {
     int closeX{}, closeY{}, closeW{}, closeH{};
 };
 
-inline CTabItemLayout calcTabItemLayout( const CRect& r, bool bSelected, float k,
+inline CTabItemLayout calcTabItemLayout( const CRect& rc,
                                          bool bIcon, const CSize& szIcon,
                                          bool bClose, const CSize& szClose )
 {
     CTabItemLayout l;
-    CRect rc(r);
-    if( bSelected ) {
-        rc.left += TabScale(4, k);
-        rc.right -= TabScale(4, k);
-        rc.top += TabScale(2, k);
-        rc.bottom -= TabScale(4, k);
-    }
 
     int xTextL = rc.left;
     if( bIcon ) {
-        l.iconX = rc.left + TabScale(2, k);
-        l.iconY = rc.top + TabScale(3, k);
-        xTextL = l.iconX + szIcon.cx + TabScale(4, k);   // icon + space before the file name
+        l.iconX = rc.left + g_dpi.scale(2);
+        l.iconY = rc.top + g_dpi.scale(3);
+        xTextL = l.iconX + szIcon.cx + g_dpi.scale(4);   // icon + space before the file name
     }
 
     int xTextR = rc.right;
     if( bClose ) {
-        l.closeX = rc.right - TabScale(1, k) - szClose.cx;
-        l.closeY = rc.top + TabScale(4, k);
+        l.closeX = rc.right - g_dpi.scale(1) - szClose.cx;
+        l.closeY = rc.top + g_dpi.scale(4);
         l.closeW = szClose.cx;
         l.closeH = szClose.cy;
-        xTextR = l.closeX - TabScale(2, k);
+        xTextR = l.closeX - g_dpi.scale(2);
     }
 
     l.textL = xTextL;
-    l.textT = rc.top + TabScale(4, k);
+    l.textT = rc.top + g_dpi.scale(8);
     l.textR = xTextR;
     l.textB = rc.bottom;
     return l;
@@ -71,11 +58,9 @@ class CTabCtrlAdv : public CTabCtrl {
     CPoint m_ptDrag;
     bool m_bStartDrag{};
     HFONT m_hFontStrikeOut{}; // todo: destroy font
-    float m_dpiScale{1.0f};
 
-    int dp(int v) const { return TabScale(v, m_dpiScale); }
     CSize iconSize(HIMAGELIST hIL) const {  // real image size (16x16 at 100%)
-        int cx = dp(16), cy = dp(16);
+        int cx = g_dpi.scale(16), cy = g_dpi.scale(16);
         if( hIL )
             ImageList_GetIconSize(hIL, &cx, &cy);
         return CSize(cx, cy);

@@ -6,16 +6,15 @@
 
 void CTabCtrlAdv::applyOptions(bool bSelf) {
     if( g_options.bTabsCloseBtn )
-        SetPadding(dp(9), dp(4));
+        SetPadding(g_dpi.scale(9), g_dpi.scale(4));
     else
-        SetPadding(dp(4), dp(4));
+        SetPadding(g_dpi.scale(4), g_dpi.scale(4));
     if( !bSelf )
         TabCtrl_SetMinTabWidth(m_hWnd, -1);
 }
 
 void CTabCtrlAdv::Create(HWND hParent, int x, int y, int w, int h, DWORD id) {
     m_id = id;
-    m_dpiScale = GetScaleDPI();
     m_hWnd = CreateWindowEx(0, WC_TABCONTROL, "",
                             WS_CHILD | TCS_FOCUSNEVER | TCS_OWNERDRAWFIXED | TCS_TABS | TCS_TOOLTIPS,
                             x, y, w, h, hParent, (HMENU) id, g_hInst, 0);
@@ -114,10 +113,10 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
     int iTab = (int)pDIS->itemID;
 
 	wstrbuf sBuf(MAX_PATH);
-    TCITEMW tci{};
-    tci.mask = TCIF_TEXT | TCIF_IMAGE;
-    tci.pszText = sBuf.buf();
-    tci.cchTextMax = sBuf.size();
+    TCITEMW tci{
+        .mask = TCIF_TEXT | TCIF_IMAGE,
+        .pszText = sBuf.buf(),
+        .cchTextMax = sBuf.size() };
     GetItem(iTab, &tci);
 
     /**int bk =*/ SetBkMode(hDC, TRANSPARENT);
@@ -126,21 +125,23 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
 
     if( bSelected ) {
         CRect r2(r);
-        r2.top += dp(2);
-        r2.setHeight(dp(4));
-        FillSolidRect(hDC, &r2, RGB(0xFA, 0xAA, 0x3C));
+        r2.top += g_dpi.scale(2);
+        r2.right -= g_dpi.scale(1);
+        r2.setHeight(g_dpi.scale(4));
+        FillSolidRect(hDC, &r2, RGB(128, 212, 178));
     }
 
     if( m_isDragging && m_iHoverTab == iTab ) {
         CRect r2(r);
-        r2.top += dp(2);
-        r2.setHeight(dp(4));
+        r2.top += g_dpi.scale(2);
+        r2.setHeight(g_dpi.scale(4));
         FillSolidRect(hDC, &r2, RGB(0, 0xA0, 0));
     }
 
     HIMAGELIST hIL = GetImageList();
     bool bIcon = hIL && tci.iImage >= 0;
-    CTabItemLayout l = calcTabItemLayout( r, bSelected, m_dpiScale, bIcon, iconSize(hIL), g_options.bTabsCloseBtn, iconSize(m_ilCloseBtn) );
+    CRect rcItem = GetItemRect(iTab);
+    CTabItemLayout l = calcTabItemLayout( rcItem, bIcon, iconSize(hIL), g_options.bTabsCloseBtn, iconSize(m_ilCloseBtn) );
 
     if( bIcon )
         ImageList_Draw(hIL, tci.iImage, hDC, l.iconX, l.iconY, ILD_TRANSPARENT);
@@ -201,9 +202,9 @@ void CTabCtrlAdv::PaintDark() {
     for( int i = 0, cnt = GetItemCount(); i < cnt; i++ ) {
         CRect r = GetItemRect(i);
         if( i == iSel ) { // as the tab control does: the selected tab is bigger
-            r.left -= dp(2);
-            r.right += dp(2);
-            r.top -= dp(2);
+            r.left -= g_dpi.scale(2);
+            r.right += g_dpi.scale(2);
+            r.top -= g_dpi.scale(2);
         }
         DRAWITEMSTRUCT dis{};
         dis.CtlType = ODT_TAB;
@@ -314,7 +315,7 @@ void CTabCtrlAdv::DragDrop(int iTab) {
 CRect CTabCtrlAdv::GetCloseBtnRect(int tab) {
     CRect r = GetItemRect(tab);
     // same geometry as in DrawItem, so the hit test matches the painted X button
-    CTabItemLayout l = calcTabItemLayout( r, tab == GetCurSel(), m_dpiScale, false, iconSize(nullptr), true, iconSize(m_ilCloseBtn) );
+    CTabItemLayout l = calcTabItemLayout( r, false, iconSize(nullptr), true, iconSize(m_ilCloseBtn) );
     return CRect( l.closeX, l.closeY, l.closeX + l.closeW, l.closeY + l.closeH );
 }
 

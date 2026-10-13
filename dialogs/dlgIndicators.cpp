@@ -46,29 +46,28 @@ void setParentFont2Children(HWND hDlg) {
 /////////////////////////////////////////////////////////////////////
 
 void CIndicatorsDlg::onInit() {
-    float dpi = GetScaleDPI();
-    int top = 10*dpi, h = 20*dpi;
+    int top = g_dpi.scale(10), h = g_dpi.scale(20);
 
     CStatic lbl;
-    lbl.Create(m_hWnd, 90*dpi, top, 120*dpi, h, "Style", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
-    lbl.Create(m_hWnd, 220*dpi, top, 80*dpi, h, "Color", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
-    lbl.Create(m_hWnd, 310*dpi, top, 50*dpi, h, "Alpha", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
-    lbl.Create(m_hWnd, 370*dpi, top - 10*dpi, 50*dpi, h + 20*dpi, "Outline Alpha", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
-    top += 20*dpi;
+    lbl.Create(m_hWnd, g_dpi.scale(90), top, g_dpi.scale(120), h, "Style", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
+    lbl.Create(m_hWnd, g_dpi.scale(220), top, g_dpi.scale(80), h, "Color", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
+    lbl.Create(m_hWnd, g_dpi.scale(310), top, g_dpi.scale(50), h, "Alpha", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
+    lbl.Create(m_hWnd, g_dpi.scale(370), top - g_dpi.scale(10), g_dpi.scale(50), h + g_dpi.scale(20), "Outline Alpha", 0, WS_VISIBLE | WS_CHILD | SS_CENTER);
+    top += g_dpi.scale(20);
 
     string sText;
-    for( int i = 0; g_indicators[i].szName; i++, top += 24*dpi ) {
+    for( int i = 0; g_indicators[i].szName; i++, top += g_dpi.scale(24) ) {
         if( i ) sText << '\n';
         sText << ' ' << g_indicators[i].szName << ' ';
 
         vIndi.emplace_back(g_indicators[i], &sci, i);
         CIndiData& data = vIndi.back();
 
-        data.stcLabel.Create(m_hWnd, 10*dpi, top + 2, 80*dpi, h - 4, (string(g_indicators[i].szName) + ":").c_str(), 0, WS_VISIBLE | WS_CHILD);
-        data.cmbStyle.Create(m_hWnd, 90*dpi, top, 120*dpi, h, ID_STYLE + i, WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST);
-        data.btnColor.Create(m_hWnd, 220*dpi, top, 80*dpi, h, "", ID_COLOR + i, WS_VISIBLE | WS_CHILD | BS_OWNERDRAW);
-        data.cmbAlpha.Create(m_hWnd, 310*dpi, top, 50*dpi, h, ID_ALPHA + i, WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST);
-        data.cmbOutlineAlpha.Create(m_hWnd, 370*dpi, top, 50*dpi, h, ID_OUTLINE_ALPHA + i, WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST);
+        data.stcLabel.Create(m_hWnd, g_dpi.scale(10), top + 2, g_dpi.scale(80), h - 4, (string(g_indicators[i].szName) + ":").c_str(), 0, WS_VISIBLE | WS_CHILD);
+        data.cmbStyle.Create(m_hWnd, g_dpi.scale(90), top, g_dpi.scale(120), h, ID_STYLE + i, WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST);
+        data.btnColor.Create(m_hWnd, g_dpi.scale(220), top, g_dpi.scale(80), h, "", ID_COLOR + i, WS_VISIBLE | WS_CHILD | BS_OWNERDRAW);
+        data.cmbAlpha.Create(m_hWnd, g_dpi.scale(310), top, g_dpi.scale(50), h, ID_ALPHA + i, WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST);
+        data.cmbOutlineAlpha.Create(m_hWnd, g_dpi.scale(370), top, g_dpi.scale(50), h, ID_OUTLINE_ALPHA + i, WS_VISIBLE | WS_CHILD | CBS_DROPDOWNLIST);
 
         fillAlpha(data.cmbAlpha);
         fillAlpha(data.cmbOutlineAlpha);
@@ -109,7 +108,7 @@ void CIndicatorsDlg::onInit() {
         sci.setIndicator(indi.id, start, end - start);
         indi.apply2Sample();
     }
-    ::MoveWindow(sci.hWnd(), 430*dpi, 25*dpi, 150*dpi, top - 20*dpi, TRUE);
+    ::MoveWindow(sci.hWnd(), g_dpi.scale(430), g_dpi.scale(25), g_dpi.scale(150), top - g_dpi.scale(20), TRUE);
     ::ShowWindow(sci.hWnd(), SW_SHOW);
 
     setParentFont2Children(m_hWnd);

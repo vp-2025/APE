@@ -32,7 +32,7 @@
 
 int TOOLBAR_H = 0; // default for 96dpi is 26
 int STATUSBAR_H = 0; // default for 96dpi is 23
-int TAB_H = 27;
+int TAB_H = 26;
 
 template<class T>
 int getVectorIndex( const vector<T>& v, const T& item, int shift )
@@ -69,12 +69,11 @@ void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
 
 	int partWidths[] = {380,40,100,120,100,-1};
 
-	float dpiScale = GetScaleDPI();
     // no need to scale TOOLBAR_H
     // no need to scale STATUSBAR_H
-    TAB_H = (int)ceil(TAB_H*dpiScale);
+    TAB_H = g_dpi.scale(TAB_H);
     for( int i=0; partWidths[i]!=-1; i++ )
-        partWidths[i] = (int)(partWidths[i]*dpiScale);
+	    partWidths[i] = g_dpi.scale(partWidths[i]);
 
 	m_hWnd = hWnd;
 	g_theme.applyTitleBar( hWnd ); // before the window is shown

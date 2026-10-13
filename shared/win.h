@@ -74,12 +74,19 @@ inline std::wstring getClassNameW(HWND hWnd) {
     return sBuf.str(len); // len without ending zero
 }
 
-inline float GetScaleDPI() {
-    HDC hdc = ::CreateCompatibleDC(nullptr);
-    float dpiScale = (float) ::GetDeviceCaps(hdc, LOGPIXELSX) / 96.0f;
-    ::DeleteDC(hdc);
-    return dpiScale;
-}
+class CScaleDPI {
+    float m_dpiScale;
+public:
+    CScaleDPI() {
+        HDC hdc = ::CreateCompatibleDC(nullptr);
+        m_dpiScale = (float) ::GetDeviceCaps(hdc, LOGPIXELSX) / 96.0f;
+        ::DeleteDC(hdc);
+    }
+    [[nodiscard]] int scale(int px) const {
+        return (int) ceil((float)px * m_dpiScale);
+    }
+};
+extern CScaleDPI g_dpi;
 
 inline std::string itoa(int i) {
     return std::to_string(i);

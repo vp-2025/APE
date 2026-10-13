@@ -14,7 +14,7 @@ class CTheme {
 	HBRUSH m_hbrBack{}, m_hbrCtrl{}, m_hbrHot{}, m_hbrPressed{}, m_hbrBorder{};
 public:
 	static constexpr COLORREF clrBack = RGB(0x20, 0x20, 0x20);         // bars, tab strip
-	static constexpr COLORREF clrCtrl = RGB(0x2D, 0x2D, 0x2D);         // selected tab, combo
+	static constexpr COLORREF clrCtrl = RGB(0x38, 0x38, 0x38);         // selected tab, combo
 	static constexpr COLORREF clrHot = RGB(0x3D, 0x3D, 0x3D);          // hot item
 	static constexpr COLORREF clrPressed = RGB(0x50, 0x50, 0x50);      // pressed / checked item
 	static constexpr COLORREF clrBorder = RGB(0x45, 0x45, 0x45);

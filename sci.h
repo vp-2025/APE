@@ -1,7 +1,6 @@
 #pragma once
 
 #include <windows.h>
-#include <cmath>
 
 #include "scintilla.h"
 
@@ -9,6 +8,7 @@
 #include "shared/cfile.h"
 #include "xmlMatchedTagHL.h"
 using namespace std;
+#include "shared/win.h" // g_dpi
 
 #define MARGIN_NUMS 1
 #define MARGIN_FOLD 2
@@ -91,7 +91,6 @@ class CSciWrapper : public CScintilla
 		CStyled() { b=bWholeWord=false; }
 	} m_styled[INDIC_CNT];
 	CEncoding m_encoding, m_encLoaded;
-    float m_dpiScale;
 public:
 	CEncoding getEncoding() { return m_encoding; }
 	bool isEncodingUtf() { return m_encoding==encUtf8 || m_encoding==encUtf8NoBOM; }
@@ -187,13 +186,7 @@ public:
 	void AdjustNumsMargin() {
 		if( !isViewNums() ) return;
 		int n=(int)log10((double)GetLineCount())+1; 
-		Margin(MARGIN_NUMS).Width(
-//#ifdef _DEBUG
-//			max(n*10,70)
-//#else
-            (int)(n*10*m_dpiScale)
-//#endif
-		);
+		Margin(MARGIN_NUMS).Width( n*g_dpi.scale(10) );
 	}
 
 	void ReStyle();

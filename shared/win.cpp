@@ -7,6 +7,8 @@ using namespace std;
 
 #pragma comment(lib, "comctl32.lib")
 
+CScaleDPI g_dpi;
+
 void CenterWindow(HWND hWnd) {
     CRect r, rP;
     GetWindowRect(hWnd, &r);
