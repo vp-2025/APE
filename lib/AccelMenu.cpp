@@ -5,8 +5,7 @@ using namespace std;
 
 extern HINSTANCE g_hInst;
 
-wstring accel2str( BYTE virt, WORD key )
-{
+wstring accel2str( BYTE virt, WORD key ) {
 	wstring ret;
 	if( virt&FCONTROL )
 		ret += L"Ctrl+";

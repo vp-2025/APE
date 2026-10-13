@@ -37,7 +37,7 @@ inline CTabItemLayout calcTabItemLayout( const CRect& rc,
     int xTextR = rc.right;
     if( bClose ) {
         l.closeX = rc.right - g_dpi.scale(1) - szClose.cx;
-        l.closeY = rc.top + g_dpi.scale(4);
+        l.closeY = rc.top + (rc.height() - szClose.cy) / 2;   // centered, whatever the size is
         l.closeW = szClose.cx;
         l.closeH = szClose.cy;
         xTextR = l.closeX - g_dpi.scale(2);
@@ -53,7 +53,10 @@ inline CTabItemLayout calcTabItemLayout( const CRect& rc,
 class CTabCtrlAdv : public CTabCtrl {
     bool m_isDragging;
     WNDPROC m_defWndProc;
-    int m_iDragTab, m_iHoverTab, m_iHoverTabPrev, m_iPressedTab;
+    // m_iHoverTab = tab under the mouse (its X button is shown), m_iHoverBtn = tab
+    // whose X button is under the mouse (hover/pressed look), m_iPressedTab = X held
+    int m_iDragTab, m_iHoverTab, m_iHoverTabPrev, m_iPressedTab, m_iHoverBtn;
+    bool m_bTrackLeave{};
     HIMAGELIST m_ilCloseBtn{};
     CPoint m_ptDrag;
     bool m_bStartDrag{};
@@ -70,7 +73,7 @@ public:
     int iPrevSel;
 
     CTabCtrlAdv() {
-        iPrevSel = m_iDragTab = m_iHoverTab = m_iHoverTabPrev = m_iPressedTab = -1;
+        iPrevSel = m_iDragTab = m_iHoverTab = m_iHoverTabPrev = m_iPressedTab = m_iHoverBtn = -1;
         m_isDragging = false;
         m_defWndProc = nullptr;
     };
@@ -89,6 +92,7 @@ public:
 
     CRect GetCloseBtnRect(int tab);
     void InvalidateCloseBtnRect(int tab);
+    void InvalidateTabRect(int tab);
 
     bool CloseBtnDown(int tab, const CPoint& pt);
     void CloseBtnHover(int tab, const CPoint& pt);

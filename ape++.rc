@@ -147,17 +147,17 @@ BEGIN
     END
     POPUP "Folding"
     BEGIN
-        MENUITEM "Toggle",                      ID_FOLDING_TOGGLE
-        MENUITEM "Collapse",                    ID_FOLDING_COLLAPSE
         MENUITEM "Expand",                      ID_FOLDING_EXPAND
-        MENUITEM SEPARATOR
-        MENUITEM "Toggle Children",             ID_FOLDING_TOGGLECHILD
-        MENUITEM "Collapse Children",           ID_FOLDING_COLLAPSECHILD
         MENUITEM "Expand Children",             ID_FOLDING_EXPANDCHILD
-        MENUITEM SEPARATOR
-        MENUITEM "Toggle All",                  ID_FOLDING_TOGGLEALL
-        MENUITEM "Collapse All",                ID_FOLDING_COLLAPSEALL
         MENUITEM "Expand All",                  ID_FOLDING_EXPANDALL
+        MENUITEM SEPARATOR
+        MENUITEM "Collapse",                    ID_FOLDING_COLLAPSE
+        MENUITEM "Collapse Children",           ID_FOLDING_COLLAPSECHILD
+        MENUITEM "Collapse All",                ID_FOLDING_COLLAPSEALL
+        MENUITEM SEPARATOR
+        MENUITEM "Toggle",                      ID_FOLDING_TOGGLE
+        MENUITEM "Toggle Children",             ID_FOLDING_TOGGLECHILD
+        MENUITEM "Toggle All",                  ID_FOLDING_TOGGLEALL
     END
     POPUP "E&ncoding"
     BEGIN

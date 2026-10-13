@@ -4,9 +4,52 @@
 #include "options.h"
 #include "theme.h"
 
+// res\ilCloseBtn.bmp is a strip of 4 images (normal/selected, hover, pressed),
+// authored at CLOSE_BTN_BASE. They are stretched to CLOSE_BTN_SIZE, so the X is
+// drawn bigger (and it follows the dpi; the layout reads the real image-list
+// size back, so drawing and the hit test stay in sync).
+static const int CLOSE_BTN_BASE = 14;
+static const int CLOSE_BTN_SIZE = 18;
+
+static int closeBtnSize() { return g_dpi.scale(CLOSE_BTN_SIZE); }
+
+static HIMAGELIST createCloseIL(int nImages) {
+    const int cx = closeBtnSize(), cy = cx;
+
+    HBITMAP hSrc = LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_CLOSEBTN));
+    if( !hSrc )
+        return ImageList_Create(cx, cy, ILC_COLOR24 | ILC_MASK, nImages, 0);
+
+    BITMAP bm{};
+    GetObject(hSrc, sizeof(bm), &bm);
+    const int srcW = bm.bmWidth / nImages, srcH = bm.bmHeight;
+
+    HDC hScreen = GetDC(nullptr);
+    HDC hSrcDC = CreateCompatibleDC(hScreen);
+    HDC hDstDC = CreateCompatibleDC(hScreen);
+    HBITMAP hDst = CreateCompatibleBitmap(hScreen, cx * nImages, cy);
+    HGDIOBJ hOldSrc = SelectObject(hSrcDC, hSrc);
+    HGDIOBJ hOldDst = SelectObject(hDstDC, hDst);
+    SetStretchBltMode(hDstDC, COLORONCOLOR); // keep the pixels (and the mask) exact, no halo
+    for( int i = 0; i < nImages; i++ )
+        StretchBlt(hDstDC, i * cx, 0, cx, cy, hSrcDC, i * srcW, 0, srcW, srcH, SRCCOPY);
+    SelectObject(hDstDC, hOldDst);
+    SelectObject(hSrcDC, hOldSrc);
+    DeleteDC(hDstDC);
+    DeleteDC(hSrcDC);
+    ReleaseDC(nullptr, hScreen);
+    DeleteObject(hSrc);
+
+    HIMAGELIST hIL = ImageList_Create(cx, cy, ILC_COLOR24 | ILC_MASK, nImages, 0);
+    ImageList_AddMasked(hIL, hDst, 0xFFFFFF);
+    DeleteObject(hDst);
+    return hIL;
+}
+
 void CTabCtrlAdv::applyOptions(bool bSelf) {
     if( g_options.bTabsCloseBtn )
-        SetPadding(g_dpi.scale(9), g_dpi.scale(4));
+        // the X sits in the right padding: keep room for its (grown) size
+        SetPadding(g_dpi.scale(9) + (closeBtnSize() - g_dpi.scale(CLOSE_BTN_BASE)), g_dpi.scale(4));
     else
         SetPadding(g_dpi.scale(4), g_dpi.scale(4));
     if( !bSelf )
@@ -24,8 +67,7 @@ void CTabCtrlAdv::Create(HWND hParent, int x, int y, int w, int h, DWORD id) {
     SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (LONG_PTR) this);
     m_defWndProc = (WNDPROC) SetWindowLongPtr(m_hWnd, GWLP_WNDPROC, (LONG_PTR) WndProcStatic);
 
-    m_ilCloseBtn = ImageList_Create(14, 14, ILC_COLOR24 | ILC_MASK, 4, 0);
-    ImageList_AddMasked(m_ilCloseBtn, LoadBitmap(g_hInst, MAKEINTRESOURCE(IDB_CLOSEBTN)), 0xFFFFFF);
+    m_ilCloseBtn = createCloseIL(4);
 
     applyOptions(true);
 
@@ -63,9 +105,20 @@ LRESULT CTabCtrlAdv::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
             int iTab = getItemIndexAt(pt);
             if( g_options.bTabsDragNDrop && m_isDragging )
                 DragOver(iTab);
-            else if( g_options.bTabsCloseBtn )
+            else if( g_options.bTabsCloseBtn ) {
+                if( !m_bTrackLeave ) { // ask to be told when the mouse leaves the control
+                    TRACKMOUSEEVENT tme{ sizeof(TRACKMOUSEEVENT), TME_LEAVE, hwnd, 0 };
+                    TrackMouseEvent(&tme);
+                    m_bTrackLeave = true;
+                }
                 CloseBtnHover(iTab, pt);
+            }
         }
+            break;
+        case WM_MOUSELEAVE:
+            m_bTrackLeave = false;
+            if( !m_isDragging && m_iPressedTab == -1 )
+                CloseBtnHover(-1, CPoint(-1, -1)); // hide the X button
             break;
         case WM_LBUTTONUP: {
             CPoint pt(LOWORD(lParam), HIWORD(lParam));
@@ -89,7 +142,7 @@ LRESULT CTabCtrlAdv::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
             break;
 
         case WM_TIMER: // vp: sometimes when mouse out closeBtn it still is hovered; this is timer-fix
-            if( m_iHoverTab != -1 ) {
+            if( !m_isDragging && m_iHoverTab != -1 ) {
                 CPoint pt = GetCursorPos();
                 ScreenToClient(pt);
                 int iTab = getItemIndexAt(pt);
@@ -146,11 +199,13 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
     if( bIcon )
         ImageList_Draw(hIL, tci.iImage, hDC, l.iconX, l.iconY, ILD_TRANSPARENT);
 
-    if( g_options.bTabsCloseBtn ) {
+    // the X button is only shown for the tab the mouse is over (the space is still
+    // reserved in the layout, so the icon / text never move)
+    if( g_options.bTabsCloseBtn && !m_isDragging && m_iHoverTab == iTab ) {
         int idCloseImg;
-        if( !m_isDragging && m_iPressedTab == iTab && m_iHoverTab == iTab )
+        if( m_iPressedTab == iTab && m_iHoverBtn == iTab )
             idCloseImg = 3;
-        else if( !m_isDragging && m_iPressedTab == -1 && m_iHoverTab == iTab )
+        else if( m_iPressedTab == -1 && m_iHoverBtn == iTab )
             idCloseImg = 2;
         else
             idCloseImg = bSelected ? 0 : 1;
@@ -246,6 +301,8 @@ void CTabCtrlAdv::DragStart(int iTab) {
         }
         m_iDragTab = iTab;
         m_isDragging = true;
+        InvalidateTabRect(m_iHoverTab);   // drop the hover look / X button
+        m_iHoverTab = m_iHoverTabPrev = m_iHoverBtn = -1;
         SetCapture(m_hWnd);
         m_ptDrag = GetCursorPos();
         m_bStartDrag = false;
@@ -325,6 +382,15 @@ void CTabCtrlAdv::InvalidateCloseBtnRect(int tab) {
     InvalidateRect(m_hWnd, &r, FALSE);
 }
 
+void CTabCtrlAdv::InvalidateTabRect(int tab) {
+    if( tab == -1 ) return;
+    CRect r = GetItemRect(tab);
+    r.left -= g_dpi.scale(2);   // the selected tab is painted a bit bigger
+    r.right += g_dpi.scale(2);
+    r.top -= g_dpi.scale(2);
+    InvalidateRect(m_hWnd, &r, FALSE);
+}
+
 bool CTabCtrlAdv::CloseBtnDown(int tab, const CPoint& pt) {
     m_iPressedTab = GetCloseBtnRect(tab).in(pt) ? tab : -1;
     if( m_iPressedTab >= 0 ) {
@@ -335,11 +401,18 @@ bool CTabCtrlAdv::CloseBtnDown(int tab, const CPoint& pt) {
 }
 
 void CTabCtrlAdv::CloseBtnHover(int tab, const CPoint& pt) {
-    m_iHoverTabPrev = m_iHoverTab;
-    m_iHoverTab = GetCloseBtnRect(tab).in(pt) ? tab : -1;
-    if( m_iHoverTabPrev != m_iHoverTab ) {
-        InvalidateCloseBtnRect(m_iHoverTab);
-        InvalidateCloseBtnRect(m_iHoverTabPrev);
+    // the mouse is over `tab` (anywhere on it) -> its X button is shown; the X
+    // itself is only under the cursor when the point is inside its rect
+    int iHoverBtn = (tab != -1 && GetCloseBtnRect(tab).in(pt)) ? tab : -1;
+    if( m_iHoverTab != tab ) {
+        m_iHoverTabPrev = m_iHoverTab;
+        m_iHoverTab = tab;
+        m_iHoverBtn = iHoverBtn;
+        InvalidateTabRect(m_iHoverTabPrev);  // the X button is shown / hidden
+        InvalidateTabRect(m_iHoverTab);
+    } else if( m_iHoverBtn != iHoverBtn ) {
+        m_iHoverBtn = iHoverBtn;
+        InvalidateCloseBtnRect(tab);         // only the X changes its look
     }
 }
 

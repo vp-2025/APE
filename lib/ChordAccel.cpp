@@ -24,12 +24,15 @@ extern HWND g_hMainWnd;
 //   CONTROL           - the "... Children" variants
 //
 static const ChordAccel s_chords[] = {
-	{'M', FCONTROL, 'M', FCONTROL, ID_FOLDING_TOGGLE},
-	{'M', FCONTROL, 'S', FCONTROL, ID_FOLDING_COLLAPSE},
 	{'M', FCONTROL, 'E', FCONTROL, ID_FOLDING_EXPAND},
-
-	{'M', FCONTROL, 'A', FCONTROL, ID_FOLDING_COLLAPSEALL},
+	{VK_ADD, FCONTROL|FALT, 0, 0, ID_FOLDING_EXPANDCHILD},
 	{'M', FCONTROL, 'X', FCONTROL, ID_FOLDING_EXPANDALL},
+
+	{'M', FCONTROL, 'S', FCONTROL, ID_FOLDING_COLLAPSE},
+	{VK_SUBTRACT, FCONTROL|FALT, 0, 0, ID_FOLDING_COLLAPSECHILD},
+	{'M', FCONTROL, 'A', FCONTROL, ID_FOLDING_COLLAPSEALL},
+
+	{'M', FCONTROL, 'M', FCONTROL, ID_FOLDING_TOGGLE},
 
 	{'R', FCONTROL, 'W', FCONTROL, ID_VIEW_WS},
 };
@@ -42,7 +45,11 @@ const vector<ChordAccel>& chordAccels() {
 }
 
 wstring chordAccel2str( const ChordAccel& ca ) {
-	return accel2str( ca.mod1|FVIRTKEY, ca.vk1 ) + L", " + accel2str( ca.mod2|FVIRTKEY, ca.vk2 );
+	wstring ws = accel2str( ca.mod1|FVIRTKEY, ca.vk1 );
+	wstring ws2 = accel2str( ca.mod2|FVIRTKEY, ca.vk2 );
+	if ( !ws2.empty() )
+		ws += L", " + accel2str( ca.mod2|FVIRTKEY, ca.vk2 );
+	return ws;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
