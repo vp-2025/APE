@@ -19,7 +19,7 @@
 #define clrKeyword			RGB(0x00,0x00,0xFF)
 #define clrValue			RGB(0x00,0xB0,0x00)
 #define clrVar				RGB(0x80,0x00,0xFF)
-#define clrNumber			RGB(0x00,0x00,0x80)
+#define clrNumber			RGB(0x00,0x80,0x80)
 #define clrString			RGB(0x80,0x80,0x00)
 #define clrRegExp			RGB(0xFF,0x80,0x80)
 #define clrChar				RGB(0xA0,0x60,0x00)
@@ -283,6 +283,25 @@ CLexerStyle styleIni[] = {
 	{0}
 };
 
+/* style ids must match LexerYAML.L */
+CLexerStyle styleYAML[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_ITALIC( 1, "Comment", clrComment ),
+	STYLE2( 2, "Key", clrKeyword ),
+	STYLE2( 3, "String", clrString ),
+	STYLE2( 4, "String Single Quoted", clrChar ),
+	STYLE2( 5, "Number", clrNumber ),
+	STYLE_BOLD( 6, "Keyword", clrValue ),
+	STYLE2( 7, "Symbol", clrSymbol ),
+	STYLE2_BOLD( 8, "Document Marker", RGB(0x80,0x00,0x80) ),
+	STYLE2( 9, "Anchor / Alias", clrVar ),
+	STYLE2( 10, "Tag", clrLabel ),
+	STYLE2( 11, "Directive", clrPrepocessor ),
+	STYLE2( 12, "Block Scalar", RGB(0x00,0x80,0x00) ),
+	{0}
+};
+
 CLexerStyle styleTxt[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 	STYLE( 0, "Text" ),
@@ -378,6 +397,7 @@ CLexerStyles g_styles[] = {
 	{"Batch", "bat",styleBatch},
 	{"Conf", "conf", styleConf},
 	{"Ini", "ini", styleIni},
+	{"YAML", "yaml", styleYAML},
 	{"Text","txt", styleTxt},
 	{"NSIS", "nsis", styleNSIS},
 	{"Make", "mak", styleMAKE},
@@ -411,6 +431,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_PASCAL: return stylePascal;
 		case LEX_CONF: return styleConf;
 		case LEX_INI: return styleIni;
+		case LEX_YAML: return styleYAML;
 		case LEX_TXT_NOQUOTE: 
 		case LEX_TXT: return styleTxt;
 		case LEX_SQL: return styleSQL;

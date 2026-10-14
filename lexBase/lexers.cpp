@@ -95,6 +95,12 @@ typedef  CSciLexer<make_FlexLexer>	CLexerMAKE;
 #include "FlexLexer.h"
 typedef  CSciLexer<msbuild_FlexLexer>	CLexerMSBuild;
 
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
+#define  yyFlexLexer	yaml_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<yaml_FlexLexer>	CLexerYAML;
+
 CLexerInfo g_lexers[]={
 	{LEX_NONE,"None"},
 	{LEX_SEPARATOR},
@@ -116,6 +122,7 @@ CLexerInfo g_lexers[]={
 	{LEX_SQL,"SQL", {"*.sql",0} },
 	{LEX_INI,"Ini", {"*.ini","*.reg","*.inf","hgrc","*.properties","*.theme",0} },
 	{LEX_CONF,"Conf", {"*.conf",".htaccess",0} },
+	{LEX_YAML,"YAML", {"*.yaml","*.yml",".clang-format",".clang-tidy",0} },
 	{LEX_NSIS,"NSIS", {"*.nsi",0}, {"*.nsh",0} },
 	{LEX_BATCH,"Batch", {"*.bat","*.cmd",0} },
 	{LEX_MAKE,"Makefile", {"*.mk","*.mak","makefile", "makefile.*",0} },
@@ -248,6 +255,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 			CLexerConf lexer( &styler, lang ); lexer.Style( posTo );
 		} break;
 		case LEX_INI:	{ CLexerIni lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_YAML:	{ CLexerYAML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 
 		case LEX_TXT: { CMyLexerText lexer(sci); lexer.StyleTo( posTo ); } break;
 		case LEX_TXT_NOQUOTE:	{ CMyLexerText lexer(sci); lexer.setQuote(false); lexer.StyleTo( posTo ); } break;
