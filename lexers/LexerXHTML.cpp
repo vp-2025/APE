@@ -738,9 +738,9 @@ bool isPHPKeyword( const char* szKW )
 
 YY_DECL
 {
-    register yy_state_type yy_current_state;
-    register char *yy_cp, *yy_bp;
-    register int yy_act;
+    yy_state_type yy_current_state;
+    char *yy_cp, *yy_bp;
+    int yy_act;
 
 /************************************************************************/
 /* start of user's declarations                                         */
@@ -1346,7 +1346,7 @@ SetStyle(); BEGIN(JS);
 case 91:
 YY_RULE_SETUP
 #line 279 "c:\\work\\ape++\\src\\lexers\\LexerXHTML.L"
-SetStyle();  // "\\" escaped \
+SetStyle();  // "\\" escaped backslash
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
@@ -1698,9 +1698,9 @@ void yyFlexLexer::LexerOutput( const char* buf, int size )
  */
 int yyFlexLexer::yy_get_next_buffer()
 {
-    register char *dest = yy_current_buffer->yy_ch_buf;
-    register char *source = yytext_ptr;
-    register int number_to_move, i;
+    char *dest = yy_current_buffer->yy_ch_buf;
+    char *source = yytext_ptr;
+    int number_to_move, i;
     int ret_val;
 
     if( yy_c_buf_p > &yy_current_buffer->yy_ch_buf[yy_n_chars + 1] )
@@ -1802,8 +1802,8 @@ int yyFlexLexer::yy_get_next_buffer()
 
 yy_state_type yyFlexLexer::yy_get_previous_state()
 {
-    register yy_state_type yy_current_state;
-    register char *yy_cp;
+    yy_state_type yy_current_state;
+    char *yy_cp;
 /*********************************************************************/
 /* start of code to get the start state into yy_current_state        */
 	yy_current_state = yy_start;
@@ -1843,7 +1843,7 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 
 yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
 {
-    register int yy_is_jam;
+    int yy_is_jam;
 /*********************************************************************/
 /* start of code to find the next state, and perhaps do backing up   */
 	register char *yy_cp = yy_c_buf_p;
@@ -1868,9 +1868,9 @@ yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
 }
 
 
-void yyFlexLexer::yyunput( int c, register char* yy_bp )
+void yyFlexLexer::yyunput( int c, char* yy_bp )
 {
-    register char *yy_cp = yy_c_buf_p;
+    char *yy_cp = yy_c_buf_p;
 
     /* undo effects of setting up yytext */
     *yy_cp = yy_hold_char;
@@ -1878,9 +1878,9 @@ void yyFlexLexer::yyunput( int c, register char* yy_bp )
     if( yy_cp < yy_current_buffer->yy_ch_buf + 2 ) {
     /* need to shift things up to make room */
     /* +2 for EOB chars. */
-        register int number_to_move = yy_n_chars + 2;
-        register char *dest = &yy_current_buffer->yy_ch_buf[yy_current_buffer->yy_buf_size + 2];
-        register char *source = &yy_current_buffer->yy_ch_buf[number_to_move];
+        int number_to_move = yy_n_chars + 2;
+        char *dest = &yy_current_buffer->yy_ch_buf[yy_current_buffer->yy_buf_size + 2];
+        char *source = &yy_current_buffer->yy_ch_buf[number_to_move];
 
         while( source > yy_current_buffer->yy_ch_buf )
             *--dest = *--source;
@@ -2168,7 +2168,7 @@ void yyFlexLexer::LexerError(yyconst char msg[])
 #ifndef yytext_ptr
 static void yy_flex_strncpy( char *s1, yyconst char *s2, int n )
 {
-    register int i;
+    int i;
     for ( i = 0; i < n; ++i )
         s1[i] = s2[i];
 }
@@ -2177,7 +2177,7 @@ static void yy_flex_strncpy( char *s1, yyconst char *s2, int n )
 #ifdef YY_NEED_STRLEN
 static int yy_flex_strlen( yyconst char *s )
 {
-    register int n;
+    int n;
     for( n = 0; s[n]; ++n );
 
     return n;

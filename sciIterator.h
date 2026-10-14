@@ -1,10 +1,17 @@
 #pragma once
 
-class CSciIterator : public iterator<bidirectional_iterator_tag,char> 
+class CSciIterator
 {
 	CSciWrapper* m_pSci;
 	int	m_pos;
 public:
+//	iterator traits (previously inherited from the deprecated std::iterator base
+//	class, which is removed in C++17 and reported as STL4015/C4996)
+	typedef bidirectional_iterator_tag	iterator_category;
+	typedef char	value_type;
+	typedef ptrdiff_t	difference_type;
+	typedef char*	pointer;
+	typedef char&	reference;
 	CSciIterator( CSciWrapper* pSci=NULL, int pos=0 ) 
 		: m_pSci(pSci), m_pos(pos) {}
 	CSciIterator( const CSciIterator& o ) 

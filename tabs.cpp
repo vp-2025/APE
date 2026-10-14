@@ -60,7 +60,7 @@ void CTabCtrlAdv::Create(HWND hParent, int x, int y, int w, int h, DWORD id) {
     m_id = id;
     m_hWnd = CreateWindowEx(0, WC_TABCONTROL, "",
                             WS_CHILD | TCS_FOCUSNEVER | TCS_OWNERDRAWFIXED | TCS_TABS | TCS_TOOLTIPS,
-                            x, y, w, h, hParent, (HMENU) id, g_hInst, 0);
+                            x, y, w, h, hParent, (HMENU) (UINT_PTR) id, g_hInst, 0);
     auto hFont = (HFONT) ::GetStockObject(DEFAULT_GUI_FONT);
     SetFont(hFont);
 

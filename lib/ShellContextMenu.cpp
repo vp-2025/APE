@@ -352,11 +352,11 @@ int CShellContextMenu::GetPIDLCount (LPCITEMIDLIST pidl)
 /////////////////////////////////////////////////////////////////////////////
 
 void OpenFolder( const string& sFolder, const string& sFile ) {
-	ITEMIDLIST *pDir = ILCreateFromPathW(utf2w(sFolder).c_str());
-	ITEMIDLIST *pFile = nullptr;
+	PIDLIST_ABSOLUTE pDir = ILCreateFromPathW(utf2w(sFolder).c_str());
+	PIDLIST_ABSOLUTE pFile = nullptr;
 	if( !sFile.empty() )
 		pFile = ILCreateFromPathW(utf2w(sFile).c_str());
-	const ITEMIDLIST* selection[] = {pFile};
+	PCUITEMID_CHILD selection[] = {pFile};
 	SHOpenFolderAndSelectItems(pDir, 1, selection, 0);
 	ILFree(pDir);
 	if( pFile!=nullptr )

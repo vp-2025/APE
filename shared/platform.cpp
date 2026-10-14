@@ -238,7 +238,7 @@ BOOL HandleDialogTooltips(NMHDR* pNMHDR, HMENU hMenu) {
 
     if( pNMHDR->code == TTN_NEEDTEXTA && (pTTTA->uFlags & TTF_IDISHWND) ||
         pNMHDR->code == TTN_NEEDTEXTW && (pTTTW->uFlags & TTF_IDISHWND) ) {
-        nID = ::GetDlgCtrlID((HWND) nID); // idFrom is actually the HWND of the tool
+        nID = ::GetDlgCtrlID((HWND) (UINT_PTR) nID); // idFrom is actually the HWND of the tool
     }
 
     if( nID != 0 ) { // will be zero on a separator

@@ -324,8 +324,8 @@ vector< pair<int, int> > CXmlMatchedTagsHighlighter::getAttributesPos(int start,
 
 	int startPos = -1;
 	int oneMoreChar = 1;
-	size_t i = 0;
-	for (; i < buf.length(); i++)
+	int i = 0;
+	for (; i < (int)buf.length(); i++)
 	{
 		switch (buf[i])
 		{

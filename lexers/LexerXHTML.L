@@ -276,7 +276,7 @@ bool isPHPKeyword( const char* szKW )
 	'		SetStyle(); BEGIN(JS);
 }
 <JS_REGEXP>{
-	\\\\	SetStyle();  // "\\" escaped \
+	\\\\	SetStyle();  // "\\" escaped backslash
 	\\\/	SetStyle();
 	\/gi	SetStyle( MatchStart(), MatchEnd()-2, STYLE_JS_REGEXP ); SetStyle( MatchEnd()-2, MatchEnd(), STYLE_JS_REGEXP_BOLD ); BEGIN(JS);
 	\/[gi]	SetStyle( MatchStart(), MatchEnd()-1, STYLE_JS_REGEXP ); SetStyle( MatchEnd()-1, MatchEnd(), STYLE_JS_REGEXP_BOLD ); BEGIN(JS);
