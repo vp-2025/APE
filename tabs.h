@@ -46,7 +46,7 @@ inline CTabItemLayout calcTabItemLayout( const CRect& rc,
     l.textL = xTextL;
     l.textT = rc.top + g_dpi.scale(8);
     l.textR = xTextR;
-    l.textB = rc.bottom;
+    l.textB = rc.bottom - g_dpi.scale(4);
     return l;
 }
 
