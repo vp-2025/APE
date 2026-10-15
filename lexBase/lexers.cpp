@@ -101,6 +101,12 @@ typedef  CSciLexer<msbuild_FlexLexer>	CLexerMSBuild;
 #include "FlexLexer.h"
 typedef  CSciLexer<yaml_FlexLexer>	CLexerYAML;
 
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
+#define  yyFlexLexer	flex_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<flex_FlexLexer>	CLexerFlex;
+
 CLexerInfo g_lexers[]={
 	{LEX_NONE,"None"},
 	{LEX_SEPARATOR},
@@ -129,6 +135,7 @@ CLexerInfo g_lexers[]={
 	{LEX_CMAKE,"CMake", {"cmakelists.txt",0} },
 	{LEX_GRADLE,"Gradle",{ "*.gradle",0 } },
 	{LEX_MSBUILD,"MSBuild", {"*.targets","*.props",0} },
+	{LEX_FLEX,"Flex", {"*.l","*.lex",0} },
 	{LEX_SEPARATOR},
 	{LEX_TXT,"Text", {"*.txt",".htaccess",".hgignore",".gitignore","readme","*.srt",0} },
 	{LEX_TXT_NOQUOTE,"Text no quote", {NULL,0} },
@@ -268,6 +275,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 		case LEX_GRADLE: { CMyLexerGradle lexer( sci ); lexer.StyleTo( posTo ); } break;
 
 		case LEX_MSBUILD:	{ CLexerMSBuild lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_FLEX:	{ CLexerFlex lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 	} 
 	if( pCur ) delete pCur;
 }

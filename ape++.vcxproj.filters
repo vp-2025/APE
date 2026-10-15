@@ -322,6 +322,9 @@
     <ClCompile Include="lexers\LexerCSS.cpp">
       <Filter>lexers\cpp</Filter>
     </ClCompile>
+    <ClCompile Include="lexers\LexerFlex.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
     <ClCompile Include="lexers\LexerINI.cpp">
       <Filter>lexers\cpp</Filter>
     </ClCompile>
@@ -580,6 +583,9 @@
       <Filter>lexers\L</Filter>
     </CustomBuild>
     <CustomBuild Include="lexers\LexerCSS.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerFlex.L">
       <Filter>lexers\L</Filter>
     </CustomBuild>
     <CustomBuild Include="lexers\LexerINI.L">

@@ -1,5 +1,3 @@
-// $Header: k:\\backup\\cvsroot/ape/lexer/FlexLexer.h,v 1.1 2000/11/15 13:38:43 Basil_Burdo Exp $
-
 // FlexLexer.h -- define interfaces for lexical analyzer classes generated
 //		  by flex
 

@@ -11,45 +11,6 @@
 #define WM_TAB_CLOSE        (WM_USER+4)
 #define WM_TAB_MOVE2NEWAPE  (WM_USER+5)
 
-// Geometry of one owner-drawn tab item, relative to the item rect.
-// Kept in one place, so the painting and the close-button hit test cannot drift
-// apart, and everything scales with the dpi (icons are as big as the image list
-// says, the gaps around them are scaled).
-struct CTabItemLayout {
-    int iconX{}, iconY{};                   // file type icon
-    int textL{}, textT{}, textR{}, textB{}; // file name
-    int closeX{}, closeY{}, closeW{}, closeH{};
-};
-
-inline CTabItemLayout calcTabItemLayout( const CRect& rc,
-                                         bool bIcon, const CSize& szIcon,
-                                         bool bClose, const CSize& szClose )
-{
-    CTabItemLayout l;
-
-    int xTextL = rc.left;
-    if( bIcon ) {
-        l.iconX = rc.left + g_dpi.scale(2);
-        l.iconY = rc.top + g_dpi.scale(3);
-        xTextL = l.iconX + szIcon.cx + g_dpi.scale(4);   // icon + space before the file name
-    }
-
-    int xTextR = rc.right;
-    if( bClose ) {
-        l.closeX = rc.right - g_dpi.scale(1) - szClose.cx;
-        l.closeY = rc.top + (rc.height() - szClose.cy) / 2;   // centered, whatever the size is
-        l.closeW = szClose.cx;
-        l.closeH = szClose.cy;
-        xTextR = l.closeX - g_dpi.scale(2);
-    }
-
-    l.textL = xTextL;
-    l.textT = rc.top + g_dpi.scale(8);
-    l.textR = xTextR;
-    l.textB = rc.bottom - g_dpi.scale(4);
-    return l;
-}
-
 class CTabCtrlAdv : public CTabCtrl {
     bool m_isDragging;
     WNDPROC m_defWndProc;

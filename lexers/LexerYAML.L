@@ -35,7 +35,7 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 #define STYLE_COMMENT		1
 #define STYLE_KEY			2
 #define STYLE_STRING		3
-#define STYLE_STRING2		4
+#define STYLE_CHAR		    4
 #define STYLE_NUMBER		5
 #define STYLE_KEYWORD		6
 #define STYLE_SYMBOL		7
@@ -172,8 +172,8 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
  /* scalars */
 	{DQSTR}					SetStyle( STYLE_STRING );
 	\"([^"\\\r\n]|\\.)*\\?	BEGIN(DQ); SetStyle( STYLE_STRING );
-	{SQSTR}					SetStyle( STYLE_STRING2 );
-	'([^'\r\n]|'')*			BEGIN(SQ); SetStyle( STYLE_STRING2 );
+	{SQSTR}					SetStyle( STYLE_CHAR );
+	'([^'\r\n]|'')*			BEGIN(SQ); SetStyle( STYLE_CHAR );
 
 	{INT}	|
 	{FLOAT}	|
@@ -232,8 +232,8 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 }
 
 <SQ>{
-	([^'\r\n]|'')*'			BEGIN(FLOW_OR_INITIAL); SetStyle( STYLE_STRING2 );
-	([^'\r\n]|'')+			SetStyle( STYLE_STRING2 );
+	([^'\r\n]|'')*'			BEGIN(FLOW_OR_INITIAL); SetStyle( STYLE_CHAR );
+	([^'\r\n]|'')+			SetStyle( STYLE_CHAR );
 }
 
 <BLOCKHDR>{EOL}				BEGIN(BLOCK); SetStyle( STYLE_TEXT );
@@ -272,7 +272,7 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
 		case DQ:		return STYLE_STRING;
-		case SQ:		return STYLE_STRING2;
+		case SQ:		return STYLE_CHAR;
 		case BLOCK:		return STYLE_BLOCK;
 	}
 	return STYLE_TEXT;

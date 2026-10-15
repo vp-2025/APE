@@ -30,7 +30,8 @@ enum {
 	LEX_CMAKE,
 	LEX_GRADLE,
 	LEX_MSBUILD,
-	LEX_YAML
+	LEX_YAML,
+	LEX_FLEX
 };
 
 struct CLexerInfo {

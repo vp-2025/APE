@@ -858,12 +858,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "vp"
             VALUE "FileDescription", "APE++"
-            VALUE "FileVersion", "1.3.0"
+            VALUE "FileVersion", "1.4.0"
             VALUE "InternalName", "ape++"
             VALUE "LegalCopyright", "Copyright (C) 2009-2026"
             VALUE "OriginalFilename", "ape++.exe"
             VALUE "ProductName", "APE++"
-            VALUE "ProductVersion", "1.3.0"
+            VALUE "ProductVersion", "1.4.0"
         END
     END
     BLOCK "VarFileInfo"

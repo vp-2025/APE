@@ -102,6 +102,25 @@ CLexerStyle styleMSBuild[] = {
 	{0}
 };
 
+/* style ids must match LexerFlex.L */
+CLexerStyle styleFlex[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_ITALIC( 1, "Comment", clrComment ),
+	STYLE2_BOLD( 2, "Directive", clrPrepocessor ),
+	STYLE2( 3, "Definition", clrLabel ),
+	STYLE2( 4, "Pattern", clrSymbol ),
+	STYLE2( 5, "String", clrString ),
+	STYLE2( 6, "Character Class", clrChar ),
+	STYLE2( 7, "Reference", clrVar ),
+	STYLE2_BOLD( 8, "Start Condition", clrKeyword ),
+	STYLE2( 9, "Number", clrNumber ),
+	STYLE( 10, "Code" ),
+	STYLE_BOLD( 11, "Keyword", clrKeyword ),
+	STYLE_BOLD( 12, "Section", clrSymbol ),
+	{0}
+};
+
 #define STYLE_PARENT(id,name,clrBack) { id, name, STL_EOL, -1, clrBack, 0, "", 0 }
 
 #define STYLE_CHILD(parentId,id,szName)						{id,szName,0,-1,-1,0,"",parentId}
@@ -404,6 +423,7 @@ CLexerStyles g_styles[] = {
 	{ "Gradle", "gradle", styleGradle },
 	{"Markdown", "markdown", styleMD },
 	{"MSBuild", "msbuild", styleMSBuild},
+	{"Flex", "flex", styleFlex},
 	{NULL}
 };
 
@@ -441,6 +461,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_CMAKE: return styleMAKE;
 		case LEX_GRADLE: return styleGradle;
 		case LEX_MSBUILD: return styleMSBuild;
+		case LEX_FLEX: return styleFlex;
 	};
 	return NULL;
 }
