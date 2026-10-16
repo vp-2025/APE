@@ -38,7 +38,9 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 %x COMMENT
 
 %{
-/* style ids - keep in sync with styleFlex[] in lexBase/lexerStyles.cpp */
+/* style ids - keep in sync with styleFlex[] in lexBase/lexerStyles.cpp.
+   Every token style exists once per file section, so that the three sections
+   can each have their own background colour (see STYLE_PARENT in lexStyles). */
 #define STYLE_TEXT			0
 #define STYLE_COMMENT		1
 #define STYLE_DIRECTIVE		2
@@ -52,6 +54,23 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 #define STYLE_CODE			10
 #define STYLE_KEYWORD		11
 #define STYLE_SECTION		12
+
+/* the three sections of a .L file and the first style id of their block.
+   Style id 0 is left alone ("Text", no background): Scintilla uses style 0 for
+   the hard coded "last style" of a line, so an empty line would otherwise be
+   painted with a section background. */
+#define SECTION_DEF			1		/* definitions - ids  1..13, slightly red  */
+#define SECTION_RULES		15		/* rules       - ids 15..27, slightly green */
+#define SECTION_CODE		43		/* user code   - ids 43..55, slightly blue  */
+
+/* section a start condition belongs to */
+#define SECTION_OF( st ) \
+	( ((st)==CODE) ? SECTION_CODE : \
+	  (((st)==RULES || (st)==PROLOGR || (st)==ACTION) ? SECTION_RULES : SECTION_DEF) )
+#define DEFSEC( styl )				( SECTION_DEF   + (styl) )
+#define RULSEC( styl )				( SECTION_RULES + (styl) )
+#define CODSEC( styl )				( SECTION_CODE  + (styl) )
+#define ANYSEC( state, styl )		( SECTION_OF(state) + (styl) )
 
 /* yy_start keeps the start condition in its low 8 bits only.  The brace depth
    of the action block being highlighted and the state to resume after a
@@ -88,32 +107,34 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
   *************************************************************************************/
 
 <INITIAL>{
-	^"%%"					SetStyle( STYLE_SECTION ); BEGIN( RULES );
+	 /* the separator line is styled as a whole - its newline included, so that
+	    the background of the section it closes fills the rest of the line */
+	^{WS}*"%%"[^\r\n]*{EOL}?	SetStyle( DEFSEC(STYLE_SECTION) ); BEGIN( RULES );
 
-	^{WS}*"%{"				SetStyle( STYLE_DIRECTIVE ); BEGIN( PROLOGD ); levelIncrease();
-	^{WS}*"%"[A-Za-z_]+		SetStyle( STYLE_DIRECTIVE );
-	^{WS}*"%"				SetStyle( STYLE_DIRECTIVE );
+	^{WS}*"%{"				SetStyle( DEFSEC(STYLE_DIRECTIVE) ); BEGIN( PROLOGD ); levelIncrease();
+	^{WS}*"%"[A-Za-z_]+		SetStyle( DEFSEC(STYLE_DIRECTIVE) );
+	^{WS}*"%"				SetStyle( DEFSEC(STYLE_DIRECTIVE) );
 
 	 /* a word at the beginning of a line names a definition */
-	^{NAME}					SetStyle( STYLE_DEFNAME );
+	^{NAME}					SetStyle( DEFSEC(STYLE_DEFNAME) );
 
-	"/*"					prevState = YY_START; BEGIN( COMMENT ); SetStyle( STYLE_COMMENT );
-	"//"[^\r\n]*			SetStyle( STYLE_COMMENT );
+	"/*"					prevState = YY_START; BEGIN( COMMENT ); SetStyle( DEFSEC(STYLE_COMMENT) );
+	"//"[^\r\n]*			SetStyle( DEFSEC(STYLE_COMMENT) );
 
-	\"([^"\\\r\n]|\\.)*\"	SetStyle( STYLE_STRING );
-	\"						SetStyle( STYLE_STRING );
-	"["("\\"[^\r\n]|[^\]\r\n])*"]"	SetStyle( STYLE_CLASS );
+	\"([^"\\\r\n]|\\.)*\"	SetStyle( DEFSEC(STYLE_STRING) );
+	\"						SetStyle( DEFSEC(STYLE_STRING) );
+	"["("\\"[^\r\n]|[^\]\r\n])*"]"	SetStyle( DEFSEC(STYLE_CLASS) );
 
-	"{"{NAME}"}"			SetStyle( STYLE_REFERENCE );
-	"{"{DC}+","{DC}+"}"		SetStyle( STYLE_NUMBER );
-	"{"{DC}+",}"			SetStyle( STYLE_NUMBER );
-	"{"{DC}+"}"				SetStyle( STYLE_NUMBER );
+	"{"{NAME}"}"			SetStyle( DEFSEC(STYLE_REFERENCE) );
+	"{"{DC}+","{DC}+"}"		SetStyle( DEFSEC(STYLE_NUMBER) );
+	"{"{DC}+",}"			SetStyle( DEFSEC(STYLE_NUMBER) );
+	"{"{DC}+"}"				SetStyle( DEFSEC(STYLE_NUMBER) );
 
-	\\[^\r\n]				SetStyle( STYLE_PATTERN );
-	[()|*+?.^$/]			SetStyle( STYLE_PATTERN );
+	\\[^\r\n]				SetStyle( DEFSEC(STYLE_PATTERN) );
+	[()|*+?.^$/]			SetStyle( DEFSEC(STYLE_PATTERN) );
 
-	{WORD}					SetStyle( STYLE_TEXT );
-	{NUM}					SetStyle( STYLE_TEXT );
+	{WORD}					SetStyle( DEFSEC(STYLE_TEXT) );
+	{NUM}					SetStyle( DEFSEC(STYLE_TEXT) );
 }
 
  /*************************************************************************************/
@@ -121,52 +142,52 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
   *************************************************************************************/
 
 <RULES>{
-	^"%%"					SetStyle( STYLE_SECTION ); BEGIN( CODE );
-	^{WS}*"%{"				SetStyle( STYLE_DIRECTIVE ); BEGIN( PROLOGR ); levelIncrease();
+	^{WS}*"%%"[^\r\n]*{EOL}?	SetStyle( RULSEC(STYLE_SECTION) ); BEGIN( CODE );
+	^{WS}*"%{"				SetStyle( RULSEC(STYLE_DIRECTIVE) ); BEGIN( PROLOGR ); levelIncrease();
 
 	 /* indentation is not part of a pattern */
-	^{WS}+					SetStyle( STYLE_TEXT );
+	^{WS}+					SetStyle( RULSEC(STYLE_TEXT) );
 
 	 /* <SC>{ ... } scope */
 	"<"{SC_LIST}">""{"		{
-		SetStyle( MatchStart(), MatchEnd()-1, STYLE_STATECOND );
-		SetStyle( MatchEnd()-1, MatchEnd(), STYLE_PATTERN );
+		SetStyle( MatchStart(), MatchEnd()-1, RULSEC(STYLE_STATECOND) );
+		SetStyle( MatchEnd()-1, MatchEnd(), RULSEC(STYLE_PATTERN) );
 		levelIncrease();
 	}
-	^"}"					SetStyle( STYLE_PATTERN ); levelDecrease();
+	^"}"					SetStyle( RULSEC(STYLE_PATTERN) ); levelDecrease();
 
 	 /* <<EOF>> and <start condition> lists */
-	"<<"[^>\r\n]*">>"		SetStyle( STYLE_STATECOND );
-	"<"{SC_LIST}">"			SetStyle( STYLE_STATECOND );
+	"<<"[^>\r\n]*">>"		SetStyle( RULSEC(STYLE_STATECOND) );
+	"<"{SC_LIST}">"			SetStyle( RULSEC(STYLE_STATECOND) );
 
 	 /* comments */
-	"/*"					prevState = YY_START; BEGIN( COMMENT ); SetStyle( STYLE_COMMENT );
-	"//"[^\r\n]*			SetStyle( STYLE_COMMENT );
+	"/*"					prevState = YY_START; BEGIN( COMMENT ); SetStyle( RULSEC(STYLE_COMMENT) );
+	"//"[^\r\n]*			SetStyle( RULSEC(STYLE_COMMENT) );
 
 	 /* the pattern ends at the first whitespace, the action follows it */
 	{WS}+"{"				{
-		SetStyle( MatchStart(), MatchEnd()-1, STYLE_TEXT );
-		SetStyle( MatchEnd()-1, MatchEnd(), STYLE_CODE );
+		SetStyle( MatchStart(), MatchEnd()-1, RULSEC(STYLE_TEXT) );
+		SetStyle( MatchEnd()-1, MatchEnd(), RULSEC(STYLE_CODE) );
 		braceDepth = 1;
 		BEGIN( ACTION );
 		levelIncrease();
 	}
-	{WS}+					BEGIN( ACTION ); braceDepth = 0; SetStyle( STYLE_TEXT );
+	{WS}+					BEGIN( ACTION ); braceDepth = 0; SetStyle( RULSEC(STYLE_TEXT) );
 
-	\"([^"\\\r\n]|\\.)*\"	SetStyle( STYLE_STRING );
-	\"						SetStyle( STYLE_STRING );
-	"["("\\"[^\r\n]|[^\]\r\n])*"]"	SetStyle( STYLE_CLASS );
+	\"([^"\\\r\n]|\\.)*\"	SetStyle( RULSEC(STYLE_STRING) );
+	\"						SetStyle( RULSEC(STYLE_STRING) );
+	"["("\\"[^\r\n]|[^\]\r\n])*"]"	SetStyle( RULSEC(STYLE_CLASS) );
 
-	"{"{NAME}"}"			SetStyle( STYLE_REFERENCE );
-	"{"{DC}+","{DC}+"}"		SetStyle( STYLE_NUMBER );
-	"{"{DC}+",}"			SetStyle( STYLE_NUMBER );
-	"{"{DC}+"}"				SetStyle( STYLE_NUMBER );
+	"{"{NAME}"}"			SetStyle( RULSEC(STYLE_REFERENCE) );
+	"{"{DC}+","{DC}+"}"		SetStyle( RULSEC(STYLE_NUMBER) );
+	"{"{DC}+",}"			SetStyle( RULSEC(STYLE_NUMBER) );
+	"{"{DC}+"}"				SetStyle( RULSEC(STYLE_NUMBER) );
 
-	\\[^\r\n]				SetStyle( STYLE_PATTERN );
-	[()|*+?.^$]				SetStyle( STYLE_PATTERN );
+	\\[^\r\n]				SetStyle( RULSEC(STYLE_PATTERN) );
+	[()|*+?.^$]				SetStyle( RULSEC(STYLE_PATTERN) );
 
-	{WORD}					SetStyle( STYLE_TEXT );
-	{NUM}					SetStyle( STYLE_TEXT );
+	{WORD}					SetStyle( RULSEC(STYLE_TEXT) );
+	{NUM}					SetStyle( RULSEC(STYLE_TEXT) );
 }
 
  /*************************************************************************************/
@@ -174,27 +195,27 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
   *************************************************************************************/
 
 <PROLOGD>{
-	^{WS}*"%}"				SetStyle( STYLE_DIRECTIVE ); BEGIN( INITIAL ); levelDecrease();
+	^{WS}*"%}"				SetStyle( DEFSEC(STYLE_DIRECTIVE) ); BEGIN( INITIAL ); levelDecrease();
 }
 
 <PROLOGR>{
-	^{WS}*"%}"				SetStyle( STYLE_DIRECTIVE ); BEGIN( RULES ); levelDecrease();
+	^{WS}*"%}"				SetStyle( RULSEC(STYLE_DIRECTIVE) ); BEGIN( RULES ); levelDecrease();
 }
 
 <ACTION>{
 	{EOL}	{
 		if( braceDepth == 0 ) {
 			BEGIN( RULES );
-			SetStyle( STYLE_TEXT );
+			SetStyle( RULSEC(STYLE_TEXT) );
 		} else
-			SetStyle( STYLE_CODE );
+			SetStyle( RULSEC(STYLE_CODE) );
 	}
 	"{"		{
 		if( braceDepth > 0 ) {
 			braceDepth++;
 			levelIncrease();
 		}
-		SetStyle( STYLE_CODE );
+		SetStyle( RULSEC(STYLE_CODE) );
 	}
 	"}"		{
 		if( braceDepth > 0 ) {
@@ -202,26 +223,29 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 			if( --braceDepth == 0 )
 				BEGIN( RULES );
 		}
-		SetStyle( STYLE_CODE );
+		SetStyle( RULSEC(STYLE_CODE) );
 	}
 }
 
 <PROLOGD,PROLOGR,ACTION,CODE>{
-	"/*"					prevState = YY_START; BEGIN( COMMENT ); SetStyle( STYLE_COMMENT );
-	"//"[^\r\n]*			SetStyle( STYLE_COMMENT );
-	\"([^"\\\r\n]|\\.)*\"	SetStyle( STYLE_STRING );
-	\'([^'\\\r\n]|\\.)*\'	SetStyle( STYLE_STRING );
-	^{WS}*"#"[^\r\n]*		SetStyle( STYLE_DIRECTIVE );
-	{NUM}					SetStyle( STYLE_NUMBER );
-	{NAME}					SetStyle( kwC.is(yytext) ? STYLE_KEYWORD : STYLE_CODE );
+	"/*"					prevState = YY_START; SetStyle( ANYSEC(prevState,STYLE_COMMENT) ); BEGIN( COMMENT );
+	"//"[^\r\n]*			SetStyle( ANYSEC(YY_START,STYLE_COMMENT) );
+	\"([^"\\\r\n]|\\.)*\"	SetStyle( ANYSEC(YY_START,STYLE_STRING) );
+	\'([^'\\\r\n]|\\.)*\'	SetStyle( ANYSEC(YY_START,STYLE_STRING) );
+	^{WS}*"#"[^\r\n]*		SetStyle( ANYSEC(YY_START,STYLE_DIRECTIVE) );
+	{NUM}					SetStyle( ANYSEC(YY_START,STYLE_NUMBER) );
+	{NAME}					SetStyle( ANYSEC(YY_START, kwC.is(yytext) ? STYLE_KEYWORD : STYLE_CODE) );
 }
 
  /*************************************************************************************/
- /* comment
+ /* comments - the body keeps the background of the section they were opened in
   *************************************************************************************/
 
 <COMMENT>{
-	"*/"					SetStyle( STYLE_COMMENT ); BEGIN( prevState );
+	"*/"					SetStyle( ANYSEC(prevState,STYLE_COMMENT) ); BEGIN( prevState );
+	{EOL}	|
+	{WS}+	|
+	.						SetStyle( ANYSEC(prevState,STYLE_COMMENT) );
 }
 
  /*************************************************************************************/
@@ -238,14 +262,13 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
  /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
+	int nStyle = STYLE_TEXT;
 	switch(nState) {
-		case INITIAL:	return STYLE_TEXT;
-		case RULES:		return STYLE_TEXT;
-		case PROLOGD:	return STYLE_CODE;
-		case PROLOGR:	return STYLE_CODE;
-		case ACTION:	return STYLE_CODE;
-		case CODE:		return STYLE_CODE;
-		case COMMENT:	return STYLE_COMMENT;
+		case PROLOGD:
+		case PROLOGR:
+		case ACTION:
+		case CODE:		nStyle = STYLE_CODE; break;
+		case COMMENT:	nStyle = STYLE_COMMENT; break;
 	}
-	return STYLE_TEXT;
+	return SECTION_OF(nState) + nStyle;		// section background + token style
 }

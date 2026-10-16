@@ -102,25 +102,6 @@ CLexerStyle styleMSBuild[] = {
 	{0}
 };
 
-/* style ids must match LexerFlex.L */
-CLexerStyle styleFlex[] = {
-	STYLE( STYLE_DEFAULT, "Default"),
-	STYLE( 0, "Text" ),
-	STYLE_ITALIC( 1, "Comment", clrComment ),
-	STYLE2_BOLD( 2, "Directive", clrPrepocessor ),
-	STYLE2( 3, "Definition", clrLabel ),
-	STYLE2( 4, "Pattern", clrSymbol ),
-	STYLE2( 5, "String", clrString ),
-	STYLE2( 6, "Character Class", clrChar ),
-	STYLE2( 7, "Reference", clrVar ),
-	STYLE2_BOLD( 8, "Start Condition", clrKeyword ),
-	STYLE2( 9, "Number", clrNumber ),
-	STYLE( 10, "Code" ),
-	STYLE_BOLD( 11, "Keyword", clrKeyword ),
-	STYLE_BOLD( 12, "Section", clrSymbol ),
-	{0}
-};
-
 #define STYLE_PARENT(id,name,clrBack) { id, name, STL_EOL, -1, clrBack, 0, "", 0 }
 
 #define STYLE_CHILD(parentId,id,szName)						{id,szName,0,-1,-1,0,"",parentId}
@@ -130,6 +111,68 @@ CLexerStyle styleFlex[] = {
 #define STYLE_CHILD_BOLD(parentId,id,szName,clrFore)		{id,szName,STL_BOLD,clrFore,-1,0,"",parentId}
 #define STYLE_CHILD_ITALIC(parentId,id,szName,clrFore)		{id,szName,STL_ITALIC,clrFore,-1,0,"",parentId}
 #define STYLE_CHILD_EOL(parentId,id,szName,clrFore,clrBack)	{id,szName,STL_EOL,clrFore,clrBack,0,"",parentId}
+
+/* flex - every token style exists once per file section, so that each of the
+   three sections (definitions / rules / user code) gets its own background.
+   the parent style carries the background, the token styles are its children.
+   ids must match SECTION_* / STYLE_* in LexerFlex.L */
+#define STYLE_FLEX_DEF		1
+#define STYLE_FLEX_RULES	41 // need to jump over STYLE_DEFAULT 32
+#define STYLE_FLEX_CODE		61
+
+CLexerStyle styleFlex[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+
+	 /* %% definitions %% - slightly red */
+	STYLE_PARENT( STYLE_FLEX_DEF, "Definitions", 0xFFE5E5 ),
+	STYLE_CHILD( STYLE_FLEX_DEF,				3, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_FLEX_DEF,		4, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		5, "Directive", clrPrepocessor ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			6, "Definition", clrLabel ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			7, "Pattern", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			8, "String", clrString ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			9, "Character Class", clrChar ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			0, "Reference", clrVar ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		10, "Start Condition", clrKeyword ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			11, "Number", clrNumber ),
+	STYLE_CHILD( STYLE_FLEX_DEF,				12, "Code" ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		13, "Keyword", clrKeyword ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		14, "Section", clrSymbol ),
+
+	 /* %% rules %% - slightly green */
+	STYLE_PARENT( STYLE_FLEX_RULES, "Rules", 0xE5FFE5 ),
+	STYLE_CHILD( STYLE_FLEX_RULES,			42, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_FLEX_RULES,	43, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_RULES,		44, "Directive", clrPrepocessor ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			45, "Definition", clrLabel ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			46, "Pattern", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			47, "String", clrString ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			48, "Character Class", clrChar ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			49, "Reference", clrVar ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_RULES,		50, "Start Condition", clrKeyword ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			51, "Number", clrNumber ),
+	STYLE_CHILD( STYLE_FLEX_RULES,			52, "Code" ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_RULES,		53, "Keyword", clrKeyword ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_RULES,		54, "Section", clrSymbol ),
+
+	 /* %% user code %% - slightly blue */
+	STYLE_PARENT( STYLE_FLEX_CODE, "User Code", 0xE5E5FF ),
+	STYLE_CHILD( STYLE_FLEX_CODE,			62, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_FLEX_CODE,		63, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_CODE,		64, "Directive", clrPrepocessor ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			65, "Definition", clrLabel ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			66, "Pattern", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			67, "String", clrString ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			68, "Character Class", clrChar ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			69, "Reference", clrVar ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_CODE,		70, "Start Condition", clrKeyword ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			71, "Number", clrNumber ),
+	STYLE_CHILD( STYLE_FLEX_CODE,			72, "Code" ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_CODE,		73, "Keyword", clrKeyword ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_CODE,		74, "Section", clrSymbol ),
+
+	{0}
+};
 
 #define STYLE_JS_DEF		40
 #define STYLE_CSS_DEF		50
