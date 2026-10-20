@@ -125,14 +125,14 @@ CLexerStyle styleFlex[] = {
 
 	 /* %% definitions %% - slightly red */
 	STYLE_PARENT( STYLE_FLEX_DEF, "Definitions", 0xFFE5E5 ),
-	STYLE_CHILD( STYLE_FLEX_DEF,				3, "Text" ),
-	STYLE_CHILD_ITALIC( STYLE_FLEX_DEF,		4, "Comment", clrComment ),
-	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		5, "Directive", clrPrepocessor ),
-	STYLE_CHILD2( STYLE_FLEX_DEF,			6, "Definition", clrLabel ),
-	STYLE_CHILD2( STYLE_FLEX_DEF,			7, "Pattern", clrSymbol ),
-	STYLE_CHILD2( STYLE_FLEX_DEF,			8, "String", clrString ),
-	STYLE_CHILD2( STYLE_FLEX_DEF,			9, "Character Class", clrChar ),
-	STYLE_CHILD2( STYLE_FLEX_DEF,			0, "Reference", clrVar ),
+	STYLE_CHILD( STYLE_FLEX_DEF,				2, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_FLEX_DEF,		3, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		4, "Directive", clrPrepocessor ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			5, "Definition", clrLabel ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			6, "Pattern", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			7, "String", clrString ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			8, "Character Class", clrChar ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			9, "Reference", clrVar ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		10, "Start Condition", clrKeyword ),
 	STYLE_CHILD2( STYLE_FLEX_DEF,			11, "Number", clrNumber ),
 	STYLE_CHILD( STYLE_FLEX_DEF,				12, "Code" ),
@@ -364,6 +364,27 @@ CLexerStyle styleYAML[] = {
 	{0}
 };
 
+/* style ids must match LexerCaddy.L */
+CLexerStyle styleCaddy[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_ITALIC( 1, "Comment", clrComment ),
+	STYLE2_BOLD( 2, "Site Address", RGB(0x80,0x00,0x00) ),
+	STYLE_BOLD( 3, "Directive", clrKeyword ),
+	STYLE2( 4, "Subdirective", clrKeyword ),
+	STYLE2( 5, "Matcher", clrLabel ),
+	STYLE2_BOLD( 6, "Matcher Type", clrLabel ),
+	STYLE2_BOLD( 7, "Snippet", RGB(0x80,0x00,0x80) ),
+	STYLE2( 8, "String", clrString ),
+	STYLE2( 9, "Backtick String", clrChar ),
+	STYLE2( 10, "Heredoc", RGB(0x00,0x80,0x00) ),
+	STYLE2( 11, "Placeholder", clrVar ),
+	STYLE2_BOLD( 12, "Env Variable", clrVar ),
+	STYLE2( 13, "Number", clrNumber ),
+	STYLE2_BOLD( 14, "Symbol", clrSymbol ),
+	{0}
+};
+
 CLexerStyle styleTxt[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 	STYLE( 0, "Text" ),
@@ -460,6 +481,7 @@ CLexerStyles g_styles[] = {
 	{"Conf", "conf", styleConf},
 	{"Ini", "ini", styleIni},
 	{"YAML", "yaml", styleYAML},
+	{"Caddyfile", "caddy", styleCaddy},
 	{"Text","txt", styleTxt},
 	{"NSIS", "nsis", styleNSIS},
 	{"Make", "mak", styleMAKE},
@@ -495,6 +517,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_CONF: return styleConf;
 		case LEX_INI: return styleIni;
 		case LEX_YAML: return styleYAML;
+		case LEX_CADDY: return styleCaddy;
 		case LEX_TXT_NOQUOTE: 
 		case LEX_TXT: return styleTxt;
 		case LEX_SQL: return styleSQL;

@@ -358,6 +358,9 @@
     <ClCompile Include="lexers\LexerYAML.cpp">
       <Filter>lexers\cpp</Filter>
     </ClCompile>
+    <ClCompile Include="lexers\LexerCaddy.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
     <ClCompile Include="lexers\LexerJS.cpp">
       <Filter>lexers\cpp</Filter>
     </ClCompile>
@@ -619,6 +622,9 @@
       <Filter>lexers\L</Filter>
     </CustomBuild>
     <CustomBuild Include="lexers\LexerYAML.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerCaddy.L">
       <Filter>lexers\L</Filter>
     </CustomBuild>
     <CustomBuild Include="lexers\LexerJS.L">

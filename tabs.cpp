@@ -189,9 +189,9 @@ CTabItemLayout calcTabItemLayout( const CRect& rc, bool bIcon, const CSize& szIc
     }
 
     l.textL = xTextL;
-    l.textT = rc.top + g_dpi.scale(8);
+    l.textT = rc.top + g_dpi.scale(4);
     l.textR = xTextR;
-    l.textB = rc.bottom - g_dpi.scale(4);
+    l.textB = rc.bottom;
     return l;
 }
 

@@ -41,27 +41,27 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 /* style ids - keep in sync with styleFlex[] in lexBase/lexerStyles.cpp.
    Every token style exists once per file section, so that the three sections
    can each have their own background colour (see STYLE_PARENT in lexStyles). */
-#define STYLE_TEXT			0
-#define STYLE_COMMENT		1
-#define STYLE_DIRECTIVE		2
-#define STYLE_DEFNAME		3
-#define STYLE_PATTERN		4
-#define STYLE_STRING		5
-#define STYLE_CLASS			6
-#define STYLE_REFERENCE		7
-#define STYLE_STATECOND		8
-#define STYLE_NUMBER		9
-#define STYLE_CODE			10
-#define STYLE_KEYWORD		11
-#define STYLE_SECTION		12
+#define STYLE_TEXT			1
+#define STYLE_COMMENT		2
+#define STYLE_DIRECTIVE		3
+#define STYLE_DEFNAME		4
+#define STYLE_PATTERN		5
+#define STYLE_STRING		6
+#define STYLE_CLASS			7
+#define STYLE_REFERENCE		8
+#define STYLE_STATECOND		9
+#define STYLE_NUMBER		10
+#define STYLE_CODE			11
+#define STYLE_KEYWORD		12
+#define STYLE_SECTION		13
 
 /* the three sections of a .L file and the first style id of their block.
    Style id 0 is left alone ("Text", no background): Scintilla uses style 0 for
    the hard coded "last style" of a line, so an empty line would otherwise be
    painted with a section background. */
-#define SECTION_DEF			1		/* definitions - ids  1..13, slightly red  */
-#define SECTION_RULES		15		/* rules       - ids 15..27, slightly green */
-#define SECTION_CODE		43		/* user code   - ids 43..55, slightly blue  */
+#define SECTION_DEF			1		/* definitions - ids  1..14, slightly red  */
+#define SECTION_RULES		41		/* rules       - ids 41..54, slightly green */
+#define SECTION_CODE		61		/* user code   - ids 61..74, slightly blue  */
 
 /* section a start condition belongs to */
 #define SECTION_OF( st ) \
