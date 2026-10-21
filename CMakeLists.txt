@@ -23,6 +23,24 @@ file(GLOB SHARED_FILES "shared/*.cpp" )
 file(GLOB SCI_SRC_FILES "scintilla/src/*.cxx" )
 file(GLOB SCI_WIN32_FILES "scintilla/win32/*.cxx" )
 
+# lexers/*.L -> lexers/*.cpp, generated next to the .L (the .cpp are committed too)
+find_program(FLEX_EXECUTABLE NAMES flex flex.exe REQUIRED)
+file(GLOB LEXER_L_FILES "lexers/*.L" )
+foreach(L_FILE ${LEXER_L_FILES})
+	get_filename_component(L_DIR ${L_FILE} DIRECTORY)
+	get_filename_component(L_NAME ${L_FILE} NAME_WE)
+	set(L_CPP "${L_DIR}/${L_NAME}.cpp")
+	add_custom_command(
+		OUTPUT ${L_CPP}
+		COMMAND ${FLEX_EXECUTABLE} -Sflex/flexLexer.skl -o${L_CPP} ${L_FILE}
+		DEPENDS ${L_FILE} ${CMAKE_CURRENT_SOURCE_DIR}/flex/flexLexer.skl
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		COMMENT "Building lexer from ${L_NAME}"
+		VERBATIM)
+	list(APPEND LEXERS_FILES ${L_CPP})
+endforeach()
+#list(REMOVE_DUPLICATES LEXERS_FILES)
+
 add_executable(ape++ WIN32 ${LOCAL_FILES} ${DLG_FILES} ${LEXBASE_FILES} ${LEXERS_FILES} ${LIB_FILES} ${SHARED_FILES}
 	${SCI_SRC_FILES} ${SCI_WIN32_FILES} ape++.rc)
 
