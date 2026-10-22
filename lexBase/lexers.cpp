@@ -132,7 +132,7 @@ CLexerInfo g_lexers[]={
 	{LEX_SEPARATOR},
 	{LEX_PASCAL,"Pascal", {"*.pas","*.inc",0} },
 	{LEX_SQL,"SQL", {"*.sql",0} },
-	{LEX_INI,"Ini", {"*.ini","*.reg","*.inf","hgrc","*.properties","*.theme",0} },
+	{LEX_INI,"Ini", {"*.ini","*.reg","*.inf","hgrc","*.properties","*.theme",".gitconfig",".editorconfig","*.cfg",0} },
 	{LEX_CONF,"Conf", {"*.conf",".htaccess",0} },
 	{LEX_YAML,"YAML", {"*.yaml","*.yml",".clang-format",".clang-tidy",0} },
 	{LEX_CADDY,"Caddyfile", {"caddyfile",0} },
@@ -268,7 +268,12 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 				lang=2; // nginx
 			CLexerConf lexer( &styler, lang ); lexer.Style( posTo );
 		} break;
-		case LEX_INI:	{ CLexerIni lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_INI:	{
+			int lang=0;
+			if( endsWithIC(sFile, ".properties") ) lang=1; // java properties
+			else if( endsWithIC(sFile, ".reg") ) lang=2; // registry
+			CLexerIni lexer( &styler, lang ); lexer.Style( posTo );
+		} break;
 		case LEX_YAML:	{ CLexerYAML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_CADDY:	{ CLexerCaddy lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 

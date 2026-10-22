@@ -93,19 +93,11 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Auto Complete",               ID_EDIT_AUTOC
         MENUITEM "Call Tip",                    ID_EDIT_CALLTIP
-        POPUP "Line Endings"
-        BEGIN
-            MENUITEM "Windows (\\r\\n)",            ID_EOL_CRLF
-            MENUITEM "Unix (\\n)",                  ID_EOL_LF
-            MENUITEM "Mac (\\r)",                   ID_EOL_CR
-        END
         MENUITEM "Format Indent",               ID_EDIT_FORMATINDENT
         MENUITEM "Format XML",                  ID_EDIT_FORMATXML
         MENUITEM "Sort Lines...",               ID_EDIT_SORT
         MENUITEM "Strip Trailing Spaces",       ID_EDIT_STRIPTRAILINGSPACES
         MENUITEM "Wrap Lines",                  ID_EDIT_WRAPLINES
-        MENUITEM SEPARATOR
-        MENUITEM "VP",                         ID_EDIT_VP
     END
     POPUP "&Search"
     BEGIN
@@ -159,6 +151,11 @@ BEGIN
         MENUITEM "Toggle Children",             ID_FOLDING_TOGGLECHILD
         MENUITEM "Toggle All",                  ID_FOLDING_TOGGLEALL
     END
+    POPUP "&Lexers"
+    BEGIN
+        MENUITEM "First",                       ID_LEXER_FIRST
+        MENUITEM "Last",                        ID_LEXER_LAST
+    END
     POPUP "E&ncoding"
     BEGIN
         MENUITEM "ANSI",                        ID_ENCODING_ANSI
@@ -171,10 +168,11 @@ BEGIN
         MENUITEM "Latin-3 (ISO 8859-3) [South European]", ID_ENCODING_LATIN3
 		MENUITEM "ANSI Cyrillic (1251)", ID_ENCODING_ANSI_CYR
     END
-    POPUP "&Lexers"
+    POPUP "LineEndings"
     BEGIN
-        MENUITEM "First",                       ID_LEXER_FIRST
-        MENUITEM "Last",                        ID_LEXER_LAST
+        MENUITEM "Windows (\\r\\n)",            ID_EOL_CRLF
+        MENUITEM "Unix (\\n)",                  ID_EOL_LF
+        MENUITEM "Mac (\\r)",                   ID_EOL_CR
     END
     POPUP "&Tools"
     BEGIN

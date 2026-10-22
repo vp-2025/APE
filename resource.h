@@ -111,7 +111,6 @@
 #define ID_EDIT_OPENFILE                32780
 #define ID_EDIT_UPPERCASE               32781
 #define ID_EDIT_LOWERCASE               32782
-#define ID_EDIT_VP                      32783
 #define ID_FILE_NEW                     32790
 #define ID_FILE_OPEN                    32791
 #define ID_FILE_SAVE                    32792

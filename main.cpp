@@ -474,21 +474,6 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 	case ID_ENCODING_ANSI_CYR:
 		page.sci.setEncodingAndConvert(encAnsiCyr); UpdateTab(iTab); UpdateStatusbar(); break;
 
-    case ID_EDIT_VP: {
-/*        replaceSciRegExp(&page.sci, "^[_a-zA-Z0-9]+.h$", "");
-        replaceSciRegExp(&page.sci, "^[_a-zA-Z0-9]+.cpp$", "");
-        replaceSciRegExp(&page.sci, R"(^[-\.\:(){}\[\]<>!|&:,"_+*=\t a-zA-Z0-9]*getProfileString)", "getProfileString");
-        replaceSciRegExp(&page.sci, R"(^[-\.\:(){}\[\]<>!|&:,"_+*=\t a-zA-Z0-9]*getProfileInt)", "getProfileInt");
-        replaceSciRegExp(&page.sci, R"(^[-\.\:(){}\[\]<>!|&:,"_+*=\t a-zA-Z0-9]*getProfileBool)", "getProfileBool");
-        replaceNormal(&page.sci, "getProfileInt( ", "getProfileInt(");
-        replaceNormal(&page.sci, "getProfileBool( ", "getProfileBool(");
-        replaceNormal(&page.sci, "getProfileString( ", "getProfileString(");
-        sortLines(page.sci, true, true, true); */
-
-/*        replaceSciRegExp(&page.sci, "^#define ", "const ");
-        replaceSciRegExp(&page.sci, "([0-9]+)$", "= \\1"); */
-    }; break;
-
 	case ID_TAB_SETCURDIR :
 		SetCurDir( ExtractFilePath(page.sFile) );
 		break;
@@ -725,8 +710,7 @@ void AppendWord( CMenu& popup, int cmd, const string& sWord, const wchar_t* szFr
 	popup.Text( cmd, s );
 }
 
-void FillLexersMenu( CMenu& popup, CTabPage* pPage )
-{
+void FillLexersMenu( CMenu& popup, CTabPage* pPage ) {
 	for( CLexerInfo* pLex=g_lexers; pLex->iLexerID>0; pLex++ )
 	{
 		if( pLex->iLexerID==LEX_SEPARATOR )
@@ -739,8 +723,7 @@ void FillLexersMenu( CMenu& popup, CTabPage* pPage )
 	}
 }
 
-void CEditor::UpdateLexersMenu( HMENU hMenu )
-{
+void CEditor::UpdateLexersMenu( HMENU hMenu ) {
 	CTabPage* pPage = NULL;
 	int iTab = m_tabs.GetCurSel();
 	if( iTab>=0 && iTab<(int)m_vTabs.size() )
@@ -1258,7 +1241,6 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.Enable( ID_EDIT_FORMATXML, pPage!=0 && !pPage->sci.IsReadOnly() );
 	menu.Enable( ID_EDIT_WRAPLINES, pPage != 0 && !pPage->sci.IsReadOnly());
 	menu.Enable( ID_EDIT_STRIPTRAILINGSPACES, pPage!=0 && !pPage->sci.IsReadOnly() );
-    menu.Enable( ID_EDIT_VP, pPage!=0 );
 
 	menu.Enable( ID_SEARCH_FIND, pPage!=0 );
 	menu.Enable( ID_SEARCH_REPLACE, pPage!=0 );
@@ -1523,13 +1505,13 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	case WM_INITMENU:
 		{
 			HMENU hMenu = GetMenu(m_hWnd);
-			HMENU hMRU = GetSubMenu(hMenu,1);
-			HMENU hPin = GetSubMenu(hMenu,2);
+			HMENU hMRU = GetSubMenu(hMenu,1); // vp: hardcoded
+			HMENU hPin = GetSubMenu(hMenu,2); // vp: hardcoded
 			int c = GetMenuItemCount(hMenu);
-			HMENU hLexers = GetSubMenu(hMenu,c-4);
-			HMENU hTools = GetSubMenu(hMenu,c-3);
+			HMENU hLexers = GetSubMenu(hMenu,c-6); // vp: hardcoded
+			HMENU hTools = GetSubMenu(hMenu,c-3); // vp: hardcoded
 			int cnt = GetMenuItemCount(hTools);
-			HMENU hLang = GetSubMenu(hTools,cnt-1); // "Languages" is the last item of "Tools"
+			HMENU hLang = GetSubMenu(hTools,cnt-1); // vp: hardcoded "Languages" is the last item of "Tools"
 
 			m_mru.UpdateMenu( hMRU );
 			m_pin.UpdateMenu( hPin );

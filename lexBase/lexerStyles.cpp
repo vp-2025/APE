@@ -19,7 +19,7 @@
 #define clrKeyword			RGB(0x00,0x00,0xFF)
 #define clrValue			RGB(0x00,0xB0,0x00)
 #define clrVar				RGB(0x80,0x00,0xFF)
-#define clrNumber			RGB(0x00,0x80,0x80)
+#define clrNumber			RGB(0x00,0x40,0xA0)
 #define clrString			RGB(0x80,0x80,0x00)
 #define clrRegExp			RGB(0xFF,0x80,0x80)
 #define clrChar				RGB(0xA0,0x60,0x00)
@@ -335,13 +335,18 @@ CLexerStyle styleConf[] = {
 	{0}
 };
 
+/* style ids must match LexerINI.L */
 CLexerStyle styleIni[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 	STYLE( 0, "Text" ),
 	STYLE_ITALIC( 1, "Comment", clrComment ),
-	STYLE2( 2, "Section", RGB(0xA0,0,0) ),
-	STYLE2( 3, "Value", RGB(0,0,0xA0) ),
+	STYLE2_BOLD( 2, "Section", RGB(0xA0,0,0) ),
+	STYLE2( 3, "Key", RGB(0x80,0x00,0x80) ),
 	STYLE2( 4, "Symbol", clrSymbol ),
+	STYLE2( 5, "Value", RGB(0x00,0xA0,0x40) ),
+	STYLE2( 6, "String", clrString ),
+	STYLE2( 7, "Number", clrNumber ),
+	STYLE2_BOLD( 11, "Directive", clrPrepocessor ),
 	{0}
 };
 

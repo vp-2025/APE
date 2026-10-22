@@ -165,6 +165,8 @@ static void yy_flex_free YY_PROTO(( void * ));
 
 /************************************************************************/
 /* start of yytext/yyin/yyout/yy_state_type/yylineno etc. def's & init  */
+
+#define YY_USES_REJECT
 typedef unsigned char YY_CHAR;
 #define yytext_ptr yytext
 #define YY_INTERACTIVE
@@ -193,30 +195,63 @@ int yyFlexLexer::yylex()
 
 /*********************************************************************************/
 /* start of data tables for the DFA and the user's section 1 definitions go here */
-#define YY_NUM_RULES 7
-#define YY_END_OF_BUFFER 8
-static yyconst short int yy_accept[18] =
+#define YY_NUM_RULES 17
+#define YY_END_OF_BUFFER 18
+static yyconst short int yy_acclist[181] =
     {   0,
-        0,    0,    0,    0,    8,    6,    5,    6,    2,    1,
-        4,    6,    5,    4,    0,    3,    0
+       18,   16,   17,   15,   16,   17,   14,   17,   16,   17,
+        8,   16,   17,    7,   16,   17,16390,   15,   16,   17,
+        3,   16,   17,    7,   16,   17,16390,    2,   16,   17,
+        7,   16,   17,16389,16390,    7,   16,   17,16390,    7,
+       16,   17,16390,    4,   16,   17,   11,   16,   17,   11,
+       15,   16,   17,   16,   17,   12,   16,   17,   13,   16,
+       17,   13,   15,   16,   17,   15,    9,    8,   14,    7,
+    16390, 8198,    7,16390,   15,    3,    7,16390,    2,    9,
+        7,16389,16390,    4,    3,    7,16390,    7,16389,16390,
+     8198,    7,16390,    2, 8197, 8198,    7,16390,    7,16390,
+
+       11,   11,   15,   10,   13,   13,   15,    9,    2,    9,
+    16389,    7,16390,    7,16390, 8197,    7,16390,    7,16390,
+        7,16390,    7,16390,    7,16390,    7,16390,    7,16390,
+        7,16390,    1,    7,16390,    7,16390,    7,16390,    7,
+    16390,    7,16390,    7,16390,    7,16390,    7,16390,    7,
+    16390,    7,16390,    7,16390,    7,16390,    7,16390,    7,
+    16390,    7,16390,    7,16390,    7,16390,    7,16390,    7,
+    16390,    7,16390,    7,16390,    7,16390,    1,    7,16390
+    } ;
+
+static yyconst short int yy_accept[106] =
+    {   0,
+        1,    1,    1,    1,    1,    1,    1,    2,    4,    7,
+        9,   11,   14,   18,   21,   24,   28,   31,   36,   40,
+       44,   47,   50,   54,   56,   59,   62,   66,   67,   68,
+       69,   70,   72,   72,   73,   75,   76,   77,   79,   81,
+       84,   85,   86,   88,   88,   91,   92,   94,   95,   95,
+       97,   99,  101,  102,  104,  104,  105,  105,  106,  108,
+      109,  111,  111,  112,  112,  114,  116,  116,  117,  119,
+      121,  123,  125,  127,  129,  131,  133,  136,  136,  138,
+      140,  142,  144,  146,  148,  150,  152,  152,  154,  156,
+      158,  160,  162,  164,  164,  166,  168,  170,  172,  174,
+
+      176,  178,  178,  181,  181
     } ;
 
 static yyconst int yy_ec[256] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
-        1,    1,    3,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
+        1,    1,    4,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    4,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    5,    1,
-        6,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        7,    1,    8,    1,    1,    1,    1,    1,    1,    1,
+        1,    5,    6,    7,    8,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    9,    1,    9,    9,    9,
+        9,   10,    9,    9,    9,    9,    9,   11,    8,    1,
+       11,    1,    1,   12,    1,    1,    1,   13,   14,    1,
+       15,    1,   16,    1,    1,    1,    1,    1,    1,    1,
+        1,   17,    1,   18,    1,   19,   20,    1,    1,    1,
+       21,   22,   23,    1,    1,    1,    1,    1,    1,   24,
 
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+       25,    1,   26,    1,   27,    1,    1,    1,    1,   28,
+       29,    1,    1,   30,   31,   32,    1,    1,   33,    1,
+       34,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -233,61 +268,205 @@ static yyconst int yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static yyconst int yy_meta[9] =
+static yyconst int yy_meta[35] =
     {   0,
-        1,    2,    3,    1,    1,    1,    1,    1
+        1,    1,    2,    2,    1,    1,    3,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    3,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1
     } ;
 
-static yyconst short int yy_base[20] =
+static yyconst short int yy_base[120] =
     {   0,
-        0,    0,    5,    0,   20,   21,   21,   17,   21,   21,
-        0,   10,   21,    0,    9,    8,   21,   13,   12
+        0,   10,   30,   52,    4,   21,   28,  404,   34,  404,
+       17,  404,   36,   74,    0,   41,    0,   56,   60,   67,
+      404,    0,   68,   22,  404,    0,   82,   88,    0,  404,
+      404,   86,   87,  404,   98,  108,    0,  100,    0,  116,
+      404,    0,  121,  128,  129,   42,  140,    0,  136,  404,
+      144,  151,    0,   99,   44,  404,   15,    0,  152,    0,
+        0,   61,  156,    6,  158,  163,  171,  404,  173,  178,
+      183,  190,  191,  195,  203,  210,  214,  222,  226,  227,
+      238,  239,  243,  250,  255,  257,  262,  267,  272,  277,
+      279,  290,  291,  292,  302,  310,  312,  314,  324,  326,
+
+      328,  340,  350,  404,  361,  364,  367,  370,  373,  376,
+      379,  382,  385,    0,  388,  391,  394,  397,  400
     } ;
 
-static yyconst short int yy_def[20] =
+static yyconst short int yy_def[120] =
     {   0,
-       17,    1,    1,    3,   17,   17,   17,   17,   17,   17,
-       18,   19,   17,   18,   19,   19,    0,   17,   17
+      105,  106,  107,  107,  108,  108,  104,  104,  104,  104,
+      104,  104,  109,  110,  111,  112,  113,  109,  109,  109,
+      104,  114,  114,  115,  104,  116,  116,  104,  117,  104,
+      104,  109,  109,  104,  109,  110,  111,  112,  118,  109,
+      104,  111,  112,  112,  109,  119,  112,  113,  109,  104,
+      109,  109,  114,  114,  115,  104,  115,  116,  116,  117,
+      118,  119,  104,  119,  109,  109,  104,  104,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+
+      109,  109,  109,    0,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104,  104
     } ;
 
-static yyconst short int yy_nxt[30] =
+static yyconst short int yy_nxt[439] =
     {   0,
-        6,    7,    8,    9,   10,   11,   12,    6,    6,    6,
-        6,    6,   15,   14,   15,   16,   16,   16,   13,   17,
-        5,   17,   17,   17,   17,   17,   17,   17,   17
+       53,    9,   10,   11,    9,   27,   10,   11,   27,   62,
+       12,   14,   10,   11,   14,   15,   16,   17,   55,   31,
+       12,   18,   27,   10,   11,   27,   19,  104,   56,   20,
+       21,   23,   10,   11,   23,   28,   24,   33,   28,  104,
+       33,   29,   44,   57,   30,   44,   34,   45,   63,  104,
+       56,   46,   25,   23,   10,   11,   23,   49,   24,  104,
+       49,   33,   47,   64,   33,   57,   50,   63,   33,   54,
+       34,   33,   54,   51,   25,   36,  104,   34,   36,   37,
+       38,   39,   64,   59,   30,   40,   59,   33,   33,   28,
+       33,   33,   28,   52,   41,   29,   34,   34,   30,   33,
+
+       54,   44,   33,   54,   44,  104,   45,  104,   34,   36,
+       46,  104,   36,   37,   38,   39,  104,   49,   30,   40,
+       49,   47,   44,  104,  104,   44,   50,   45,   41,   44,
+       49,   46,   44,   49,   45,  104,  104,   49,   46,   50,
+       49,   44,   47,   62,   44,   33,   50,  104,   33,   47,
+       46,  104,   33,   59,   34,   33,   59,   67,   65,   33,
+       67,   34,   33,  104,   33,  104,   68,   33,   34,  104,
+      104,   69,   67,   34,   33,   67,  104,   33,   66,   33,
+      104,   68,   33,   34,   33,   71,   70,   33,   34,  104,
+      104,   33,   33,   34,   33,   33,   33,  104,   73,   33,
+
+       34,   34,  104,  104,   33,   34,   72,   33,   75,  104,
+      104,   33,   77,   34,   78,   33,  104,  104,   33,  104,
+       34,  104,   74,   33,   34,   76,   33,   33,   33,  104,
+       33,   33,   34,  104,  104,  104,   34,   34,   79,   33,
+       33,  104,   33,   33,   33,  104,  104,   33,   34,   34,
+       80,   33,   81,   34,   33,  104,   33,  104,   33,   33,
+       34,   87,  104,   33,   82,   34,   33,   34,   33,   83,
+      104,   33,   34,   33,   84,   88,   33,   34,   33,   85,
+       33,   33,   34,   33,  104,  104,  104,   34,   86,   34,
+       89,   33,   33,   33,   33,   94,   33,  104,   90,  104,
+
+       34,   34,   34,   33,  104,  104,   33,   92,   91,  104,
+       95,   33,   34,   33,   33,   33,   33,  104,   33,   93,
+       34,  104,   34,  104,   34,   33,   96,   33,   33,   33,
+       33,  104,  102,  104,   34,  104,   34,  104,   34,   97,
+       99,   33,   98,  104,   33,  104,  104,  104,  103,  103,
+       34,   33,  100,  101,   33,  104,  104,  104,  103,  103,
+       34,    8,    8,    8,   13,   13,   13,   22,   22,   22,
+       26,   26,   26,   32,  104,   32,   35,  104,   35,   42,
+      104,   42,   43,  104,   43,   48,  104,   48,   55,  104,
+       55,   58,  104,   58,   60,  104,   60,   61,  104,   61,
+
+       62,  104,   62,    7,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104
     } ;
 
-static yyconst short int yy_chk[30] =
+static yyconst short int yy_chk[439] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    3,    3,
-        3,    3,   19,   18,   19,   16,   15,   12,    8,    5,
-       17,   17,   17,   17,   17,   17,   17,   17,   17
+      114,    1,    1,    1,    1,    5,    5,    5,    5,   64,
+        1,    2,    2,    2,    2,    2,    2,    2,   57,   11,
+        2,    2,    6,    6,    6,    6,    2,    7,   24,    2,
+        2,    3,    3,    3,    3,    9,    3,   13,    9,    0,
+       13,    9,   16,   24,    9,   16,   13,   16,   46,    0,
+       55,   16,    3,    4,    4,    4,    4,   18,    4,    0,
+       18,   19,   16,   46,   19,   55,   18,   62,   20,   23,
+       19,   20,   23,   19,    4,   14,    0,   20,   14,   14,
+       14,   14,   62,   27,   14,   14,   27,   32,   33,   28,
+       32,   33,   28,   20,   14,   28,   32,   33,   28,   35,
+
+       54,   38,   35,   54,   38,    0,   38,    0,   35,   36,
+       38,    0,   36,   36,   36,   36,    0,   40,   36,   36,
+       40,   38,   43,    0,    0,   43,   40,   43,   36,   44,
+       45,   43,   44,   45,   44,    0,    0,   49,   44,   45,
+       49,   47,   43,   47,   47,   51,   49,    0,   51,   44,
+       47,    0,   52,   59,   51,   52,   59,   63,   51,   65,
+       63,   52,   65,    0,   66,    0,   63,   66,   65,    0,
+        0,   65,   67,   66,   69,   67,    0,   69,   52,   70,
+        0,   67,   70,   69,   71,   69,   66,   71,   70,    0,
+        0,   72,   73,   71,   72,   73,   74,    0,   71,   74,
+
+       72,   73,    0,    0,   75,   74,   70,   75,   73,    0,
+        0,   76,   75,   75,   76,   77,    0,    0,   77,    0,
+       76,    0,   72,   78,   77,   74,   78,   79,   80,    0,
+       79,   80,   78,    0,    0,    0,   79,   80,   78,   81,
+       82,    0,   81,   82,   83,    0,    0,   83,   81,   82,
+       79,   84,   80,   83,   84,    0,   85,    0,   86,   85,
+       84,   86,    0,   87,   81,   85,   87,   86,   88,   82,
+        0,   88,   87,   89,   83,   87,   89,   88,   90,   84,
+       91,   90,   89,   91,    0,    0,    0,   90,   85,   91,
+       88,   92,   93,   94,   92,   93,   94,    0,   89,    0,
+
+       92,   93,   94,   95,    0,    0,   95,   91,   90,    0,
+       94,   96,   95,   97,   96,   98,   97,    0,   98,   92,
+       96,    0,   97,    0,   98,   99,   95,  100,   99,  101,
+      100,    0,  101,    0,   99,    0,  100,    0,  101,   96,
+       98,  102,   97,    0,  102,    0,    0,    0,  102,  102,
+      102,  103,   99,  100,  103,    0,    0,    0,  103,  103,
+      103,  105,  105,  105,  106,  106,  106,  107,  107,  107,
+      108,  108,  108,  109,    0,  109,  110,    0,  110,  111,
+        0,  111,  112,    0,  112,  113,    0,  113,  115,    0,
+      115,  116,    0,  116,  117,    0,  117,  118,    0,  118,
+
+      119,    0,  119,  104,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104,  104,  104,
+      104,  104,  104,  104,  104,  104,  104,  104
     } ;
 
-/* The intent behind this definition is that it'll catch
- * any uses of REJECT which flex missed.
- */
-#define REJECT reject_used_but_not_detected
+#define YY_TRAILING_MASK 0x2000
+#define YY_TRAILING_HEAD_MASK 0x4000
+#define REJECT \
+{ \
+*yy_cp = yy_hold_char; /* undo effects of setting up yytext */ \
+yy_cp = yy_full_match; /* restore poss. backed-over text */ \
+yy_lp = yy_full_lp; /* restore orig. accepting pos. */ \
+yy_state_ptr = yy_full_state; /* restore orig. state */ \
+yy_current_state = *yy_state_ptr; /* restore curr. state */ \
+++yy_lp; \
+goto find_rule; \
+}
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 #line 1 "C:/work/ape++/src/lexers/LexerINI.L"
 #define INITIAL 0
 #line 2 "C:/work/ape++/src/lexers/LexerINI.L"
+/******************************************************************************
+* 		ini-like files: *.ini *.inf *.reg *.properties hgrc .gitconfig ...
+*
+*   ; comment  # comment            at the line start (and "  ; comment" after an ini value)
+*   [section]  [remote "origin"]    section header, folds up to the next one
+*   key = value   key: value        key, separator and value
+*   "key"="value"  @=dword:0000001  registry values (m_langId == LANG_REG)
+*   key value  ! comment            java properties (m_langId == LANG_PROPERTIES)
+*   !include file                   MySQL style directive
+*
+* The whole value is styled as a number, a quoted string or a plain value.
+* A '\' at the line end continues the value on the next line in properties
+* and registry files.
+******************************************************************************/
 #include "LexBase.h"
-#define SLCOMMENT 1
+#define SECTION 1
+#define VALUE 2
 
-#line 19 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 31 "C:/work/ape++/src/lexers/LexerINI.L"
+/* style ids - keep in sync with styleIni[] in lexBase/lexerStyles.cpp */
 #define STYLE_TEXT			0
 #define STYLE_COMMENT		1
 #define STYLE_SECTION		2
-#define STYLE_VALUE			3
+#define STYLE_KEY			3
 #define STYLE_SYMBOL		4
-#line 27 "C:/work/ape++/src/lexers/LexerINI.L"
-//<SLCOMMENT>{
-//	{EOL}		SetStyle(STYLE_COMMENT); BEGIN(INITIAL);	// keep the EOL inside the comment style
-//}
-#line 291 "C:/work/ape++/src/lexers/LexerINI.cpp"
+#define STYLE_VALUE			5
+#define STYLE_STRING		6
+#define STYLE_NUMBER		7
+#define STYLE_DIRECTIVE		11
+
+/* m_langId - the dialect, chosen by the file name in lexers.cpp */
+#define LANG_INI			0
+#define LANG_PROPERTIES		1
+#define LANG_REG			2
+#line 470 "C:/work/ape++/src/lexers/LexerINI.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -395,6 +574,9 @@ static yyconst short int yy_chk[30] =
 /************************************************************************/
 /* start of YY_RULE_SETUP definition                                    */
 #define YY_RULE_SETUP \
+	if ( yyleng > 0 ) \
+		yy_current_buffer->yy_at_bol = \
+				(yytext[yyleng - 1] == '\n'); \
 	YY_USER_ACTION
 /* end of YY_RULE_SETUP definition                                      */
 /************************************************************************/
@@ -407,11 +589,85 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 32 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 48 "C:/work/ape++/src/lexers/LexerINI.L"
 
  /*************************************************************************************/
 
-#line 415 "C:/work/ape++/src/lexers/LexerINI.cpp"
+
+	bool bContinue = false;					// the line ends with '\': the value goes on at the next line
+	bool bContLine = YY_START == VALUE;		// the line continues the value of the previous one
+
+	auto isWS = []( char ch ) { return ch == ' ' || ch == '\t'; };
+
+	auto beginValue = [&]() {
+		BEGIN( VALUE );
+	};
+
+	// -12  3.5  1e-3  .5  0x1F
+	auto isNumber = []( const char* p, int n ) {
+		int i = 0, digits = 0;
+		if( i < n && (p[i] == '-' || p[i] == '+') )
+			i++;
+		if( i+1 < n && p[i] == '0' && (p[i+1] == 'x' || p[i+1] == 'X') ) {
+			for( i += 2; i < n && isxdigit((unsigned char)p[i]); i++ )
+				digits++;
+			return digits > 0 && i == n;
+		}
+		for( ; i < n && isdigit((unsigned char)p[i]); i++ )
+			digits++;
+		if( i < n && p[i] == '.' )
+			for( i++; i < n && isdigit((unsigned char)p[i]); i++ )
+				digits++;
+		if( !digits )
+			return false;
+		if( i < n && (p[i] == 'e' || p[i] == 'E') ) {
+			i++;
+			if( i < n && (p[i] == '-' || p[i] == '+') )
+				i++;
+			int exp = i;
+			while( i < n && isdigit((unsigned char)p[i]) )
+				i++;
+			if( i == exp )
+				return false;
+		}
+		return i == n;
+	};
+
+	// position after the closing quote of the string at p[0], or -1: "a\"b"  'it'
+	auto quotedEnd = []( const char* p, int n ) {
+		char q = *p;
+		if( n < 2 || (q != '"' && q != '\'') )
+			return -1;
+		for( int i = 1; i < n; i++ ) {
+			if( q == '"' && p[i] == '\\' )
+				i++;
+			else if( p[i] == q )
+				return i+1;
+		}
+		return -1;
+	};
+
+	// a properties key ends at the first space: "key value"
+	auto styleKey = [&]() {
+		if( m_langId == LANG_PROPERTIES ) {
+			int k = 0;
+			while( k < yyleng && isWS(yytext[k]) )
+				k++;
+			while( k < yyleng && !isWS(yytext[k]) )
+				k++;
+			if( k < yyleng ) {
+				SetStyle( MatchStart(), MatchStart()+k, STYLE_KEY );
+				yyless( k );
+				beginValue();
+				return;
+			}
+		}
+		SetStyle( STYLE_KEY );
+	};
+
+
+
+#line 671 "C:/work/ape++/src/lexers/LexerINI.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -455,25 +711,24 @@ YY_DECL
 /************************************************************************/
 /* start of code to set up and find next match                          */
 		yy_current_state = yy_start;
+		yy_current_state += YY_AT_BOL();
+		yy_state_ptr = yy_state_buf;
+		*yy_state_ptr++ = yy_current_state;
 yy_match:
 		do
 			{
 			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
-			if ( yy_accept[yy_current_state] )
-				{
-				yy_last_accepting_state = yy_current_state;
-				yy_last_accepting_cpos = yy_cp;
-				}
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 18 )
+				if ( yy_current_state >= 105 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+			*yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 21 );
+		while ( yy_base[yy_current_state] != 404 );
 /* end of code to set up and find next match                            */
 /************************************************************************/
 
@@ -481,12 +736,42 @@ yy_find_action:
 
 /************************************************************************/
 /* start of code to find the action number                              */
-		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = yy_last_accepting_cpos;
-			yy_current_state = yy_last_accepting_state;
-			yy_act = yy_accept[yy_current_state];
+		yy_current_state = *--yy_state_ptr;
+		yy_lp = yy_accept[yy_current_state];
+find_rule: /* we branch to this label when backing up */
+		for ( ; ; ) /* until we find what rule we matched */
+			{
+			if ( yy_lp && yy_lp < yy_accept[yy_current_state + 1] )
+				{
+				yy_act = yy_acclist[yy_lp];
+				if ( yy_act & YY_TRAILING_HEAD_MASK ||
+				     yy_looking_for_trail_begin )
+					{
+					if ( yy_act == yy_looking_for_trail_begin )
+						{
+						yy_looking_for_trail_begin = 0;
+						yy_act &= ~YY_TRAILING_HEAD_MASK;
+						break;
+						}
+					}
+				else if ( yy_act & YY_TRAILING_MASK )
+					{
+					yy_looking_for_trail_begin = yy_act & ~YY_TRAILING_MASK;
+					yy_looking_for_trail_begin |= YY_TRAILING_HEAD_MASK;
+					}
+				else
+					{
+					yy_full_match = yy_cp;
+					yy_full_state = yy_state_ptr;
+					yy_full_lp = yy_lp;
+					break;
+					}
+				++yy_lp;
+				goto find_rule;
+				}
+			--yy_cp;
+			yy_current_state = *--yy_state_ptr;
+			yy_lp = yy_accept[yy_current_state];
 			}
 /* end of code to find the action number                                */
 /************************************************************************/
@@ -507,62 +792,173 @@ do_action:  /* This label is used only to access EOF actions. */
         switch ( yy_act ) { /* beginning of action switch */
 /************************************************************************/
 /* start of actions code                                                */
-			case 0: /* must back up */
-			/* undo the effects of YY_DO_BEFORE_ACTION */
-			*yy_cp = yy_hold_char;
-			yy_cp = yy_last_accepting_cpos;
-			yy_current_state = yy_last_accepting_state;
-			goto yy_find_action;
-
 
 case 1:
-#line 37 "C:/work/ape++/src/lexers/LexerINI.L"
+YY_RULE_SETUP
+#line 126 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_DIRECTIVE );
+	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 37 "C:/work/ape++/src/lexers/LexerINI.L"
-BEGIN(SLCOMMENT); SetStyle();
+#line 128 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_COMMENT );
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 39 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 129 "C:/work/ape++/src/lexers/LexerINI.L"
 {
-		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL );
-		SetStyle( MatchStart()+1, MatchEnd()-1, STYLE_SECTION );
-		SetStyle( MatchEnd()-1, MatchEnd(), STYLE_SYMBOL );
-		if( GetLevel() ) levelDecrease();
-		levelIncrease();
+		if( m_langId == LANG_PROPERTIES )
+			SetStyle( STYLE_COMMENT );
+		else {
+			int n = 0;
+			while( isWS(yytext[n]) )
+				n++;
+			for( n++; n < yyleng && (isalnum((unsigned char)yytext[n]) || yytext[n] == '_'); n++ )
+				;
+			SetStyle( MatchStart(), MatchStart()+n, STYLE_DIRECTIVE );
+			yyless( n );
+			beginValue();
+		}
 	}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 47 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 144 "C:/work/ape++/src/lexers/LexerINI.L"
 {
-		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL );
-		SetStyle( MatchStart()+1, MatchEnd(), STYLE_VALUE );
+		SetStyle( STYLE_SYMBOL );
+		BEGIN( SECTION );
+		if( GetLevel() )
+			levelDecrease();
+		levelIncrease();
 	}
 	YY_BREAK
-
-
 case 5:
 YY_RULE_SETUP
-#line 54 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle(STYLE_COMMENT); BEGIN(INITIAL);
+#line 152 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_KEY );
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 55 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 153 "C:/work/ape++/src/lexers/LexerINI.L"
+styleKey();
+	YY_BREAK
+/* a line without a separator: a flag ("skip-networking"), a properties "key value"
+	    or the indented continuation of the previous value (hgrc, python configparser) */
+case 7:
+YY_RULE_SETUP
+#line 157 "C:/work/ape++/src/lexers/LexerINI.L"
+{
+		if( m_langId == LANG_INI && isWS(*yytext) ) {
+			beginValue();
+			yyless( 0 );
+		} else
+			styleKey();
+	}
+	YY_BREAK
+case 8:
+YY_RULE_SETUP
+#line 165 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_SYMBOL ); beginValue();
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 167 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_COMMENT );		// after "[section]"
+	YY_BREAK
+
+
+case 10:
+YY_RULE_SETUP
+#line 171 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_STRING );
+	YY_BREAK
+case 11:
+YY_RULE_SETUP
+#line 172 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_SECTION );
+	YY_BREAK
+case 12:
+YY_RULE_SETUP
+#line 173 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( STYLE_SYMBOL ); BEGIN( INITIAL );
+	YY_BREAK
+
+/* the rest of the line after '=' gets a single style: a number, a quoted string
+    or a plain value.  An ini value may be followed by a ; comment */
+case 13:
+YY_RULE_SETUP
+#line 178 "C:/work/ape++/src/lexers/LexerINI.L"
+{
+	int b = 0, n = yyleng;
+	while( b < n && isWS(yytext[b]) )
+		b++;
+	int e = n;							// value end
+	if( m_langId == LANG_INI ) {
+		int q = quotedEnd( yytext+b, n-b );
+		for( int i = q > 0 ? b+q : b; i < n; i++ )
+			if( yytext[i] == ';' && (i == b || isWS(yytext[i-1])) ) {
+				e = i;
+				break;
+			}
+	}
+	int c = e;							// comment start
+	while( e > b && isWS(yytext[e-1]) )
+		e--;
+
+	int style = STYLE_VALUE;
+	if( m_langId != LANG_INI && e > b && yytext[e-1] == '\\' )
+		bContinue = true;				// a multi-line value is a plain one
+	else if( !bContLine ) {
+		if( isNumber( yytext+b, e-b ) )
+			style = STYLE_NUMBER;
+		else if( quotedEnd( yytext+b, e-b ) == e-b )
+			style = STYLE_STRING;
+	}
+
+	int pos = MatchStart();
+	if( b )
+		SetStyle( pos, pos+b, STYLE_VALUE );
+	if( e > b )
+		SetStyle( pos+b, pos+e, style );
+	if( c > e )
+		SetStyle( pos+e, pos+c, STYLE_VALUE );
+	if( n > c )
+		SetStyle( pos+c, pos+n, STYLE_COMMENT );
+}
+	YY_BREAK
+/*************************************************************************************/
+/* default rule - a value, a section or a string ends with the line
+  *************************************************************************************/
+
+case 14:
+YY_RULE_SETUP
+#line 221 "C:/work/ape++/src/lexers/LexerINI.L"
+{
+		SetStyle();
+		if( !bContinue )
+			BEGIN( INITIAL );
+		bContLine = bContinue;
+		bContinue = false;
+	}
+	YY_BREAK
+case 15:
+#line 229 "C:/work/ape++/src/lexers/LexerINI.L"
+case 16:
+YY_RULE_SETUP
+#line 229 "C:/work/ape++/src/lexers/LexerINI.L"
 SetStyle();
 	YY_BREAK
 
-case 7:
+case 17:
 YY_RULE_SETUP
-#line 58 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 232 "C:/work/ape++/src/lexers/LexerINI.L"
 ECHO;
 	YY_BREAK
-#line 563 "C:/work/ape++/src/lexers/LexerINI.cpp"
-case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(SLCOMMENT):
-	yyterminate();
+#line 958 "C:/work/ape++/src/lexers/LexerINI.cpp"
+			case YY_STATE_EOF(INITIAL):
+			case YY_STATE_EOF(SECTION):
+			case YY_STATE_EOF(VALUE):
+				yyterminate();
 /* end of actions code                                                  */
 /************************************************************************/
         case YY_END_OF_BUFFER: {
@@ -862,6 +1258,9 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 /*********************************************************************/
 /* start of code to get the start state into yy_current_state        */
 	yy_current_state = yy_start;
+	yy_current_state += YY_AT_BOL();
+	yy_state_ptr = yy_state_buf;
+	*yy_state_ptr++ = yy_current_state;
 /* end of start of code to get the start state into yy_current_state */
 /*********************************************************************/
 
@@ -870,18 +1269,14 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 /*********************************************************************/
 /* start of code to find the next state                              */     
 		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
-		if ( yy_accept[yy_current_state] )
-			{
-			yy_last_accepting_state = yy_current_state;
-			yy_last_accepting_cpos = yy_cp;
-			}
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 18 )
+			if ( yy_current_state >= 105 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+		*yy_state_ptr++ = yy_current_state;
 /* end of code to find the next state                                */     
 /*********************************************************************/
     }
@@ -901,22 +1296,18 @@ yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
     int yy_is_jam;
 /*********************************************************************/
 /* start of code to find the next state, and perhaps do backing up   */
-	register char *yy_cp = yy_c_buf_p;
 
 	register YY_CHAR yy_c = 1;
-	if ( yy_accept[yy_current_state] )
-		{
-		yy_last_accepting_state = yy_current_state;
-		yy_last_accepting_cpos = yy_cp;
-		}
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 18 )
+		if ( yy_current_state >= 105 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 17);
+	yy_is_jam = (yy_current_state == 104);
+	if ( ! yy_is_jam )
+		*yy_state_ptr++ = yy_current_state;
 /* end ofcode to find the next state, and perhaps do backing up      */
 /*********************************************************************/
     return yy_is_jam ? 0 : yy_current_state;
@@ -1023,6 +1414,7 @@ int yyFlexLexer::yyinput()
 
 /************************************/
 /* start of update BOL and yylineno */
+	yy_current_buffer->yy_at_bol = (c == '\n');
 /* end of update BOL and yylineno   */
 /************************************/
 
@@ -1270,13 +1662,14 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 58 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 232 "C:/work/ape++/src/lexers/LexerINI.L"
 
 /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
-		case SLCOMMENT: return STYLE_COMMENT;
+		case SECTION:	return STYLE_SECTION;
+		case VALUE:		return STYLE_VALUE;
 	}
 	return STYLE_TEXT;
 }
