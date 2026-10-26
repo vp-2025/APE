@@ -55,6 +55,15 @@ URLCH		[^ \t\r\n<>()\[\]]
 		if( nPost ) \
 			SetStyle( MatchEnd()-(nPost), MatchEnd(), STYLE_MARK ); \
 	} while( 0 )
+
+/* a heading of level n folds the lines up to the next heading of level <= n:
+   the heading line gets the fold level n-1 (a fold header), the lines below it n.
+   The level is set absolutely - a heading never is inside a fenced block. */
+#define HEADING_FOLD(n) \
+	do { \
+		m_foldLevel = SC_FOLDLEVELBASE + (n) - 1; \
+		levelIncrease(); \
+	} while( 0 )
 %}
 
 %%
@@ -73,17 +82,26 @@ URLCH		[^ \t\r\n<>()\[\]]
  /* horizontal rule: ***, ___, - - -, * * * */
 ^([-*_]{SPACE}*){3,}{EOL}	SetStyle( STYLE_HR );
 
- /* ATX heading: # .. ###### (needs a space, so #tag stays text) */
+ /* ATX heading: # .. ###### (needs a space, so #tag stays text).
+    The line end is not part of the match: the fold level is applied at it. */
 ^#{1,6}{SPACE}[^\n]* |
-^#{1,6}{SPACE}*{EOL}	{
+^#{1,6}{SPACE}*/{EOL}	{
 		int nLevel = 0;
 		while( yytext[nLevel]=='#' ) nLevel++;
 		SetStyle( MatchStart(), MatchStart()+nLevel, STYLE_MARK );
 		SetStyle( MatchStart()+nLevel, MatchEnd(), STYLE_H1+nLevel-1 );
+		HEADING_FOLD( nLevel );
 	}
 
- /* setext heading underline: === (the --- case is handled above) */
-^={2,}{SPACE}*{EOL}	SetStyle( STYLE_H1 );
+ /* setext heading underline: === (the --- case is handled above).
+    The heading is the previous line, it becomes the fold header. */
+^={2,}{SPACE}*/{EOL}	{
+		SetStyle( STYLE_H1 );
+		if( m_foldLine > 0 ) {
+			m_pStyler->SetLevel( m_foldLine-1, SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG );
+			m_foldLevel = SC_FOLDLEVELBASE + 1;
+		}
+	}
 
  /* task list item: - [ ] / - [x] */
 ^[ \t]{0,3}([-*+]|[0-9]{1,9}[.)]){SPACE}+\[[ xX]\]{SPACE}+	{

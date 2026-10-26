@@ -165,6 +165,8 @@ static void yy_flex_free YY_PROTO(( void * ));
 
 /************************************************************************/
 /* start of yytext/yyin/yyout/yy_state_type/yylineno etc. def's & init  */
+
+#define YY_USES_REJECT
 typedef unsigned char YY_CHAR;
 #define yytext_ptr yytext
 #define YY_INTERACTIVE
@@ -195,53 +197,82 @@ int yyFlexLexer::yylex()
 /* start of data tables for the DFA and the user's section 1 definitions go here */
 #define YY_NUM_RULES 44
 #define YY_END_OF_BUFFER 45
-static yyconst short int yy_accept[407] =
+static yyconst short int yy_acclist[229] =
     {   0,
-        0,    0,    0,    0,    0,    0,    0,    0,   45,   43,
-       42,   40,   43,   43,   43,   43,   43,   41,   43,   43,
-       41,   43,   41,   41,   41,   41,   39,   43,   42,   43,
-       43,   43,   43,   43,   43,   43,    9,   43,   41,   43,
-       39,   43,   42,   43,   43,   43,   43,   14,   43,   42,
-       40,    0,    0,    0,    0,    0,    0,    0,    0,   41,
-        0,    0,    0,   35,    0,   41,   41,    0,   27,   41,
-       41,   41,   41,   41,    0,   42,    0,    0,    0,    0,
-        9,    0,    0,    0,    0,    3,    4,    0,    0,    7,
-        8,    0,    7,    0,    0,    7,    0,    7,    0,    0,
+       45,   43,   44,   42,   43,   44,   40,   44,   43,   44,
+       43,   44,   43,   44,   43,   44,   43,   44,   41,   43,
+       44,   43,   44,   43,   44,   41,   43,   44,   43,   44,
+       41,   43,   44,   41,   43,   44,   41,   43,   44,   41,
+       43,   44,   39,   43,   44,   43,   44,   42,   43,   44,
+       43,   44,16388,   43,   44,   43,   44,   43,   44,   43,
+       44,   43,   44,   43,   44,    9,   43,   44,   43,   44,
+       41,   43,   44,   43,   44,   39,   43,   44,   43,   44,
+       42,   43,   44,   43,   44,   43,   44,   43,   44,   43,
+       44,   14,   40,   44,   43,   44,   42,   40,   41,   35,
 
-        0,    0,    0,    0,    0,    9,    0,    0,    0,    0,
-        0,   41,   27,    0,    0,   42,    0,    0,    0,    0,
-        0,    0,   14,    0,    0,    0,    0,   30,    0,    0,
-        0,    0,    0,    0,    0,    0,   20,    0,    0,    0,
-        0,   33,   41,   33,    0,   41,   41,   27,   41,   41,
-       41,   41,   41,    0,   42,    7,    0,    0,    0,    3,
-        3,    3,    0,    7,    0,   30,    0,    0,    0,    0,
-        0,    0,    0,    0,   30,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    5,    0,    0,    0,    0,
-        0,    0,   33,    0,    0,   33,    0,    0,   41,   12,
+       41,   41,   27,   41,   41,   41,   41,   41,   42,    9,
+        3,16388, 8196,16388,    7,    8,    7,    7,    7,16389,
+        9,   41,   27,   42,   14,   40,   30,   20,   33,   41,
+       33,   41,   41,   41,   27,   41,   41,   41,   41,   41,
+       42,    7,    3,    3,16388,    3,16388,    7,   30,   30,
+    16389, 8197,16389,   33,   33,   41,   12,   27,   12,   42,
+       13,   13,   37,   36,   19,   18,   20,   22,   23,   21,
+       41,   41,   41,   41,   41,   42,   12,16388,    2,   30,
+        1,    2,   10,   11,   21,   33,   41,   12,   12,   27,
+       12,   12,   13,   13,   13,   15,   16,   38,   29,   32,
 
-       12,   42,   13,   13,    0,    0,    0,   37,    0,    0,
-       36,    0,    0,    0,    0,    0,   19,    0,   18,    0,
-       22,    0,   23,   21,    0,    0,   41,   41,    0,   41,
-        0,   41,   41,    0,    0,    0,   42,    0,   12,    0,
-        0,    0,    0,    0,    0,    0,    2,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,   30,    0,
-        0,    1,    0,    0,    0,   10,    0,    0,    0,    0,
-       11,   21,    0,    0,    0,   33,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,   41,   12,   12,   12,
-       12,   13,   13,   13,    0,   15,    0,    0,   16,    0,
+       32,   41,   41,   41,   41,   25,   34,   12,16388,   29,
+       11,   32,   12,   27,   41,   41,16388,    6,    6,   28,
+       17,   31,   31,   41,   24,   28,   31,   26
+    } ;
 
-        0,    0,   38,    0,   29,    0,    0,    0,    0,   32,
-       32,    0,    0,   41,   41,    0,   41,   25,   34,   12,
-        0,    0,    0,   29,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,   11,    0,   32,    0,    0,
-        0,    0,    0,    0,   12,    0,    0,    0,    0,    0,
-        0,   41,    0,   41,    0,    6,    6,    0,    0,    0,
-        0,    0,    0,   28,   17,   31,   31,   24,    0,   28,
-        0,   31,    0,    0,    0,   26,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+static yyconst short int yy_accept[408] =
+    {   0,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
+        4,    7,    9,   11,   13,   15,   17,   19,   22,   24,
+       26,   29,   31,   34,   37,   40,   43,   46,   48,   51,
+       54,   56,   58,   60,   62,   64,   66,   69,   71,   74,
+       76,   79,   81,   84,   86,   88,   90,   92,   95,   97,
+       98,   99,   99,   99,   99,   99,   99,   99,   99,   99,
+      100,  100,  100,  100,  101,  101,  102,  103,  103,  104,
+      105,  106,  107,  108,  109,  109,  110,  110,  110,  110,
+      110,  111,  111,  111,  111,  111,  113,  114,  114,  115,
+      116,  117,  117,  118,  118,  118,  119,  119,  120,  120,
 
-        0,    0,    0,    0,    0,    0
+      120,  120,  120,  120,  120,  121,  122,  122,  122,  122,
+      122,  122,  123,  124,  124,  124,  125,  125,  125,  125,
+      125,  125,  125,  127,  127,  127,  127,  127,  128,  128,
+      128,  128,  128,  128,  128,  128,  128,  129,  129,  129,
+      129,  129,  130,  131,  133,  133,  134,  135,  136,  137,
+      138,  139,  140,  141,  141,  142,  143,  143,  143,  143,
+      144,  146,  147,  148,  149,  149,  150,  150,  150,  150,
+      150,  150,  150,  150,  150,  151,  151,  151,  151,  151,
+      151,  151,  151,  151,  151,  152,  153,  153,  154,  154,
+      154,  154,  154,  155,  155,  155,  156,  156,  156,  157,
+
+      159,  160,  161,  162,  163,  163,  163,  163,  164,  164,
+      164,  165,  165,  165,  165,  165,  165,  166,  166,  168,
+      168,  169,  169,  170,  171,  171,  171,  172,  173,  173,
+      174,  174,  175,  176,  176,  176,  176,  177,  177,  178,
+      179,  179,  179,  179,  179,  179,  179,  180,  180,  180,
+      180,  180,  180,  180,  180,  180,  180,  180,  180,  181,
+      181,  181,  183,  183,  183,  183,  184,  184,  184,  184,
+      184,  185,  186,  186,  186,  186,  187,  187,  187,  187,
+      187,  187,  187,  187,  187,  187,  187,  188,  189,  191,
+      192,  193,  194,  195,  196,  196,  197,  197,  197,  198,
+
+      198,  198,  198,  199,  199,  200,  200,  200,  200,  200,
+      201,  203,  203,  203,  204,  205,  205,  206,  207,  208,
+      209,  210,  210,  210,  211,  211,  211,  211,  211,  211,
+      211,  211,  211,  211,  211,  211,  212,  212,  213,  213,
+      213,  213,  213,  213,  213,  215,  215,  215,  215,  215,
+      215,  215,  216,  216,  217,  218,  219,  220,  220,  220,
+      220,  220,  220,  220,  221,  222,  223,  225,  226,  226,
+      227,  227,  228,  228,  228,  228,  229,  229,  229,  229,
+      229,  229,  229,  229,  229,  229,  229,  229,  229,  229,
+      229,  229,  229,  229,  229,  229,  229,  229,  229,  229,
+
+      229,  229,  229,  229,  229,  229,  229
     } ;
 
 static yyconst int yy_ec[256] =
@@ -947,10 +978,18 @@ static yyconst short int yy_chk[2462] =
       406
     } ;
 
-/* The intent behind this definition is that it'll catch
- * any uses of REJECT which flex missed.
- */
-#define REJECT reject_used_but_not_detected
+#define YY_TRAILING_MASK 0x2000
+#define YY_TRAILING_HEAD_MASK 0x4000
+#define REJECT \
+{ \
+*yy_cp = yy_hold_char; /* undo effects of setting up yytext */ \
+yy_cp = yy_full_match; /* restore poss. backed-over text */ \
+yy_lp = yy_full_lp; /* restore orig. accepting pos. */ \
+yy_state_ptr = yy_full_state; /* restore orig. state */ \
+yy_current_state = *yy_state_ptr; /* restore curr. state */ \
+++yy_lp; \
+goto find_rule; \
+}
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
@@ -1002,7 +1041,16 @@ static yyconst short int yy_chk[2462] =
 		if( nPost ) \
 			SetStyle( MatchEnd()-(nPost), MatchEnd(), STYLE_MARK ); \
 	} while( 0 )
-#line 1006 "C:/work/ape++/src/lexers/LexerMD.cpp"
+
+/* a heading of level n folds the lines up to the next heading of level <= n:
+   the heading line gets the fold level n-1 (a fold header), the lines below it n.
+   The level is set absolutely - a heading never is inside a fenced block. */
+#define HEADING_FOLD(n) \
+	do { \
+		m_foldLevel = SC_FOLDLEVELBASE + (n) - 1; \
+		levelIncrease(); \
+	} while( 0 )
+#line 1054 "C:/work/ape++/src/lexers/LexerMD.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -1125,13 +1173,13 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 60 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 69 "C:/work/ape++/src/lexers/LexerMD.L"
 
  /*************************************************************************************/
 
  /* YAML front matter: only valid as the very first line of the file.
     A "---" anywhere else is a horizontal rule. */
-#line 1135 "C:/work/ape++/src/lexers/LexerMD.cpp"
+#line 1183 "C:/work/ape++/src/lexers/LexerMD.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -1176,15 +1224,12 @@ YY_DECL
 /* start of code to set up and find next match                          */
 		yy_current_state = yy_start;
 		yy_current_state += YY_AT_BOL();
+		yy_state_ptr = yy_state_buf;
+		*yy_state_ptr++ = yy_current_state;
 yy_match:
 		do
 			{
 			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
-			if ( yy_accept[yy_current_state] )
-				{
-				yy_last_accepting_state = yy_current_state;
-				yy_last_accepting_cpos = yy_cp;
-				}
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
@@ -1192,6 +1237,7 @@ yy_match:
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+			*yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
 		while ( yy_base[yy_current_state] != 2416 );
@@ -1202,12 +1248,42 @@ yy_find_action:
 
 /************************************************************************/
 /* start of code to find the action number                              */
-		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = yy_last_accepting_cpos;
-			yy_current_state = yy_last_accepting_state;
-			yy_act = yy_accept[yy_current_state];
+		yy_current_state = *--yy_state_ptr;
+		yy_lp = yy_accept[yy_current_state];
+find_rule: /* we branch to this label when backing up */
+		for ( ; ; ) /* until we find what rule we matched */
+			{
+			if ( yy_lp && yy_lp < yy_accept[yy_current_state + 1] )
+				{
+				yy_act = yy_acclist[yy_lp];
+				if ( yy_act & YY_TRAILING_HEAD_MASK ||
+				     yy_looking_for_trail_begin )
+					{
+					if ( yy_act == yy_looking_for_trail_begin )
+						{
+						yy_looking_for_trail_begin = 0;
+						yy_act &= ~YY_TRAILING_HEAD_MASK;
+						break;
+						}
+					}
+				else if ( yy_act & YY_TRAILING_MASK )
+					{
+					yy_looking_for_trail_begin = yy_act & ~YY_TRAILING_MASK;
+					yy_looking_for_trail_begin |= YY_TRAILING_HEAD_MASK;
+					}
+				else
+					{
+					yy_full_match = yy_cp;
+					yy_full_state = yy_state_ptr;
+					yy_full_lp = yy_lp;
+					break;
+					}
+				++yy_lp;
+				goto find_rule;
+				}
+			--yy_cp;
+			yy_current_state = *--yy_state_ptr;
+			yy_lp = yy_accept[yy_current_state];
 			}
 /* end of code to find the action number                                */
 /************************************************************************/
@@ -1228,16 +1304,9 @@ do_action:  /* This label is used only to access EOF actions. */
         switch ( yy_act ) { /* beginning of action switch */
 /************************************************************************/
 /* start of actions code                                                */
-			case 0: /* must back up */
-			/* undo the effects of YY_DO_BEFORE_ACTION */
-			*yy_cp = yy_hold_char;
-			yy_cp = yy_last_accepting_cpos;
-			yy_current_state = yy_last_accepting_state;
-			goto yy_find_action;
-
 case 1:
 YY_RULE_SETUP
-#line 65 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 74 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		if( MatchStart()==0 ) {
 			BEGIN(FRONT);
@@ -1249,32 +1318,41 @@ YY_RULE_SETUP
 /* horizontal rule: ***, ___, - - -, * * * */
 case 2:
 YY_RULE_SETUP
-#line 74 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 83 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_HR );
 	YY_BREAK
-/* ATX heading: # .. ###### (needs a space, so #tag stays text) */
+/* ATX heading: # .. ###### (needs a space, so #tag stays text).
+    The line end is not part of the match: the fold level is applied at it. */
 case 3:
-#line 78 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 88 "C:/work/ape++/src/lexers/LexerMD.L"
 case 4:
 YY_RULE_SETUP
-#line 78 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 88 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nLevel = 0;
 		while( yytext[nLevel]=='#' ) nLevel++;
 		SetStyle( MatchStart(), MatchStart()+nLevel, STYLE_MARK );
 		SetStyle( MatchStart()+nLevel, MatchEnd(), STYLE_H1+nLevel-1 );
+		HEADING_FOLD( nLevel );
 	}
 	YY_BREAK
-/* setext heading underline: === (the --- case is handled above) */
+/* setext heading underline: === (the --- case is handled above).
+    The heading is the previous line, it becomes the fold header. */
 case 5:
 YY_RULE_SETUP
-#line 86 "C:/work/ape++/src/lexers/LexerMD.L"
-SetStyle( STYLE_H1 );
+#line 98 "C:/work/ape++/src/lexers/LexerMD.L"
+{
+		SetStyle( STYLE_H1 );
+		if( m_foldLine > 0 ) {
+			m_pStyler->SetLevel( m_foldLine-1, SC_FOLDLEVELBASE | SC_FOLDLEVELHEADERFLAG );
+			m_foldLevel = SC_FOLDLEVELBASE + 1;
+		}
+	}
 	YY_BREAK
 /* task list item: - [ ] / - [x] */
 case 6:
 YY_RULE_SETUP
-#line 89 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 107 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nChr = 0;
 		while( yytext[nChr]==' ' || yytext[nChr]=='\t' ) nChr++;
@@ -1288,28 +1366,28 @@ YY_RULE_SETUP
 	YY_BREAK
 /* list item marker: -, *, +, 1. , 1) */
 case 7:
-#line 102 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 120 "C:/work/ape++/src/lexers/LexerMD.L"
 case 8:
 YY_RULE_SETUP
-#line 102 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 120 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_LIST );
 	YY_BREAK
 /* blockquote marker */
 case 9:
 YY_RULE_SETUP
-#line 105 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 123 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_QUOTE );
 	YY_BREAK
 /* table delimiter row: |---|:--:|---| */
 case 10:
 YY_RULE_SETUP
-#line 108 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 126 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_TABLE );
 	YY_BREAK
 /* link reference definition: [label]: url */
 case 11:
 YY_RULE_SETUP
-#line 111 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 129 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nClose = 0;
 		while( yytext[nClose] && yytext[nClose]!=']' ) nClose++;
@@ -1322,7 +1400,7 @@ YY_RULE_SETUP
     end is matched separately (see CSciLexer::BeforeAction). */
 case 12:
 YY_RULE_SETUP
-#line 121 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 139 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		levelIncrease();
 		BEGIN(FENCE);
@@ -1331,7 +1409,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 127 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 145 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		levelDecrease();
 		BEGIN(FENCEEND);
@@ -1340,7 +1418,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 133 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 151 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		BEGIN(INITIAL);
 		SetStyle( STYLE_CODEBLOCK );
@@ -1348,10 +1426,10 @@ YY_RULE_SETUP
 	YY_BREAK
 /* end of front matter */
 case 15:
-#line 140 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 158 "C:/work/ape++/src/lexers/LexerMD.L"
 case 16:
 YY_RULE_SETUP
-#line 140 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 158 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		BEGIN(INITIAL);
 		SetStyle( STYLE_FRONT );
@@ -1360,35 +1438,35 @@ YY_RULE_SETUP
 /* html comment */
 case 17:
 YY_RULE_SETUP
-#line 146 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 164 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_HTML );
 	YY_BREAK
 /* autolink: <scheme:...> */
 case 18:
 YY_RULE_SETUP
-#line 149 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 167 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 /* html tag */
 case 19:
-#line 153 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 171 "C:/work/ape++/src/lexers/LexerMD.L"
 case 20:
 YY_RULE_SETUP
-#line 153 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 171 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_HTML );
 	YY_BREAK
 /* footnote reference: [^1] */
 case 21:
 YY_RULE_SETUP
-#line 156 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 174 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_REF );
 	YY_BREAK
 /* links & images: [text](url), [text][ref] */
 case 22:
-#line 160 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 178 "C:/work/ape++/src/lexers/LexerMD.L"
 case 23:
 YY_RULE_SETUP
-#line 160 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 178 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nStart = (yytext[0]=='!') ? 1 : 0;
 		int nClose = nStart;
@@ -1409,23 +1487,23 @@ YY_RULE_SETUP
 /* bare url */
 case 24:
 YY_RULE_SETUP
-#line 178 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 196 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 179 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 197 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 180 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 198 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 /* inline code */
 case 27:
 YY_RULE_SETUP
-#line 183 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 201 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nPre = 0;
 		while( nPre<yyleng && yytext[nPre]=='`' ) nPre++;
@@ -1437,85 +1515,85 @@ YY_RULE_SETUP
 /* emphasis */
 case 28:
 YY_RULE_SETUP
-#line 192 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 210 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 3, 3, STYLE_BOLDITALIC );
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 193 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 211 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 2, 2, STYLE_BOLD );
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 194 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 212 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 1, 1, STYLE_ITALIC );
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 195 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 213 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 3, 3, STYLE_BOLDITALIC );
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 196 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 214 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 2, 2, STYLE_BOLD );
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 197 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 215 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 1, 1, STYLE_ITALIC );
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 198 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 216 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 2, 2, STYLE_STRIKE );
 	YY_BREAK
 /* escaped char */
 case 35:
 YY_RULE_SETUP
-#line 201 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 219 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_ESCAPE );
 	YY_BREAK
 /* html entity */
 case 36:
-#line 205 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 223 "C:/work/ape++/src/lexers/LexerMD.L"
 case 37:
-#line 206 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 224 "C:/work/ape++/src/lexers/LexerMD.L"
 case 38:
 YY_RULE_SETUP
-#line 206 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 224 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_ESCAPE );
 	YY_BREAK
 /* table cell separator */
 case 39:
 YY_RULE_SETUP
-#line 209 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 227 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_TABLE );
 	YY_BREAK
 
 case 40:
-#line 213 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 231 "C:/work/ape++/src/lexers/LexerMD.L"
 case 41:
-#line 214 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 232 "C:/work/ape++/src/lexers/LexerMD.L"
 case 42:
-#line 215 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 233 "C:/work/ape++/src/lexers/LexerMD.L"
 case 43:
 YY_RULE_SETUP
-#line 215 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 233 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle();
 	YY_BREAK
 
 case 44:
 YY_RULE_SETUP
-#line 218 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 236 "C:/work/ape++/src/lexers/LexerMD.L"
 ECHO;
 	YY_BREAK
-#line 1514 "C:/work/ape++/src/lexers/LexerMD.cpp"
-case YY_STATE_EOF(INITIAL):
-case YY_STATE_EOF(FENCE):
-case YY_STATE_EOF(FRONT):
-case YY_STATE_EOF(FENCEEND):
-	yyterminate();
+#line 1592 "C:/work/ape++/src/lexers/LexerMD.cpp"
+			case YY_STATE_EOF(INITIAL):
+			case YY_STATE_EOF(FENCE):
+			case YY_STATE_EOF(FRONT):
+			case YY_STATE_EOF(FENCEEND):
+				yyterminate();
 /* end of actions code                                                  */
 /************************************************************************/
         case YY_END_OF_BUFFER: {
@@ -1816,6 +1894,8 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 /* start of code to get the start state into yy_current_state        */
 	yy_current_state = yy_start;
 	yy_current_state += YY_AT_BOL();
+	yy_state_ptr = yy_state_buf;
+	*yy_state_ptr++ = yy_current_state;
 /* end of start of code to get the start state into yy_current_state */
 /*********************************************************************/
 
@@ -1824,11 +1904,6 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 /*********************************************************************/
 /* start of code to find the next state                              */     
 		register YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
-		if ( yy_accept[yy_current_state] )
-			{
-			yy_last_accepting_state = yy_current_state;
-			yy_last_accepting_cpos = yy_cp;
-			}
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
@@ -1836,6 +1911,7 @@ yy_state_type yyFlexLexer::yy_get_previous_state()
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+		*yy_state_ptr++ = yy_current_state;
 /* end of code to find the next state                                */     
 /*********************************************************************/
     }
@@ -1855,14 +1931,8 @@ yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
     int yy_is_jam;
 /*********************************************************************/
 /* start of code to find the next state, and perhaps do backing up   */
-	register char *yy_cp = yy_c_buf_p;
 
 	register YY_CHAR yy_c = 1;
-	if ( yy_accept[yy_current_state] )
-		{
-		yy_last_accepting_state = yy_current_state;
-		yy_last_accepting_cpos = yy_cp;
-		}
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
@@ -1871,6 +1941,8 @@ yy_state_type yyFlexLexer::yy_try_NUL_trans( yy_state_type yy_current_state )
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 406);
+	if ( ! yy_is_jam )
+		*yy_state_ptr++ = yy_current_state;
 /* end ofcode to find the next state, and perhaps do backing up      */
 /*********************************************************************/
     return yy_is_jam ? 0 : yy_current_state;
@@ -2225,7 +2297,7 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 218 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 236 "C:/work/ape++/src/lexers/LexerMD.L"
 
  /*************************************************************************************/
 
