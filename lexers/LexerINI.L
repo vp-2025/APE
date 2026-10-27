@@ -12,6 +12,10 @@
 * The whole value is styled as a number, a quoted string or a plain value.
 * A '\' at the line end continues the value on the next line in properties
 * and registry files.
+*
+* Sections alternate their background: every token style exists twice, the
+* plain one for even sections (and the lines before the first section) and a
+* tinted copy for odd sections (see styleIni[] in lexBase/lexerStyles.cpp).
 ******************************************************************************/
 #include "LexBase.h"
 %}
@@ -43,12 +47,33 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 #define LANG_INI			0
 #define LANG_PROPERTIES		1
 #define LANG_REG			2
+
+/* odd sections use the styles shifted by STYLE_ODD - the ids 42..53 */
+#define STYLE_ODD			42
+#define SEC( styl )			( bOddSection ? STYLE_ODD + (styl) : (styl) )
+
+/* yy_start keeps the start condition in its low 8 bits only.  The parity of
+   the current section is kept above them and serialized into the line state
+   at every newline, so that styling can resume in the middle of the file. */
+#define LINE_STATE			((yy_start & 0xFF) | (bOddSection ? 0x100 : 0))
+
+/* StateToStyle() is called by the rules - declare the specialization first */
+template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
+
+#undef	YY_BREAK
+#define YY_BREAK \
+	if( yyleng > 0 && yytext[yyleng-1] == '\n' ) \
+		m_pStyler->SetLineState( m_foldLine, LINE_STATE ); \
+	break;
 %}
 
 %%
  /*************************************************************************************/
 
 %{
+	bool bOddSection = (yy_start & 0x100) != 0;	// background of the current section
+	yy_start &= 0xFF;						// the DFA only understands the start condition
+
 	bool bContinue = false;					// the line ends with '\': the value goes on at the next line
 	bool bContLine = YY_START == VALUE;		// the line continues the value of the previous one
 
@@ -111,45 +136,46 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 			while( k < yyleng && !isWS(yytext[k]) )
 				k++;
 			if( k < yyleng ) {
-				SetStyle( MatchStart(), MatchStart()+k, STYLE_KEY );
+				SetStyle( MatchStart(), MatchStart()+k, SEC(STYLE_KEY) );
 				yyless( k );
 				beginValue();
 				return;
 			}
 		}
-		SetStyle( STYLE_KEY );
+		SetStyle( SEC(STYLE_KEY) );
 	};
 
 %}
 
 <INITIAL>{
-	^(Windows\ Registry\ Editor\ Version\ [0-9.]+|REGEDIT4)	SetStyle( STYLE_DIRECTIVE );
+	^(Windows\ Registry\ Editor\ Version\ [0-9.]+|REGEDIT4)	SetStyle( SEC(STYLE_DIRECTIVE) );
 
-	^{WS}*[;#][^\r\n]*		SetStyle( STYLE_COMMENT );
+	^{WS}*[;#][^\r\n]*		SetStyle( SEC(STYLE_COMMENT) );
 	^{WS}*![^\r\n]*			{
 		if( m_langId == LANG_PROPERTIES )
-			SetStyle( STYLE_COMMENT );
+			SetStyle( SEC(STYLE_COMMENT) );
 		else {
 			int n = 0;
 			while( isWS(yytext[n]) )
 				n++;
 			for( n++; n < yyleng && (isalnum((unsigned char)yytext[n]) || yytext[n] == '_'); n++ )
 				;
-			SetStyle( MatchStart(), MatchStart()+n, STYLE_DIRECTIVE );
+			SetStyle( MatchStart(), MatchStart()+n, SEC(STYLE_DIRECTIVE) );
 			yyless( n );
 			beginValue();
 		}
 	}
 
 	^{WS}*\[				{
-		SetStyle( STYLE_SYMBOL );
+		bOddSection = !bOddSection;
+		SetStyle( SEC(STYLE_SYMBOL) );
 		BEGIN( SECTION );
 		if( GetLevel() )
 			levelDecrease();
 		levelIncrease();
 	}
 
-	^{WS}*{QKEY}/{WS}*[=:]	SetStyle( STYLE_KEY );
+	^{WS}*{QKEY}/{WS}*[=:]	SetStyle( SEC(STYLE_KEY) );
 	^{WS}*{KEY}/{WS}*[=:]	styleKey();
 
 	 /* a line without a separator: a flag ("skip-networking"), a properties "key value"
@@ -162,15 +188,15 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 			styleKey();
 	}
 
-	{WS}*[=:]				SetStyle( STYLE_SYMBOL ); beginValue();
+	{WS}*[=:]				SetStyle( SEC(STYLE_SYMBOL) ); beginValue();
 
-	{WS}+[;#][^\r\n]*		SetStyle( STYLE_COMMENT );		// after "[section]"
+	{WS}+[;#][^\r\n]*		SetStyle( SEC(STYLE_COMMENT) );		// after "[section]"
 }
 
 <SECTION>{
-	\"([^"\\\r\n]|\\.)*\"	SetStyle( STYLE_STRING );
-	[^\]"\r\n]+				SetStyle( STYLE_SECTION );
-	\]						SetStyle( STYLE_SYMBOL ); BEGIN( INITIAL );
+	\"([^"\\\r\n]|\\.)*\"	SetStyle( SEC(STYLE_STRING) );
+	[^\]"\r\n]+				SetStyle( SEC(STYLE_SECTION) );
+	\]						SetStyle( SEC(STYLE_SYMBOL) ); BEGIN( INITIAL );
 }
 
  /* the rest of the line after '=' gets a single style: a number, a quoted string
@@ -204,13 +230,13 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 
 	int pos = MatchStart();
 	if( b )
-		SetStyle( pos, pos+b, STYLE_VALUE );
+		SetStyle( pos, pos+b, SEC(STYLE_VALUE) );
 	if( e > b )
-		SetStyle( pos+b, pos+e, style );
+		SetStyle( pos+b, pos+e, SEC(style) );
 	if( c > e )
-		SetStyle( pos+e, pos+c, STYLE_VALUE );
+		SetStyle( pos+e, pos+c, SEC(STYLE_VALUE) );
 	if( n > c )
-		SetStyle( pos+c, pos+n, STYLE_COMMENT );
+		SetStyle( pos+c, pos+n, SEC(STYLE_COMMENT) );
 }
 
  /*************************************************************************************/
@@ -219,19 +245,20 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 
 <*>{
 	{EOL}					{
-		SetStyle();
+		SetStyle( SEC(StateToStyle(YY_START)) );
 		if( !bContinue )
 			BEGIN( INITIAL );
 		bContLine = bContinue;
 		bContinue = false;
 	}
 	{WS}+	|
-	.						SetStyle();
+	.						SetStyle( SEC(StateToStyle(YY_START)) );
 }
 
 %%
 /*************************************************************************************/
 
+template<>
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
 		case SECTION:	return STYLE_SECTION;

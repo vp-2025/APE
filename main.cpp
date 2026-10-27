@@ -494,7 +494,7 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 		for(auto& tabPage : m_vTabs)
 			tabPage.sci.SetViewWS(g_options.iViewWS);
 		break;
-	case ID_VIEW_EOL: 
+	case ID_VIEW_EOL2:
 		g_options.bViewEOL = !page.sci.GetViewEOL();
 		g_options.Save();
 		for(auto& tabPage : m_vTabs)
@@ -1206,8 +1206,8 @@ void CEditor::UpdateToolbar()
 	m_toolbar.Enable(ID_VIEW_WRAPLINES, pPage != 0);
 	m_toolbar.Check(ID_VIEW_WRAPLINES, pPage && pPage->sci.getWrapLongLines());
 
-	m_toolbar.Enable(ID_VIEW_EOL, pPage != 0);
-	m_toolbar.Check(ID_VIEW_EOL, pPage && pPage->sci.GetViewEOL());
+	m_toolbar.Enable(ID_VIEW_EOL2, pPage != 0);
+	m_toolbar.Check(ID_VIEW_EOL2, pPage && pPage->sci.GetViewEOL());
 }
 
 void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
@@ -1268,7 +1268,7 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.Enable( ID_WINDOW_CLOSE_ALL, pPage!=0 );
 
 	menu.EnableCheck( ID_VIEW_WS, pPage!=0, pPage && pPage->sci.isViewWSAll() );
-	menu.EnableCheck( ID_VIEW_EOL, pPage!=0, pPage && pPage->sci.GetViewEOL() );
+	menu.EnableCheck( ID_VIEW_EOL2, pPage!=0, pPage && pPage->sci.GetViewEOL() );
 	menu.EnableCheck( ID_VIEW_BRACE, pPage!=0, pPage && pPage->sci.isBraceHL() );
 	menu.EnableCheck( ID_VIEW_NUMS, pPage!=0, pPage && pPage->sci.isViewNums() );
 	menu.EnableCheck( ID_VIEW_INDENT, pPage!=0, pPage && pPage->sci.isViewIndentGuides() );

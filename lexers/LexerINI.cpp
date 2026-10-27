@@ -445,12 +445,16 @@ goto find_rule; \
 * The whole value is styled as a number, a quoted string or a plain value.
 * A '\' at the line end continues the value on the next line in properties
 * and registry files.
+*
+* Sections alternate their background: every token style exists twice, the
+* plain one for even sections (and the lines before the first section) and a
+* tinted copy for odd sections (see styleIni[] in lexBase/lexerStyles.cpp).
 ******************************************************************************/
 #include "LexBase.h"
 #define SECTION 1
 #define VALUE 2
 
-#line 31 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 35 "C:/work/ape++/src/lexers/LexerINI.L"
 /* style ids - keep in sync with styleIni[] in lexBase/lexerStyles.cpp */
 #define STYLE_TEXT			0
 #define STYLE_COMMENT		1
@@ -466,7 +470,25 @@ goto find_rule; \
 #define LANG_INI			0
 #define LANG_PROPERTIES		1
 #define LANG_REG			2
-#line 470 "C:/work/ape++/src/lexers/LexerINI.cpp"
+
+/* odd sections use the styles shifted by STYLE_ODD - the ids 42..53 */
+#define STYLE_ODD			42
+#define SEC( styl )			( bOddSection ? STYLE_ODD + (styl) : (styl) )
+
+/* yy_start keeps the start condition in its low 8 bits only.  The parity of
+   the current section is kept above them and serialized into the line state
+   at every newline, so that styling can resume in the middle of the file. */
+#define LINE_STATE			((yy_start & 0xFF) | (bOddSection ? 0x100 : 0))
+
+/* StateToStyle() is called by the rules - declare the specialization first */
+template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
+
+#undef	YY_BREAK
+#define YY_BREAK \
+	if( yyleng > 0 && yytext[yyleng-1] == '\n' ) \
+		m_pStyler->SetLineState( m_foldLine, LINE_STATE ); \
+	break;
+#line 492 "C:/work/ape++/src/lexers/LexerINI.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -589,10 +611,13 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 48 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 70 "C:/work/ape++/src/lexers/LexerINI.L"
 
  /*************************************************************************************/
 
+
+	bool bOddSection = (yy_start & 0x100) != 0;	// background of the current section
+	yy_start &= 0xFF;						// the DFA only understands the start condition
 
 	bool bContinue = false;					// the line ends with '\': the value goes on at the next line
 	bool bContLine = YY_START == VALUE;		// the line continues the value of the previous one
@@ -656,18 +681,18 @@ YY_DECL
 			while( k < yyleng && !isWS(yytext[k]) )
 				k++;
 			if( k < yyleng ) {
-				SetStyle( MatchStart(), MatchStart()+k, STYLE_KEY );
+				SetStyle( MatchStart(), MatchStart()+k, SEC(STYLE_KEY) );
 				yyless( k );
 				beginValue();
 				return;
 			}
 		}
-		SetStyle( STYLE_KEY );
+		SetStyle( SEC(STYLE_KEY) );
 	};
 
 
 
-#line 671 "C:/work/ape++/src/lexers/LexerINI.cpp"
+#line 696 "C:/work/ape++/src/lexers/LexerINI.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -795,27 +820,27 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 126 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_DIRECTIVE );
+#line 151 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_DIRECTIVE) );
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 128 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_COMMENT );
+#line 153 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_COMMENT) );
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 129 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 154 "C:/work/ape++/src/lexers/LexerINI.L"
 {
 		if( m_langId == LANG_PROPERTIES )
-			SetStyle( STYLE_COMMENT );
+			SetStyle( SEC(STYLE_COMMENT) );
 		else {
 			int n = 0;
 			while( isWS(yytext[n]) )
 				n++;
 			for( n++; n < yyleng && (isalnum((unsigned char)yytext[n]) || yytext[n] == '_'); n++ )
 				;
-			SetStyle( MatchStart(), MatchStart()+n, STYLE_DIRECTIVE );
+			SetStyle( MatchStart(), MatchStart()+n, SEC(STYLE_DIRECTIVE) );
 			yyless( n );
 			beginValue();
 		}
@@ -823,9 +848,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 144 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 169 "C:/work/ape++/src/lexers/LexerINI.L"
 {
-		SetStyle( STYLE_SYMBOL );
+		bOddSection = !bOddSection;
+		SetStyle( SEC(STYLE_SYMBOL) );
 		BEGIN( SECTION );
 		if( GetLevel() )
 			levelDecrease();
@@ -834,19 +860,19 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 152 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_KEY );
+#line 178 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_KEY) );
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 153 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 179 "C:/work/ape++/src/lexers/LexerINI.L"
 styleKey();
 	YY_BREAK
 /* a line without a separator: a flag ("skip-networking"), a properties "key value"
 	    or the indented continuation of the previous value (hgrc, python configparser) */
 case 7:
 YY_RULE_SETUP
-#line 157 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 183 "C:/work/ape++/src/lexers/LexerINI.L"
 {
 		if( m_langId == LANG_INI && isWS(*yytext) ) {
 			beginValue();
@@ -857,37 +883,37 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 165 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_SYMBOL ); beginValue();
+#line 191 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_SYMBOL) ); beginValue();
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 167 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_COMMENT );		// after "[section]"
+#line 193 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_COMMENT) );		// after "[section]"
 	YY_BREAK
 
 
 case 10:
 YY_RULE_SETUP
-#line 171 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_STRING );
+#line 197 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_STRING) );
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 172 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_SECTION );
+#line 198 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_SECTION) );
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 173 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle( STYLE_SYMBOL ); BEGIN( INITIAL );
+#line 199 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(STYLE_SYMBOL) ); BEGIN( INITIAL );
 	YY_BREAK
 
 /* the rest of the line after '=' gets a single style: a number, a quoted string
     or a plain value.  An ini value may be followed by a ; comment */
 case 13:
 YY_RULE_SETUP
-#line 178 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 204 "C:/work/ape++/src/lexers/LexerINI.L"
 {
 	int b = 0, n = yyleng;
 	while( b < n && isWS(yytext[b]) )
@@ -917,13 +943,13 @@ YY_RULE_SETUP
 
 	int pos = MatchStart();
 	if( b )
-		SetStyle( pos, pos+b, STYLE_VALUE );
+		SetStyle( pos, pos+b, SEC(STYLE_VALUE) );
 	if( e > b )
-		SetStyle( pos+b, pos+e, style );
+		SetStyle( pos+b, pos+e, SEC(style) );
 	if( c > e )
-		SetStyle( pos+e, pos+c, STYLE_VALUE );
+		SetStyle( pos+e, pos+c, SEC(STYLE_VALUE) );
 	if( n > c )
-		SetStyle( pos+c, pos+n, STYLE_COMMENT );
+		SetStyle( pos+c, pos+n, SEC(STYLE_COMMENT) );
 }
 	YY_BREAK
 /*************************************************************************************/
@@ -932,9 +958,9 @@ YY_RULE_SETUP
 
 case 14:
 YY_RULE_SETUP
-#line 221 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 247 "C:/work/ape++/src/lexers/LexerINI.L"
 {
-		SetStyle();
+		SetStyle( SEC(StateToStyle(YY_START)) );
 		if( !bContinue )
 			BEGIN( INITIAL );
 		bContLine = bContinue;
@@ -942,19 +968,19 @@ YY_RULE_SETUP
 	}
 	YY_BREAK
 case 15:
-#line 229 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 255 "C:/work/ape++/src/lexers/LexerINI.L"
 case 16:
 YY_RULE_SETUP
-#line 229 "C:/work/ape++/src/lexers/LexerINI.L"
-SetStyle();
+#line 255 "C:/work/ape++/src/lexers/LexerINI.L"
+SetStyle( SEC(StateToStyle(YY_START)) );
 	YY_BREAK
 
 case 17:
 YY_RULE_SETUP
-#line 232 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 258 "C:/work/ape++/src/lexers/LexerINI.L"
 ECHO;
 	YY_BREAK
-#line 958 "C:/work/ape++/src/lexers/LexerINI.cpp"
+#line 984 "C:/work/ape++/src/lexers/LexerINI.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(SECTION):
 			case YY_STATE_EOF(VALUE):
@@ -1662,10 +1688,11 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 232 "C:/work/ape++/src/lexers/LexerINI.L"
+#line 258 "C:/work/ape++/src/lexers/LexerINI.L"
 
 /*************************************************************************************/
 
+template<>
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
 		case SECTION:	return STYLE_SECTION;

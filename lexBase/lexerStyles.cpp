@@ -335,7 +335,12 @@ CLexerStyle styleConf[] = {
 	{0}
 };
 
-/* style ids must match LexerINI.L */
+/* ini - sections alternate their background: the token styles of the odd
+   sections are a copy of the even ones, shifted by STYLE_ODD (LexerINI.L),
+   under a parent style that carries the background.
+   ids must match STYLE_* / STYLE_ODD in LexerINI.L */
+#define STYLE_INI_ODD		41 // the odd styles are 42..53: jump over STYLE_DEFAULT 32
+
 CLexerStyle styleIni[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 	STYLE( 0, "Text" ),
@@ -347,6 +352,18 @@ CLexerStyle styleIni[] = {
 	STYLE2( 6, "String", clrString ),
 	STYLE2( 7, "Number", clrNumber ),
 	STYLE2_BOLD( 11, "Directive", clrPrepocessor ),
+
+	 /* odd sections - slightly blue */
+	STYLE_PARENT( STYLE_INI_ODD, "Odd Section", RGB(0xEE,0xF3,0xFB) ),
+	STYLE_CHILD( STYLE_INI_ODD,				42, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_INI_ODD,		43, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_INI_ODD,		44, "Section", RGB(0xA0,0,0) ),
+	STYLE_CHILD2( STYLE_INI_ODD,			45, "Key", RGB(0x80,0x00,0x80) ),
+	STYLE_CHILD2( STYLE_INI_ODD,			46, "Symbol", clrSymbol ),
+	STYLE_CHILD2( STYLE_INI_ODD,			47, "Value", RGB(0x00,0xA0,0x40) ),
+	STYLE_CHILD2( STYLE_INI_ODD,			48, "String", clrString ),
+	STYLE_CHILD2( STYLE_INI_ODD,			49, "Number", clrNumber ),
+	STYLE_CHILD_BOLD( STYLE_INI_ODD,		53, "Directive", clrPrepocessor ),
 	{0}
 };
 

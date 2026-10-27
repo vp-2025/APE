@@ -123,7 +123,6 @@ BEGIN
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
         MENUITEM SEPARATOR
         MENUITEM "Whitespace",                  ID_VIEW_WS
-        MENUITEM "Line Endings",                ID_VIEW_EOL
         MENUITEM "Line Numbers",                ID_VIEW_NUMS
         MENUITEM "Indent Guides",               ID_VIEW_INDENT
         MENUITEM "Wrap Long Lines",             ID_VIEW_WRAPLINES
@@ -170,6 +169,8 @@ BEGIN
     END
     POPUP "LineEndings"
     BEGIN
+        MENUITEM "Line Endings",                ID_VIEW_EOL2
+        MENUITEM SEPARATOR
         MENUITEM "Windows (\\r\\n)",            ID_EOL_CRLF
         MENUITEM "Unix (\\n)",                  ID_EOL_LF
         MENUITEM "Mac (\\r)",                   ID_EOL_CR
@@ -326,7 +327,7 @@ IDC_POPUP_EOL MENU
 BEGIN
     POPUP "<Popup>"
     BEGIN
-        MENUITEM "View Line Endings",           ID_VIEW_EOL
+        MENUITEM "Line Endings",           ID_VIEW_EOL2
         MENUITEM SEPARATOR
         MENUITEM "Windows (\\r\\n)",            ID_EOL_CRLF
         MENUITEM "Unix (\\n)",                  ID_EOL_LF

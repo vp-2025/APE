@@ -183,8 +183,7 @@ void CSciWrapper::setEncodingAndConvert(CEncoding enc) {
 	setEncoding(enc);
 }
 
-void CSciWrapper::DetectIfUtf8NoBOM()
-{
+void CSciWrapper::DetectIfUtf8NoBOM() {
 	for( int i=0, len=GetTextLength(); i<len-1; i++ ) {
 		unsigned char ch = GetCharAt(i);
 		if( 0xC0<=ch && ch<=0xDF ) {
@@ -205,8 +204,7 @@ struct CSciTextRange : public Sci_TextRange
 
 #define BLOCK_SIZE (1024*16)
 
-void swap_bytes( wstring& ws )
-{
+void swap_bytes( wstring& ws ) {
 	for( size_t i=0; i<ws.size(); i++ ) {
 		wchar_t c = ws[i];
 		BYTE byL = c & 0xFF;
@@ -240,8 +238,7 @@ bool CSciWrapper::loadFromFile( const string& sFile, CTime& tm, int64_t& size, b
 	if( size>1000000 )
 		pProgress = new CProgress( "Loading", 0, size);
 	int p = 0;
-	while( true )
-	{
+	while( true ) {
 		int len = f.Read(data, BLOCK_SIZE );
 		if( !len ) break;
 		if( m_encoding==encUtf16LE || m_encoding==encUtf16BE ) {
