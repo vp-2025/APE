@@ -23,7 +23,7 @@
 #define clrString			RGB(0x80,0x80,0x00)
 #define clrRegExp			RGB(0xFF,0x80,0x80)
 #define clrChar				RGB(0xA0,0x60,0x00)
-#define clrPrepocessor		RGB(0x00,0x00,0xFF)
+#define clrPrepocessor		RGB(0x20,0x00,0xD0)
 #define clrSymbol			RGB(0x00,0x80,0x80)
 #define clrOperator 		RGB(0x00,0xFF,0xFF)
 #define clrLabel 			RGB(0x00,0x70,0x70)
@@ -79,6 +79,23 @@ CLexerStyle styleCPP[] = {
 	STYLE2( 10, "@", 0xA0A0A0 ),
 	STYLE2( 11, "JS RegExp", clrRegExp ),
 	STYLE_BOLD( 12, "JS RegExp Modifiers", clrRegExp ),
+	{0}
+};
+
+/* style ids must match LexerGo.L */
+CLexerStyle styleGo[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_BOLD( 1, "Keyword", clrKeyword ),
+	STYLE_ITALIC( 2, "Comment", clrComment ),
+	STYLE2( 3, "Symbol", clrSymbol ),
+	STYLE2( 4, "String", clrString ),
+	STYLE2( 10, "Raw String", RGB(0x00,0x80,0x00) ),
+	STYLE2( 5, "Rune", clrChar ),
+	STYLE2( 6, "Number", clrNumber ),
+	STYLE2( 9, "Predeclared", RGB(0x80,0x00,0x80) ),
+	STYLE2( 7, "Directive", clrPrepocessor ),
+	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
 	{0}
 };
 
@@ -494,6 +511,7 @@ CLexerStyle styleMD[] = {
 CLexerStyles g_styles[] = {
 	{"Global", "global", styleGlobal},
 	{"C/C++", "cpp", styleCPP},
+	{"Go", "go", styleGo},
 	{"HTML", "html", styleHTML},
 	{"XML", "xml", styleXML},
 	{"CSS", "css", styleCSS},
@@ -529,6 +547,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_PROTO: return styleCPP;
 
 		case LEX_JS: return styleCPP;
+		case LEX_GO: return styleGo;
 
 		case LEX_XHTML: return styleHTML;
 		case LEX_XML: return styleXML;
