@@ -26,7 +26,6 @@ bool isCssValue( const char* text );
 %}
 
 %%
- /*************************************************************************************/
 
 <INITIAL>\{				SetStyle(STYLE_CSS_SYMBOL); BEGIN(ATTR); levelIncrease();
 <ATTR,VALUE>\}			SetStyle(STYLE_CSS_SYMBOL); BEGIN(INITIAL); levelDecrease();
@@ -83,7 +82,6 @@ bool isCssValue( const char* text );
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

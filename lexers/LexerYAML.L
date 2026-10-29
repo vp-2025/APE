@@ -68,7 +68,6 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 %}
 
 %%
- /*************************************************************************************/
 
 %{
 	int extra = yy_start >> 8;
@@ -267,7 +266,6 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

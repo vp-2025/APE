@@ -423,8 +423,7 @@ static yyconst short int yy_chk[395] =
 // without - "'	esc []-\/   !
 #line 34 "C:/work/ape++/src/lexers/lexerSQL.L"
 
-bool isSQLKeyword( const char* text, bool& bInc, bool& bDec, bool bPLSQL ) 
-{
+bool isSQLKeyword( const char* text, bool& bInc, bool& bDec, bool bPLSQL ) {
 	static CKeywordsIC kwSQL("TXT_SQL_KW");
 	if( kwSQL.is(text) )
 		return true;		
@@ -436,16 +435,14 @@ bool isSQLKeyword( const char* text, bool& bInc, bool& bDec, bool bPLSQL )
 	return kwPLSQL.is(text);	
 }
 
-void proceedFolding( const char* text, bool& bInc, bool& bDec ) 
-{
+void proceedFolding( const char* text, bool& bInc, bool& bDec ) {
 	if( strnicmp(text,"-- start section",16)==0 )
 		bInc = true;
 	if( strnicmp(text,"-- end section",14)==0 )
 		bDec = true;
 }
 
-bool isBeginPLSQL( const char* text )
-{
+bool isBeginPLSQL( const char* text ) {
 	return strcmpi(text,"begin")==0 || strcmpi(text,"declare")==0;
 }
 
@@ -469,7 +466,7 @@ bool isBeginPLSQL( const char* text )
 #define STYLE_PLSQL_PARAM		27
 #define STYLE_PLSQL_UNQ			28
 
-#line 473 "C:/work/ape++/src/lexers/lexerSQL.cpp"
+#line 470 "C:/work/ape++/src/lexers/lexerSQL.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -589,11 +586,10 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 83 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 80 "C:/work/ape++/src/lexers/lexerSQL.L"
 
- /*************************************************************************************/
 
-#line 597 "C:/work/ape++/src/lexers/lexerSQL.cpp"
+#line 593 "C:/work/ape++/src/lexers/lexerSQL.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -699,13 +695,13 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 87 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 83 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 /* folding */
 case 2:
 YY_RULE_SETUP
-#line 90 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 86 "C:/work/ape++/src/lexers/lexerSQL.L"
 {
 						BEGIN(SLCOMMENT); SetStyle();
 						bool bInc=false, bDec=false;
@@ -716,12 +712,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 98 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 94 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(STRING); SetStyle();
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 99 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 95 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(CHAR); SetStyle();
 	YY_BREAK
 case 5:
@@ -729,7 +725,7 @@ case 5:
 yy_c_buf_p = yy_cp = yy_bp + 7;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 101 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 97 "C:/work/ape++/src/lexers/lexerSQL.L"
 {
 							SetStyle(STYLE_PLSQL_KW);
 							BEGIN(PLSQL); 
@@ -741,7 +737,7 @@ case 6:
 yy_c_buf_p = yy_cp = yy_bp + 5;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 106 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 102 "C:/work/ape++/src/lexers/lexerSQL.L"
 {
 							SetStyle(STYLE_PLSQL_KW);
 							BEGIN(PLSQL); 
@@ -750,7 +746,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 112 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 108 "C:/work/ape++/src/lexers/lexerSQL.L"
 {
 							bool bInc=false, bDec=false;
 							if( isSQLKeyword(yytext,bInc,bDec,false) ) SetStyle(STYLE_KW); else SetStyle();
@@ -760,106 +756,106 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 119 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 115 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_PARAM);
 	YY_BREAK
 /* numbers */
 case 9:
-#line 123 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 119 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 10:
-#line 124 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 120 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 11:
-#line 125 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 121 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 12:
 YY_RULE_SETUP
-#line 125 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 121 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_NUMBER);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 127 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 123 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 /* invalid chars - all second part of the ASCII table */
 case 14:
 YY_RULE_SETUP
-#line 130 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 126 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 15:
 YY_RULE_SETUP
-#line 134 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 130 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(); levelDecrease(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 16:
 YY_RULE_SETUP
-#line 138 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 134 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(); levelDecrease(); BEGIN(PLSQL);
 	YY_BREAK
 
 
 case 17:
 YY_RULE_SETUP
-#line 142 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 138 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(INITIAL); SetStyle(); 
 	YY_BREAK
 
 
 case 18:
 YY_RULE_SETUP
-#line 146 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 142 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(PLSQL); SetStyle(); 
 	YY_BREAK
 
 
 case 19:
 YY_RULE_SETUP
-#line 150 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 146 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle();
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 151 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 147 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 21:
 YY_RULE_SETUP
-#line 155 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 151 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle();
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 156 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 152 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(); BEGIN(PLSQL);
 	YY_BREAK
 
 
 case 23:
 YY_RULE_SETUP
-#line 160 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 156 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle();
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 161 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 157 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 25:
 YY_RULE_SETUP
-#line 165 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 161 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle();
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 166 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 162 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(); BEGIN(PLSQL);
 	YY_BREAK
 
@@ -867,29 +863,29 @@ SetStyle(); BEGIN(PLSQL);
 /*invalid end-of-line*/
 case 27:
 YY_RULE_SETUP
-#line 171 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 167 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 28:
 YY_RULE_SETUP
-#line 175 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 171 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(PLSQL_COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 177 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 173 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(PLSQL_SLCOMMENT); SetStyle();
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 179 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 175 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(PLSQL_STRING); SetStyle();
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 180 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 176 "C:/work/ape++/src/lexers/lexerSQL.L"
 BEGIN(PLSQL_CHAR); SetStyle();
 	YY_BREAK
 case 32:
@@ -897,12 +893,12 @@ case 32:
 yy_c_buf_p = yy_cp = yy_bp + 4;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 182 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 178 "C:/work/ape++/src/lexers/lexerSQL.L"
 levelDecrease(); SetStyle(STYLE_PLSQL_KW); BEGIN(INITIAL); 
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 184 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 180 "C:/work/ape++/src/lexers/lexerSQL.L"
 {
 						bool bInc=false, bDec=false;
 						if( isSQLKeyword(yytext,bInc,bDec,true) ) SetStyle(STYLE_PLSQL_KW); else SetStyle();
@@ -912,46 +908,46 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 191 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 187 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_PLSQL_PARAM);
 	YY_BREAK
 /* numbers */
 case 35:
-#line 195 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 191 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 36:
-#line 196 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 192 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 37:
-#line 197 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 193 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 38:
 YY_RULE_SETUP
-#line 197 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 193 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_PLSQL_NUMBER);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 199 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 195 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle(STYLE_PLSQL_SYMBOL);
 	YY_BREAK
 
 
 case 40:
-#line 204 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 200 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 41:
-#line 205 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 201 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 42:
-#line 206 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 202 "C:/work/ape++/src/lexers/lexerSQL.L"
 case 43:
 YY_RULE_SETUP
-#line 206 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 202 "C:/work/ape++/src/lexers/lexerSQL.L"
 SetStyle();
 	YY_BREAK
 
 case 44:
 YY_RULE_SETUP
-#line 209 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 205 "C:/work/ape++/src/lexers/lexerSQL.L"
 ECHO;
 	YY_BREAK
-#line 955 "C:/work/ape++/src/lexers/lexerSQL.cpp"
+#line 951 "C:/work/ape++/src/lexers/lexerSQL.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(SLCOMMENT):
@@ -1670,9 +1666,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 209 "C:/work/ape++/src/lexers/lexerSQL.L"
+#line 205 "C:/work/ape++/src/lexers/lexerSQL.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

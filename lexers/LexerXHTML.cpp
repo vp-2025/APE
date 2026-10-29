@@ -743,7 +743,6 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 57 "C:/work/ape++/src/lexers/LexerXHTML.L"
 
- /*************************************************************************************/
 
 	int after_tag = INITIAL; // UNDEF, INITIAL or CSS or SCR_JS
 
@@ -751,7 +750,7 @@ YY_DECL
  // comment
  // =======================================================================================*/
 
-#line 755 "C:/work/ape++/src/lexers/LexerXHTML.cpp"
+#line 754 "C:/work/ape++/src/lexers/LexerXHTML.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -857,20 +856,20 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 67 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 66 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 
 
 case 2:
 YY_RULE_SETUP
-#line 70 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 69 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 
 case 3:
 YY_RULE_SETUP
-#line 73 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 72 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 		SetStyle( MatchStart(), MatchStart()+2, STYLE_SYMBOL );
 		SetStyle( MatchStart()+2, MatchEnd(), STYLE_TAG_NAME );
@@ -879,14 +878,14 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 79 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 78 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 	BEGIN(PHP); SetStyle();
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 83 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 82 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 		char* pText = yytext;
 		pText++;
@@ -905,7 +904,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 99 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 98 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 		char* pText = yytext;
 		pText += 2;
@@ -918,7 +917,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 109 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 108 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 									SetStyle(MatchStart(), MatchStart()+5, STYLE_TAG_ATTR); 
 									SetStyle(MatchStart()+5, MatchEnd()-1, STYLE_SYMBOL); 
@@ -928,65 +927,65 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 115 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 114 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(INTAG_CSS_VALUE);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 116 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 115 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(INTAG_CSS_ATTR);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 117 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 116 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(INTAG);
 	YY_BREAK
 
 case 11:
 YY_RULE_SETUP
-#line 120 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 119 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if(isCssKeyword(yytext)) SetStyle(STYLE_CSS_ATTR_KW); else SetStyle();
 	YY_BREAK
 
 
 case 12:
 YY_RULE_SETUP
-#line 123 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 122 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if(isCssValue(yytext)) SetStyle(STYLE_CSS_VAL_KW); else SetStyle();
 	YY_BREAK
 
 
 case 13:
-#line 127 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 126 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 14:
-#line 128 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 127 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 15:
-#line 129 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 128 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 16:
-#line 130 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 129 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 17:
-#line 131 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 130 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 18:
-#line 132 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 131 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 19:
-#line 133 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 132 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 20:
 YY_RULE_SETUP
-#line 133 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 132 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_NUMBER);
 	YY_BREAK
 
 
 case 21:
 YY_RULE_SETUP
-#line 137 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 136 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle( STYLE_TAG_ATTR );
 	YY_BREAK
 case 22:
-#line 139 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 138 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 23:
 YY_RULE_SETUP
-#line 139 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 138 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL); 
 		SetStyle( MatchStart()+1, MatchEnd(), STYLE_TAG_NUMBER);
@@ -994,7 +993,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 143 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 142 "C:/work/ape++/src/lexers/LexerXHTML.L"
 {
 		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL); 
 		SetStyle( MatchStart()+1, MatchEnd(), STYLE_TAG_TEXT);
@@ -1002,63 +1001,63 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 147 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 146 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 148 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 147 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(STRING); SetStyle();
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 149 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 148 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(STRING2);	SetStyle();
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 150 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 149 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_SYMBOL); BEGIN(after_tag); 
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 151 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 150 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 152 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 151 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 	YY_BREAK
 
 
 case 31:
 YY_RULE_SETUP
-#line 156 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 155 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_STRING_UNQ); BEGIN(after_tag);
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 157 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 156 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(INTAG);
 	YY_BREAK
 
 
 case 33:
 YY_RULE_SETUP
-#line 160 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 159 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_STRING_UNQ); BEGIN(after_tag);
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 161 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 160 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(INTAG);
 	YY_BREAK
 
 
 case 35:
 YY_RULE_SETUP
-#line 165 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 164 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if( isHTMLKeyword(yytext) ) SetStyle(STYLE_KW); else SetStyle();
 	YY_BREAK
 
@@ -1067,134 +1066,134 @@ if( isHTMLKeyword(yytext) ) SetStyle(STYLE_KW); else SetStyle();
  // ========================================================================================*/
 case 36:
 YY_RULE_SETUP
-#line 172 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 171 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(CSS_ATTR); levelIncrease();
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 173 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 172 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(CSS); levelDecrease();
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 174 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 173 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(CSS_VALUE);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 175 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 174 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(CSS_ATTR);
 	YY_BREAK
 
 case 40:
 YY_RULE_SETUP
-#line 178 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 177 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if(isCssKeyword(yytext)) SetStyle(STYLE_CSS_ATTR_KW); else SetStyle();
 	YY_BREAK
 
 
 case 41:
 YY_RULE_SETUP
-#line 181 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 180 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if(isCssValue(yytext)) SetStyle(STYLE_CSS_VAL_KW); else SetStyle();
 	YY_BREAK
 
 
 case 42:
-#line 185 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 184 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 43:
-#line 186 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 185 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 44:
-#line 187 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 186 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 45:
-#line 188 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 187 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 46:
-#line 189 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 188 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 47:
-#line 190 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 189 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 48:
-#line 191 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 190 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 49:
 YY_RULE_SETUP
-#line 191 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 190 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_NUMBER);
 	YY_BREAK
 
 case 50:
 YY_RULE_SETUP
-#line 194 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 193 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_COMMENT);   SetStyle(); levelIncrease();
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 195 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 194 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle();	BEGIN(CSS); levelDecrease();
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 197 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 196 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_SL_COMMENT); SetStyle();
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 198 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 197 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS); SetStyle();
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 200 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 199 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_COMMENTA);   SetStyle(); levelIncrease();
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 201 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 200 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle();	BEGIN(CSS_ATTR); levelDecrease();
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 203 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 202 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_SL_COMMENTA); SetStyle();
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 204 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 203 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_ATTR); SetStyle();
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 206 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 205 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_STRING);	  SetStyle();
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 207 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 206 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(CSS_VALUE);
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 209 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 208 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(CSS_CHAR);	  SetStyle();
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 210 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 209 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(CSS_VALUE);
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 212 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 211 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_UNQ); BEGIN(CSS);
 	YY_BREAK
 
 case 63:
 YY_RULE_SETUP
-#line 215 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 214 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_CSS_SELECTOR);
 	YY_BREAK
 /* invalid chars - all second part of the ASCII table */
 case 64:
 YY_RULE_SETUP
-#line 218 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 217 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 
@@ -1204,170 +1203,170 @@ SetStyle(IStyler::styleInvalidText);
 
 case 65:
 YY_RULE_SETUP
-#line 226 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 225 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_SLCOMMENT); SetStyle(); levelIncrease(); 
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 227 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 226 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_SLCOMMENT); SetStyle(); levelDecrease(); 
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 229 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 228 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_SLCOMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 230 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 229 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_SLCOMMENT); SetStyle(); levelDecrease();
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 232 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 231 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_SLCOMMENT); SetStyle();
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 233 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 232 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 234 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 233 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if( g_isJSRegExp ) { BEGIN(JS_REGEXP); SetStyle(); } else SetStyle(STYLE_JS_SYMBOL);
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 235 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 234 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_STRING); SetStyle();
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 236 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 235 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS_CHAR); SetStyle();
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 238 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 237 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if( isJSKeyword(yytext) ) SetStyle( STYLE_JS_KW ); else SetStyle();
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 239 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 238 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_NUMBER);
 	YY_BREAK
 /* folding */
 case 76:
 YY_RULE_SETUP
-#line 242 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 241 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_SYMBOL);	if( *yytext=='{' ) levelIncrease(); else levelDecrease();
 	YY_BREAK
 /* folding */
 case 77:
 YY_RULE_SETUP
-#line 245 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 244 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_SYMBOL);	if( *yytext=='(' ) levelIncrease(); else { levelDecrease(); g_isJSRegExp=false; }
 	YY_BREAK
 /* folding */
 case 78:
 YY_RULE_SETUP
-#line 248 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 247 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_SYMBOL);		if( *yytext=='[' ) levelIncrease(); else levelDecrease();
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 250 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 249 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_SYMBOL);
 	YY_BREAK
 
 
 case 80:
 YY_RULE_SETUP
-#line 254 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 253 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(JS); SetStyle();
 	YY_BREAK
 
 
 case 81:
 YY_RULE_SETUP
-#line 257 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 256 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(JS); levelDecrease();
 	YY_BREAK
 
 
 /*escaped symbols*/
 case 82:
-#line 262 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 261 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 83:
-#line 263 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 262 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 84:
-#line 264 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 263 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 85:
 YY_RULE_SETUP
-#line 264 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 263 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle();
 	YY_BREAK
 /*invalid escaped symbol*/
 case 86:
 YY_RULE_SETUP
-#line 267 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 266 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 269 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 268 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_UNQ); BEGIN(JS);
 	YY_BREAK
 
 
 case 88:
 YY_RULE_SETUP
-#line 272 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 271 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(JS);
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 273 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 272 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(JS);
 	YY_BREAK
 
 
 case 90:
 YY_RULE_SETUP
-#line 276 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 275 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(JS);
 	YY_BREAK
 
 
 case 91:
 YY_RULE_SETUP
-#line 279 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 278 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle();  // "\\" escaped backslash
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 280 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 279 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle();
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 281 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 280 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle( MatchStart(), MatchEnd()-2, STYLE_JS_REGEXP ); SetStyle( MatchEnd()-2, MatchEnd(), STYLE_JS_REGEXP_BOLD ); BEGIN(JS);
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 282 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 281 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle( MatchStart(), MatchEnd()-1, STYLE_JS_REGEXP ); SetStyle( MatchEnd()-1, MatchEnd(), STYLE_JS_REGEXP_BOLD ); BEGIN(JS);
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 283 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 282 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(JS);
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 284 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 283 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_JS_UNQ); BEGIN(JS);
 	YY_BREAK
 
@@ -1377,82 +1376,82 @@ SetStyle(STYLE_JS_UNQ); BEGIN(JS);
 
 case 97:
 YY_RULE_SETUP
-#line 292 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 291 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(INITIAL); SetStyle();
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 293 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 292 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(PHP_SLCOMMENT); SetStyle();
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 294 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 293 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(PHP_COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 295 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 294 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(PHP_STRING); SetStyle();
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 296 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 295 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(PHP_CHAR); SetStyle();
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 297 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 296 "C:/work/ape++/src/lexers/LexerXHTML.L"
 if( isPHPKeyword(yytext) ) SetStyle( STYLE_PHP_KW ); else SetStyle();
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 298 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 297 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_PHP_NUMBER);
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 299 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 298 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_PHP_SYMBOL); if( *yytext=='{' ) levelIncrease(); else levelDecrease();
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 300 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 299 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_PHP_SYMBOL);
 	YY_BREAK
 
 
 case 106:
 YY_RULE_SETUP
-#line 304 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 303 "C:/work/ape++/src/lexers/LexerXHTML.L"
 BEGIN(PHP); SetStyle();
 	YY_BREAK
 
 
 case 107:
 YY_RULE_SETUP
-#line 307 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 306 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(PHP); levelDecrease();
 	YY_BREAK
 
 
 case 108:
 YY_RULE_SETUP
-#line 310 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 309 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(STYLE_PHP_UNQ); BEGIN(PHP);
 	YY_BREAK
 
 
 case 109:
 YY_RULE_SETUP
-#line 313 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 312 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(PHP);
 	YY_BREAK
 
 
 case 110:
 YY_RULE_SETUP
-#line 316 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 315 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle(); BEGIN(PHP);
 	YY_BREAK
 
@@ -1461,19 +1460,19 @@ SetStyle(); BEGIN(PHP);
  // ========================================================================================*/
 
 case 111:
-#line 325 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 324 "C:/work/ape++/src/lexers/LexerXHTML.L"
 case 112:
 YY_RULE_SETUP
-#line 325 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 324 "C:/work/ape++/src/lexers/LexerXHTML.L"
 SetStyle();
 	YY_BREAK
 
 case 113:
 YY_RULE_SETUP
-#line 328 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 327 "C:/work/ape++/src/lexers/LexerXHTML.L"
 ECHO;
 	YY_BREAK
-#line 1477 "C:/work/ape++/src/lexers/LexerXHTML.cpp"
+#line 1476 "C:/work/ape++/src/lexers/LexerXHTML.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(INTAG):
@@ -2212,9 +2211,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 328 "C:/work/ape++/src/lexers/LexerXHTML.L"
+#line 327 "C:/work/ape++/src/lexers/LexerXHTML.L"
 
- /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

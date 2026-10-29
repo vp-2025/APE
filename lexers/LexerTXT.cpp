@@ -413,9 +413,8 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 27 "C:/work/ape++/src/lexers/LexerTXT.L"
 
- /*************************************************************************************/
 
-#line 419 "C:/work/ape++/src/lexers/LexerTXT.cpp"
+#line 418 "C:/work/ape++/src/lexers/LexerTXT.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -522,59 +521,59 @@ do_action:  /* This label is used only to access EOF actions. */
 /* esc []-/\ */
 case 1:
 YY_RULE_SETUP
-#line 32 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 31 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 34 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 33 "C:/work/ape++/src/lexers/LexerTXT.L"
 if(m_bQuote) { BEGIN(STRING); SetStyle(); } else SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 case 3:
-#line 37 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 36 "C:/work/ape++/src/lexers/LexerTXT.L"
 case 4:
 YY_RULE_SETUP
-#line 37 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 36 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle(STYLE_NUMBER);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 39 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 38 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle();
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 41 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 40 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle();
 	YY_BREAK
 
 
 case 7:
 YY_RULE_SETUP
-#line 45 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 44 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 46 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 45 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 9:
-#line 51 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 50 "C:/work/ape++/src/lexers/LexerTXT.L"
 case 10:
 YY_RULE_SETUP
-#line 51 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 50 "C:/work/ape++/src/lexers/LexerTXT.L"
 SetStyle();
 	YY_BREAK
 
 case 11:
 YY_RULE_SETUP
-#line 54 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 53 "C:/work/ape++/src/lexers/LexerTXT.L"
 ECHO;
 	YY_BREAK
-#line 578 "C:/work/ape++/src/lexers/LexerTXT.cpp"
+#line 577 "C:/work/ape++/src/lexers/LexerTXT.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STRING):
 	yyterminate();
@@ -1285,9 +1284,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 54 "C:/work/ape++/src/lexers/LexerTXT.L"
+#line 53 "C:/work/ape++/src/lexers/LexerTXT.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

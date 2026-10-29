@@ -76,7 +76,6 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 %}
 
 %%
- /*************************************************************************************/
 
 <INITIAL,PREPROCESSOR>{
 	;					BEGIN(SLCOMMENT); SetStyle();
@@ -157,7 +156,6 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 	{EOL}				BEGIN(INITIAL);   SetStyle();
 }
 
-
 <*>{
 	{WORD} |
 	{SPACE}+ |
@@ -166,7 +164,6 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

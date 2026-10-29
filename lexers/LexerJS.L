@@ -39,7 +39,6 @@ bool isJSKeyword( const char* szKW );
 %}
 
 %%
- /*************************************************************************************/
 
 <INITIAL>{	
 	\/\/					BEGIN(SLCOMMENT); SetStyle();
@@ -118,7 +117,6 @@ bool isJSKeyword( const char* szKW );
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

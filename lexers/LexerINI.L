@@ -68,7 +68,6 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 %}
 
 %%
- /*************************************************************************************/
 
 %{
 	bool bOddSection = (yy_start & 0x100) != 0;	// background of the current section
@@ -256,7 +255,6 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 }
 
 %%
-/*************************************************************************************/
 
 template<>
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {

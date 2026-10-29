@@ -561,9 +561,8 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 53 "C:/work/ape++/src/lexers/lexerPascal.L"
 
- /*************************************************************************************/
 
-#line 567 "C:/work/ape++/src/lexers/lexerPascal.cpp"
+#line 566 "C:/work/ape++/src/lexers/lexerPascal.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -669,27 +668,27 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 57 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 56 "C:/work/ape++/src/lexers/lexerPascal.L"
 BEGIN(SLCOMMENT); SetStyle();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 58 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 57 "C:/work/ape++/src/lexers/lexerPascal.L"
 BEGIN(COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 59 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 58 "C:/work/ape++/src/lexers/lexerPascal.L"
 BEGIN(COMMENT2); SetStyle(); levelIncrease();
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 60 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 59 "C:/work/ape++/src/lexers/lexerPascal.L"
 BEGIN(STRING);	  SetStyle();
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 62 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 61 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						char* pText;
 						for( pText=yytext; *pText!='i'; pText++ );
@@ -703,7 +702,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 73 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 72 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						char* pText;
 						for( pText=yytext; *pText!='i'; pText++ );
@@ -716,7 +715,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 83 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 82 "C:/work/ape++/src/lexers/lexerPascal.L"
 { // sample : procedure ... of object;
 						SetStyle( MatchStart(), MatchEnd()-1, STYLE_KW ); 
 						SetStyle( MatchEnd()-1, MatchEnd(), STYLE_SYMBOL );
@@ -724,7 +723,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 88 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 87 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						SetStyle( MatchStart(), MatchStart()+5, STYLE_KW );
 						SetStyle( MatchStart()+5, MatchEnd()-1, STYLE_TEXT );
@@ -733,7 +732,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 94 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 93 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						SetStyle( MatchStart(), MatchStart()+8, STYLE_KW ); // class of
 						SetStyle( MatchStart()+8, MatchEnd()-1, STYLE_TEXT ); // IDENT
@@ -742,7 +741,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 100 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 99 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						SetStyle( MatchStart(), MatchStart()+5, STYLE_KW );
 						char* pText=yytext+5;
@@ -755,7 +754,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 110 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 109 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						SetStyle( MatchStart(), MatchEnd()-1, STYLE_KW );
 						SetStyle( MatchEnd()-1, MatchEnd(), STYLE_SYMBOL );
@@ -764,7 +763,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 116 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 115 "C:/work/ape++/src/lexers/lexerPascal.L"
 {
 						bool bInc=false, bDec=false;
 						if( isPascalKeyword(yytext,bInc,bDec) ) SetStyle(STYLE_KW); else SetStyle();
@@ -774,79 +773,79 @@ YY_RULE_SETUP
 	YY_BREAK
 /* numbers */
 case 13:
-#line 125 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 124 "C:/work/ape++/src/lexers/lexerPascal.L"
 case 14:
-#line 126 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 125 "C:/work/ape++/src/lexers/lexerPascal.L"
 case 15:
-#line 127 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 126 "C:/work/ape++/src/lexers/lexerPascal.L"
 case 16:
 YY_RULE_SETUP
-#line 127 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 126 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_NUMBER);
 	YY_BREAK
 /* folding */
 case 17:
 YY_RULE_SETUP
-#line 130 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 129 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_SYMBOL);	levelIncrease();
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 131 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 130 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_SYMBOL);	levelDecrease();
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 132 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 131 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_SYMBOL);	levelIncrease();
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 133 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 132 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_SYMBOL);	levelDecrease();
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 135 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 134 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 /* invalid chars - all second part of the ASCII table */
 case 22:
 YY_RULE_SETUP
-#line 138 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 137 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 23:
 YY_RULE_SETUP
-#line 142 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 141 "C:/work/ape++/src/lexers/lexerPascal.L"
 BEGIN(INITIAL); SetStyle(); 
 	YY_BREAK
 
 
 case 24:
 YY_RULE_SETUP
-#line 145 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 144 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle();	BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 
 
 case 25:
 YY_RULE_SETUP
-#line 148 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 147 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle();	BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 
 
 case 26:
 YY_RULE_SETUP
-#line 152 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 151 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle();
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 153 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 152 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
@@ -854,29 +853,29 @@ SetStyle(); BEGIN(INITIAL);
 /*invalid end-of-line*/
 case 28:
 YY_RULE_SETUP
-#line 158 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 157 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 29:
-#line 163 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 162 "C:/work/ape++/src/lexers/lexerPascal.L"
 case 30:
-#line 164 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 163 "C:/work/ape++/src/lexers/lexerPascal.L"
 case 31:
-#line 165 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 164 "C:/work/ape++/src/lexers/lexerPascal.L"
 case 32:
 YY_RULE_SETUP
-#line 165 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 164 "C:/work/ape++/src/lexers/lexerPascal.L"
 SetStyle();
 	YY_BREAK
 
 case 33:
 YY_RULE_SETUP
-#line 168 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 167 "C:/work/ape++/src/lexers/lexerPascal.L"
 ECHO;
 	YY_BREAK
-#line 880 "C:/work/ape++/src/lexers/lexerPascal.cpp"
+#line 879 "C:/work/ape++/src/lexers/lexerPascal.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(COMMENT2):
@@ -1591,9 +1590,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 168 "C:/work/ape++/src/lexers/lexerPascal.L"
+#line 167 "C:/work/ape++/src/lexers/lexerPascal.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

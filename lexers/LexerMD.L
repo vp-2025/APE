@@ -67,7 +67,6 @@ URLCH		[^ \t\r\n<>()\[\]]
 %}
 
 %%
- /*************************************************************************************/
 
  /* YAML front matter: only valid as the very first line of the file.
     A "---" anywhere else is a horizontal rule. */
@@ -234,7 +233,6 @@ _[^ _\n][^_\n]*_			STYLE_SPAN( 1, 1, STYLE_ITALIC );
 }
 
 %%
- /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

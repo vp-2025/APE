@@ -55,7 +55,6 @@ bool isPHPKeyword( const char* szKW )
 %}
 
 %%
- /*************************************************************************************/
 
 	int after_tag = INITIAL; // UNDEF, INITIAL or CSS or SCR_JS
 
@@ -326,7 +325,6 @@ bool isPHPKeyword( const char* szKW )
 }
 
 %%
- /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

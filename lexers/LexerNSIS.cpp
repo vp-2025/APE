@@ -533,9 +533,8 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 78 "C:/work/ape++/src/lexers/LexerNSIS.L"
 
- /*************************************************************************************/
 
-#line 539 "C:/work/ape++/src/lexers/LexerNSIS.cpp"
+#line 538 "C:/work/ape++/src/lexers/LexerNSIS.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -642,56 +641,56 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 82 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 81 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(SLCOMMENT); SetStyle();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 83 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 82 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(SLCOMMENT); SetStyle();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 84 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 83 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(COMMENT); SetStyle(); levelIncrease();
 	YY_BREAK
 
 
 case 4:
 YY_RULE_SETUP
-#line 88 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 87 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 89 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 88 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 90 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 89 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 
 
 case 7:
 YY_RULE_SETUP
-#line 94 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 93 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(STRING);	  SetStyle();
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 95 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 94 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(STRING2);	  SetStyle();
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 96 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 95 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(STRING3);	  SetStyle();
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 98 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 97 "C:/work/ape++/src/lexers/LexerNSIS.L"
 { //preprocessor
 								char* pText;
 								for( pText=yytext; *pText!='!'; pText++ );
@@ -707,12 +706,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 111 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 110 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_LABEL);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 113 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 112 "C:/work/ape++/src/lexers/LexerNSIS.L"
 {
 				if( isKeywordNSIS(yytext) ) SetStyle(STYLE_KW); else SetStyle();
 				bool bInc, bDec; 
@@ -724,100 +723,100 @@ YY_RULE_SETUP
 /* numbers */
 case 13:
 YY_RULE_SETUP
-#line 122 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 121 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_NUMBER);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 124 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 123 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 /* invalid chars - all second part of the ASCII table */
 case 15:
 YY_RULE_SETUP
-#line 127 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 126 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 16:
 YY_RULE_SETUP
-#line 131 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 130 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle();	BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 
 
 case 17:
 YY_RULE_SETUP
-#line 135 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 134 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(INITIAL); SetStyle(); 
 	YY_BREAK
 
 
 case 18:
 YY_RULE_SETUP
-#line 139 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 138 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle();
 	YY_BREAK
 /*invalid end-of-line*/
 case 19:
 YY_RULE_SETUP
-#line 142 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 141 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 20:
 YY_RULE_SETUP
-#line 145 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 144 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 21:
 YY_RULE_SETUP
-#line 148 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 147 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 22:
 YY_RULE_SETUP
-#line 151 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 150 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 23:
 YY_RULE_SETUP
-#line 155 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 154 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle();
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 157 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 156 "C:/work/ape++/src/lexers/LexerNSIS.L"
 BEGIN(INITIAL);   SetStyle();
 	YY_BREAK
 
 
 case 25:
-#line 163 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 161 "C:/work/ape++/src/lexers/LexerNSIS.L"
 case 26:
-#line 164 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 162 "C:/work/ape++/src/lexers/LexerNSIS.L"
 case 27:
-#line 165 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 163 "C:/work/ape++/src/lexers/LexerNSIS.L"
 case 28:
 YY_RULE_SETUP
-#line 165 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 163 "C:/work/ape++/src/lexers/LexerNSIS.L"
 SetStyle();
 	YY_BREAK
 
 case 29:
 YY_RULE_SETUP
-#line 168 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 166 "C:/work/ape++/src/lexers/LexerNSIS.L"
 ECHO;
 	YY_BREAK
-#line 821 "C:/work/ape++/src/lexers/LexerNSIS.cpp"
+#line 820 "C:/work/ape++/src/lexers/LexerNSIS.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(SLCOMMENT):
@@ -1536,9 +1535,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 168 "C:/work/ape++/src/lexers/LexerNSIS.L"
+#line 166 "C:/work/ape++/src/lexers/LexerNSIS.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

@@ -34,7 +34,6 @@ bool isMakeKeyword( const char* text )
 %}
 
 %%
- /*************************************************************************************/
 
 #						BEGIN(SLCOMMENT);	SetStyle();
 
@@ -63,7 +62,6 @@ $\(call\ my-dir\)		SetStyle(STYLE_VAR);
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

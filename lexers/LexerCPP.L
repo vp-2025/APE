@@ -22,8 +22,7 @@ SYMB	[<>(){}\[\]+\-*=&|~`\/\\,.:;!$?%]
 
 %{
 
-bool isCppKeyword( const char* text, int lang ) 
-{	
+bool isCppKeyword( const char* text, int lang ) {
 	switch( lang ) {
 		case 1: { static CKeywords kw("TXT_CPP_KW"); return kw.is(text); }
 		case 2: { static CKeywords kw("TXT_C_KW"); return kw.is(text); }
@@ -51,7 +50,6 @@ bool isCppKeyword( const char* text, int lang )
 %}
 
 %%
- /*************************************************************************************/
 
 <INITIAL>{	
 	\/\/					BEGIN(SLCOMMENT); SetStyle();
@@ -176,7 +174,6 @@ bool isCppKeyword( const char* text, int lang )
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

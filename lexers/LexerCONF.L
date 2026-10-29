@@ -42,7 +42,6 @@ bool isNginxKeyword2( const char* szKW );
 %}
 
 %%
- /*************************************************************************************/
 
 [{}]			SetStyle(STYLE_SYMBOL); if( *yytext=='{' ) levelIncrease(); else levelDecrease();
 
@@ -111,7 +110,6 @@ $[_a-zA-Z][_a-zA-Z0-9]*			SetStyle(STYLE_VAR);	// nginx VAR
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

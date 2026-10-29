@@ -325,8 +325,7 @@ static yyconst short int yy_chk[157] =
 
 #line 21 "C:/work/ape++/src/lexers/LexerBATCH.L"
 
-bool isBatchKeyword( const char* text ) 
-{
+bool isBatchKeyword( const char* text ) {
 	static CKeywordsIC kw("TXT_BATCH_KW");
 	return kw.is(text); 
 }
@@ -342,7 +341,7 @@ bool isBatchKeyword( const char* text )
 #define STYLE_SYMBOL		8
 #define STYLE_STRING_UNQ	9
 
-#line 346 "C:/work/ape++/src/lexers/LexerBATCH.cpp"
+#line 345 "C:/work/ape++/src/lexers/LexerBATCH.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -465,11 +464,10 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 41 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 40 "C:/work/ape++/src/lexers/LexerBATCH.L"
 
- /*************************************************************************************/
 
-#line 473 "C:/work/ape++/src/lexers/LexerBATCH.cpp"
+#line 471 "C:/work/ape++/src/lexers/LexerBATCH.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -575,70 +573,70 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 44 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 42 "C:/work/ape++/src/lexers/LexerBATCH.L"
 BEGIN(SLCOMMENT);	SetStyle();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 45 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 43 "C:/work/ape++/src/lexers/LexerBATCH.L"
 BEGIN(STRING);	SetStyle();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 46 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 44 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 47 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 45 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 48 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 46 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 50 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 48 "C:/work/ape++/src/lexers/LexerBATCH.L"
 BEGIN(INITIAL);	SetStyle();
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 52 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 50 "C:/work/ape++/src/lexers/LexerBATCH.L"
 BEGIN(INITIAL);	SetStyle();
 	YY_BREAK
 
 case 8:
 YY_RULE_SETUP
-#line 55 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 53 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 56 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 54 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 57 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 55 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_VAR);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 58 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 56 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_STRING_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 59 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 57 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 13:
 YY_RULE_SETUP
-#line 63 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 61 "C:/work/ape++/src/lexers/LexerBATCH.L"
 {
 		char* pText;
 		for( pText=yytext; strchr(" \t@",*pText)!=NULL ; pText++ );
@@ -653,35 +651,35 @@ YY_RULE_SETUP
 /* label */
 case 14:
 YY_RULE_SETUP
-#line 75 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 73 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_LABEL);
 	YY_BREAK
 /* operator */
 case 15:
 YY_RULE_SETUP
-#line 78 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 76 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 
 
 case 16:
-#line 83 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 81 "C:/work/ape++/src/lexers/LexerBATCH.L"
 case 17:
-#line 84 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 82 "C:/work/ape++/src/lexers/LexerBATCH.L"
 case 18:
-#line 85 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 83 "C:/work/ape++/src/lexers/LexerBATCH.L"
 case 19:
 YY_RULE_SETUP
-#line 85 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 83 "C:/work/ape++/src/lexers/LexerBATCH.L"
 SetStyle();
 	YY_BREAK
 
 case 20:
 YY_RULE_SETUP
-#line 88 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 86 "C:/work/ape++/src/lexers/LexerBATCH.L"
 ECHO;
 	YY_BREAK
-#line 685 "C:/work/ape++/src/lexers/LexerBATCH.cpp"
+#line 683 "C:/work/ape++/src/lexers/LexerBATCH.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SLCOMMENT):
 case YY_STATE_EOF(ECHO):
@@ -1396,9 +1394,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 88 "C:/work/ape++/src/lexers/LexerBATCH.L"
+#line 86 "C:/work/ape++/src/lexers/LexerBATCH.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

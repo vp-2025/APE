@@ -19,8 +19,7 @@ WORD	{SWC}{WWC}*
 
 %{
 
-bool isBatchKeyword( const char* text ) 
-{
+bool isBatchKeyword( const char* text ) {
 	static CKeywordsIC kw("TXT_BATCH_KW");
 	return kw.is(text); 
 }
@@ -39,7 +38,6 @@ bool isBatchKeyword( const char* text )
 %}
 
 %%
- /*************************************************************************************/
 
 ::						BEGIN(SLCOMMENT);	SetStyle();
 \"						BEGIN(STRING);	SetStyle();
@@ -86,7 +84,6 @@ bool isBatchKeyword( const char* text )
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

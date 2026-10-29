@@ -494,9 +494,8 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 41 "C:/work/ape++/src/lexers/LexerJS.L"
 
- /*************************************************************************************/
 
-#line 500 "C:/work/ape++/src/lexers/LexerJS.cpp"
+#line 499 "C:/work/ape++/src/lexers/LexerJS.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -602,186 +601,186 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 45 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 44 "C:/work/ape++/src/lexers/LexerJS.L"
 BEGIN(SLCOMMENT); SetStyle();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 46 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 45 "C:/work/ape++/src/lexers/LexerJS.L"
 BEGIN(COMMENT);   SetStyle(); levelIncrease();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 47 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 46 "C:/work/ape++/src/lexers/LexerJS.L"
 if( g_isJSRegExp ) { BEGIN(REGEXP); SetStyle(); } else SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 48 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 47 "C:/work/ape++/src/lexers/LexerJS.L"
 BEGIN(STRING);	  SetStyle();
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 49 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 48 "C:/work/ape++/src/lexers/LexerJS.L"
 BEGIN(CHAR);	  SetStyle();
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 51 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 50 "C:/work/ape++/src/lexers/LexerJS.L"
 if( isJSKeyword(yytext) ) SetStyle(STYLE_KW); else SetStyle();
 	YY_BREAK
 /* numbers */
 case 7:
-#line 55 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 54 "C:/work/ape++/src/lexers/LexerJS.L"
 case 8:
-#line 56 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 55 "C:/work/ape++/src/lexers/LexerJS.L"
 case 9:
-#line 57 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 56 "C:/work/ape++/src/lexers/LexerJS.L"
 case 10:
 YY_RULE_SETUP
-#line 57 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 56 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_NUMBER);
 	YY_BREAK
 /* folding */
 case 11:
 YY_RULE_SETUP
-#line 60 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 59 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_SYMBOL); if( *yytext=='{' ) levelIncrease(); else levelDecrease();
 	YY_BREAK
 /* folding */
 case 12:
 YY_RULE_SETUP
-#line 63 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 62 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_SYMBOL); if( *yytext=='(' ) levelIncrease(); else { levelDecrease(); g_isJSRegExp=false; }
 	YY_BREAK
 /* folding for IDL only ! */
 case 13:
 YY_RULE_SETUP
-#line 66 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 65 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_SYMBOL); if( *yytext=='[' ) levelIncrease(); else levelDecrease();
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 68 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 67 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 /* invalid chars - all second part of the ASCII table */
 case 15:
 YY_RULE_SETUP
-#line 71 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 70 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 16:
 YY_RULE_SETUP
-#line 75 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 74 "C:/work/ape++/src/lexers/LexerJS.L"
 BEGIN(INITIAL); SetStyle(); 
 	YY_BREAK
 
 
 case 17:
 YY_RULE_SETUP
-#line 78 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 77 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle();	BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 
 
 case 18:
 YY_RULE_SETUP
-#line 82 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 81 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 83 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 82 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 20:
 YY_RULE_SETUP
-#line 87 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 86 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 /*escaped symbols*/
 case 21:
-#line 93 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 92 "C:/work/ape++/src/lexers/LexerJS.L"
 case 22:
-#line 94 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 93 "C:/work/ape++/src/lexers/LexerJS.L"
 case 23:
-#line 95 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 94 "C:/work/ape++/src/lexers/LexerJS.L"
 case 24:
 YY_RULE_SETUP
-#line 95 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 94 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle();
 	YY_BREAK
 /*invalid escaped symbol*/
 case 25:
 YY_RULE_SETUP
-#line 98 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 97 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 /*invalid end-of-line*/
 case 26:
 YY_RULE_SETUP
-#line 101 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 100 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 27:
 YY_RULE_SETUP
-#line 105 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 104 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(); // "\\" escaped backslash
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 106 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 105 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle();
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 107 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 106 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle( MatchStart(), MatchEnd()-2, STYLE_REGEXP ); SetStyle( MatchEnd()-2, MatchEnd(), STYLE_REGEXP_BOLD ); BEGIN(INITIAL);
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 108 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 107 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle( MatchStart(), MatchEnd()-1, STYLE_REGEXP ); SetStyle( MatchEnd()-1, MatchEnd(), STYLE_REGEXP_BOLD ); BEGIN(INITIAL);
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 109 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 108 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 110 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 109 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 33:
-#line 115 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 114 "C:/work/ape++/src/lexers/LexerJS.L"
 case 34:
-#line 116 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 115 "C:/work/ape++/src/lexers/LexerJS.L"
 case 35:
-#line 117 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 116 "C:/work/ape++/src/lexers/LexerJS.L"
 case 36:
 YY_RULE_SETUP
-#line 117 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 116 "C:/work/ape++/src/lexers/LexerJS.L"
 SetStyle();
 	YY_BREAK
 
 case 37:
 YY_RULE_SETUP
-#line 120 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 119 "C:/work/ape++/src/lexers/LexerJS.L"
 ECHO;
 	YY_BREAK
-#line 785 "C:/work/ape++/src/lexers/LexerJS.cpp"
+#line 784 "C:/work/ape++/src/lexers/LexerJS.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(SLCOMMENT):
@@ -1496,9 +1495,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 120 "C:/work/ape++/src/lexers/LexerJS.L"
+#line 119 "C:/work/ape++/src/lexers/LexerJS.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

@@ -1175,11 +1175,10 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 69 "C:/work/ape++/src/lexers/LexerMD.L"
 
- /*************************************************************************************/
 
  /* YAML front matter: only valid as the very first line of the file.
     A "---" anywhere else is a horizontal rule. */
-#line 1183 "C:/work/ape++/src/lexers/LexerMD.cpp"
+#line 1182 "C:/work/ape++/src/lexers/LexerMD.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -1306,7 +1305,7 @@ do_action:  /* This label is used only to access EOF actions. */
 /* start of actions code                                                */
 case 1:
 YY_RULE_SETUP
-#line 74 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 73 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		if( MatchStart()==0 ) {
 			BEGIN(FRONT);
@@ -1318,16 +1317,16 @@ YY_RULE_SETUP
 /* horizontal rule: ***, ___, - - -, * * * */
 case 2:
 YY_RULE_SETUP
-#line 83 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 82 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_HR );
 	YY_BREAK
 /* ATX heading: # .. ###### (needs a space, so #tag stays text).
     The line end is not part of the match: the fold level is applied at it. */
 case 3:
-#line 88 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 87 "C:/work/ape++/src/lexers/LexerMD.L"
 case 4:
 YY_RULE_SETUP
-#line 88 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 87 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nLevel = 0;
 		while( yytext[nLevel]=='#' ) nLevel++;
@@ -1340,7 +1339,7 @@ YY_RULE_SETUP
     The heading is the previous line, it becomes the fold header. */
 case 5:
 YY_RULE_SETUP
-#line 98 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 97 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		SetStyle( STYLE_H1 );
 		if( m_foldLine > 0 ) {
@@ -1352,7 +1351,7 @@ YY_RULE_SETUP
 /* task list item: - [ ] / - [x] */
 case 6:
 YY_RULE_SETUP
-#line 107 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 106 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nChr = 0;
 		while( yytext[nChr]==' ' || yytext[nChr]=='\t' ) nChr++;
@@ -1366,28 +1365,28 @@ YY_RULE_SETUP
 	YY_BREAK
 /* list item marker: -, *, +, 1. , 1) */
 case 7:
-#line 120 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 119 "C:/work/ape++/src/lexers/LexerMD.L"
 case 8:
 YY_RULE_SETUP
-#line 120 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 119 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_LIST );
 	YY_BREAK
 /* blockquote marker */
 case 9:
 YY_RULE_SETUP
-#line 123 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 122 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_QUOTE );
 	YY_BREAK
 /* table delimiter row: |---|:--:|---| */
 case 10:
 YY_RULE_SETUP
-#line 126 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 125 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_TABLE );
 	YY_BREAK
 /* link reference definition: [label]: url */
 case 11:
 YY_RULE_SETUP
-#line 129 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 128 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nClose = 0;
 		while( yytext[nClose] && yytext[nClose]!=']' ) nClose++;
@@ -1400,7 +1399,7 @@ YY_RULE_SETUP
     end is matched separately (see CSciLexer::BeforeAction). */
 case 12:
 YY_RULE_SETUP
-#line 139 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 138 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		levelIncrease();
 		BEGIN(FENCE);
@@ -1409,7 +1408,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 145 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 144 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		levelDecrease();
 		BEGIN(FENCEEND);
@@ -1418,7 +1417,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 151 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 150 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		BEGIN(INITIAL);
 		SetStyle( STYLE_CODEBLOCK );
@@ -1426,10 +1425,10 @@ YY_RULE_SETUP
 	YY_BREAK
 /* end of front matter */
 case 15:
-#line 158 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 157 "C:/work/ape++/src/lexers/LexerMD.L"
 case 16:
 YY_RULE_SETUP
-#line 158 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 157 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		BEGIN(INITIAL);
 		SetStyle( STYLE_FRONT );
@@ -1438,35 +1437,35 @@ YY_RULE_SETUP
 /* html comment */
 case 17:
 YY_RULE_SETUP
-#line 164 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 163 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_HTML );
 	YY_BREAK
 /* autolink: <scheme:...> */
 case 18:
 YY_RULE_SETUP
-#line 167 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 166 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 /* html tag */
 case 19:
-#line 171 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 170 "C:/work/ape++/src/lexers/LexerMD.L"
 case 20:
 YY_RULE_SETUP
-#line 171 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 170 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_HTML );
 	YY_BREAK
 /* footnote reference: [^1] */
 case 21:
 YY_RULE_SETUP
-#line 174 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 173 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_REF );
 	YY_BREAK
 /* links & images: [text](url), [text][ref] */
 case 22:
-#line 178 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 177 "C:/work/ape++/src/lexers/LexerMD.L"
 case 23:
 YY_RULE_SETUP
-#line 178 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 177 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nStart = (yytext[0]=='!') ? 1 : 0;
 		int nClose = nStart;
@@ -1487,23 +1486,23 @@ YY_RULE_SETUP
 /* bare url */
 case 24:
 YY_RULE_SETUP
-#line 196 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 195 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 197 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 196 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 198 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 197 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_URL );
 	YY_BREAK
 /* inline code */
 case 27:
 YY_RULE_SETUP
-#line 201 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 200 "C:/work/ape++/src/lexers/LexerMD.L"
 {
 		int nPre = 0;
 		while( nPre<yyleng && yytext[nPre]=='`' ) nPre++;
@@ -1515,80 +1514,80 @@ YY_RULE_SETUP
 /* emphasis */
 case 28:
 YY_RULE_SETUP
-#line 210 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 209 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 3, 3, STYLE_BOLDITALIC );
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 211 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 210 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 2, 2, STYLE_BOLD );
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 212 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 211 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 1, 1, STYLE_ITALIC );
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 213 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 212 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 3, 3, STYLE_BOLDITALIC );
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 214 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 213 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 2, 2, STYLE_BOLD );
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 215 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 214 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 1, 1, STYLE_ITALIC );
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 216 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 215 "C:/work/ape++/src/lexers/LexerMD.L"
 STYLE_SPAN( 2, 2, STYLE_STRIKE );
 	YY_BREAK
 /* escaped char */
 case 35:
 YY_RULE_SETUP
-#line 219 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 218 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_ESCAPE );
 	YY_BREAK
 /* html entity */
 case 36:
-#line 223 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 222 "C:/work/ape++/src/lexers/LexerMD.L"
 case 37:
-#line 224 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 223 "C:/work/ape++/src/lexers/LexerMD.L"
 case 38:
 YY_RULE_SETUP
-#line 224 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 223 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_ESCAPE );
 	YY_BREAK
 /* table cell separator */
 case 39:
 YY_RULE_SETUP
-#line 227 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 226 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle( STYLE_TABLE );
 	YY_BREAK
 
 case 40:
-#line 231 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 230 "C:/work/ape++/src/lexers/LexerMD.L"
 case 41:
-#line 232 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 231 "C:/work/ape++/src/lexers/LexerMD.L"
 case 42:
-#line 233 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 232 "C:/work/ape++/src/lexers/LexerMD.L"
 case 43:
 YY_RULE_SETUP
-#line 233 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 232 "C:/work/ape++/src/lexers/LexerMD.L"
 SetStyle();
 	YY_BREAK
 
 case 44:
 YY_RULE_SETUP
-#line 236 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 235 "C:/work/ape++/src/lexers/LexerMD.L"
 ECHO;
 	YY_BREAK
-#line 1592 "C:/work/ape++/src/lexers/LexerMD.cpp"
+#line 1591 "C:/work/ape++/src/lexers/LexerMD.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(FENCE):
 			case YY_STATE_EOF(FRONT):
@@ -2297,9 +2296,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 236 "C:/work/ape++/src/lexers/LexerMD.L"
+#line 235 "C:/work/ape++/src/lexers/LexerMD.L"
 
- /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

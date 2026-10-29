@@ -51,7 +51,6 @@ bool isPascalKeyword( const char* text, bool& bInc, bool& bDec )
 %}
 
 %%
- /*************************************************************************************/
 
 <INITIAL>{
 	\/\/				BEGIN(SLCOMMENT); SetStyle();
@@ -166,7 +165,6 @@ bool isPascalKeyword( const char* text, bool& bInc, bool& bDec )
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

@@ -54,14 +54,15 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 #define STYLE_CODE			11
 #define STYLE_KEYWORD		12
 #define STYLE_SECTION		13
+#define STYLE_CODESYM		14		/* operators and punctuation of the C code */
 
 /* the three sections of a .L file and the first style id of their block.
    Style id 0 is left alone ("Text", no background): Scintilla uses style 0 for
    the hard coded "last style" of a line, so an empty line would otherwise be
    painted with a section background. */
-#define SECTION_DEF			1		/* definitions - ids  1..14, slightly red  */
-#define SECTION_RULES		41		/* rules       - ids 41..54, slightly green */
-#define SECTION_CODE		61		/* user code   - ids 61..74, slightly blue  */
+#define SECTION_DEF			1		/* definitions - ids  1..15, slightly red  */
+#define SECTION_RULES		41		/* rules       - ids 41..55, slightly green */
+#define SECTION_CODE		61		/* user code   - ids 61..75, slightly blue  */
 
 /* section a start condition belongs to */
 #define SECTION_OF( st ) \
@@ -87,7 +88,6 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 %}
 
 %%
- /*************************************************************************************/
 
 %{
 	int extra = yy_start >> 8;
@@ -96,7 +96,7 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 	int prevState = (extra >> 8) & 0xFF;	// state to resume after a comment
 
 	static const char* pszCKeywords =
-		"auto break case char const continue default do double else enum extern float "
+		"auto break bool case char const continue default do double else enum extern float "
 		"for goto if inline int long register restrict return short signed sizeof static "
 		"struct switch typedef union unsigned void volatile while _Bool _Complex _Imaginary";
 	CKeywords kwC( pszCKeywords, true );
@@ -148,6 +148,14 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 	 /* indentation is not part of a pattern */
 	^{WS}+					SetStyle( RULSEC(STYLE_TEXT) );
 
+	 /* <SC>{name} and <SC>{n,m} - a start condition before a reference or a repeat
+	    count, not a scope: the braces are given back to the rules below */
+	"<"{SC_LIST}">""{"({NAME}|{DC}+(","{DC}*)?)"}"	{
+		int n = (int)(strchr( yytext, '>' ) - yytext) + 1;
+		SetStyle( MatchStart(), MatchStart()+n, RULSEC(STYLE_STATECOND) );
+		yyless( n );
+	}
+
 	 /* <SC>{ ... } scope */
 	"<"{SC_LIST}">""{"		{
 		SetStyle( MatchStart(), MatchEnd()-1, RULSEC(STYLE_STATECOND) );
@@ -166,11 +174,17 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 
 	 /* the pattern ends at the first whitespace, the action follows it */
 	{WS}+"{"				{
-		SetStyle( MatchStart(), MatchEnd()-1, RULSEC(STYLE_TEXT) );
-		SetStyle( MatchEnd()-1, MatchEnd(), RULSEC(STYLE_CODE) );
-		braceDepth = 1;
-		BEGIN( ACTION );
-		levelIncrease();
+		// an indented line is a pattern inside a start condition scope: a leading {name} reference, not an action
+		if( yytext == this->yy_current_buffer->yy_ch_buf || yytext[-1] == '\n' ) {
+			yyless( yyleng-1 );
+			SetStyle( RULSEC(STYLE_TEXT) );
+		} else {
+			SetStyle( MatchStart(), MatchEnd()-1, RULSEC(STYLE_TEXT) );
+			SetStyle( MatchEnd()-1, MatchEnd(), RULSEC(STYLE_CODESYM) );
+			braceDepth = 1;
+			BEGIN( ACTION );
+			levelIncrease();
+		}
 	}
 	{WS}+					BEGIN( ACTION ); braceDepth = 0; SetStyle( RULSEC(STYLE_TEXT) );
 
@@ -215,7 +229,7 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 			braceDepth++;
 			levelIncrease();
 		}
-		SetStyle( RULSEC(STYLE_CODE) );
+		SetStyle( RULSEC(STYLE_CODESYM) );
 	}
 	"}"		{
 		if( braceDepth > 0 ) {
@@ -223,8 +237,14 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 			if( --braceDepth == 0 )
 				BEGIN( RULES );
 		}
-		SetStyle( RULSEC(STYLE_CODE) );
+		SetStyle( RULSEC(STYLE_CODESYM) );
 	}
+}
+
+ /* user code - its { } blocks fold */
+<CODE>{
+	"{"						SetStyle( CODSEC(STYLE_CODESYM) ); levelIncrease();
+	"}"						SetStyle( CODSEC(STYLE_CODESYM) ); levelDecrease();
 }
 
 <PROLOGD,PROLOGR,ACTION,CODE>{
@@ -235,6 +255,7 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 	^{WS}*"#"[^\r\n]*		SetStyle( ANYSEC(YY_START,STYLE_DIRECTIVE) );
 	{NUM}					SetStyle( ANYSEC(YY_START,STYLE_NUMBER) );
 	{NAME}					SetStyle( ANYSEC(YY_START, kwC.is(yytext) ? STYLE_KEYWORD : STYLE_CODE) );
+	[-+*/%&|^~!=<>?:;,.(){}\[\]]	SetStyle( ANYSEC(YY_START,STYLE_CODESYM) );
 }
 
  /*************************************************************************************/
@@ -259,7 +280,6 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 }
 
 %%
- /*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	int nStyle = STYLE_TEXT;

@@ -155,6 +155,7 @@ CLexerStyle styleFlex[] = {
 	STYLE_CHILD( STYLE_FLEX_DEF,				12, "Code" ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		13, "Keyword", clrKeyword ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_DEF,		14, "Section", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_DEF,			15, "Code Symbol", clrSymbol ),
 
 	 /* %% rules %% - slightly green */
 	STYLE_PARENT( STYLE_FLEX_RULES, "Rules", 0xE5FFE5 ),
@@ -171,6 +172,7 @@ CLexerStyle styleFlex[] = {
 	STYLE_CHILD( STYLE_FLEX_RULES,			52, "Code" ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_RULES,		53, "Keyword", clrKeyword ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_RULES,		54, "Section", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_RULES,			55, "Code Symbol", clrSymbol ),
 
 	 /* %% user code %% - slightly blue */
 	STYLE_PARENT( STYLE_FLEX_CODE, "User Code", 0xE5E5FF ),
@@ -187,6 +189,7 @@ CLexerStyle styleFlex[] = {
 	STYLE_CHILD( STYLE_FLEX_CODE,			72, "Code" ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_CODE,		73, "Keyword", clrKeyword ),
 	STYLE_CHILD_BOLD( STYLE_FLEX_CODE,		74, "Section", clrSymbol ),
+	STYLE_CHILD2( STYLE_FLEX_CODE,			75, "Code Symbol", clrSymbol ),
 
 	{0}
 };

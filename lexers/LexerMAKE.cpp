@@ -465,9 +465,8 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 36 "C:/work/ape++/src/lexers/LexerMAKE.L"
 
- /*************************************************************************************/
 
-#line 471 "C:/work/ape++/src/lexers/LexerMAKE.cpp"
+#line 470 "C:/work/ape++/src/lexers/LexerMAKE.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -573,73 +572,73 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 39 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 38 "C:/work/ape++/src/lexers/LexerMAKE.L"
 BEGIN(SLCOMMENT);	SetStyle();
 	YY_BREAK
 case 2:
-#line 42 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 41 "C:/work/ape++/src/lexers/LexerMAKE.L"
 case 3:
 YY_RULE_SETUP
-#line 42 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 41 "C:/work/ape++/src/lexers/LexerMAKE.L"
 SetStyle(STYLE_VAR);		
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 44 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 43 "C:/work/ape++/src/lexers/LexerMAKE.L"
 BEGIN(INITIAL);	SetStyle();
 	YY_BREAK
 
 case 5:
 YY_RULE_SETUP
-#line 47 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 46 "C:/work/ape++/src/lexers/LexerMAKE.L"
 levelIncrease(); SetStyle(STYLE_KW);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 48 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 47 "C:/work/ape++/src/lexers/LexerMAKE.L"
 levelIncrease(); SetStyle(STYLE_KW);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 49 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 48 "C:/work/ape++/src/lexers/LexerMAKE.L"
 levelDecrease(); levelIncrease(); SetStyle(STYLE_KW); 
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 50 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 49 "C:/work/ape++/src/lexers/LexerMAKE.L"
 levelDecrease(); SetStyle(STYLE_KW);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 52 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 51 "C:/work/ape++/src/lexers/LexerMAKE.L"
 SetStyle( isMakeKeyword(yytext) ? STYLE_KW : STYLE_TEXT );
 	YY_BREAK
 /* operator */
 case 10:
 YY_RULE_SETUP
-#line 55 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 54 "C:/work/ape++/src/lexers/LexerMAKE.L"
 SetStyle(STYLE_SYMBOL);
 	YY_BREAK
 
 
 case 11:
-#line 60 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 59 "C:/work/ape++/src/lexers/LexerMAKE.L"
 case 12:
-#line 61 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 60 "C:/work/ape++/src/lexers/LexerMAKE.L"
 case 13:
-#line 62 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 61 "C:/work/ape++/src/lexers/LexerMAKE.L"
 case 14:
 YY_RULE_SETUP
-#line 62 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 61 "C:/work/ape++/src/lexers/LexerMAKE.L"
 SetStyle();
 	YY_BREAK
 
 case 15:
 YY_RULE_SETUP
-#line 65 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 64 "C:/work/ape++/src/lexers/LexerMAKE.L"
 ECHO;
 	YY_BREAK
-#line 643 "C:/work/ape++/src/lexers/LexerMAKE.cpp"
+#line 642 "C:/work/ape++/src/lexers/LexerMAKE.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SLCOMMENT):
 	yyterminate();
@@ -1352,9 +1351,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 65 "C:/work/ape++/src/lexers/LexerMAKE.L"
+#line 64 "C:/work/ape++/src/lexers/LexerMAKE.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

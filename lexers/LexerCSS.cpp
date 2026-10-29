@@ -459,9 +459,8 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 28 "C:/work/ape++/src/lexers/LexerCSS.L"
 
- /*************************************************************************************/
 
-#line 465 "C:/work/ape++/src/lexers/LexerCSS.cpp"
+#line 464 "C:/work/ape++/src/lexers/LexerCSS.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -566,152 +565,152 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 31 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 30 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(ATTR); levelIncrease();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 32 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 31 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 33 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 32 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(VALUE);
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 34 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 33 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_SYMBOL); BEGIN(ATTR);
 	YY_BREAK
 
 case 5:
 YY_RULE_SETUP
-#line 37 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 36 "C:/work/ape++/src/lexers/LexerCSS.L"
 if(isCssKeyword(yytext)) SetStyle(STYLE_CSS_ATTR_KW); else SetStyle();
 	YY_BREAK
 
 
 case 6:
 YY_RULE_SETUP
-#line 40 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 39 "C:/work/ape++/src/lexers/LexerCSS.L"
 if(isCssValue(yytext)) SetStyle(STYLE_CSS_VAL_KW); else SetStyle();
 	YY_BREAK
 
 
 case 7:
-#line 44 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 43 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 8:
-#line 45 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 44 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 9:
-#line 46 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 45 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 10:
-#line 47 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 46 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 11:
-#line 48 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 47 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 12:
-#line 49 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 48 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 13:
-#line 50 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 49 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 14:
 YY_RULE_SETUP
-#line 50 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 49 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_NUMBER);
 	YY_BREAK
 
 case 15:
 YY_RULE_SETUP
-#line 53 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 52 "C:/work/ape++/src/lexers/LexerCSS.L"
 BEGIN(COMMENT);   SetStyle(); levelIncrease();
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 54 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 53 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle();	BEGIN(INITIAL); levelDecrease();
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 56 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 55 "C:/work/ape++/src/lexers/LexerCSS.L"
 BEGIN(SL_COMMENT); SetStyle();
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 57 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 56 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle();	BEGIN(INITIAL);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 59 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 58 "C:/work/ape++/src/lexers/LexerCSS.L"
 BEGIN(COMMENTA);   SetStyle(); levelIncrease();
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 60 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 59 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle();	BEGIN(ATTR); levelDecrease();
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 62 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 61 "C:/work/ape++/src/lexers/LexerCSS.L"
 BEGIN(SL_COMMENTA); SetStyle();
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 63 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 62 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle();	BEGIN(ATTR);
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 65 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 64 "C:/work/ape++/src/lexers/LexerCSS.L"
 BEGIN(STRING);	  SetStyle();
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 66 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 65 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(); BEGIN(VALUE);
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 68 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 67 "C:/work/ape++/src/lexers/LexerCSS.L"
 BEGIN(CHAR);	  SetStyle();
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 69 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 68 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(); BEGIN(VALUE);
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 71 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 70 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 case 28:
 YY_RULE_SETUP
-#line 74 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 73 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(STYLE_CSS_SELECTOR);
 	YY_BREAK
 /* invalid chars - all second part of the ASCII table */
 case 29:
 YY_RULE_SETUP
-#line 77 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 76 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle(IStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 30:
-#line 82 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 81 "C:/work/ape++/src/lexers/LexerCSS.L"
 case 31:
 YY_RULE_SETUP
-#line 82 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 81 "C:/work/ape++/src/lexers/LexerCSS.L"
 SetStyle();
 	YY_BREAK
 
 case 32:
 YY_RULE_SETUP
-#line 85 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 84 "C:/work/ape++/src/lexers/LexerCSS.L"
 ECHO;
 	YY_BREAK
-#line 715 "C:/work/ape++/src/lexers/LexerCSS.cpp"
+#line 714 "C:/work/ape++/src/lexers/LexerCSS.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SELECTOR):
 case YY_STATE_EOF(ATTR):
@@ -1430,9 +1429,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 85 "C:/work/ape++/src/lexers/LexerCSS.L"
+#line 84 "C:/work/ape++/src/lexers/LexerCSS.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

@@ -1120,7 +1120,6 @@ YY_DECL
 /* start of user's declarations                                         */
 #line 70 "C:/work/ape++/src/lexers/LexerYAML.L"
 
- /*************************************************************************************/
 
 
 	int extra = yy_start >> 8;
@@ -1209,7 +1208,7 @@ YY_DECL
 
 
  /* document start / end, directives */
-#line 1213 "C:/work/ape++/src/lexers/LexerYAML.cpp"
+#line 1212 "C:/work/ape++/src/lexers/LexerYAML.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -1318,17 +1317,17 @@ case 1:
 yy_c_buf_p = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 160 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 159 "C:/work/ape++/src/lexers/LexerYAML.L"
 setDocMarker();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 161 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 160 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_DIRECTIVE );
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 163 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 162 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_COMMENT );
 	YY_BREAK
 /* keys */
@@ -1337,7 +1336,7 @@ case 4:
 yy_c_buf_p = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 166 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 165 "C:/work/ape++/src/lexers/LexerYAML.L"
 setKey();
 	YY_BREAK
 case 5:
@@ -1345,68 +1344,68 @@ case 5:
 yy_c_buf_p = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 167 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 166 "C:/work/ape++/src/lexers/LexerYAML.L"
 setKey();
 	YY_BREAK
 case 6:
-#line 169 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 168 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 7:
 YY_RULE_SETUP
-#line 169 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 168 "C:/work/ape++/src/lexers/LexerYAML.L"
 setKey();
 	YY_BREAK
 
 /* scalars */
 case 8:
 YY_RULE_SETUP
-#line 173 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 172 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_STRING );
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 174 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 173 "C:/work/ape++/src/lexers/LexerYAML.L"
 BEGIN(DQ); SetStyle( STYLE_STRING );
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 175 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 174 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_CHAR );
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 176 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 175 "C:/work/ape++/src/lexers/LexerYAML.L"
 BEGIN(SQ); SetStyle( STYLE_CHAR );
 	YY_BREAK
 case 12:
-#line 179 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 178 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 13:
-#line 180 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 179 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 14:
 YY_RULE_SETUP
-#line 180 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 179 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_NUMBER );
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 181 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 180 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_KEYWORD );
 	YY_BREAK
 case 16:
-#line 184 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 183 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 17:
 YY_RULE_SETUP
-#line 184 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 183 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_TAG );
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 185 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 184 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_ANCHOR );
 	YY_BREAK
 /* flow collections */
 case 19:
 YY_RULE_SETUP
-#line 188 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 187 "C:/work/ape++/src/lexers/LexerYAML.L"
 {
 		flowDepth++;
 		BEGIN(FLOW);
@@ -1415,7 +1414,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 193 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 192 "C:/work/ape++/src/lexers/LexerYAML.L"
 {
 		if( flowDepth > 0 ) flowDepth--;
 		BEGIN(FLOW_OR_INITIAL);
@@ -1426,7 +1425,7 @@ YY_RULE_SETUP
 
 case 21:
 YY_RULE_SETUP
-#line 201 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 200 "C:/work/ape++/src/lexers/LexerYAML.L"
 {
 		// "--- |", "--- text": the longer plain scalar wins over the ^--- rule
 		if( MatchStart() == lineStart && isDocMarker() ) {
@@ -1441,7 +1440,7 @@ case 22:
 yy_c_buf_p = yy_cp = yy_bp + 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 209 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 208 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_SYMBOL );
 	YY_BREAK
 /* block scalar header: | |- |+ |2 > >- ... */
@@ -1450,7 +1449,7 @@ case 23:
 yy_c_buf_p = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 212 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 211 "C:/work/ape++/src/lexers/LexerYAML.L"
 {
 		if( docLine )
 			blockIndent = -1;
@@ -1464,7 +1463,7 @@ YY_RULE_SETUP
 
 case 24:
 YY_RULE_SETUP
-#line 223 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 222 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_TEXT );
 	YY_BREAK
 case 25:
@@ -1472,56 +1471,56 @@ case 25:
 yy_c_buf_p = yy_cp = yy_bp + 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 224 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 223 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_SYMBOL );
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 225 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 224 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_SYMBOL );
 	YY_BREAK
 
 
 case 27:
 YY_RULE_SETUP
-#line 229 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 228 "C:/work/ape++/src/lexers/LexerYAML.L"
 BEGIN(FLOW_OR_INITIAL); SetStyle( STYLE_STRING );
 	YY_BREAK
 case 28:
-#line 231 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 230 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 29:
 YY_RULE_SETUP
-#line 231 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 230 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_STRING );
 	YY_BREAK
 
 
 case 30:
 YY_RULE_SETUP
-#line 235 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 234 "C:/work/ape++/src/lexers/LexerYAML.L"
 BEGIN(FLOW_OR_INITIAL); SetStyle( STYLE_CHAR );
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 236 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 235 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_CHAR );
 	YY_BREAK
 
 case 32:
 YY_RULE_SETUP
-#line 239 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 238 "C:/work/ape++/src/lexers/LexerYAML.L"
 BEGIN(BLOCK); SetStyle( STYLE_TEXT );
 	YY_BREAK
 /* block scalar body: lasts while the lines are indented deeper than the parent node */
 
 case 33:
 YY_RULE_SETUP
-#line 243 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 242 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( STYLE_BLOCK );
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 244 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 243 "C:/work/ape++/src/lexers/LexerYAML.L"
 {
 		int ind = 0;
 		while( yytext[ind] == ' ' )
@@ -1543,21 +1542,21 @@ YY_RULE_SETUP
 
 
 case 35:
-#line 265 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 264 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 36:
-#line 266 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 265 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 37:
 YY_RULE_SETUP
-#line 266 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 265 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle();
 	YY_BREAK
 
 case 38:
 YY_RULE_SETUP
-#line 269 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 268 "C:/work/ape++/src/lexers/LexerYAML.L"
 ECHO;
 	YY_BREAK
-#line 1561 "C:/work/ape++/src/lexers/LexerYAML.cpp"
+#line 1560 "C:/work/ape++/src/lexers/LexerYAML.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(FLOW):
 case YY_STATE_EOF(DQ):
@@ -2274,9 +2273,8 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 269 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 268 "C:/work/ape++/src/lexers/LexerYAML.L"
 
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {

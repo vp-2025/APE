@@ -32,8 +32,7 @@ SYMB	[@<>(){}\[\]+\-*=&|~`\/\\,.:;!$?%^]
 
 %{
 
-bool isSQLKeyword( const char* text, bool& bInc, bool& bDec, bool bPLSQL ) 
-{
+bool isSQLKeyword( const char* text, bool& bInc, bool& bDec, bool bPLSQL ) {
 	static CKeywordsIC kwSQL("TXT_SQL_KW");
 	if( kwSQL.is(text) )
 		return true;		
@@ -45,16 +44,14 @@ bool isSQLKeyword( const char* text, bool& bInc, bool& bDec, bool bPLSQL )
 	return kwPLSQL.is(text);	
 }
 
-void proceedFolding( const char* text, bool& bInc, bool& bDec ) 
-{
+void proceedFolding( const char* text, bool& bInc, bool& bDec ) {
 	if( strnicmp(text,"-- start section",16)==0 )
 		bInc = true;
 	if( strnicmp(text,"-- end section",14)==0 )
 		bDec = true;
 }
 
-bool isBeginPLSQL( const char* text )
-{
+bool isBeginPLSQL( const char* text ) {
 	return strcmpi(text,"begin")==0 || strcmpi(text,"declare")==0;
 }
 
@@ -81,7 +78,6 @@ bool isBeginPLSQL( const char* text )
 %}
 
 %%
- /*************************************************************************************/
 
 <INITIAL>{
 	\/\*				BEGIN(COMMENT); SetStyle(); levelIncrease();
@@ -207,7 +203,6 @@ bool isBeginPLSQL( const char* text )
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
