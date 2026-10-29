@@ -82,6 +82,22 @@ CLexerStyle styleCPP[] = {
 	{0}
 };
 
+/* style ids must match LexerJSON.L */
+CLexerStyle styleJSON[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE2_BOLD( 13, "Key", RGB(0x80,0x00,0x80) ),
+	STYLE2( 4, "String", clrString ),
+	STYLE2( 5, "String Single Quoted", clrChar ),
+	STYLE2_BOLD( 14, "Escape Char", RGB(0xD0,0x50,0x00) ),
+	STYLE2( 6, "Number", clrNumber ),
+	STYLE_BOLD( 1, "Keyword", clrKeyword ),
+	STYLE2( 3, "Symbol", clrSymbol ),
+	STYLE_ITALIC( 2, "Comment", clrComment ),
+	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
+	{0}
+};
+
 /* style ids must match LexerGo.L */
 CLexerStyle styleGo[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
@@ -533,6 +549,7 @@ CLexerStyles g_styles[] = {
 	{"Global", "global", styleGlobal},
 	{"C/C++", "cpp", styleCPP},
 	{"Go", "go", styleGo},
+	{"JSON", "json", styleJSON},
 	{"HTML", "html", styleHTML},
 	{"XML", "xml", styleXML},
 	{"CSS", "css", styleCSS},
@@ -570,6 +587,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 
 		case LEX_JS: return styleCPP;
 		case LEX_GO: return styleGo;
+		case LEX_JSON: return styleJSON;
 
 		case LEX_XHTML: return styleHTML;
 		case LEX_XML: return styleXML;

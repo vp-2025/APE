@@ -34,7 +34,8 @@ enum {
 	LEX_FLEX,
 	LEX_CADDY,
 	LEX_GO,
-	LEX_TEXT
+	LEX_TEXT,
+	LEX_JSON
 };
 
 struct CLexerInfo {

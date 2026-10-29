@@ -125,6 +125,12 @@ typedef  CSciLexer<go_FlexLexer>	CLexerGo;
 #include "FlexLexer.h"
 typedef  CSciLexer<text_FlexLexer>	CLexerText;
 
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
+#define  yyFlexLexer	json_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<json_FlexLexer>	CLexerJSON;
+
 CLexerInfo g_lexers[]={
 	{LEX_NONE,"None"},
 	{LEX_SEPARATOR},
@@ -134,7 +140,8 @@ CLexerInfo g_lexers[]={
 	{LEX_IDL,"IDL", {"*.idl",0} },
 	{LEX_RC,"Resource", {"*.rc",0} },
 	{LEX_JAVA,"Java", {"*.java",0} },
-	{LEX_JS,"JavaScript", {"*.js","*.json",0} },
+	{LEX_JS,"JavaScript", {"*.js",0} },
+	{LEX_JSON,"JSON", {"*.json",0} },
 	{LEX_PROTO,"ProtoBuf", {"*.proto",0} },
 	{LEX_GO,"Go", {"*.go","go.mod","go.work",0} },
 	{LEX_SEPARATOR},
@@ -265,6 +272,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 		case LEX_JAVA:	{ CLexerCPP lexer( &styler, 6 ); lexer.Style( posTo ); } break;
 		case LEX_PROTO:	{ CLexerCPP lexer( &styler, 7 ); lexer.Style( posTo ); } break;
 		case LEX_JS:	{ CLexerJS lexer( &styler ); lexer.Style( posTo ); } break;
+		case LEX_JSON:	{ CLexerJSON lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_GO:	{ CLexerGo lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 
 		case LEX_XHTML:	{ CLexerXHTML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
