@@ -55,7 +55,6 @@ WORD	{SWC}{WWC}*
 %}
 
 %%
- /*************************************************************************************/
 
 %{
 	static CKeywords kwJSON( "true false null NaN Infinity", true );
@@ -122,12 +121,12 @@ WORD	{SWC}{WWC}*
 
 <STRING>{
 	\"						SetStyle(); BEGIN( INITIAL );
-	[^"\\\r\n]+			SetStyle();
+	[^"\\\r\n]+				SetStyle();
 }
 
 <SQSTRING>{
 	'						SetStyle(); BEGIN( INITIAL );
-	[^'\\\r\n]+			SetStyle();
+	[^'\\\r\n]+				SetStyle();
 }
 
 <STRING,SQSTRING>{
@@ -152,7 +151,6 @@ WORD	{SWC}{WWC}*
 }
 
 %%
-/*************************************************************************************/
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
