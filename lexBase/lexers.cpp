@@ -119,6 +119,12 @@ typedef  CSciLexer<caddy_FlexLexer>	CLexerCaddy;
 #include "FlexLexer.h"
 typedef  CSciLexer<go_FlexLexer>	CLexerGo;
 
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
+#define  yyFlexLexer	text_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<text_FlexLexer>	CLexerText;
+
 CLexerInfo g_lexers[]={
 	{LEX_NONE,"None"},
 	{LEX_SEPARATOR},
@@ -151,7 +157,8 @@ CLexerInfo g_lexers[]={
 	{LEX_MSBUILD,"MSBuild", {"*.targets","*.props",0} },
 	{LEX_FLEX,"Flex", {"*.l","*.lex",0} },
 	{LEX_SEPARATOR},
-	{LEX_TXT,"Text", {"*.txt",".htaccess",".hgignore",".gitignore","readme","*.srt",0} },
+	{LEX_TEXT,"Text Document", {"*.txt",0} },
+	{LEX_TXT,"Text", {".htaccess",".hgignore",".gitignore","readme","*.srt",0} },
 	{LEX_TXT_NOQUOTE,"Text no quote", {NULL,0} },
 	{0}
 };
@@ -287,6 +294,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 
 		case LEX_TXT: { CMyLexerText lexer(sci); lexer.StyleTo( posTo ); } break;
 		case LEX_TXT_NOQUOTE:	{ CMyLexerText lexer(sci); lexer.setQuote(false); lexer.StyleTo( posTo ); } break;
+		case LEX_TEXT:	{ CLexerText lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 
 		case LEX_BATCH: { CLexerBatch lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_SQL:	{ CLexerSQL lexer( &styler, 0 ); lexer.Style( posTo ); } break;

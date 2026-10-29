@@ -256,8 +256,7 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 
 %%
 
-template<>
-int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
+template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 	switch(nState) {
 		case SECTION:	return STYLE_SECTION;
 		case VALUE:		return STYLE_VALUE;

@@ -33,7 +33,8 @@ enum {
 	LEX_YAML,
 	LEX_FLEX,
 	LEX_CADDY,
-	LEX_GO
+	LEX_GO,
+	LEX_TEXT
 };
 
 struct CLexerInfo {

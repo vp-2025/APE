@@ -427,6 +427,24 @@ CLexerStyle styleCaddy[] = {
 	{0}
 };
 
+/* style ids must match LexerTEXT.L */
+CLexerStyle styleText[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE2( 1, "Symbol", clrSymbol ),
+	STYLE2( 2, "Number", clrNumber ),
+	STYLE2( 3, "String", clrString ),
+	STYLE_EOL( 5, "Unquoted Values", -1, clrUnquoted ),
+	STYLE_LINK( 6, "Link", clrBlue ),
+	STYLE_ITALIC( 7, "Comment", clrComment ),
+	STYLE2_BOLD( 8, "Heading", RGB(0x80,0x00,0x80) ),
+	STYLE2_BOLD( 9, "List Marker", RGB(0xC0,0x60,0x00) ),
+	STYLE2( 10, "Date", RGB(0x00,0x80,0x80) ),
+	STYLE2( 11, "Time", RGB(0x00,0x60,0xA0) ),
+	{ 12, "E-mail", STL_UNDERLINE, RGB(0x00,0x60,0xC0), -1 },
+	{0}
+};
+
 CLexerStyle styleTxt[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 	STYLE( 0, "Text" ),
@@ -526,6 +544,7 @@ CLexerStyles g_styles[] = {
 	{"YAML", "yaml", styleYAML},
 	{"Caddyfile", "caddy", styleCaddy},
 	{"Text","txt", styleTxt},
+	{"Text Document", "text", styleText},
 	{"NSIS", "nsis", styleNSIS},
 	{"Make", "mak", styleMAKE},
 	{ "Gradle", "gradle", styleGradle },
@@ -564,6 +583,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_CADDY: return styleCaddy;
 		case LEX_TXT_NOQUOTE: 
 		case LEX_TXT: return styleTxt;
+		case LEX_TEXT: return styleText;
 		case LEX_SQL: return styleSQL;
 		case LEX_BATCH: return styleBatch;
 		case LEX_NSIS: return styleNSIS;
