@@ -23,6 +23,7 @@
 SWC			[A-Za-z_]
 WWC			[A-Za-z_0-9]
 DC			[0-9]
+HC			[0-9A-Fa-f]
 EOL			(\r?\n)
 WS			[ \t]
 WORD		{SWC}{WWC}*
@@ -55,14 +56,15 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 #define STYLE_KEYWORD		12
 #define STYLE_SECTION		13
 #define STYLE_CODESYM		14		/* operators and punctuation of the C code */
+#define STYLE_FLEXVAR		15		/* flex variables, macros and functions: yytext BEGIN ... */
 
 /* the three sections of a .L file and the first style id of their block.
    Style id 0 is left alone ("Text", no background): Scintilla uses style 0 for
    the hard coded "last style" of a line, so an empty line would otherwise be
    painted with a section background. */
-#define SECTION_DEF			1		/* definitions - ids  1..15, slightly red  */
-#define SECTION_RULES		41		/* rules       - ids 41..55, slightly green */
-#define SECTION_CODE		61		/* user code   - ids 61..75, slightly blue  */
+#define SECTION_DEF			1		/* definitions - ids  1..16, slightly red  */
+#define SECTION_RULES		41		/* rules       - ids 41..56, slightly green */
+#define SECTION_CODE		61		/* user code   - ids 61..76, slightly blue  */
 
 /* section a start condition belongs to */
 #define SECTION_OF( st ) \
@@ -100,6 +102,22 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 		"for goto if inline int long register restrict return short signed sizeof static "
 		"struct switch typedef union unsigned void volatile while _Bool _Complex _Imaginary";
 	CKeywords kwC( pszCKeywords, true );
+
+	// what flex itself provides to the C code of a scanner
+	static CKeywords kwFlex(
+		// variables
+		"yytext yyleng yyin yyout yylineno yylval yylloc yy_start yy_act yy_current_buffer "
+		// macros
+		"BEGIN REJECT INITIAL YY_START YYSTATE YY_BREAK YY_DECL YY_INPUT YY_NULL " //  ECHO
+		"YY_USER_ACTION YY_USER_INIT YY_FATAL_ERROR YY_CURRENT_BUFFER YY_BUFFER_STATE "
+		"YY_BUF_SIZE YY_AT_BOL YY_RULE_SETUP YY_EXIT_FAILURE yyFlexLexer yyterminate "
+		// functions
+		"yyless yymore yylex yywrap yyrestart unput input yyinput yyunput "
+		"yy_push_state yy_pop_state yy_top_state yy_set_bol yy_set_interactive "
+		"yy_create_buffer yy_delete_buffer yy_flush_buffer yy_switch_to_buffer "
+		"yy_scan_string yy_scan_bytes yy_scan_buffer yypush_buffer_state yypop_buffer_state "
+		"yyalloc yyrealloc yyfree yyget_text yyget_leng yyget_in yyget_out yyget_lineno "
+		"yyset_in yyset_out yyset_lineno", true );
 %}
 
  /*************************************************************************************/
@@ -253,8 +271,12 @@ SC_LIST		("*"|"^"|{NAME}(","{NAME})*)
 	\"([^"\\\r\n]|\\.)*\"	SetStyle( ANYSEC(YY_START,STYLE_STRING) );
 	\'([^'\\\r\n]|\\.)*\'	SetStyle( ANYSEC(YY_START,STYLE_STRING) );
 	^{WS}*"#"[^\r\n]*		SetStyle( ANYSEC(YY_START,STYLE_DIRECTIVE) );
-	{NUM}					SetStyle( ANYSEC(YY_START,STYLE_NUMBER) );
-	{NAME}					SetStyle( ANYSEC(YY_START, kwC.is(yytext) ? STYLE_KEYWORD : STYLE_CODE) );
+	{NUM}					|
+	0[xX]{HC}+[uUlL]*		SetStyle( ANYSEC(YY_START,STYLE_NUMBER) );	// 0x100 0xFFu 0x1FUL
+	{NAME}					{
+		int styl = kwFlex.is(yytext) ? STYLE_FLEXVAR : kwC.is(yytext) ? STYLE_KEYWORD : STYLE_CODE;
+		SetStyle( ANYSEC(YY_START,styl) );
+	}
 	[-+*/%&|^~!=<>?:;,.(){}\[\]]	SetStyle( ANYSEC(YY_START,STYLE_CODESYM) );
 }
 
