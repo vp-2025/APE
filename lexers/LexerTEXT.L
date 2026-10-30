@@ -51,6 +51,7 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 #define STYLE_DATE			10
 #define STYLE_TIME			11
 #define STYLE_EMAIL			12
+#define STYLE_EOL			13		/* line ends - light grey, visible with "show line endings" */
 %}
 
 %%
@@ -120,7 +121,7 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 }
 
 <*>{
-	{EOL}	|
+	{EOL}					SetStyle( STYLE_EOL );
 	{WS}+	|
 	.						SetStyle();
 }

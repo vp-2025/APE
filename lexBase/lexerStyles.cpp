@@ -30,6 +30,7 @@
 #define clrUnquoted			RGB(0xFF,0x80,0x80)
 #define clrInvalidFore	 	RGB(0xFF,0x00,0x00)
 #define clrInvalidBack		RGB(0xFF,0xFF,0x00)
+#define clrEOL				RGB(0xC0,0xC0,0xC0)
 
 #define STL_BOLD			0x03
 #define STL_ITALIC			0x0C
@@ -95,7 +96,7 @@ CLexerStyle styleJSON[] = {
 	STYLE2( 3, "Symbol", clrSymbol ),
 	STYLE_ITALIC( 2, "Comment", clrComment ),
 	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
-	STYLE2( 15, "Line End", RGB(0xC0,0xC0,0xC0) ),
+	STYLE2( 15, "Line End", clrEOL ), // EOL
 	{0}
 };
 
@@ -462,6 +463,7 @@ CLexerStyle styleText[] = {
 	STYLE2( 10, "Date", RGB(0x00,0x80,0x80) ),
 	STYLE2( 11, "Time", RGB(0x00,0x60,0xA0) ),
 	{ 12, "E-mail", STL_UNDERLINE, RGB(0x00,0x60,0xC0), -1 },
+	STYLE2( 13, "Line End", clrEOL ), // EOL
 	{0}
 };
 
