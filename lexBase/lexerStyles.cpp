@@ -95,6 +95,7 @@ CLexerStyle styleJSON[] = {
 	STYLE2( 3, "Symbol", clrSymbol ),
 	STYLE_ITALIC( 2, "Comment", clrComment ),
 	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
+	STYLE2( 15, "Line End", RGB(0xC0,0xC0,0xC0) ),
 	{0}
 };
 

@@ -41,6 +41,7 @@ WORD	{SWC}{WWC}*
 #define STYLE_UNQ			8
 #define STYLE_KEY			13
 #define STYLE_ESCAPE		14
+#define STYLE_EOL			15
 
 /* yy_start keeps the start condition in its low 8 bits only.  Whether a key
    may come next is kept above them and serialized into the line state at
@@ -134,8 +135,7 @@ WORD	{SWC}{WWC}*
 	\\[bfnrtv0'"/\\]		|
 	\\u{HC}{4}				|
 	\\u"{"{HC}+"}"			|
-	\\x{HC}{2}				|
-	\\{EOL}					SetStyle( STYLE_ESCAPE );
+	\\x{HC}{2}				SetStyle( STYLE_ESCAPE );
 
 	 /* an invalid escape sequence */
 	\\.						SetStyle( IStyler::styleInvalidText );
@@ -145,7 +145,7 @@ WORD	{SWC}{WWC}*
 }
 
 <*>{
-	{EOL}	|
+	{EOL}					SetStyle( STYLE_EOL );
 	{WS}+	|
 	.						SetStyle();
 }
