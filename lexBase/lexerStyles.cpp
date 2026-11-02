@@ -53,15 +53,15 @@
 #define STYLE_LINK(id,szName,clrFore)		{id,szName,STL_HOTSPOT|STL_UNDERLINE,clrFore,-1}
 
 CLexerStyle styleGlobal[] = {
-	STYLE3_EX( STYLE_DEFAULT, "Default", 0x0, 0xFFFFFF, 11, "Consolas"),
-	STYLE2_BOLD( STYLE_BRACELIGHT, "Brace Highlight", RGB(0xFF,0,0) ),
-	STYLE3_BOLD( STYLE_BRACEBAD, "Brace Badlight", clrInvalidFore, clrInvalidBack ),
-	STYLE2_EX( STYLE_LINENUMBER, "Line Number", RGB(0x40,0x40,0x40), 9, "Tahoma" ),
-	STYLE2( STYLE_INDENTGUIDE, "Indent Guide", RGB(0xD0,0xD0,0xD0) ),
-	STYLE3_EX( STYLE_CALLTIP, "Calltip Style", RGB(0,0,0), RGB(245,245,210), 8, "Tahoma" ),
-//	STYLE( STYLE_CONTROLCHAR, "Control Chars" ), // only: font size bold italic
-	STYLE2( STYLE_WHITESPACE, "White Space", clrLtGrey), // fore & back
-	STYLE3( STYLE_INVALID, "Invalid Style", clrInvalidFore, clrInvalidBack ),
+	STYLE3_EX( STYLE_DEFAULT, "Default", 0x0, 0xFFFFFF, 11, "Consolas"), // 32
+	STYLE2_BOLD( STYLE_BRACELIGHT, "Brace Highlight", RGB(0xFF,0,0) ), // 34
+	STYLE3_BOLD( STYLE_BRACEBAD, "Brace Badlight", clrInvalidFore, clrInvalidBack ), // 35
+	STYLE3( STYLE_INVALID, "Invalid Style", clrInvalidFore, clrInvalidBack ), // 31
+	STYLE2_EX( STYLE_LINENUMBER, "Line Number", RGB(0x40,0x40,0x40), 9, "Tahoma" ), // 33
+	STYLE2( STYLE_INDENTGUIDE, "Indent Guide", RGB(0xD0,0xD0,0xD0) ), // 37, White Space: fore & back
+	STYLE3_EX( STYLE_CALLTIP, "Calltip Style", RGB(0,0,0), RGB(245,245,210), 8, "Tahoma" ), // 38
+//	STYLE( STYLE_CONTROLCHAR, "Control Chars" ), // 36, only: font size bold italic
+// no 39 ?
 	{0}
 };
 
@@ -96,7 +96,6 @@ CLexerStyle styleJSON[] = {
 	STYLE2( 3, "Symbol", clrSymbol ),
 	STYLE_ITALIC( 2, "Comment", clrComment ),
 	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
-	STYLE2( 15, "Line End", clrEOL ), // EOL
 	{0}
 };
 
@@ -463,7 +462,6 @@ CLexerStyle styleText[] = {
 	STYLE2( 10, "Date", RGB(0x00,0x80,0x80) ),
 	STYLE2( 11, "Time", RGB(0x00,0x60,0xA0) ),
 	{ 12, "E-mail", STL_UNDERLINE, RGB(0x00,0x60,0xC0), -1 },
-	STYLE2( 13, "Line End", clrEOL ), // EOL
 	{0}
 };
 
@@ -665,11 +663,12 @@ void SetupLexerStyles( CSciWrapper& sci )
 	sci.StylesClear();
 
 	for( CLexerStyle* pStyle=styleGlobal; pStyle && pStyle->szName; pStyle++ ) {
-		if( pStyle->id==STYLE_WHITESPACE ) {
+		if( pStyle->id==STYLE_INDENTGUIDE) {
 			bool bFore = pStyle->isFore;
 			bool bBack = pStyle->isBack;
 			sci.Call( SCI_SETWHITESPACEFORE, bFore, bFore ? g_theme.editorFore(pStyle->clrFore) : 0 );
 			sci.Call( SCI_SETWHITESPACEBACK, bBack, bBack ? g_theme.editorBack(pStyle->clrBack) : 0 );
+			applyStyle( sci, pStyle ); // for EOL Line Ending
 		} else
 		if( pStyle->id!=STYLE_DEFAULT )
 			applyStyle( sci, pStyle );
