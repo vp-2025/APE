@@ -67,13 +67,10 @@ bool CEditor::OnGetImage(UINT menuID, HIMAGELIST& hIL, int& imageID)
 void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
     SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR) this);
 
-	int partWidths[] = {380,40,100,120,100,-1};
 
     // no need to scale TOOLBAR_H
     // no need to scale STATUSBAR_H
     TAB_H = g_dpi.scale(TAB_H);
-    for( int i=0; partWidths[i]!=-1; i++ )
-	    partWidths[i] = g_dpi.scale(partWidths[i]);
 
 	m_hWnd = hWnd;
 	g_theme.applyTitleBar( hWnd ); // before the window is shown
@@ -109,6 +106,9 @@ void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
 
 // Statusbar ==========================
 	m_statusbar.Create( hWnd, 121 );
+	int partWidths[] = {380,40,100,120,50,-1};
+	for( int i=0; partWidths[i]!=-1; i++ )
+		partWidths[i] = g_dpi.scale(partWidths[i]);
 	m_statusbar.SetParts( sizeof(partWidths)/sizeof(partWidths[0]), partWidths );
 
 // Tabs ===============================

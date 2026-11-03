@@ -56,6 +56,14 @@ URLCH		[^ \t\r\n<>()\[\]]
 			SetStyle( MatchEnd()-(nPost), MatchEnd(), STYLE_MARK ); \
 	} while( 0 )
 
+/* style a match that ends with its line end: the line end gets IStyler::styleEOL */
+#define STYLE_LINE(nStyle) \
+	{ \
+		int nEol = (yyleng>1 && yytext[yyleng-2]=='\r') ? 2 : 1; \
+		SetStyle( MatchStart(), MatchEnd()-nEol, (nStyle) ); \
+		SetStyle( MatchEnd()-nEol, MatchEnd(), IStyler::styleEOL ); \
+	}
+
 /* a heading of level n folds the lines up to the next heading of level <= n:
    the heading line gets the fold level n-1 (a fold header), the lines below it n.
    The level is set absolutely - a heading never is inside a fenced block. */
@@ -73,13 +81,13 @@ URLCH		[^ \t\r\n<>()\[\]]
 ^---{SPACE}*{EOL}	{
 		if( MatchStart()==0 ) {
 			BEGIN(FRONT);
-			SetStyle( STYLE_FRONT );
+			STYLE_LINE( STYLE_FRONT );
 		} else
-			SetStyle( STYLE_HR );
+			STYLE_LINE( STYLE_HR );
 	}
 
  /* horizontal rule: ***, ___, - - -, * * * */
-^([-*_]{SPACE}*){3,}{EOL}	SetStyle( STYLE_HR );
+^([-*_]{SPACE}*){3,}{EOL}	STYLE_LINE( STYLE_HR );
 
  /* ATX heading: # .. ###### (needs a space, so #tag stays text).
     The line end is not part of the match: the fold level is applied at it. */
@@ -115,14 +123,14 @@ URLCH		[^ \t\r\n<>()\[\]]
 	}
 
  /* list item marker: -, *, +, 1. , 1) */
-^[ \t]{0,3}([-*+]|[0-9]{1,9}[.)]){SPACE}+ |
-^[ \t]{0,3}([-*+]|[0-9]{1,9}[.)]){SPACE}*{EOL}	SetStyle( STYLE_LIST );
+^[ \t]{0,3}([-*+]|[0-9]{1,9}[.)]){SPACE}+	SetStyle( STYLE_LIST );
+^[ \t]{0,3}([-*+]|[0-9]{1,9}[.)]){SPACE}*{EOL}	STYLE_LINE( STYLE_LIST );
 
  /* blockquote marker */
 ^[ \t]{0,3}>+{SPACE}?	SetStyle( STYLE_QUOTE );
 
  /* table delimiter row: |---|:--:|---| */
-^[ \t]*\|?{SPACE}*:?-+:?{SPACE}*(\|{SPACE}*:?-+:?{SPACE}*)+(\|{SPACE}*)?{EOL}	SetStyle( STYLE_TABLE );
+^[ \t]*\|?{SPACE}*:?-+:?{SPACE}*(\|{SPACE}*:?-+:?{SPACE}*)+(\|{SPACE}*)?{EOL}	STYLE_LINE( STYLE_TABLE );
 
  /* link reference definition: [label]: url */
 ^[ \t]{0,3}\[[^\]\n]+\]:[^\n]*	{
@@ -149,14 +157,14 @@ URLCH		[^ \t\r\n<>()\[\]]
 
 <FENCEEND>{EOL}	{
 		BEGIN(INITIAL);
-		SetStyle( STYLE_CODEBLOCK );
+		SetStyle( IStyler::styleEOL );
 	}
 
  /* end of front matter */
 <FRONT>^---{SPACE}*{EOL} |
 <FRONT>^\.\.\.{SPACE}*{EOL}	{
 		BEGIN(INITIAL);
-		SetStyle( STYLE_FRONT );
+		STYLE_LINE( STYLE_FRONT );
 	}
 
  /* html comment */

@@ -123,8 +123,8 @@ BEGIN
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
         MENUITEM SEPARATOR
         MENUITEM "Whitespace",                  ID_VIEW_WS
-        MENUITEM "Line Numbers",                ID_VIEW_NUMS
         MENUITEM "Indent Guides",               ID_VIEW_INDENT
+        MENUITEM "Line Numbers",                ID_VIEW_NUMS
         MENUITEM "Wrap Long Lines",             ID_VIEW_WRAPLINES
         MENUITEM SEPARATOR
         MENUITEM "Brace Highlight",             ID_VIEW_BRACE

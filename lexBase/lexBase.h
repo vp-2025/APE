@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cassert>
-#include <cstdlib>
 #include "scintilla.h"
 #include "progress.h"
 #include <set>
@@ -17,7 +16,7 @@ class IStyler {
 public:
     enum {
         defaultStyleMask = 0x7F,
-        styleInvalidText = 31,
+        styleInvalidText = STYLE_BRACEBAD, //31,
         styleEOL = 37 // STYLE_INDENTGUIDE = 37
     };
 

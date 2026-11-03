@@ -8,7 +8,7 @@ class CMyLexerBase {
 protected:
 	enum EnumStyle {
 		defaultStyleMask = 0x7F,
-		styleInvalidText = 31,
+		styleInvalidText = STYLE_BRACEBAD, //31
 		INITIAL = 0
 	};
 

@@ -3,8 +3,7 @@
 #include "lexerStyles.h"
 #include "theme.h"
 
-#define STYLE_INVALID IStyler::styleInvalidText
-#define STYLE_WHITESPACE 40
+//#define STYLE_INVALID IStyler::styleInvalidText
 
 #define clrWhite			RGB(0xFF,0xFF,0xFF)
 #define clrBlack			RGB(0,0,0)
@@ -55,10 +54,10 @@
 CLexerStyle styleGlobal[] = {
 	STYLE3_EX( STYLE_DEFAULT, "Default", 0x0, 0xFFFFFF, 11, "Consolas"), // 32
 	STYLE2_BOLD( STYLE_BRACELIGHT, "Brace Highlight", RGB(0xFF,0,0) ), // 34
-	STYLE3_BOLD( STYLE_BRACEBAD, "Brace Badlight", clrInvalidFore, clrInvalidBack ), // 35
-	STYLE3( STYLE_INVALID, "Invalid Style", clrInvalidFore, clrInvalidBack ), // 31
+	STYLE3_BOLD( STYLE_BRACEBAD, "Invalid Style", clrInvalidFore, clrInvalidBack ), // 35, Brace Badlight
+//	STYLE3( STYLE_INVALID, "Invalid Style", clrInvalidFore, clrInvalidBack ), // 31
+	STYLE2( STYLE_INDENTGUIDE, "White Space", RGB(0xD0,0xD0,0xD0) ), // 37, IndentGuide, WhiteSpace: fore & back, +LineEnding
 	STYLE2_EX( STYLE_LINENUMBER, "Line Number", RGB(0x40,0x40,0x40), 9, "Tahoma" ), // 33
-	STYLE2( STYLE_INDENTGUIDE, "Indent Guide", RGB(0xD0,0xD0,0xD0) ), // 37, White Space: fore & back
 	STYLE3_EX( STYLE_CALLTIP, "Calltip Style", RGB(0,0,0), RGB(245,245,210), 8, "Tahoma" ), // 38
 //	STYLE( STYLE_CONTROLCHAR, "Control Chars" ), // 36, only: font size bold italic
 // no 39 ?

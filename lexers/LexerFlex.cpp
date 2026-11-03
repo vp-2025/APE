@@ -1047,16 +1047,14 @@ case 44:
 YY_RULE_SETUP
 #line 238 "C:/work/ape++/src/lexers/LexerFlex.L"
 {
-		if( braceDepth == 0 ) {
+		if( braceDepth == 0 )
 			BEGIN( RULES );
-			SetStyle( RULSEC(STYLE_TEXT) );
-		} else
-			SetStyle( RULSEC(STYLE_CODE) );
+		SetStyle( IStyler::styleEOL );
 	}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 245 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 243 "C:/work/ape++/src/lexers/LexerFlex.L"
 {
 		if( braceDepth > 0 ) {
 			braceDepth++;
@@ -1067,7 +1065,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 252 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 250 "C:/work/ape++/src/lexers/LexerFlex.L"
 {
 		if( braceDepth > 0 ) {
 			levelDecrease();
@@ -1082,51 +1080,51 @@ YY_RULE_SETUP
 
 case 47:
 YY_RULE_SETUP
-#line 264 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 262 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( CODSEC(STYLE_CODESYM) ); levelIncrease();
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 265 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 263 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( CODSEC(STYLE_CODESYM) ); levelDecrease();
 	YY_BREAK
 
 
 case 49:
 YY_RULE_SETUP
-#line 269 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 267 "C:/work/ape++/src/lexers/LexerFlex.L"
 prevState = YY_START; SetStyle( ANYSEC(prevState,STYLE_COMMENT) ); BEGIN( COMMENT );
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 270 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 268 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(YY_START,STYLE_COMMENT) );
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 271 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 269 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(YY_START,STYLE_STRING) );
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 272 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 270 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(YY_START,STYLE_STRING) );
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 273 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 271 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(YY_START,STYLE_DIRECTIVE) );
 	YY_BREAK
 case 54:
-#line 275 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 273 "C:/work/ape++/src/lexers/LexerFlex.L"
 case 55:
 YY_RULE_SETUP
-#line 275 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 273 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(YY_START,STYLE_NUMBER) );	// 0x100 0xFFu 0x1FUL
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 276 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 274 "C:/work/ape++/src/lexers/LexerFlex.L"
 {
 		int styl = kwFlex.is(yytext) ? STYLE_FLEXVAR : kwC.is(yytext) ? STYLE_KEYWORD : STYLE_CODE;
 		SetStyle( ANYSEC(YY_START,styl) );
@@ -1134,7 +1132,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 280 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 278 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(YY_START,STYLE_CODESYM) );
 	YY_BREAK
 
@@ -1144,16 +1142,19 @@ SetStyle( ANYSEC(YY_START,STYLE_CODESYM) );
 
 case 58:
 YY_RULE_SETUP
-#line 288 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 286 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(prevState,STYLE_COMMENT) ); BEGIN( prevState );
 	YY_BREAK
 case 59:
-#line 290 "C:/work/ape++/src/lexers/LexerFlex.L"
+YY_RULE_SETUP
+#line 287 "C:/work/ape++/src/lexers/LexerFlex.L"
+SetStyle( IStyler::styleEOL );
+	YY_BREAK
 case 60:
-#line 291 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 289 "C:/work/ape++/src/lexers/LexerFlex.L"
 case 61:
 YY_RULE_SETUP
-#line 291 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 289 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle( ANYSEC(prevState,STYLE_COMMENT) );
 	YY_BREAK
 
@@ -1162,21 +1163,24 @@ SetStyle( ANYSEC(prevState,STYLE_COMMENT) );
   *************************************************************************************/
 
 case 62:
-#line 300 "C:/work/ape++/src/lexers/LexerFlex.L"
+YY_RULE_SETUP
+#line 297 "C:/work/ape++/src/lexers/LexerFlex.L"
+SetStyle( IStyler::styleEOL );
+	YY_BREAK
 case 63:
-#line 301 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 299 "C:/work/ape++/src/lexers/LexerFlex.L"
 case 64:
 YY_RULE_SETUP
-#line 301 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 299 "C:/work/ape++/src/lexers/LexerFlex.L"
 SetStyle();
 	YY_BREAK
 
 case 65:
 YY_RULE_SETUP
-#line 304 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 302 "C:/work/ape++/src/lexers/LexerFlex.L"
 ECHO;
 	YY_BREAK
-#line 1180 "C:/work/ape++/src/lexers/LexerFlex.cpp"
+#line 1184 "C:/work/ape++/src/lexers/LexerFlex.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(PROLOGD):
 case YY_STATE_EOF(PROLOGR):
@@ -1894,7 +1898,7 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 304 "C:/work/ape++/src/lexers/LexerFlex.L"
+#line 302 "C:/work/ape++/src/lexers/LexerFlex.L"
 
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
