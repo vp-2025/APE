@@ -17,7 +17,8 @@ class IStyler {
 public:
     enum {
         defaultStyleMask = 0x7F,
-        styleInvalidText = 31
+        styleInvalidText = 31,
+        styleEOL = 37 // STYLE_INDENTGUIDE = 37
     };
 
     virtual int GetStylingPos() = 0;

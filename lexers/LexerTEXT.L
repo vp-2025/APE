@@ -51,7 +51,6 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 #define STYLE_DATE			10
 #define STYLE_TIME			11
 #define STYLE_EMAIL			12
-#define STYLE_LINEEND			37 // STYLE_INDENTGUIDE
 %}
 
 %%
@@ -121,7 +120,7 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 }
 
 <*>{
-	{EOL}					SetStyle( STYLE_LINEEND );
+	{EOL}					SetStyle( IStyler::styleEOL );
 	{WS}+	|
 	.						SetStyle();
 }

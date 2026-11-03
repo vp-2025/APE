@@ -41,7 +41,6 @@ WORD	{SWC}{WWC}*
 #define STYLE_UNQ			8
 #define STYLE_KEY			13
 #define STYLE_ESCAPE		14
-#define STYLE_LINEEND			37 // STYLE_INDENTGUIDE
 
 /* yy_start keeps the start condition in its low 8 bits only.  Whether a key
    may come next is kept above them and serialized into the line state at
@@ -145,7 +144,7 @@ WORD	{SWC}{WWC}*
 }
 
 <*>{
-	{EOL}					SetStyle( STYLE_LINEEND );
+	{EOL}					SetStyle( IStyler::styleEOL );
 	{WS}+	|
 	.						SetStyle();
 }

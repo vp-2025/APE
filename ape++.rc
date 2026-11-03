@@ -171,9 +171,9 @@ BEGIN
     BEGIN
         MENUITEM "Line Endings",                ID_VIEW_EOL2
         MENUITEM SEPARATOR
-        MENUITEM "Windows (\\r\\n)",            ID_EOL_CRLF
-        MENUITEM "Unix (\\n)",                  ID_EOL_LF
-        MENUITEM "Mac (\\r)",                   ID_EOL_CR
+        MENUITEM "CRLF - Windows (\\r\\n)",          ID_EOL_CRLF
+        MENUITEM "LF - Unix (\\n)",                  ID_EOL_LF
+        MENUITEM "CR - Mac (\\r)",                   ID_EOL_CR
     END
     POPUP "&Tools"
     BEGIN
@@ -329,9 +329,9 @@ BEGIN
     BEGIN
         MENUITEM "Line Endings",           ID_VIEW_EOL2
         MENUITEM SEPARATOR
-        MENUITEM "Windows (\\r\\n)",            ID_EOL_CRLF
-        MENUITEM "Unix (\\n)",                  ID_EOL_LF
-        MENUITEM "Mac (\\r)",                   ID_EOL_CR
+        MENUITEM "CRLF - Windows (\\r\\n)",          ID_EOL_CRLF
+        MENUITEM "LF - Unix (\\n)",                  ID_EOL_LF
+        MENUITEM "CR - Mac (\\r)",                   ID_EOL_CR
     END
 END
 
