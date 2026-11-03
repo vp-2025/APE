@@ -197,12 +197,12 @@ int yyFlexLexer::yylex()
 #define YY_END_OF_BUFFER 38
 static yyconst short int yy_accept[81] =
     {   0,
-       34,   34,   34,   34,   34,   34,   34,   34,   34,   34,
-       34,   34,   38,   36,   34,   35,   36,   14,    4,    5,
-       12,    3,    8,    7,    6,   13,   11,   15,   36,   33,
+       35,   35,   35,   35,   35,   35,   35,   35,   35,   35,
+       35,   35,   38,   36,   35,   33,   36,   14,    4,    5,
+       12,    3,    8,    7,    6,   13,   11,   15,   36,   34,
        16,   36,   26,   36,   19,   36,   20,   36,   32,   36,
-       31,   36,   34,   35,    2,    1,    0,    8,   10,    0,
-        0,    7,    6,   15,   17,   33,   16,   26,   25,   18,
+       31,   36,   35,   33,    2,    1,    0,    8,   10,    0,
+        0,    7,    6,   15,   17,   34,   16,   26,   25,   18,
        25,   21,   23,   25,   22,   32,   30,   30,   28,   27,
        10,    0,   10,    9,   23,    0,   29,   23,   24,    0
     } ;
@@ -675,7 +675,7 @@ SetStyle(IStyler::styleInvalidText);
 case 16:
 YY_RULE_SETUP
 #line 74 "C:/work/ape++/src/lexers/LexerJS.L"
-BEGIN(INITIAL); SetStyle(); 
+BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
 	YY_BREAK
 
 
@@ -764,7 +764,10 @@ SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 
 
 case 33:
-#line 114 "C:/work/ape++/src/lexers/LexerJS.L"
+YY_RULE_SETUP
+#line 113 "C:/work/ape++/src/lexers/LexerJS.L"
+SetStyle( IStyler::styleEOL );
+	YY_BREAK
 case 34:
 #line 115 "C:/work/ape++/src/lexers/LexerJS.L"
 case 35:
@@ -780,7 +783,7 @@ YY_RULE_SETUP
 #line 119 "C:/work/ape++/src/lexers/LexerJS.L"
 ECHO;
 	YY_BREAK
-#line 784 "C:/work/ape++/src/lexers/LexerJS.cpp"
+#line 787 "C:/work/ape++/src/lexers/LexerJS.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(SLCOMMENT):

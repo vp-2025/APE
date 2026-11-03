@@ -260,7 +260,7 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 }
 
 <*>{
-	{EOL}	|
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WS}+	|
 	.		SetStyle();
 }

@@ -131,7 +131,7 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 }
 
 <SLCOMMENT>{
-	{EOL}				BEGIN(INITIAL); SetStyle(); 
+	{EOL}				BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
 }
 
 <STRING,STRING2,STRING3>{
@@ -153,13 +153,13 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 <PREPROCESSOR>{
 	\\{EOL}			SetStyle();
 
-	{EOL}				BEGIN(INITIAL);   SetStyle();
+	{EOL}				BEGIN(INITIAL);   SetStyle( IStyler::styleEOL );
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.					SetStyle();
 }
 

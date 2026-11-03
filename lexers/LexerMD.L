@@ -226,7 +226,7 @@ _[^ _\n][^_\n]*_			STYLE_SPAN( 1, 1, STYLE_ITALIC );
 \|							SetStyle( STYLE_TABLE );
 
 <*>{
-	{EOL} |
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
 	.						SetStyle();

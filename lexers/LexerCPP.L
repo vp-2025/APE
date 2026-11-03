@@ -117,7 +117,7 @@ bool isCppKeyword( const char* text, int lang ) {
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle(); 
+	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
 }
 <COMMENT>{
 	\*\/		SetStyle();	BEGIN(INITIAL); levelDecrease();
@@ -156,7 +156,7 @@ bool isCppKeyword( const char* text, int lang ) {
 	/* \/\*				BEGIN(COMMENT);   SetStyle(); levelIncrease(); */
 
 	\\{EOL}				SetStyle();
-	{EOL}				BEGIN(INITIAL);   SetStyle();
+	{EOL}				BEGIN(INITIAL);   SetStyle( IStyler::styleEOL );
 }
 
 <UID>{
@@ -167,9 +167,9 @@ bool isCppKeyword( const char* text, int lang ) {
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.				SetStyle();
 }
 

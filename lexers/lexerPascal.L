@@ -138,7 +138,7 @@ bool isPascalKeyword( const char* text, bool& bInc, bool& bDec )
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle(); 
+	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
 }
 <COMMENT>{
 	\}			SetStyle();	BEGIN(INITIAL); levelDecrease();
@@ -158,9 +158,9 @@ bool isPascalKeyword( const char* text, bool& bInc, bool& bDec )
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.				SetStyle();
 }
 

@@ -71,7 +71,7 @@ bool isJSKeyword( const char* szKW );
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle(); 
+	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
 }
 <COMMENT>{
 	\*\/		SetStyle();	BEGIN(INITIAL); levelDecrease();
@@ -110,9 +110,9 @@ bool isJSKeyword( const char* szKW );
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.				SetStyle();
 }
 

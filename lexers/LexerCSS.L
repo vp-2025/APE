@@ -77,7 +77,7 @@ bool isCssValue( const char* text );
 }
 
 <*>{
-	{EOL} |
+	{EOL}						SetStyle( IStyler::styleEOL );
 	.					SetStyle();
 }
 

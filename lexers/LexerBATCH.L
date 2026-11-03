@@ -45,9 +45,9 @@ bool isBatchKeyword( const char* text ) {
 %~dp[0-9]				SetStyle(STYLE_VAR);
 %\*						SetStyle(STYLE_VAR);
 
-<SLCOMMENT>{EOL}		BEGIN(INITIAL);	SetStyle();
+<SLCOMMENT>{EOL}		BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
 
-<ECHO>{EOL}				BEGIN(INITIAL);	SetStyle();
+<ECHO>{EOL}				BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
 
 <STRING>{
 	%[_a-zA-Z0-9\(\)]+%		SetStyle(STYLE_VAR);
@@ -77,9 +77,9 @@ bool isBatchKeyword( const char* text ) {
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.					SetStyle();
 }
 

@@ -167,7 +167,7 @@ BEGIN
         MENUITEM "Latin-3 (ISO 8859-3) [South European]", ID_ENCODING_LATIN3
 		MENUITEM "ANSI Cyrillic (1251)", ID_ENCODING_ANSI_CYR
     END
-    POPUP "LineEndings"
+    POPUP "EOL"
     BEGIN
         MENUITEM "Line Endings",                ID_VIEW_EOL2
         MENUITEM SEPARATOR

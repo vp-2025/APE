@@ -124,8 +124,8 @@ static CKeywords kwBuiltin(
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WS}+	|
-	{EOL}	|
 	.						SetStyle();
 }
 

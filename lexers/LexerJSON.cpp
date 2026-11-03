@@ -389,7 +389,6 @@ static yyconst short int yy_chk[290] =
 #define STYLE_UNQ			8
 #define STYLE_KEY			13
 #define STYLE_ESCAPE		14
-#define STYLE_EOL			15
 
 /* yy_start keeps the start condition in its low 8 bits only.  Whether a key
    may come next is kept above them and serialized into the line state at
@@ -401,7 +400,7 @@ static yyconst short int yy_chk[290] =
 	if( yyleng > 0 && yytext[yyleng-1] == '\n' ) \
 		m_pStyler->SetLineState( m_foldLine, LINE_STATE ); \
 	break;
-#line 405 "C:/work/ape++/src/lexers/LexerJSON.cpp"
+#line 404 "C:/work/ape++/src/lexers/LexerJSON.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -521,7 +520,7 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 58 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 57 "C:/work/ape++/src/lexers/LexerJSON.L"
 
 
 
@@ -532,7 +531,7 @@ YY_DECL
 	yy_start &= 0xFF;						// the DFA only understands the start condition
 
 
-#line 536 "C:/work/ape++/src/lexers/LexerJSON.cpp"
+#line 535 "C:/work/ape++/src/lexers/LexerJSON.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -638,12 +637,12 @@ do_action:  /* This label is used only to access EOF actions. */
 
 /* keys - "key":  'key':  key:  the whitespace and ':' styled apart */
 case 1:
-#line 71 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 70 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 2:
-#line 72 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 71 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 3:
 YY_RULE_SETUP
-#line 72 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 71 "C:/work/ape++/src/lexers/LexerJSON.L"
 {
 		bool bKey = !bNoKey;
 		bNoKey = true;						// a value follows either way
@@ -669,144 +668,144 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 95 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 94 "C:/work/ape++/src/lexers/LexerJSON.L"
 BEGIN( STRING ); SetStyle(); bNoKey = true;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 96 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 95 "C:/work/ape++/src/lexers/LexerJSON.L"
 BEGIN( SQSTRING ); SetStyle(); bNoKey = true;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 98 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 97 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_COMMENT );
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 99 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 98 "C:/work/ape++/src/lexers/LexerJSON.L"
 BEGIN( COMMENT ); SetStyle(); levelIncrease();
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 101 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 100 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( kwJSON.is(yytext) ? STYLE_KEYWORD : STYLE_TEXT ); bNoKey = true;
 	YY_BREAK
 /* numbers - the sign is a symbol */
 case 9:
-#line 105 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 104 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 10:
-#line 106 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 105 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 11:
 YY_RULE_SETUP
-#line 106 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 105 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_NUMBER ); bNoKey = true;
 	YY_BREAK
 /* folding */
 case 12:
 YY_RULE_SETUP
-#line 109 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 108 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_SYMBOL ); levelIncrease(); bNoKey = *yytext == '[';
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 110 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 109 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_SYMBOL ); levelDecrease(); bNoKey = true;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 112 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 111 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_SYMBOL ); bNoKey = *yytext != ',';
 	YY_BREAK
 /* non-ASCII outside of a string */
 case 15:
 YY_RULE_SETUP
-#line 115 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 114 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( IStyler::styleInvalidText ); bNoKey = true;
 	YY_BREAK
 
 
 case 16:
 YY_RULE_SETUP
-#line 119 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 118 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle(); BEGIN( INITIAL ); levelDecrease();
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 120 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 119 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle();
 	YY_BREAK
 
 
 case 18:
 YY_RULE_SETUP
-#line 124 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 123 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle(); BEGIN( INITIAL );
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 125 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 124 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle();
 	YY_BREAK
 
 
 case 20:
 YY_RULE_SETUP
-#line 129 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 128 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle(); BEGIN( INITIAL );
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 130 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 129 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle();
 	YY_BREAK
 
 
 /* escape sequences, a '\' at the line end continues the string (JSON5) */
 case 22:
-#line 136 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 135 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 23:
-#line 137 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 136 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 24:
-#line 138 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 137 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 25:
 YY_RULE_SETUP
-#line 138 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 137 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_ESCAPE );
 	YY_BREAK
 /* an invalid escape sequence */
 case 26:
 YY_RULE_SETUP
-#line 141 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 140 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( IStyler::styleInvalidText );
 	YY_BREAK
 /* the string is not closed at the end of the line */
 case 27:
 YY_RULE_SETUP
-#line 144 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 143 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle( STYLE_UNQ ); BEGIN( INITIAL );
 	YY_BREAK
 
 
 case 28:
 YY_RULE_SETUP
-#line 148 "C:/work/ape++/src/lexers/LexerJSON.L"
-SetStyle( STYLE_EOL );
+#line 147 "C:/work/ape++/src/lexers/LexerJSON.L"
+SetStyle( IStyler::styleEOL );
 	YY_BREAK
 case 29:
-#line 150 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 149 "C:/work/ape++/src/lexers/LexerJSON.L"
 case 30:
 YY_RULE_SETUP
-#line 150 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 149 "C:/work/ape++/src/lexers/LexerJSON.L"
 SetStyle();
 	YY_BREAK
 
 case 31:
 YY_RULE_SETUP
-#line 153 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 152 "C:/work/ape++/src/lexers/LexerJSON.L"
 ECHO;
 	YY_BREAK
-#line 810 "C:/work/ape++/src/lexers/LexerJSON.cpp"
+#line 809 "C:/work/ape++/src/lexers/LexerJSON.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
@@ -1519,7 +1518,7 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 153 "C:/work/ape++/src/lexers/LexerJSON.L"
+#line 152 "C:/work/ape++/src/lexers/LexerJSON.L"
 
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {

@@ -733,7 +733,10 @@ SetStyle();
  // ========================================================================================*/
 
 case 24:
-#line 121 "C:/work/ape++/src/lexers/LexerMSBuild.L"
+YY_RULE_SETUP
+#line 120 "C:/work/ape++/src/lexers/LexerMSBuild.L"
+SetStyle( IStyler::styleEOL );
+	YY_BREAK
 case 25:
 YY_RULE_SETUP
 #line 121 "C:/work/ape++/src/lexers/LexerMSBuild.L"
@@ -745,7 +748,7 @@ YY_RULE_SETUP
 #line 124 "C:/work/ape++/src/lexers/LexerMSBuild.L"
 ECHO;
 	YY_BREAK
-#line 749 "C:/work/ape++/src/lexers/LexerMSBuild.cpp"
+#line 752 "C:/work/ape++/src/lexers/LexerMSBuild.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(INTAG):

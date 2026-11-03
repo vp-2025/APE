@@ -255,7 +255,7 @@ PH		\{[^ \t\r\n{}"`]+\}
 		tokCount = 0;
 		prevWS = true;
 		matcherDef = importLine = false;
-		SetStyle();
+		SetStyle( IStyler::styleEOL );
 	}
 	{WS}+		prevWS = true; SetStyle();
 	.			prevWS = false; SetStyle();

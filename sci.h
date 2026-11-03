@@ -114,9 +114,9 @@ public:
 	}
 	string getEOLString() { 
 		switch(GetEOLMode()) {
-			case SC_EOL_CRLF: return "Windows (\\r\\n)";
-			case SC_EOL_LF: return "Unix (\\n)";
-			case SC_EOL_CR: return "Max (\\r)";
+			case SC_EOL_CRLF: return "CRLF"; //"Windows (\\r\\n)";
+			case SC_EOL_LF: return "LF"; // "Unix (\\n)";
+			case SC_EOL_CR: return "CR"; // "Max (\\r)";
 			default: return "";
 		}
 	}

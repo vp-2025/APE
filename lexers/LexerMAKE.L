@@ -40,7 +40,7 @@ bool isMakeKeyword( const char* text )
 $\([_a-zA-Z0-9]+\) |
 $\(call\ my-dir\)		SetStyle(STYLE_VAR);		
 
-<SLCOMMENT>{EOL}		BEGIN(INITIAL);	SetStyle();
+<SLCOMMENT>{EOL}		BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
 
 <INITIAL>{
 	ifneq				levelIncrease(); SetStyle(STYLE_KW);
@@ -55,9 +55,9 @@ $\(call\ my-dir\)		SetStyle(STYLE_VAR);
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.					SetStyle();
 }
 

@@ -46,7 +46,7 @@ WORD	{SWC}{WWC}*
 }
 
 <*>{
-	{EOL} |
+	{EOL}						SetStyle( IStyler::styleEOL );
 	.			SetStyle();
 }
 

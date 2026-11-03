@@ -1571,7 +1571,10 @@ SetStyle( STYLE_TABLE );
 	YY_BREAK
 
 case 40:
-#line 230 "C:/work/ape++/src/lexers/LexerMD.L"
+YY_RULE_SETUP
+#line 229 "C:/work/ape++/src/lexers/LexerMD.L"
+SetStyle( IStyler::styleEOL );
+	YY_BREAK
 case 41:
 #line 231 "C:/work/ape++/src/lexers/LexerMD.L"
 case 42:
@@ -1587,7 +1590,7 @@ YY_RULE_SETUP
 #line 235 "C:/work/ape++/src/lexers/LexerMD.L"
 ECHO;
 	YY_BREAK
-#line 1591 "C:/work/ape++/src/lexers/LexerMD.cpp"
+#line 1594 "C:/work/ape++/src/lexers/LexerMD.cpp"
 			case YY_STATE_EOF(INITIAL):
 			case YY_STATE_EOF(FENCE):
 			case YY_STATE_EOF(FRONT):

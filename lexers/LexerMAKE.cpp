@@ -197,11 +197,11 @@ int yyFlexLexer::yylex()
 #define YY_END_OF_BUFFER 16
 static yyconst short int yy_accept[68] =
     {   0,
-        0,    0,    0,    0,   16,   14,   12,   13,   14,    1,
-       14,   10,   11,   11,   11,    9,    9,    9,    4,   14,
-       12,   13,    0,   11,   11,   11,   11,    9,    9,    9,
-        9,    4,    0,    0,   11,   11,   11,   11,    9,    9,
-        9,    9,    2,    0,    7,   11,    6,   11,    7,    9,
+        0,    0,    0,    0,   16,   14,   13,   11,   14,    1,
+       14,   10,   12,   12,   12,    9,    9,    9,    4,   14,
+       13,   11,    0,   12,   12,   12,   12,    9,    9,    9,
+        9,    4,    0,    0,   12,   12,   12,   12,    9,    9,
+        9,    9,    2,    0,    7,   12,    6,   12,    7,    9,
         6,    9,    0,    8,    5,    8,    5,    0,    0,    0,
         0,    0,    0,    0,    0,    3,    0
     } ;
@@ -585,7 +585,7 @@ SetStyle(STYLE_VAR);
 case 4:
 YY_RULE_SETUP
 #line 43 "C:/work/ape++/src/lexers/LexerMAKE.L"
-BEGIN(INITIAL);	SetStyle();
+BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
 	YY_BREAK
 
 case 5:
@@ -622,7 +622,10 @@ SetStyle(STYLE_SYMBOL);
 
 
 case 11:
-#line 59 "C:/work/ape++/src/lexers/LexerMAKE.L"
+YY_RULE_SETUP
+#line 58 "C:/work/ape++/src/lexers/LexerMAKE.L"
+SetStyle( IStyler::styleEOL );
+	YY_BREAK
 case 12:
 #line 60 "C:/work/ape++/src/lexers/LexerMAKE.L"
 case 13:
@@ -638,7 +641,7 @@ YY_RULE_SETUP
 #line 64 "C:/work/ape++/src/lexers/LexerMAKE.L"
 ECHO;
 	YY_BREAK
-#line 642 "C:/work/ape++/src/lexers/LexerMAKE.cpp"
+#line 645 "C:/work/ape++/src/lexers/LexerMAKE.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SLCOMMENT):
 	yyterminate();

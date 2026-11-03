@@ -194,13 +194,13 @@ bool isPHPKeyword( const char* szKW )
 <CSS_COMMENT>\*\/			SetStyle();	BEGIN(CSS); levelDecrease();
 
 <CSS>\/\/					BEGIN(CSS_SL_COMMENT); SetStyle();
-<CSS_SL_COMMENT>{EOL}		BEGIN(CSS); SetStyle();
+<CSS_SL_COMMENT>{EOL}		BEGIN(CSS); SetStyle( IStyler::styleEOL );
 
 <CSS_ATTR>\/\*				BEGIN(CSS_COMMENTA);   SetStyle(); levelIncrease();
 <CSS_COMMENTA>\*\/			SetStyle();	BEGIN(CSS_ATTR); levelDecrease();
 
 <CSS_ATTR>\/\/				BEGIN(CSS_SL_COMMENTA); SetStyle();
-<CSS_SL_COMMENTA>{EOL}		BEGIN(CSS_ATTR); SetStyle();
+<CSS_SL_COMMENTA>{EOL}		BEGIN(CSS_ATTR); SetStyle( IStyler::styleEOL );
 
 <CSS_VALUE>\"				BEGIN(CSS_STRING);	  SetStyle();
 <CSS_STRING>\"				SetStyle(); BEGIN(CSS_VALUE);
@@ -250,7 +250,7 @@ bool isPHPKeyword( const char* szKW )
 }
 
 <JS_SLCOMMENT>{
-	{EOL}	BEGIN(JS); SetStyle();
+	{EOL}	BEGIN(JS); SetStyle( IStyler::styleEOL );
 }
 <JS_COMMENT>{
 	\*\/	SetStyle(); BEGIN(JS); levelDecrease();
@@ -300,7 +300,7 @@ bool isPHPKeyword( const char* szKW )
 }
 
 <PHP_SLCOMMENT>{
-	{EOL}		BEGIN(PHP); SetStyle();
+	{EOL}		BEGIN(PHP); SetStyle( IStyler::styleEOL );
 }
 <PHP_COMMENT>{
 	\*\/		SetStyle(); BEGIN(PHP); levelDecrease();
@@ -320,7 +320,7 @@ bool isPHPKeyword( const char* szKW )
  // ========================================================================================*/
 
 <*>{
-	{EOL} |
+	{EOL}						SetStyle( IStyler::styleEOL );
 	.		SetStyle();
 }
 

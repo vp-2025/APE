@@ -101,11 +101,11 @@ $[_a-zA-Z][_a-zA-Z0-9]*			SetStyle(STYLE_VAR);	// nginx VAR
 }
 
 <SLCOMMENT>{
-	{EOL}	BEGIN(INITIAL); SetStyle();
+	{EOL}	BEGIN(INITIAL); SetStyle( IStyler::styleEOL );
 }
 
 <*>{
-	{EOL} |
+	{EOL}						SetStyle( IStyler::styleEOL );
 	 .	SetStyle();
 }
 

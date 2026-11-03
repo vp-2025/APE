@@ -135,11 +135,11 @@ bool isBeginPLSQL( const char* text ) {
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle(); 
+	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
 }
 
 <PLSQL_SLCOMMENT>{
-	{EOL}		BEGIN(PLSQL); SetStyle(); 
+	{EOL}		BEGIN(PLSQL); SetStyle( IStyler::styleEOL ); 
 }
 
 <STRING>{
@@ -196,9 +196,9 @@ bool isBeginPLSQL( const char* text ) {
 }
 
 <*>{
+	{EOL}						SetStyle( IStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
-	{EOL} |
 	.				SetStyle();
 }
 
