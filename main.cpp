@@ -1626,7 +1626,7 @@ bool CEditor::FileOpen( const string& sFile, bool bNew, int idx, int top, int po
 	if( index<0 )
 		return false;
 	if( bNew ) {
-		page.sci.SetLexer( LEX_TXT );
+		page.sci.SetLexer( LEX_TEXT );
 		SetupLexerStyles( page.sci );
 	} else {
 		if( !page.loadFromFile() ) {

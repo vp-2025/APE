@@ -64,6 +64,11 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 			levelDecrease();
 		levelIncrease();
 	};
+
+    /* ... a line in capitals or a line ending with ':' */
+    // ^[A-Z]{CAPS}*[A-Z]{CAPS}*/[\r\n]		heading();
+    // ^[A-Za-z\x80-\xFF][^\r\n]*":"{WS}*/[\r\n]	heading();
+
 %}
 
 <INITIAL>{
@@ -77,10 +82,6 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 	^[^ \t\r\n=-][^\r\n]*/"\r\n---"		heading();
 	^(={3,}|-{3,}){WS}*/[\r\n]			SetStyle( STYLE_HEADING );
 
-	 /* ... a line in capitals or a line ending with ':' */
-	^[A-Z]{CAPS}*[A-Z]{CAPS}*/[\r\n]		heading();
-	^[A-Za-z\x80-\xFF][^\r\n]*":"{WS}*/[\r\n]	heading();
-
 	 /* list markers */
 	^{WS}*({BULLET}|{NUMBERED})/{WS}	SetStyle( STYLE_LIST );
 
@@ -88,7 +89,8 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 	{DC}{4}"-"{DC}{2}"-"{DC}{2}				|
 	{DC}{1,2}"."{DC}{1,2}"."{DC}{2,4}		|
 	{DC}{1,2}"/"{DC}{1,2}"/"{DC}{2,4}		SetStyle( STYLE_DATE );
-	{DC}{1,2}":"{DC}{2}(":"{DC}{2}([.,]{DC}+)?)?	SetStyle( STYLE_TIME );
+	{DC}{1,2}":"{DC}{2}						|
+	{DC}{1,2}":"{DC}{2}":"{DC}{2}			SetStyle( STYLE_TIME );
 
 	 /* links and e-mail addresses */
 	([hH][tT][tT][pP][sS]?"://"|[wW][wW][wW]".")[A-Za-z0-9?&%_.+=#/:~-]+	SetStyle( STYLE_LINK );
@@ -102,11 +104,12 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 			SetStyle( STYLE_SYMBOL );
 	}
 
-	 /* numbers - "3rd", "2x" and the like are words */
 	0[xX]{HC}+				|
-	{DC}+("."{DC}+)?		SetStyle( STYLE_NUMBER );
-	{DC}+{WORD}				SetStyle( STYLE_TEXT );
-
+	{DC}+					SetStyle( STYLE_NUMBER );
+	{DC}+"."{DC}+			SetStyle( STYLE_NUMBER );
+	
+	 /* numbers - "3rd", "2x" and the like are words */
+	{DC}+{WORD}				|
 	{WORD}					SetStyle( STYLE_TEXT );
 
 	[<>(){}\[\]+*=&|~`'/\\,.:;%@?!#$^-]	SetStyle( STYLE_SYMBOL );

@@ -602,8 +602,8 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_INI: return styleIni;
 		case LEX_YAML: return styleYAML;
 		case LEX_CADDY: return styleCaddy;
-		case LEX_TXT_NOQUOTE: 
-		case LEX_TXT: return styleTxt;
+//		case LEX_TXT_NOQUOTE:
+//		case LEX_TXT: return styleTxt;
 		case LEX_TEXT: return styleText;
 		case LEX_SQL: return styleSQL;
 		case LEX_BATCH: return styleBatch;

@@ -37,14 +37,18 @@ class CSciLexer : protected LEXER {
     IStyler* m_pStyler;
     int m_langId;
 
-    int m_posSave;
     int m_foldLine;        // line no
     int m_foldLevel;    // fold level
     int m_levelInc;        // fold inc++
     int m_levelDec;        // fold dec--
     int m_levelIncreasedFirst;    // -1 = undef, 1 = inc, 0 = dec
 
-    int MatchStart() { return m_posSave + (this->yytext - this->yy_current_buffer->yy_ch_buf); }
+    // the last char in the flex buffer (yy_ch_buf[yy_n_chars-1]) is always the last char read
+    // (GetStylingPos()-1): flex moves the unmatched text to the buffer start before reading
+    // more input - and also at EOF, without calling LexerInput()
+    int MatchStart() {
+        return m_pStyler->GetStylingPos() - this->yy_n_chars + (this->yytext - this->yy_current_buffer->yy_ch_buf);
+    }
     int MatchEnd() { return MatchStart() + this->yyleng; }
     int MatchLine() { return m_pStyler->GetLine(MatchStart()); }
 
@@ -102,7 +106,6 @@ protected:
     void AfterAction(const char* pszMatchText, int nMatchLength);
 
     virtual int LexerInput(char* buf, int max_size) {
-        m_posSave = m_pStyler->GetStylingPos() - (buf - this->yy_current_buffer->yy_ch_buf);
         return m_pStyler->GetText(buf, max_size);
     }
     virtual void LexerOutput(const char* buf, int size) {}
