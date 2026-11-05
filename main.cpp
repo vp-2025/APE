@@ -538,7 +538,7 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
             tabPage.sci.setTokenHL(g_options.bViewTokenHL);
 		break;
 
-	case ID_VIEW_WRAPLINES: 
+	case ID_VIEW_WRAPLINES2:
 		g_options.bViewWrapLongLines = !g_options.bViewWrapLongLines;
 		g_options.Save();
 		for(auto& tabPage : m_vTabs)
@@ -1203,8 +1203,8 @@ void CEditor::UpdateToolbar()
 	m_toolbar.Check( ID_EDIT_READONLY, pPage && pPage->sci.IsReadOnly() );
 	m_toolbar.Enable( ID_EDIT_FORMATXML, pPage!=0 );
 
-	m_toolbar.Enable(ID_VIEW_WRAPLINES, pPage != 0);
-	m_toolbar.Check(ID_VIEW_WRAPLINES, pPage && pPage->sci.getWrapLongLines());
+	m_toolbar.Enable(ID_VIEW_WRAPLINES2, pPage != 0);
+	m_toolbar.Check(ID_VIEW_WRAPLINES2, pPage && pPage->sci.getWrapLongLines());
 
 	m_toolbar.Enable(ID_VIEW_EOL2, pPage != 0);
 	m_toolbar.Check(ID_VIEW_EOL2, pPage && pPage->sci.GetViewEOL());
@@ -1275,7 +1275,7 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.EnableCheck( ID_VIEW_LINEHL, pPage!=0, pPage && pPage->sci.GetCarretLineVisible() );
 	menu.EnableCheck( ID_VIEW_XMLTAGS, pPage!=0, pPage && pPage->sci.isXmlMatchedTagHL() );
 	menu.EnableCheck( ID_VIEW_TOKEN, pPage!=0, pPage && pPage->sci.isTokenHL() );
-	menu.EnableCheck( ID_VIEW_WRAPLINES, pPage!=0, pPage && pPage->sci.getWrapLongLines() );
+	menu.EnableCheck( ID_VIEW_WRAPLINES2, pPage!=0, pPage && pPage->sci.getWrapLongLines() );
 
 	menu.Enable( ID_VIEW_ZOOMIN, pPage!=0 );
 	menu.Enable( ID_VIEW_ZOOMOUT, pPage!=0 );
@@ -1508,7 +1508,7 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			HMENU hMRU = GetSubMenu(hMenu,1); // vp: hardcoded
 			HMENU hPin = GetSubMenu(hMenu,2); // vp: hardcoded
 			int c = GetMenuItemCount(hMenu);
-			HMENU hLexers = GetSubMenu(hMenu,c-6); // vp: hardcoded
+			HMENU hLexers = GetSubMenu(hMenu,c-5); // vp: hardcoded
 			HMENU hTools = GetSubMenu(hMenu,c-3); // vp: hardcoded
 			int cnt = GetMenuItemCount(hTools);
 			HMENU hLang = GetSubMenu(hTools,cnt-1); // vp: hardcoded "Languages" is the last item of "Tools"

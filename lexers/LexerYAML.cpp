@@ -1509,18 +1509,22 @@ SetStyle( STYLE_CHAR );
 case 32:
 YY_RULE_SETUP
 #line 238 "C:/work/ape++/src/lexers/LexerYAML.L"
-BEGIN(BLOCK); SetStyle( STYLE_TEXT );
+BEGIN(BLOCK); SetStyle( IStyler::styleEOL );
 	YY_BREAK
 /* block scalar body: lasts while the lines are indented deeper than the parent node */
 
 case 33:
 YY_RULE_SETUP
 #line 242 "C:/work/ape++/src/lexers/LexerYAML.L"
-SetStyle( STYLE_BLOCK );
+{
+		int nEol = (yyleng>1 && yytext[yyleng-2]=='\r') ? 2 : 1;
+		SetStyle( MatchStart(), MatchEnd()-nEol, STYLE_BLOCK );
+		SetStyle( MatchEnd()-nEol, MatchEnd(), IStyler::styleEOL );
+	}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 243 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 247 "C:/work/ape++/src/lexers/LexerYAML.L"
 {
 		int ind = 0;
 		while( yytext[ind] == ' ' )
@@ -1543,23 +1547,23 @@ YY_RULE_SETUP
 
 case 35:
 YY_RULE_SETUP
-#line 263 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 267 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle( IStyler::styleEOL );
 	YY_BREAK
 case 36:
-#line 265 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 269 "C:/work/ape++/src/lexers/LexerYAML.L"
 case 37:
 YY_RULE_SETUP
-#line 265 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 269 "C:/work/ape++/src/lexers/LexerYAML.L"
 SetStyle();
 	YY_BREAK
 
 case 38:
 YY_RULE_SETUP
-#line 268 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 272 "C:/work/ape++/src/lexers/LexerYAML.L"
 ECHO;
 	YY_BREAK
-#line 1563 "C:/work/ape++/src/lexers/LexerYAML.cpp"
+#line 1567 "C:/work/ape++/src/lexers/LexerYAML.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(FLOW):
 case YY_STATE_EOF(DQ):
@@ -2276,7 +2280,7 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 268 "C:/work/ape++/src/lexers/LexerYAML.L"
+#line 272 "C:/work/ape++/src/lexers/LexerYAML.L"
 
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {

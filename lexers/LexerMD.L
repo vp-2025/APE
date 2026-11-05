@@ -91,7 +91,7 @@ URLCH		[^ \t\r\n<>()\[\]]
 
  /* ATX heading: # .. ###### (needs a space, so #tag stays text).
     The line end is not part of the match: the fold level is applied at it. */
-^#{1,6}{SPACE}[^\n]* |
+^#{1,6}{SPACE}[^\r\n]* |
 ^#{1,6}{SPACE}*/{EOL}	{
 		int nLevel = 0;
 		while( yytext[nLevel]=='#' ) nLevel++;
@@ -133,7 +133,7 @@ URLCH		[^ \t\r\n<>()\[\]]
 ^[ \t]*\|?{SPACE}*:?-+:?{SPACE}*(\|{SPACE}*:?-+:?{SPACE}*)+(\|{SPACE}*)?{EOL}	STYLE_LINE( STYLE_TABLE );
 
  /* link reference definition: [label]: url */
-^[ \t]{0,3}\[[^\]\n]+\]:[^\n]*	{
+^[ \t]{0,3}\[[^\]\r\n]+\]:[^\r\n]*	{
 		int nClose = 0;
 		while( yytext[nClose] && yytext[nClose]!=']' ) nClose++;
 		SetStyle( MatchStart(), MatchStart()+nClose+2, STYLE_REF );
@@ -143,7 +143,7 @@ URLCH		[^ \t\r\n<>()\[\]]
  /* fenced code block: ``` or ~~~.
     NOTE: no {EOL} here - the fold level a rule sets is applied when the line
     end is matched separately (see CSciLexer::BeforeAction). */
-^[ \t]{0,3}(`{3,}|~{3,})[^\n]*	{
+^[ \t]{0,3}(`{3,}|~{3,})[^\r\n]*	{
 		levelIncrease();
 		BEGIN(FENCE);
 		SetStyle( STYLE_CODEBLOCK );
@@ -155,9 +155,12 @@ URLCH		[^ \t\r\n<>()\[\]]
 		SetStyle( STYLE_CODEBLOCK );
 	}
 
+ /* the line ends of a code block keep its style: it is filled to the end of the line */
+<FENCE>{EOL}	SetStyle( STYLE_CODEBLOCK );
+
 <FENCEEND>{EOL}	{
 		BEGIN(INITIAL);
-		SetStyle( IStyler::styleEOL );
+		SetStyle( STYLE_CODEBLOCK );
 	}
 
  /* end of front matter */

@@ -122,10 +122,17 @@ BEGIN
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
         MENUITEM SEPARATOR
+        POPUP "EOL"
+        BEGIN
+            MENUITEM "CRLF - Windows (\\r\\n)", ID_EOL_CRLF
+            MENUITEM "LF - Unix (\\n)",         ID_EOL_LF
+            MENUITEM "CR - Mac (\\r)",          ID_EOL_CR
+        END
+        MENUITEM "Line Endings",                ID_VIEW_EOL2
         MENUITEM "Whitespace",                  ID_VIEW_WS
         MENUITEM "Indent Guides",               ID_VIEW_INDENT
         MENUITEM "Line Numbers",                ID_VIEW_NUMS
-        MENUITEM "Wrap Long Lines",             ID_VIEW_WRAPLINES
+        MENUITEM "Wrap Long Lines",             ID_VIEW_WRAPLINES2
         MENUITEM SEPARATOR
         MENUITEM "Brace Highlight",             ID_VIEW_BRACE
         MENUITEM "Line Highlight",              ID_VIEW_LINEHL
@@ -166,14 +173,6 @@ BEGIN
         MENUITEM "Latin-2 (ISO 8859-2) [Eastern European]", ID_ENCODING_LATIN2
         MENUITEM "Latin-3 (ISO 8859-3) [South European]", ID_ENCODING_LATIN3
 		MENUITEM "ANSI Cyrillic (1251)", ID_ENCODING_ANSI_CYR
-    END
-    POPUP "EOL"
-    BEGIN
-        MENUITEM "Line Endings",                ID_VIEW_EOL2
-        MENUITEM SEPARATOR
-        MENUITEM "CRLF - Windows (\\r\\n)",          ID_EOL_CRLF
-        MENUITEM "LF - Unix (\\n)",                  ID_EOL_LF
-        MENUITEM "CR - Mac (\\r)",                   ID_EOL_CR
     END
     POPUP "&Tools"
     BEGIN

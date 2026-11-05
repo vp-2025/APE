@@ -244,7 +244,8 @@
 #define ID_VIEW_THEME_LIGHT             33649
 #define ID_VIEW_THEME_DARK              33650
 #define ID_VIEW_TOOLBAR                 33651
-#define ID_VIEW_EOL2                    32852
+#define ID_VIEW_EOL2                    33652
+#define ID_VIEW_WRAPLINES2              33653
 
 // Next default values for new objects
 // 
@@ -252,7 +253,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        231
-#define _APS_NEXT_COMMAND_VALUE         33653
+#define _APS_NEXT_COMMAND_VALUE         33654
 #define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
