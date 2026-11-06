@@ -693,14 +693,14 @@ SetStyle(STYLE_CSS_SELECTOR);
 case 29:
 YY_RULE_SETUP
 #line 76 "C:/work/ape++/src/lexers/LexerCSS.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 30:
 YY_RULE_SETUP
 #line 80 "C:/work/ape++/src/lexers/LexerCSS.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 31:
 YY_RULE_SETUP

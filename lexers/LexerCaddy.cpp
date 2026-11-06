@@ -964,7 +964,7 @@ YY_RULE_SETUP
 		tokCount = 0;
 		prevWS = true;
 		matcherDef = importLine = false;
-		SetStyle( IStyler::styleEOL );
+		SetStyle( CSciStyler::styleEOL );
 	}
 	YY_BREAK
 case 21:

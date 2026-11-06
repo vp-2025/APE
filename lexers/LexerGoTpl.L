@@ -229,7 +229,7 @@ static CKeywords kwTplFunc( "tr dueCal frameKey hasDay weekDays nextRun", true )
 	\'			BEGIN(STRING2);	SetStyle();
 	>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag);
 	 /* the line of <style> / <script> is not EOL filled */
-	>{EOL}		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), IStyler::styleEOL ); BEGIN(after_tag);
+	>{EOL}		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), CSciStyler::styleEOL ); BEGIN(after_tag);
 	\?>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 	\/>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 }
@@ -297,7 +297,7 @@ static CKeywords kwTplFunc( "tr dueCal frameKey hasDay weekDays nextRun", true )
 	[A-Za-z][A-Za-z_0-9-]*		SetStyle(STYLE_CSS_SELECTOR);
 
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+		SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+		SetStyle(CSciStyler::styleInvalidText);
 }
 
  /* ========================================================================================
@@ -343,7 +343,7 @@ static CKeywords kwTplFunc( "tr dueCal frameKey hasDay weekDays nextRun", true )
 	\\[xX]{HC}{HC}		SetStyle();
 
 	/*invalid escaped symbol*/
-	\\.					SetStyle(IStyler::styleInvalidText);
+	\\.					SetStyle(CSciStyler::styleInvalidText);
 
 	{EOL}	SetStyle(STYLE_JS_UNQ); BEGIN(JS);
 }
@@ -371,7 +371,7 @@ static CKeywords kwTplFunc( "tr dueCal frameKey hasDay weekDays nextRun", true )
 <CSS,CSS_SELECTOR,CSS_ATTR,CSS_VALUE,CSS_COMMENT,CSS_COMMENTA,JS,JS_COMMENT>{EOL}	SetStyle();
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	.		SetStyle();
 }
 

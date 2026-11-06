@@ -1509,7 +1509,7 @@ SetStyle( STYLE_CHAR );
 case 32:
 YY_RULE_SETUP
 #line 238 "C:/work/ape++/src/lexers/LexerYAML.L"
-BEGIN(BLOCK); SetStyle( IStyler::styleEOL );
+BEGIN(BLOCK); SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 /* block scalar body: lasts while the lines are indented deeper than the parent node */
 
@@ -1519,7 +1519,7 @@ YY_RULE_SETUP
 {
 		int nEol = (yyleng>1 && yytext[yyleng-2]=='\r') ? 2 : 1;
 		SetStyle( MatchStart(), MatchEnd()-nEol, STYLE_BLOCK );
-		SetStyle( MatchEnd()-nEol, MatchEnd(), IStyler::styleEOL );
+		SetStyle( MatchEnd()-nEol, MatchEnd(), CSciStyler::styleEOL );
 	}
 	YY_BREAK
 case 34:
@@ -1548,7 +1548,7 @@ YY_RULE_SETUP
 case 35:
 YY_RULE_SETUP
 #line 267 "C:/work/ape++/src/lexers/LexerYAML.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 36:
 #line 269 "C:/work/ape++/src/lexers/LexerYAML.L"

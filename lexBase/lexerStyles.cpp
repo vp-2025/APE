@@ -3,7 +3,7 @@
 #include "lexerStyles.h"
 #include "theme.h"
 
-//#define STYLE_INVALID IStyler::styleInvalidText
+//#define STYLE_INVALID CSciStyler::styleInvalidText
 
 #define clrWhite			RGB(0xFF,0xFF,0xFF)
 #define clrBlack			RGB(0,0,0)

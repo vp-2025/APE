@@ -123,7 +123,7 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 	{SYMB}				SetStyle(STYLE_SYMBOL);
 
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+		SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+		SetStyle(CSciStyler::styleInvalidText);
 }
 
 <COMMENT>{
@@ -131,7 +131,7 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 }
 
 <SLCOMMENT>{
-	{EOL}				BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+	{EOL}				BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 }
 
 <STRING,STRING2,STRING3>{
@@ -153,11 +153,11 @@ bool isKeywordNSIS( const char* szKW ); // defined in lexNSIS
 <PREPROCESSOR>{
 	\\{EOL}			SetStyle();
 
-	{EOL}				BEGIN(INITIAL);   SetStyle( IStyler::styleEOL );
+	{EOL}				BEGIN(INITIAL);   SetStyle( CSciStyler::styleEOL );
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
 	.					SetStyle();

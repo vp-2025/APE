@@ -585,7 +585,7 @@ SetStyle(STYLE_VAR);
 case 4:
 YY_RULE_SETUP
 #line 43 "C:/work/ape++/src/lexers/LexerMAKE.L"
-BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL);	SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 case 5:
@@ -624,7 +624,7 @@ SetStyle(STYLE_SYMBOL);
 case 11:
 YY_RULE_SETUP
 #line 58 "C:/work/ape++/src/lexers/LexerMAKE.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 12:
 #line 60 "C:/work/ape++/src/lexers/LexerMAKE.L"

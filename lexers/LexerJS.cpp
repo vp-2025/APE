@@ -668,14 +668,14 @@ SetStyle(STYLE_SYMBOL);
 case 15:
 YY_RULE_SETUP
 #line 70 "C:/work/ape++/src/lexers/LexerJS.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 16:
 YY_RULE_SETUP
 #line 74 "C:/work/ape++/src/lexers/LexerJS.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 	YY_BREAK
 
 
@@ -721,7 +721,7 @@ SetStyle();
 case 25:
 YY_RULE_SETUP
 #line 97 "C:/work/ape++/src/lexers/LexerJS.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 /*invalid end-of-line*/
 case 26:
@@ -766,7 +766,7 @@ SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 case 33:
 YY_RULE_SETUP
 #line 113 "C:/work/ape++/src/lexers/LexerJS.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 34:
 #line 115 "C:/work/ape++/src/lexers/LexerJS.L"

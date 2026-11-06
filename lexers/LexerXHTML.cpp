@@ -1050,7 +1050,7 @@ SetStyle(STYLE_SYMBOL); BEGIN(after_tag);
 case 30:
 YY_RULE_SETUP
 #line 153 "C:/work/ape++/src/lexers/LexerXHTML.L"
-SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), IStyler::styleEOL ); BEGIN(after_tag);
+SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), CSciStyler::styleEOL ); BEGIN(after_tag);
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
@@ -1227,7 +1227,7 @@ SetStyle(STYLE_CSS_SELECTOR);
 case 66:
 YY_RULE_SETUP
 #line 221 "C:/work/ape++/src/lexers/LexerXHTML.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 /* ========================================================================================
@@ -1344,7 +1344,7 @@ SetStyle();
 case 88:
 YY_RULE_SETUP
 #line 270 "C:/work/ape++/src/lexers/LexerXHTML.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
@@ -1457,7 +1457,7 @@ SetStyle(STYLE_PHP_SYMBOL);
 case 108:
 YY_RULE_SETUP
 #line 307 "C:/work/ape++/src/lexers/LexerXHTML.L"
-BEGIN(PHP); SetStyle( IStyler::styleEOL );
+BEGIN(PHP); SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 
@@ -1501,7 +1501,7 @@ SetStyle();
 case 114:
 YY_RULE_SETUP
 #line 330 "C:/work/ape++/src/lexers/LexerXHTML.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 115:
 YY_RULE_SETUP

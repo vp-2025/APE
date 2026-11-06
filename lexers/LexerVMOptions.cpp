@@ -659,7 +659,7 @@ SetStyle( STYLE_SYMBOL );
 case 12:
 YY_RULE_SETUP
 #line 89 "C:/work/ape++/src/lexers/LexerVMOptions.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 13:
 #line 91 "C:/work/ape++/src/lexers/LexerVMOptions.L"

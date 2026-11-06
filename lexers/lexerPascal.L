@@ -134,11 +134,11 @@ bool isPascalKeyword( const char* text, bool& bInc, bool& bDec )
 	{SYMB}			SetStyle(STYLE_SYMBOL);
 
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+	SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+	SetStyle(CSciStyler::styleInvalidText);
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+	{EOL}		BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 }
 <COMMENT>{
 	\}			SetStyle();	BEGIN(INITIAL); levelDecrease();
@@ -158,7 +158,7 @@ bool isPascalKeyword( const char* text, bool& bInc, bool& bDec )
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
 	.				SetStyle();

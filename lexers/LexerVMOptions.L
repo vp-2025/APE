@@ -86,7 +86,7 @@ TOKEN	[^ \t\r\n=:,$]+
 }
 
 <*>{
-	{EOL}					BEGIN(INITIAL); SetStyle( IStyler::styleEOL );
+	{EOL}					BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL );
 	{WS}+	|
 	.						SetStyle();
 }

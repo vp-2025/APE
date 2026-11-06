@@ -735,7 +735,7 @@ SetStyle(STYLE_SYMBOL);
 case 15:
 YY_RULE_SETUP
 #line 126 "C:/work/ape++/src/lexers/LexerNSIS.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
@@ -749,7 +749,7 @@ SetStyle();	BEGIN(INITIAL); levelDecrease();
 case 17:
 YY_RULE_SETUP
 #line 134 "C:/work/ape++/src/lexers/LexerNSIS.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 	YY_BREAK
 
 
@@ -795,14 +795,14 @@ SetStyle();
 case 24:
 YY_RULE_SETUP
 #line 156 "C:/work/ape++/src/lexers/LexerNSIS.L"
-BEGIN(INITIAL);   SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL);   SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 
 case 25:
 YY_RULE_SETUP
 #line 160 "C:/work/ape++/src/lexers/LexerNSIS.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 26:
 #line 162 "C:/work/ape++/src/lexers/LexerNSIS.L"

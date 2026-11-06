@@ -235,14 +235,14 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 	([^'\r\n]|'')+			SetStyle( STYLE_CHAR );
 }
 
-<BLOCKHDR>{EOL}				BEGIN(BLOCK); SetStyle( IStyler::styleEOL );
+<BLOCKHDR>{EOL}				BEGIN(BLOCK); SetStyle( CSciStyler::styleEOL );
 
  /* block scalar body: lasts while the lines are indented deeper than the parent node */
 <BLOCK>{
 	{WS}*{EOL}				{
 		int nEol = (yyleng>1 && yytext[yyleng-2]=='\r') ? 2 : 1;
 		SetStyle( MatchStart(), MatchEnd()-nEol, STYLE_BLOCK );
-		SetStyle( MatchEnd()-nEol, MatchEnd(), IStyler::styleEOL );
+		SetStyle( MatchEnd()-nEol, MatchEnd(), CSciStyler::styleEOL );
 	}
 	[ ]*[^ \r\n][^\r\n]*	{
 		int ind = 0;
@@ -264,7 +264,7 @@ KW		(true|True|TRUE|false|False|FALSE|yes|Yes|YES|no|No|NO|on|On|ON|off|Off|OFF|
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WS}+	|
 	.		SetStyle();
 }

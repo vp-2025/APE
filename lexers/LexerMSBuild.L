@@ -117,7 +117,7 @@ VAR			[$@%]\([a-zA-Z_.0-9]+\)
  // ========================================================================================*/
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	.		SetStyle();
 }
 

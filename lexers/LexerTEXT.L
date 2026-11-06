@@ -123,7 +123,7 @@ CAPS	[A-Z0-9 .,&/()'_:-]
 }
 
 <*>{
-	{EOL}					SetStyle( IStyler::styleEOL );
+	{EOL}					SetStyle( CSciStyler::styleEOL );
 	{WS}+	|
 	.						SetStyle();
 }

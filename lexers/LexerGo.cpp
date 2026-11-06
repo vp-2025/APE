@@ -858,7 +858,7 @@ SetStyle();
 case 28:
 YY_RULE_SETUP
 #line 114 "C:/work/ape++/src/lexers/LexerGo.L"
-SetStyle( IStyler::styleInvalidText );
+SetStyle( CSciStyler::styleInvalidText );
 	YY_BREAK
 /* the string is not closed at the end of the line */
 case 29:
@@ -884,7 +884,7 @@ SetStyle();
 case 32:
 YY_RULE_SETUP
 #line 127 "C:/work/ape++/src/lexers/LexerGo.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 33:
 #line 129 "C:/work/ape++/src/lexers/LexerGo.L"

@@ -201,26 +201,13 @@ int DetectLexer(const string &sFile1) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-class CSciStyler : public IStyler
-{
-	CSciWrapper& m_sci;
-	int m_posStylingCur, m_posStylingTo;
-public:
-	explicit CSciStyler( CSciWrapper& sci ) : m_sci(sci) { m_posStylingCur = m_posStylingTo = 0; }
+int  CSciStyler::GetLine(int nPos) { return m_sci.LineFromPosition( nPos ); }
+void CSciStyler::SetLevel(int nLine, int nLevel) { m_sci.SetFoldLevel( nLine, nLevel ); }
+int  CSciStyler::GetLevel(int nLine) { return m_sci.GetFoldLevel( nLine ); }
+int  CSciStyler::GetLineState(int nLine) { return m_sci.GetLineState( nLine ); }
+void CSciStyler::SetLineState(int nLine, int nState) { m_sci.SetLineState( nLine, nState ); }
 
-	int	 GetStylingPos() override { return m_posStylingCur; }
-	void StartStyling(int posTo) override;
-	int  GetText(char* buf, int max_size) override;
-	int  GetStyle(int nPos) override { return m_sci.GetStyleAt( nPos ); }
-	void SetStyle(int nStartPos, int nEndPos, int nStyle) override;
-	int  GetLine(int nPos) override { return m_sci.LineFromPosition( nPos ); }
-	void SetLevel(int nLine, int nLevel) override { m_sci.SetFoldLevel( nLine, nLevel ); }
-	int  GetLevel(int nLine) override { return m_sci.GetFoldLevel( nLine ); }
-	int  GetLineState(int nLine) override { return m_sci.GetLineState( nLine ); }
-	void SetLineState(int nLine, int nState) override { m_sci.SetLineState( nLine, nState ); }
-};
-
-inline void CSciStyler::StartStyling(int posTo) {
+void CSciStyler::StartStyling(int posTo) {
 	m_posStylingCur = m_sci.GetEndStyled();
 	int nLine = m_sci.LineFromPosition(m_posStylingCur)-1;
 	if( GetLevel(nLine) & SC_FOLDLEVELHEADERFLAG )
@@ -231,7 +218,7 @@ inline void CSciStyler::StartStyling(int posTo) {
 	m_sci.StartStyling( m_posStylingCur, defaultStyleMask );
 }
 
-inline int CSciStyler::GetText(char* buf, int max_size) {
+int CSciStyler::GetText(char* buf, int max_size) {
 	if( m_posStylingCur >= m_posStylingTo )
 		return 0; //EOF
 	int cbAvail = m_posStylingTo - m_posStylingCur;
@@ -250,7 +237,7 @@ inline int CSciStyler::GetText(char* buf, int max_size) {
 	return cbAvail;
 }
 
-inline void CSciStyler::SetStyle(int nStartPos, int nEndPos, int nStyle) {
+void CSciStyler::SetStyle(int nStartPos, int nEndPos, int nStyle) {
 	int nEndStyled = m_sci.GetEndStyled();
 	if( nStartPos < nEndStyled )
 		m_sci.StartStyling(nStartPos, defaultStyleMask);

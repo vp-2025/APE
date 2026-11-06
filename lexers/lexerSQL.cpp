@@ -780,7 +780,7 @@ SetStyle(STYLE_SYMBOL);
 case 14:
 YY_RULE_SETUP
 #line 126 "C:/work/ape++/src/lexers/lexerSQL.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
@@ -801,14 +801,14 @@ SetStyle(); levelDecrease(); BEGIN(PLSQL);
 case 17:
 YY_RULE_SETUP
 #line 138 "C:/work/ape++/src/lexers/lexerSQL.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 	YY_BREAK
 
 
 case 18:
 YY_RULE_SETUP
 #line 142 "C:/work/ape++/src/lexers/lexerSQL.L"
-BEGIN(PLSQL); SetStyle( IStyler::styleEOL ); 
+BEGIN(PLSQL); SetStyle( CSciStyler::styleEOL ); 
 	YY_BREAK
 
 
@@ -933,7 +933,7 @@ SetStyle(STYLE_PLSQL_SYMBOL);
 case 40:
 YY_RULE_SETUP
 #line 199 "C:/work/ape++/src/lexers/lexerSQL.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 41:
 #line 201 "C:/work/ape++/src/lexers/lexerSQL.L"

@@ -111,7 +111,7 @@ WORD	{SWC}{WWC}*
 	[:,+\-.]				SetStyle( STYLE_SYMBOL ); bNoKey = *yytext != ',';
 
 	 /* non-ASCII outside of a string */
-	[\x80-\xFF]+			SetStyle( IStyler::styleInvalidText ); bNoKey = true;
+	[\x80-\xFF]+			SetStyle( CSciStyler::styleInvalidText ); bNoKey = true;
 }
 
 <COMMENT>{
@@ -137,14 +137,14 @@ WORD	{SWC}{WWC}*
 	\\x{HC}{2}				SetStyle( STYLE_ESCAPE );
 
 	 /* an invalid escape sequence */
-	\\.						SetStyle( IStyler::styleInvalidText );
+	\\.						SetStyle( CSciStyler::styleInvalidText );
 
 	 /* the string is not closed at the end of the line */
 	{EOL}					SetStyle( STYLE_UNQ ); BEGIN( INITIAL );
 }
 
 <*>{
-	{EOL}					SetStyle( IStyler::styleEOL );
+	{EOL}					SetStyle( CSciStyler::styleEOL );
 	{WS}+	|
 	.						SetStyle();
 }

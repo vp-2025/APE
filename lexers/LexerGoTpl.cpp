@@ -1280,7 +1280,7 @@ SetStyle(STYLE_SYMBOL); BEGIN(after_tag);
 case 52:
 YY_RULE_SETUP
 #line 232 "C:/work/ape++/src/lexers/LexerGoTpl.L"
-SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), IStyler::styleEOL ); BEGIN(after_tag);
+SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), CSciStyler::styleEOL ); BEGIN(after_tag);
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
@@ -1457,7 +1457,7 @@ SetStyle(STYLE_CSS_SELECTOR);
 case 88:
 YY_RULE_SETUP
 #line 300 "C:/work/ape++/src/lexers/LexerGoTpl.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 /* ========================================================================================
@@ -1564,7 +1564,7 @@ SetStyle();
 case 108:
 YY_RULE_SETUP
 #line 346 "C:/work/ape++/src/lexers/LexerGoTpl.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
@@ -1636,7 +1636,7 @@ SetStyle();
 case 120:
 YY_RULE_SETUP
 #line 374 "C:/work/ape++/src/lexers/LexerGoTpl.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 121:
 YY_RULE_SETUP

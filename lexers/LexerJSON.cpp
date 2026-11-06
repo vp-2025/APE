@@ -721,7 +721,7 @@ SetStyle( STYLE_SYMBOL ); bNoKey = *yytext != ',';
 case 15:
 YY_RULE_SETUP
 #line 114 "C:/work/ape++/src/lexers/LexerJSON.L"
-SetStyle( IStyler::styleInvalidText ); bNoKey = true;
+SetStyle( CSciStyler::styleInvalidText ); bNoKey = true;
 	YY_BREAK
 
 
@@ -777,7 +777,7 @@ SetStyle( STYLE_ESCAPE );
 case 26:
 YY_RULE_SETUP
 #line 140 "C:/work/ape++/src/lexers/LexerJSON.L"
-SetStyle( IStyler::styleInvalidText );
+SetStyle( CSciStyler::styleInvalidText );
 	YY_BREAK
 /* the string is not closed at the end of the line */
 case 27:
@@ -790,7 +790,7 @@ SetStyle( STYLE_UNQ ); BEGIN( INITIAL );
 case 28:
 YY_RULE_SETUP
 #line 147 "C:/work/ape++/src/lexers/LexerJSON.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 29:
 #line 149 "C:/work/ape++/src/lexers/LexerJSON.L"

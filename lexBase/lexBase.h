@@ -12,7 +12,11 @@ using namespace std;
 
 #define SC_FOLDLEVELFOOTERFLAG            (SC_FOLDLEVELHEADERFLAG << 1)
 
-class IStyler {
+class CSciWrapper;
+
+class CSciStyler {
+    CSciWrapper& m_sci;
+    int m_posStylingCur, m_posStylingTo;
 public:
     enum {
         defaultStyleMask = 0x7F,
@@ -20,21 +24,22 @@ public:
         styleEOL = 37 // STYLE_INDENTGUIDE = 37
     };
 
-    virtual int GetStylingPos() = 0;
-    virtual void StartStyling(int posTo) = 0;
-    virtual int GetText(char* buf, int max_size) = 0;
-    virtual int GetStyle(int nPos) = 0;
-    virtual void SetStyle(int nStartPos, int nEndPos, int nStyle) = 0;
-    virtual int GetLine(int nPos) = 0;
-    virtual void SetLevel(int nLine, int nLevel) = 0;
-    virtual int GetLevel(int nLine) = 0;
-    virtual int GetLineState(int nLine) = 0;
-    virtual void SetLineState(int nLine, int nState) = 0;
+    explicit CSciStyler(CSciWrapper& sci) : m_sci(sci), m_posStylingCur(0), m_posStylingTo(0) {}
+
+    int GetStylingPos() { return m_posStylingCur; }
+    void StartStyling(int posTo);
+    int GetText(char* buf, int max_size);
+    void SetStyle(int nStartPos, int nEndPos, int nStyle);
+    int GetLine(int nPos);
+    void SetLevel(int nLine, int nLevel);
+    int GetLevel(int nLine);
+    int GetLineState(int nLine);
+    void SetLineState(int nLine, int nState);
 };
 
 template<class LEXER>
 class CSciLexer : protected LEXER {
-    IStyler* m_pStyler;
+    CSciStyler* m_pStyler;
     int m_langId;
 
     int m_foldLine;        // line no
@@ -145,7 +150,7 @@ public:
     bool isQuote() { return m_bQuote; }
     void setQuote(bool b) { m_bQuote = b; }
 
-    CSciLexer(IStyler* pStyler, int langId = 0) : m_pStyler(pStyler), m_langId(langId), m_stateExt(0), m_pProgress(0),
+    CSciLexer(CSciStyler* pStyler, int langId = 0) : m_pStyler(pStyler), m_langId(langId), m_stateExt(0), m_pProgress(0),
                                                   m_bQuote(true) {}
 
     void Style(int posTo) {

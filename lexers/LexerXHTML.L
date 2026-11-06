@@ -150,7 +150,7 @@ bool isPHPKeyword( const char* szKW )
 	\'			BEGIN(STRING2);	SetStyle();
 	>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); 
 	 /* the line of <style> / <script> is not EOL filled */
-	>{EOL}		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), IStyler::styleEOL ); BEGIN(after_tag);
+	>{EOL}		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), CSciStyler::styleEOL ); BEGIN(after_tag);
 	\?>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 	\/>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 }
@@ -218,7 +218,7 @@ bool isPHPKeyword( const char* szKW )
 	[A-Za-z][A-Za-z_0-9-]*		SetStyle(STYLE_CSS_SELECTOR);
 	
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+		SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+		SetStyle(CSciStyler::styleInvalidText);
 }
 
  /* ========================================================================================
@@ -267,7 +267,7 @@ bool isPHPKeyword( const char* szKW )
 	\\[xX]{HC}{HC}		SetStyle();
 	
 	/*invalid escaped symbol*/
-	\\.					SetStyle(IStyler::styleInvalidText);
+	\\.					SetStyle(CSciStyler::styleInvalidText);
 	
 	{EOL}	SetStyle(STYLE_JS_UNQ); BEGIN(JS);
 }
@@ -304,7 +304,7 @@ bool isPHPKeyword( const char* szKW )
 }
 
 <PHP_SLCOMMENT>{
-	{EOL}		BEGIN(PHP); SetStyle( IStyler::styleEOL );
+	{EOL}		BEGIN(PHP); SetStyle( CSciStyler::styleEOL );
 }
 <PHP_COMMENT>{
 	\*\/		SetStyle(); BEGIN(PHP); levelDecrease();
@@ -327,7 +327,7 @@ bool isPHPKeyword( const char* szKW )
 <CSS,CSS_SELECTOR,CSS_ATTR,CSS_VALUE,CSS_COMMENT,CSS_COMMENTA,JS,JS_COMMENT>{EOL}	SetStyle();
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	.		SetStyle();
 }
 

@@ -1051,12 +1051,12 @@ goto find_rule; \
 			SetStyle( MatchEnd()-(nPost), MatchEnd(), STYLE_MARK ); \
 	} while( 0 )
 
-/* style a match that ends with its line end: the line end gets IStyler::styleEOL */
+/* style a match that ends with its line end: the line end gets CSciStyler::styleEOL */
 #define STYLE_LINE(nStyle) \
 	{ \
 		int nEol = (yyleng>1 && yytext[yyleng-2]=='\r') ? 2 : 1; \
 		SetStyle( MatchStart(), MatchEnd()-nEol, (nStyle) ); \
-		SetStyle( MatchEnd()-nEol, MatchEnd(), IStyler::styleEOL ); \
+		SetStyle( MatchEnd()-nEol, MatchEnd(), CSciStyler::styleEOL ); \
 	}
 
 /* a heading of level n folds the lines up to the next heading of level <= n:
@@ -1599,7 +1599,7 @@ SetStyle( STYLE_TABLE );
 case 41:
 YY_RULE_SETUP
 #line 240 "C:/work/ape++/src/lexers/LexerMD.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 42:
 #line 242 "C:/work/ape++/src/lexers/LexerMD.L"

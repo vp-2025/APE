@@ -111,7 +111,7 @@ static CKeywords kwBuiltin(
 	\\U{HC}{8}				SetStyle();
 
 	 /* an invalid escape sequence */
-	\\.						SetStyle( IStyler::styleInvalidText );
+	\\.						SetStyle( CSciStyler::styleInvalidText );
 
 	 /* the string is not closed at the end of the line */
 	{EOL}					SetStyle( STYLE_UNQ ); BEGIN( INITIAL );
@@ -124,7 +124,7 @@ static CKeywords kwBuiltin(
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WS}+	|
 	.						SetStyle();
 }

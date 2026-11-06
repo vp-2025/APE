@@ -113,11 +113,11 @@ bool isCppKeyword( const char* text, int lang ) {
 	{SYMB}			SetStyle(STYLE_SYMBOL);
 	
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+	SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+	SetStyle(CSciStyler::styleInvalidText);
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+	{EOL}		BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 }
 <COMMENT>{
 	\*\/		SetStyle();	BEGIN(INITIAL); levelDecrease();
@@ -140,7 +140,7 @@ bool isCppKeyword( const char* text, int lang ) {
 	\\[xX]{HC}{HC}		SetStyle();
 
 	/*invalid escaped symbol*/
-	\\.					SetStyle(IStyler::styleInvalidText);
+	\\.					SetStyle(CSciStyler::styleInvalidText);
 
 	/*invalid end-of-line*/
 	{EOL}				SetStyle(STYLE_UNQ); BEGIN(INITIAL);
@@ -156,18 +156,18 @@ bool isCppKeyword( const char* text, int lang ) {
 	/* \/\*				BEGIN(COMMENT);   SetStyle(); levelIncrease(); */
 
 	\\{EOL}				SetStyle();
-	{EOL}				BEGIN(INITIAL);   SetStyle( IStyler::styleEOL );
+	{EOL}				BEGIN(INITIAL);   SetStyle( CSciStyler::styleEOL );
 }
 
 <UID>{
 	[0-9a-fA-F -]*	SetStyle();
 	{EOL}			SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	\)				SetStyle(STYLE_SYMBOL); BEGIN(INITIAL);
-	.				SetStyle(IStyler::styleInvalidText);
+	.				SetStyle(CSciStyler::styleInvalidText);
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
 	.				SetStyle();

@@ -67,11 +67,11 @@ bool isJSKeyword( const char* szKW );
 	{SYMB}			SetStyle(STYLE_SYMBOL);
 	
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+		SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+		SetStyle(CSciStyler::styleInvalidText);
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+	{EOL}		BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 }
 <COMMENT>{
 	\*\/		SetStyle();	BEGIN(INITIAL); levelDecrease();
@@ -94,7 +94,7 @@ bool isJSKeyword( const char* szKW );
 	\\[xX]{HC}{HC}		SetStyle();
 
 	/*invalid escaped symbol*/
-	\\.					SetStyle(IStyler::styleInvalidText);
+	\\.					SetStyle(CSciStyler::styleInvalidText);
 
 	/*invalid end-of-line*/
 	{EOL}				SetStyle(STYLE_UNQ); BEGIN(INITIAL);
@@ -110,7 +110,7 @@ bool isJSKeyword( const char* szKW );
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
 	.				SetStyle();

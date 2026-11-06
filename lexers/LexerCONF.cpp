@@ -673,14 +673,14 @@ SetStyle(); BEGIN(INITIAL);
 case 18:
 YY_RULE_SETUP
 #line 104 "C:/work/ape++/src/lexers/LexerCONF.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 
 case 19:
 YY_RULE_SETUP
 #line 108 "C:/work/ape++/src/lexers/LexerCONF.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 20:
 YY_RULE_SETUP

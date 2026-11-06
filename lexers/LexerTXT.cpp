@@ -563,7 +563,7 @@ SetStyle(); BEGIN(INITIAL);
 case 9:
 YY_RULE_SETUP
 #line 49 "C:/work/ape++/src/lexers/LexerTXT.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 10:
 YY_RULE_SETUP

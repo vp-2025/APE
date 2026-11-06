@@ -123,7 +123,7 @@ bool isBeginPLSQL( const char* text ) {
 	{SYMB}			SetStyle(STYLE_SYMBOL);
 
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+	SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+	SetStyle(CSciStyler::styleInvalidText);
 }
 
 <COMMENT>{
@@ -135,11 +135,11 @@ bool isBeginPLSQL( const char* text ) {
 }
 
 <SLCOMMENT>{
-	{EOL}		BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+	{EOL}		BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 }
 
 <PLSQL_SLCOMMENT>{
-	{EOL}		BEGIN(PLSQL); SetStyle( IStyler::styleEOL ); 
+	{EOL}		BEGIN(PLSQL); SetStyle( CSciStyler::styleEOL ); 
 }
 
 <STRING>{
@@ -196,7 +196,7 @@ bool isBeginPLSQL( const char* text ) {
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	{WORD} |
 	{SPACE}+ |
 	.				SetStyle();

@@ -599,12 +599,12 @@ SetStyle(STYLE_VAR);
 case 6:
 YY_RULE_SETUP
 #line 48 "C:/work/ape++/src/lexers/LexerBATCH.L"
-BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL);	SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 50 "C:/work/ape++/src/lexers/LexerBATCH.L"
-BEGIN(INITIAL);	SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL);	SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 case 8:
@@ -665,7 +665,7 @@ SetStyle(STYLE_SYMBOL);
 case 16:
 YY_RULE_SETUP
 #line 80 "C:/work/ape++/src/lexers/LexerBATCH.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 17:
 #line 82 "C:/work/ape++/src/lexers/LexerBATCH.L"

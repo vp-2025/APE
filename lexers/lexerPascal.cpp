@@ -813,14 +813,14 @@ SetStyle(STYLE_SYMBOL);
 case 22:
 YY_RULE_SETUP
 #line 137 "C:/work/ape++/src/lexers/lexerPascal.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 23:
 YY_RULE_SETUP
 #line 141 "C:/work/ape++/src/lexers/lexerPascal.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 	YY_BREAK
 
 
@@ -861,7 +861,7 @@ SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 case 29:
 YY_RULE_SETUP
 #line 161 "C:/work/ape++/src/lexers/lexerPascal.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 30:
 #line 163 "C:/work/ape++/src/lexers/lexerPascal.L"

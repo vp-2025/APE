@@ -955,7 +955,7 @@ SetStyle( STYLE_UNQ ); BEGIN( INITIAL );
 case 25:
 YY_RULE_SETUP
 #line 126 "C:/work/ape++/src/lexers/LexerTEXT.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 26:
 #line 128 "C:/work/ape++/src/lexers/LexerTEXT.L"

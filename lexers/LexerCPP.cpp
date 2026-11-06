@@ -928,14 +928,14 @@ SetStyle(STYLE_SYMBOL);
 case 26:
 YY_RULE_SETUP
 #line 116 "C:/work/ape++/src/lexers/LexerCPP.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 27:
 YY_RULE_SETUP
 #line 120 "C:/work/ape++/src/lexers/LexerCPP.L"
-BEGIN(INITIAL); SetStyle( IStyler::styleEOL ); 
+BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL ); 
 	YY_BREAK
 
 
@@ -981,7 +981,7 @@ SetStyle();
 case 36:
 YY_RULE_SETUP
 #line 143 "C:/work/ape++/src/lexers/LexerCPP.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 /*invalid end-of-line*/
 case 37:
@@ -1013,7 +1013,7 @@ SetStyle();
 case 41:
 YY_RULE_SETUP
 #line 159 "C:/work/ape++/src/lexers/LexerCPP.L"
-BEGIN(INITIAL);   SetStyle( IStyler::styleEOL );
+BEGIN(INITIAL);   SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 
@@ -1035,14 +1035,14 @@ SetStyle(STYLE_SYMBOL); BEGIN(INITIAL);
 case 45:
 YY_RULE_SETUP
 #line 166 "C:/work/ape++/src/lexers/LexerCPP.L"
-SetStyle(IStyler::styleInvalidText);
+SetStyle(CSciStyler::styleInvalidText);
 	YY_BREAK
 
 
 case 46:
 YY_RULE_SETUP
 #line 170 "C:/work/ape++/src/lexers/LexerCPP.L"
-SetStyle( IStyler::styleEOL );
+SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 47:
 #line 172 "C:/work/ape++/src/lexers/LexerCPP.L"

@@ -73,11 +73,11 @@ bool isCssValue( const char* text );
 	[A-Za-z][A-Za-z_0-9-]*		SetStyle(STYLE_CSS_SELECTOR);
 	
 	 /* invalid chars - all second part of the ASCII table */
-	[\x80-\xFF]+		SetStyle(IStyler::styleInvalidText);
+	[\x80-\xFF]+		SetStyle(CSciStyler::styleInvalidText);
 }
 
 <*>{
-	{EOL}						SetStyle( IStyler::styleEOL );
+	{EOL}						SetStyle( CSciStyler::styleEOL );
 	.					SetStyle();
 }
 
