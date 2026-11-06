@@ -308,10 +308,35 @@ static yyconst short int yy_chk[84] =
 // without - "'	esc []-\/
 #line 24 "C:/work/ape++/src/lexers/LexerCONF.L"
 
-bool isApacheKeyword( const char* szKW );
-bool isApacheKeyword2( const char* szKW );
-bool isNginxKeyword( const char* szKW );
-bool isNginxKeyword2( const char* szKW );
+bool isApacheKeyword( const char* szKW ) {
+	static set<string> stKW = {"ProxyPass", "ProxyRequests", "AddDefaultCharset",
+		"AuthType", "AuthName", "AuthBasicProvider","AuthUserfile", "AuthnzFcgiDefineProvider",
+		"Alias", "Require", "AllowOverride", "RequestHeader", "Options", "AddHandler", "DirectoryIndex",
+		"ServerRoot", "ServerAdmin", "ServerName", "DocumentRoot", "Listen", "LoadModule"};
+	return stKW.find(szKW)!=stKW.end();
+}
+
+bool isApacheKeyword2( const char* szKW ) {
+	static set<string> stKW = {"none", "all", "granted", "denied", "set", "Basic", "ExecCGI", "Indexes",
+		"authn", "authz", "authnz"};
+	return stKW.find(szKW)!=stKW.end();
+}
+
+bool isNginxKeyword( const char* szKW ) {
+	static set<string> stKW = {"events", "http", "server", "location", "include", "internal", "on", "off"};
+	return stKW.find(szKW)!=stKW.end();
+}
+
+bool isNginxKeyword2( const char* szKW ) {
+	static set<string> stKW = {"auth_request", "auth_request_set", "auth_basic", "auth_basic_user_file",
+		"add_header",  "client_max_body_size",
+		"default_type", "sendfile", "listen", "server_name", "root", "alias", "index", "allow", "deny", "keepalive_timeout", "worker_connections", "worker_processes",
+		"proxy_pass", "proxy_set_header", "proxy_pass_request_body",
+		"proxy_cache", "proxy_cache_path", "proxy_cache_methods", "proxy_cache_key", "proxy_cache_valid",
+		"fastcgi_pass", "fastcgi_connect_timeout", "fastcgi_param"};
+	bool b = stKW.find(szKW)!=stKW.end();
+	return b;
+}
 
 #define STYLE_TEXT			0
 #define STYLE_KW1			1
@@ -325,7 +350,7 @@ bool isNginxKeyword2( const char* szKW );
 #define STYLE_TAG			8
 #define STYLE_VAR			9
 
-#line 329 "C:/work/ape++/src/lexers/LexerCONF.cpp"
+#line 354 "C:/work/ape++/src/lexers/LexerCONF.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */
 /*********************************************************************************/
 
@@ -448,10 +473,10 @@ YY_DECL
 
 /************************************************************************/
 /* start of user's declarations                                         */
-#line 44 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 69 "C:/work/ape++/src/lexers/LexerCONF.L"
 
 
-#line 455 "C:/work/ape++/src/lexers/LexerCONF.cpp"
+#line 480 "C:/work/ape++/src/lexers/LexerCONF.cpp"
 /* end of user's declarations                                           */
 /************************************************************************/
 
@@ -557,12 +582,12 @@ do_action:  /* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 46 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 71 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_SYMBOL); if( *yytext=='{' ) levelIncrease(); else levelDecrease();
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 48 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 73 "C:/work/ape++/src/lexers/LexerCONF.L"
 {
 				char chB = *(yytext-1);
 				bool bB = true; // strchr(" \t\r\n",chB);
@@ -588,112 +613,112 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 71 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 96 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_VAR);	// nginx VAR
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 73 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 98 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_VAR);	// apache VAR
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 75 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 100 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_NUMBER);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 77 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 102 "C:/work/ape++/src/lexers/LexerCONF.L"
 BEGIN(SLCOMMENT); levelIncrease(); SetStyle();
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 79 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 104 "C:/work/ape++/src/lexers/LexerCONF.L"
 BEGIN(SLCOMMENT); levelDecrease(); SetStyle();
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 81 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 106 "C:/work/ape++/src/lexers/LexerCONF.L"
 BEGIN(SLCOMMENT); SetStyle();
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 83 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 108 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_SYMBOL);	BEGIN(TAG); levelIncrease();
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 84 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 109 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_SYMBOL);	BEGIN(TAG); levelDecrease();
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 85 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 110 "C:/work/ape++/src/lexers/LexerCONF.L"
 BEGIN(STRING); SetStyle();
 	YY_BREAK
 
 case 12:
 YY_RULE_SETUP
-#line 88 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 113 "C:/work/ape++/src/lexers/LexerCONF.L"
 BEGIN(TAG_STRING); SetStyle();
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 89 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 114 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_SYMBOL); BEGIN(INITIAL); 
 	YY_BREAK
 
 
 case 14:
 YY_RULE_SETUP
-#line 93 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 118 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle();
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 94 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 119 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(STYLE_UNQ); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 16:
 YY_RULE_SETUP
-#line 97 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 122 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(); BEGIN(TAG);
 	YY_BREAK
 
 
 case 17:
 YY_RULE_SETUP
-#line 100 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 125 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle(); BEGIN(INITIAL);
 	YY_BREAK
 
 
 case 18:
 YY_RULE_SETUP
-#line 104 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 129 "C:/work/ape++/src/lexers/LexerCONF.L"
 BEGIN(INITIAL); SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 
 
 case 19:
 YY_RULE_SETUP
-#line 108 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 133 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle( CSciStyler::styleEOL );
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 109 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 134 "C:/work/ape++/src/lexers/LexerCONF.L"
 SetStyle();
 	YY_BREAK
 
 case 21:
 YY_RULE_SETUP
-#line 112 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 137 "C:/work/ape++/src/lexers/LexerCONF.L"
 ECHO;
 	YY_BREAK
-#line 697 "C:/work/ape++/src/lexers/LexerCONF.cpp"
+#line 722 "C:/work/ape++/src/lexers/LexerCONF.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(SLCOMMENT):
 case YY_STATE_EOF(STRING):
@@ -1409,7 +1434,7 @@ static void yy_flex_free( void *ptr )
         return 0;
     }
 #endif
-#line 112 "C:/work/ape++/src/lexers/LexerCONF.L"
+#line 137 "C:/work/ape++/src/lexers/LexerCONF.L"
 
 
 int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {

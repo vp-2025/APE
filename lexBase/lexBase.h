@@ -21,20 +21,20 @@ public:
     enum {
         defaultStyleMask = 0x7F,
         styleInvalidText = STYLE_BRACEBAD, //31,
-        styleEOL = 37 // STYLE_INDENTGUIDE = 37
+        styleEOL = STYLE_INDENTGUIDE // 37
     };
 
     explicit CSciStyler(CSciWrapper& sci) : m_sci(sci), m_posStylingCur(0), m_posStylingTo(0) {}
 
-    int GetStylingPos() { return m_posStylingCur; }
+    int GetStylingPos() const { return m_posStylingCur; }
     void StartStyling(int posTo);
     int GetText(char* buf, int max_size);
     void SetStyle(int nStartPos, int nEndPos, int nStyle);
-    int GetLine(int nPos);
-    void SetLevel(int nLine, int nLevel);
-    int GetLevel(int nLine);
-    int GetLineState(int nLine);
-    void SetLineState(int nLine, int nState);
+    int GetLine(int nPos) const;
+    void SetLevel(int nLine, int nLevel) const;
+    int GetLevel(int nLine) const;
+    int GetLineState(int nLine) const;
+    void SetLineState(int nLine, int nState) const;
 };
 
 template<class LEXER>

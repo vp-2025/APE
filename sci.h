@@ -77,8 +77,7 @@ public:
 	CSciIndicator& Under(bool b) { sci.Call(SCI_INDICSETUNDER, idx, b); return *this; }
 };
 
-class CSciWrapper : public CScintilla
-{
+class CSciWrapper : public CScintilla {
 	HWND hSci;
 	int (*sci_fn)(void*,unsigned int,uintptr_t,intptr_t);
 	void* sci_ptr;

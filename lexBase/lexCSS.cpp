@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "lexJS.h"
 #include "lexers.h"
 
 #include "stylesCSS.h"

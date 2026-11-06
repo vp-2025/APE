@@ -157,8 +157,8 @@ CLexerInfo g_lexers[]={
 	{LEX_PROTO,"ProtoBuf", {"*.proto"} },
 	{LEX_GO,"Go", {"*.go","go.mod","go.work"} },
 	{LEX_SEPARATOR},
-	{LEX_XHTML,"HTML", {"*.html","*.htm","*.php"} },
 	{LEX_GOTPL,"HTML-Go-Tpl", {"*.tpl"} },
+	{LEX_XHTML,"HTML", {"*.html","*.htm","*.php"} },
 	{LEX_XML,"XML", {"*.xml","*.xsl","*.xsd","*.svg","*.osm","*.xul","*.vcproj*","*.vcxproj*"} }, // xsl=XML stylesheet lang xsd=XML schema definition
 	{LEX_CSS,"CSS", {"*.css"} },
 	{LEX_MD,"Markdown", {"*.md","*.markdown","*.mdown","*.mkd","*.mdx"} },
@@ -201,11 +201,11 @@ int DetectLexer(const string &sFile1) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int  CSciStyler::GetLine(int nPos) { return m_sci.LineFromPosition( nPos ); }
-void CSciStyler::SetLevel(int nLine, int nLevel) { m_sci.SetFoldLevel( nLine, nLevel ); }
-int  CSciStyler::GetLevel(int nLine) { return m_sci.GetFoldLevel( nLine ); }
-int  CSciStyler::GetLineState(int nLine) { return m_sci.GetLineState( nLine ); }
-void CSciStyler::SetLineState(int nLine, int nState) { m_sci.SetLineState( nLine, nState ); }
+int  CSciStyler::GetLine(int nPos) const { return m_sci.LineFromPosition( nPos ); }
+void CSciStyler::SetLevel(int nLine, int nLevel) const { m_sci.SetFoldLevel( nLine, nLevel ); }
+int  CSciStyler::GetLevel(int nLine) const { return m_sci.GetFoldLevel( nLine ); }
+int  CSciStyler::GetLineState(int nLine) const { return m_sci.GetLineState( nLine ); }
+void CSciStyler::SetLineState(int nLine, int nState) const { m_sci.SetLineState( nLine, nState ); }
 
 void CSciStyler::StartStyling(int posTo) {
 	m_posStylingCur = m_sci.GetEndStyled();
@@ -249,8 +249,7 @@ void CSciStyler::SetStyle(int nStartPos, int nEndPos, int nStyle) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo ) 
-{
+void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo ) {
 	if( sci.Lexer()==LEX_NONE ) return;
 
 	int line = sci.LineFromPosition(posTo);
@@ -261,8 +260,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 	CWaitCursor* pCur = nullptr;
 	if( posTo-pos>1000*1000 ) pCur = new CWaitCursor();
 	CSciStyler styler( sci );
-	switch( sci.Lexer() )
-	{
+	switch( sci.Lexer() ) {
 		case LEX_CPP:	{ CLexerCPP lexer( &styler, 1 ); lexer.Style( posTo ); } break;
 		case LEX_C:		{ CLexerCPP lexer( &styler, 2 ); lexer.Style( posTo ); } break;
 		case LEX_CS:	{ CLexerCPP lexer( &styler, 3 ); lexer.Style( posTo ); } break;

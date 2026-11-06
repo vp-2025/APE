@@ -22,10 +22,35 @@ SYMB	[<>(){}\[\]+\-*=&|~`\/\\,.:;]
 
 %{
 
-bool isApacheKeyword( const char* szKW );
-bool isApacheKeyword2( const char* szKW );
-bool isNginxKeyword( const char* szKW );
-bool isNginxKeyword2( const char* szKW );
+bool isApacheKeyword( const char* szKW ) {
+	static set<string> stKW = {"ProxyPass", "ProxyRequests", "AddDefaultCharset",
+		"AuthType", "AuthName", "AuthBasicProvider","AuthUserfile", "AuthnzFcgiDefineProvider",
+		"Alias", "Require", "AllowOverride", "RequestHeader", "Options", "AddHandler", "DirectoryIndex",
+		"ServerRoot", "ServerAdmin", "ServerName", "DocumentRoot", "Listen", "LoadModule"};
+	return stKW.find(szKW)!=stKW.end();
+}
+
+bool isApacheKeyword2( const char* szKW ) {
+	static set<string> stKW = {"none", "all", "granted", "denied", "set", "Basic", "ExecCGI", "Indexes",
+		"authn", "authz", "authnz"};
+	return stKW.find(szKW)!=stKW.end();
+}
+
+bool isNginxKeyword( const char* szKW ) {
+	static set<string> stKW = {"events", "http", "server", "location", "include", "internal", "on", "off"};
+	return stKW.find(szKW)!=stKW.end();
+}
+
+bool isNginxKeyword2( const char* szKW ) {
+	static set<string> stKW = {"auth_request", "auth_request_set", "auth_basic", "auth_basic_user_file",
+		"add_header",  "client_max_body_size",
+		"default_type", "sendfile", "listen", "server_name", "root", "alias", "index", "allow", "deny", "keepalive_timeout", "worker_connections", "worker_processes",
+		"proxy_pass", "proxy_set_header", "proxy_pass_request_body",
+		"proxy_cache", "proxy_cache_path", "proxy_cache_methods", "proxy_cache_key", "proxy_cache_valid",
+		"fastcgi_pass", "fastcgi_connect_timeout", "fastcgi_param"};
+	bool b = stKW.find(szKW)!=stKW.end();
+	return b;
+}
 
 #define STYLE_TEXT			0
 #define STYLE_KW1			1

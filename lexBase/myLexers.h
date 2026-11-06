@@ -210,7 +210,7 @@ public:
 	virtual void Proceed(void) = 0;
 };
 
-class CMyLexerText : public CMyLexerBase {
+/* class CMyLexerText : public CMyLexerBase {
 	enum EnumStates {
 		STRING = 1
 	};
@@ -277,7 +277,7 @@ public:
 		}
 		return STYLE_TEXT;
 	}
-};
+}; */
 
 class CMyLexerCMake : public CMyLexerBase {
 	enum EnumStates {
