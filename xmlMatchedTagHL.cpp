@@ -403,7 +403,7 @@ void CXmlMatchedTagsHighlighter::tagClear(CSciWrapper* pSci)
 void CXmlMatchedTagsHighlighter::tagHighlight(CSciWrapper* pSci, bool doHiliteAttr) 
 {
 	// Detect the current lang type. It works only with html and xml
-	if( pSci->Lexer()!=LEX_XHTML && pSci->Lexer()!=LEX_XML )
+	if( !isHtmlLexer(pSci->Lexer()) && pSci->Lexer()!=LEX_XML )
 		return;
 
 	// if move inside tag then skip it

@@ -18,6 +18,7 @@ SPACE		{WS}*
 WORD		{SWC}{WWC}*
 TAG_NAME	[A-Za-z_0-9][A-Za-z_0-9-]*
 ATTR_NAME	{TAG_NAME}
+HTMX_ATTR	(data-)?hx-[A-Za-z_0-9:.-]*
 SYMB		[()\[\]{}<>~@#$%^&|_+\-*=\/\\`.,:;!?]	
 STYLE		[sS][tT][yY][lL][eE]
 	// without "', esc - []-\/
@@ -133,6 +134,7 @@ bool isPHPKeyword( const char* szKW )
 }
 
 <INTAG>{
+	{HTMX_ATTR}	SetStyle( STYLE_TAG_HTMX );
 	{ATTR_NAME}	SetStyle( STYLE_TAG_ATTR );
 	={SPACE}[0-9]+	|
 	={SPACE}#[0-9a-fA-F]+	{
@@ -147,6 +149,8 @@ bool isPHPKeyword( const char* szKW )
 	\"			BEGIN(STRING); SetStyle();
 	\'			BEGIN(STRING2);	SetStyle();
 	>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); 
+	 /* the line of <style> / <script> is not EOL filled */
+	>{EOL}		SetStyle( MatchStart(), MatchStart()+1, STYLE_SYMBOL ); SetStyle( MatchStart()+1, MatchEnd(), IStyler::styleEOL ); BEGIN(after_tag);
 	\?>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 	\/>			SetStyle(STYLE_SYMBOL); BEGIN(after_tag); levelDecrease();
 }
@@ -194,13 +198,13 @@ bool isPHPKeyword( const char* szKW )
 <CSS_COMMENT>\*\/			SetStyle();	BEGIN(CSS); levelDecrease();
 
 <CSS>\/\/					BEGIN(CSS_SL_COMMENT); SetStyle();
-<CSS_SL_COMMENT>{EOL}		BEGIN(CSS); SetStyle( IStyler::styleEOL );
+<CSS_SL_COMMENT>{EOL}		BEGIN(CSS); SetStyle( STYLE_CSS_COMMENT );
 
 <CSS_ATTR>\/\*				BEGIN(CSS_COMMENTA);   SetStyle(); levelIncrease();
 <CSS_COMMENTA>\*\/			SetStyle();	BEGIN(CSS_ATTR); levelDecrease();
 
 <CSS_ATTR>\/\/				BEGIN(CSS_SL_COMMENTA); SetStyle();
-<CSS_SL_COMMENTA>{EOL}		BEGIN(CSS_ATTR); SetStyle( IStyler::styleEOL );
+<CSS_SL_COMMENTA>{EOL}		BEGIN(CSS_ATTR); SetStyle( STYLE_CSS_COMMENT );
 
 <CSS_VALUE>\"				BEGIN(CSS_STRING);	  SetStyle();
 <CSS_STRING>\"				SetStyle(); BEGIN(CSS_VALUE);
@@ -250,7 +254,7 @@ bool isPHPKeyword( const char* szKW )
 }
 
 <JS_SLCOMMENT>{
-	{EOL}	BEGIN(JS); SetStyle( IStyler::styleEOL );
+	{EOL}	BEGIN(JS); SetStyle( STYLE_JS_COMMENT );
 }
 <JS_COMMENT>{
 	\*\/	SetStyle(); BEGIN(JS); levelDecrease();
@@ -318,6 +322,9 @@ bool isPHPKeyword( const char* szKW )
  /* ========================================================================================
  // default rule
  // ========================================================================================*/
+
+ /* the CSS / JS blocks are EOL filled: the line end gets the style of the block */
+<CSS,CSS_SELECTOR,CSS_ATTR,CSS_VALUE,CSS_COMMENT,CSS_COMMENTA,JS,JS_COMMENT>{EOL}	SetStyle();
 
 <*>{
 	{EOL}						SetStyle( IStyler::styleEOL );

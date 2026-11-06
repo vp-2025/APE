@@ -8,6 +8,7 @@
 #define STYLE_TAG_ATTR			5
 #define STYLE_TAG_STRING		6	// "..."
 #define STYLE_TAG_STRING2		13	// "..."
+#define STYLE_TAG_HTMX			14	// hx-get, hx-on:click, data-hx-vals ...
 #define STYLE_TAG_NUMBER		7	// "..."
 #define STYLE_TAG_TEXT			8
 #define STYLE_UNDEF				9

@@ -138,7 +138,7 @@ bool isCSSAttr( CSciWrapper& sci, int pos )
 	int style1 = pos>0 ? sci.GetStyleAt(pos-1) : 0;
 	int ch1 = pos>0 ? sci.GetCharAt(pos-1) : 0;
 
-	if( sci.Lexer()==LEX_CSS || sci.Lexer()==LEX_XHTML ) {
+	if( sci.Lexer()==LEX_CSS || isHtmlLexer(sci.Lexer()) ) {
 		if( isCssSymb(style) && ch=='"' && isCssSymb(style1) && ch1=='"' )
 			return true;
 		if( isCssSymb(style) && ch=='}' && isCssSymb(style1) && ch1=='{' )
@@ -158,7 +158,7 @@ bool isCSSValue( CSciWrapper& sci, int pos )
 	int style1 = pos>0 ? sci.GetStyleAt(pos-1) : 0;
 	int ch1 = pos>0 ? sci.GetCharAt(pos-1) : 0;
 
-	if( sci.Lexer()==LEX_CSS || sci.Lexer()==LEX_XHTML ) {
+	if( sci.Lexer()==LEX_CSS || isHtmlLexer(sci.Lexer()) ) {
 		if( isCssSymb(style) && (ch=='}' || ch=='"') )
 			return (isCssSymb(style1) && ch1==':') || isCssValue(style1);
 		return (isCssSymb(style) && ch==';') || isCssValue(style);

@@ -1025,7 +1025,7 @@ struct CInclude {
 void parseIncludes(CSciWrapper& sci, vector<CInclude>& v)
 {
 	int flags = SCFIND_REGEXP|SCFIND_POSIX;
-	if( sci.Lexer()==LEX_XHTML )
+	if( isHtmlLexer(sci.Lexer()) )
 	{
 		{
 			TextToFindV ttfOpen("<link[ \t]", 0, sci.GetTextLength());
@@ -1058,7 +1058,7 @@ void parseIncludes(CSciWrapper& sci, vector<CInclude>& v)
 			}
 		}
 	}
-	if( sci.Lexer()==LEX_XHTML || sci.Lexer()==LEX_JS )
+	if( isHtmlLexer(sci.Lexer()) || sci.Lexer()==LEX_JS )
 	{
 		int start = 0;
 		CSciIterator itB(&sci,sci.GetTextLength());
@@ -2250,7 +2250,7 @@ void CEditor::fillFuncs_int( CTabPage& page, int start, int end )
 
 	int styComment = 2;
 	int stySymbol = 3;
-	if( sci.Lexer()==LEX_XHTML )
+	if( isHtmlLexer(sci.Lexer()) )
 	{
 		styComment = 42;
 		stySymbol = 43;
@@ -2300,7 +2300,7 @@ void CEditor::fillFuncs_int( CTabPage& page, int start, int end )
 void CEditor::FillFuncs( CTabPage& page, int posFrom )
 {
 	CSciWrapper& sci = page.sci;
-	if( sci.Lexer()!=LEX_XHTML && sci.Lexer()!=LEX_JS )
+	if( !isHtmlLexer(sci.Lexer()) && sci.Lexer()!=LEX_JS )
 		return;
 	if( sci.GetTextLength()>1000*1000 )
 		return;
@@ -2365,13 +2365,13 @@ void CEditor::FillFuncCombo(CTabPage& page)
 
 void CEditor::ShowFuncCombo(CTabPage& page)
 {
-	m_cmbFunc.SetVisible( (page.sci.Lexer()==LEX_JS || page.sci.Lexer()==LEX_XHTML) && page.sci.GetTextLength()<1000*1000 );
+	m_cmbFunc.SetVisible( (page.sci.Lexer()==LEX_JS || isHtmlLexer(page.sci.Lexer())) && page.sci.GetTextLength()<1000*1000 );
 }
 
 void CEditor::UpdateFuncCombo(CTabPage& page)
 {
 	CSciWrapper& sci = page.sci;
-	if( sci.Lexer()!=LEX_XHTML && sci.Lexer()!=LEX_JS )
+	if( !isHtmlLexer(sci.Lexer()) && sci.Lexer()!=LEX_JS )
 		return;
 	int pos = sci.GetCurrentPos();
 	for( unsigned i=0; i<page.vFunc.size(); i++ )

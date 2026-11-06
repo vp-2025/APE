@@ -252,7 +252,7 @@ void jsFix4JQuery( string& sObject, bool bDot )
 bool isJSSkipStyle(CSciWrapper& sci, int pos, bool bStringChar)
 {
 	int style = sci.GetStyleAt(pos);
-	if( sci.Lexer()==LEX_XHTML) {
+	if( isHtmlLexer(sci.Lexer())) {
 		if( style<40 || style>=50 )
 			return true;
 		if( bStringChar )
@@ -273,7 +273,7 @@ bool isJSCode( CSciWrapper& sci )
 			style!=4 &&		// string
 			style!=5;		// char
 	}
-	if( sci.Lexer()==LEX_XHTML) {
+	if( isHtmlLexer(sci.Lexer())) {
 		int style = sci.GetStyleAt(sci.GetCurrentPos());
 		return style>=40 && style<50 && 
 				style!=42 &&	// comment

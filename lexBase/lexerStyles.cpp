@@ -225,6 +225,7 @@ CLexerStyle styleHTML[] = {
 	STYLE_ITALIC( 3, "Comment", clrComment ),
 	STYLE2( 4, "Tag Name", clrKeyword ),
 	STYLE2( 5, "Tag Attr", clrTagAttr ),
+	STYLE2( 14, "htmx Attr", RGB(0xB0,0x00,0x60) ),
 	STYLE2( 6, "Tag String", clrString ),
 	STYLE2( 13, "Tag Char", clrChar ),
 	STYLE2( 7, "Tag Number", clrNumber ),
@@ -267,6 +268,71 @@ CLexerStyle styleHTML[] = {
 	STYLE_CHILD2( STYLE_PHP_DEF, 75, "Char",	clrChar ),
 	STYLE_CHILD_EOL( STYLE_PHP_DEF, 76, "Unquoted Values", -1, clrUnquoted ),
 	STYLE_CHILD2( STYLE_PHP_DEF, 77, "Number", clrNumber ),
+	{0}
+};
+
+/* Go html/template: the styles of HTML (without PHP) + the {{...}} actions.
+   style ids must match LexerGoTpl.L */
+#define STYLE_TPL_DEF		80
+
+CLexerStyle styleGoTpl[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_BOLD( 1, "Keyword", clrKeyword ),
+	STYLE2( 2, "Symbol", clrSymbol ),
+	STYLE_ITALIC( 3, "Comment", clrComment ),
+	STYLE2( 4, "Tag Name", clrKeyword ),
+	STYLE2( 5, "Tag Attr", clrTagAttr ),
+	STYLE2( 14, "htmx Attr", RGB(0xB0,0x00,0x60) ),
+	STYLE2( 6, "Tag String", clrString ),
+	STYLE2( 13, "Tag Char", clrChar ),
+	STYLE2( 7, "Tag Number", clrNumber ),
+	STYLE2( 8, "Tag Text", clrTagText ),
+	STYLE3( 9, "Undef",-1, 0xA0A0A0 ),
+	STYLE_EOL( 12, "Unquoted Values", -1, clrUnquoted ),
+
+// CSS 50-61
+	STYLE_PARENT( STYLE_CSS_DEF, "CSS", 0xFFF0F0 ),
+	STYLE_CHILD_ITALIC( STYLE_CSS_DEF, 51, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_CSS_DEF, 52, "Symbol", RGB(0,0x80,0) ),
+	STYLE_CHILD2( STYLE_CSS_DEF, 53, "Number", clrNumber ),
+	STYLE_CHILD2( STYLE_CSS_DEF, 54, "String", clrString ),
+	STYLE_CHILD2( STYLE_CSS_DEF, 55, "Char", clrChar ),
+	STYLE_CHILD_EOL( STYLE_CSS_DEF, 56, "Unquoted Values", -1, clrUnquoted ),
+	STYLE_CHILD2( STYLE_CSS_DEF, 57, "Selector", RGB(0xE0,0,0) ),
+	STYLE_CHILD2( STYLE_CSS_DEF, 58, "Attribute", RGB(0,0xA0,0) ),
+	STYLE_CHILD_BOLD( STYLE_CSS_DEF, 59, "AttributeKW", RGB(0,0xA0,0) ),
+	STYLE_CHILD2( STYLE_CSS_DEF, 60, "Value", RGB(0,0,0xE0) ),
+	STYLE_CHILD_BOLD( STYLE_CSS_DEF, 61, "ValueKW", RGB(0,0,0xE0) ),
+
+// JS 40-49
+	STYLE_PARENT( STYLE_JS_DEF, "JS", 0xFFFBF0 ),
+	STYLE_CHILD_BOLD( STYLE_JS_DEF, 41, "Keyword", clrKeyword ),
+	STYLE_CHILD_ITALIC( STYLE_JS_DEF, 42, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_JS_DEF, 43, "Symbol", RGB(0,0x80,0) ),
+	STYLE_CHILD2( STYLE_JS_DEF, 44, "String", clrString ),
+	STYLE_CHILD2( STYLE_JS_DEF, 45, "Char",	clrChar ),
+	STYLE_CHILD2( STYLE_JS_DEF, 46, "JS RegExp", clrRegExp ),
+	STYLE_CHILD_BOLD( STYLE_JS_DEF, 47, "JS RegExp Modifiers", clrRegExp ),
+	STYLE_CHILD_EOL( STYLE_JS_DEF, 48, "Unquoted Values", -1, clrUnquoted ),
+	STYLE_CHILD2( STYLE_JS_DEF, 49, "Number", clrNumber ),
+
+// template {{...}} 80-94
+	STYLE_PARENT( STYLE_TPL_DEF, "Template", RGB(0xFF,0xF2,0xCC) ),
+	STYLE_CHILD( STYLE_TPL_DEF, 81, "Text" ),
+	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 82, "Delimiter", RGB(0xC0,0x60,0x00) ),
+	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 83, "Keyword", clrKeyword ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 84, "Builtin Function", RGB(0x80,0x00,0x80) ),
+	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 85, "Function", clrLabel ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 86, "Variable", clrVar ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 87, "Field", RGB(0x80,0x40,0x00) ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 88, "String", clrString ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 89, "Raw String", RGB(0x00,0x80,0x00) ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 90, "Char", clrChar ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 91, "Number", clrNumber ),
+	STYLE_CHILD_ITALIC( STYLE_TPL_DEF, 92, "Comment", clrComment ),
+	STYLE_CHILD2( STYLE_TPL_DEF, 93, "Symbol", clrSymbol ),
+	STYLE_CHILD_EOL( STYLE_TPL_DEF, 94, "Unquoted Values", -1, clrUnquoted ),
 	{0}
 };
 
@@ -570,6 +636,7 @@ CLexerStyles g_styles[] = {
 	{"Go", "go", styleGo},
 	{"JSON", "json", styleJSON},
 	{"HTML", "html", styleHTML},
+	{"Go Template", "gotpl", styleGoTpl},
 	{"XML", "xml", styleXML},
 	{"CSS", "css", styleCSS},
 	{"Pascal", "pascal", stylePascal},
@@ -610,6 +677,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_JSON: return styleJSON;
 
 		case LEX_XHTML: return styleHTML;
+		case LEX_GOTPL: return styleGoTpl;
 		case LEX_XML: return styleXML;
 		case LEX_CSS: return styleCSS;
 		case LEX_MD: return styleMD;
@@ -719,7 +787,7 @@ void SetupLexerStyles( CSciWrapper& sci )
 	sci.Call( SCI_SETCARETFORE, clr );
 
 	sci.ClearRegisteredImages();
-	if( sci.Lexer()==LEX_JS || sci.Lexer()==LEX_CSS || sci.Lexer()==LEX_XHTML )
+	if( sci.Lexer()==LEX_JS || sci.Lexer()==LEX_CSS || isHtmlLexer(sci.Lexer()) )
 	{
 		sci.RegisterImage( 1, xpmData );
 		sci.RegisterImage( 2, xpmMethod );

@@ -15,6 +15,7 @@ enum {
 	LEX_JS,
 	LEX_PROTO,
 	LEX_XHTML,
+	LEX_GOTPL,
 	LEX_XML,
 	LEX_CSS,
 	LEX_MD,
@@ -46,6 +47,9 @@ struct CLexerInfo {
 	const char* szIncludeMasks[10];
 };
 extern CLexerInfo g_lexers[];
+
+// HTML, also with the template actions: the same HTML / CSS / JS styles
+inline bool isHtmlLexer( int lexer ) { return lexer==LEX_XHTML || lexer==LEX_GOTPL; }
 
 struct CLexerStyle {
 	int id;					// style id

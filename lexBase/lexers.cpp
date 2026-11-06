@@ -25,6 +25,12 @@ typedef  CSciLexer<xhtml_FlexLexer>	CLexerXHTML;
 
 #undef	yyFlexLexerOnce
 #undef   yyFlexLexer
+#define  yyFlexLexer	gotpl_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<gotpl_FlexLexer>	CLexerGoTpl;
+
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
 #define  yyFlexLexer	xml_FlexLexer
 #include "FlexLexer.h"
 typedef  CSciLexer<xml_FlexLexer>	CLexerXML;
@@ -152,6 +158,7 @@ CLexerInfo g_lexers[]={
 	{LEX_GO,"Go", {"*.go","go.mod","go.work",0} },
 	{LEX_SEPARATOR},
 	{LEX_XHTML,"HTML", {"*.html","*.htm","*.php",0} },
+	{LEX_GOTPL,"HTML-Go-Tpl", {"*.tpl",0} },
 	{LEX_XML,"XML", {"*.xml","*.xsl","*.xsd","*.svg","*.osm","*.xul","*.vcproj*","*.vcxproj*",0} }, // xsl=XML stylesheet lang xsd=XML schema definition
 	{LEX_CSS,"CSS", {"*.css",0} },
 	{LEX_MD,"Markdown", {"*.md","*.markdown","*.mdown","*.mkd","*.mdx",0} },
@@ -281,6 +288,7 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo )
 		case LEX_GO:	{ CLexerGo lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 
 		case LEX_XHTML:	{ CLexerXHTML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_GOTPL:	{ CLexerGoTpl lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 //		case LEX_HTML:	{ CLexerHTML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_XML:	{ CLexerXML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_CSS:	{ CLexerCSS lexer( &styler, 0 ); lexer.Style( posTo ); } break;

@@ -43,6 +43,10 @@ class CSciLexer : protected LEXER {
     int m_levelDec;        // fold dec--
     int m_levelIncreasedFirst;    // -1 = undef, 1 = inc, 0 = dec
 
+    // a lexer specific state, saved with yy_start in the line state (in the bits above 16):
+    // e.g. the state to go back to after a nested block
+    int m_stateExt;
+
     // the last char in the flex buffer (yy_ch_buf[yy_n_chars-1]) is always the last char read
     // (GetStylingPos()-1): flex moves the unmatched text to the buffer start before reading
     // more input - and also at EOF, without calling LexerInput()
@@ -79,12 +83,18 @@ class CSciLexer : protected LEXER {
             m_foldLevel = SC_FOLDLEVELBASE;
             //
             this->yy_start = State2YYState(0);
+            m_stateExt = 0;
         } else {
             // folding
             m_foldLine = m_pStyler->GetLine(posCur);
-            m_foldLevel = m_pStyler->GetLevel(m_foldLine) & SC_FOLDLEVELNUMBERMASK;
+            int level = m_pStyler->GetLevel(m_foldLine);
+            m_foldLevel = level & SC_FOLDLEVELNUMBERMASK;
+            if( level & SC_FOLDLEVELFOOTERFLAG ) // "else": saved one level less, see BeforeAction()
+                m_foldLevel++;
             //
-            this->yy_start = m_foldLine > 0 ? m_pStyler->GetLineState(m_foldLine) : State2YYState(0);
+            int lineState = m_foldLine > 0 ? m_pStyler->GetLineState(m_foldLine) : State2YYState(0);
+            this->yy_start = lineState & 0xFFFF;
+            m_stateExt = lineState >> 16;
         }
         m_levelInc = m_levelDec = 0;
         m_levelIncreasedFirst = -1;
@@ -135,7 +145,7 @@ public:
     bool isQuote() { return m_bQuote; }
     void setQuote(bool b) { m_bQuote = b; }
 
-    CSciLexer(IStyler* pStyler, int langId = 0) : m_pStyler(pStyler), m_langId(langId), m_pProgress(0),
+    CSciLexer(IStyler* pStyler, int langId = 0) : m_pStyler(pStyler), m_langId(langId), m_stateExt(0), m_pProgress(0),
                                                   m_bQuote(true) {}
 
     void Style(int posTo) {
@@ -196,7 +206,7 @@ void CSciLexer<LEXER>::BeforeAction(const char* pszMatchText, int nMatchLength) 
 template<class LEXER>
 void CSciLexer<LEXER>::AfterAction(const char* pszMatchText, int nMatchLength) {
     if( pszMatchText[nMatchLength - 1] == '\n' ) {
-        m_pStyler->SetLineState(m_foldLine, this->yy_start);
+        m_pStyler->SetLineState(m_foldLine, this->yy_start | (m_stateExt << 16));
     }
 }
 
