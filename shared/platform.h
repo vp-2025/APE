@@ -80,6 +80,12 @@ std::string vFileAttrs2Str(const std::string& sFile);
 
 std::string GetLastErrorText();
 
+bool isElevated();
+// runs this exe elevated ("runas" - shows the UAC prompt) and waits for its end, pumping the messages
+// meanwhile; hParent is disabled while it runs.  false if it could not start: GetLastError() tells why,
+// ERROR_CANCELLED - the user declined the UAC prompt
+bool runSelfElevated(HWND hParent, const std::string& sParams, DWORD* pExitCode = nullptr);
+
 void MsgBox(const char* szMsg);
 void MsgBoxError(const char* szMsg);
 void MsgBox(const wchar_t* szMsg);

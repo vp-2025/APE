@@ -302,12 +302,30 @@ bool CSciWrapper::saveToFile( const string& sFile, CTime& tm, int64_t& size )
 	EndUndoAction();
 
 	CFile f;
-	if( !f.Open( sFile.c_str(), false ) )
-	{
+	if( !f.Open( sFile.c_str(), false ) ) {
+		DWORD err = GetLastError();
+		// a folder that needs admin rights (UAC): the read-only attribute stops an admin too
+		DWORD attrs = GetFileAttrs(sFile);
+		bool bReadOnly = attrs!=INVALID_FILE_ATTRIBUTES && (attrs & FILE_ATTRIBUTE_READONLY);
+		if( err==ERROR_ACCESS_DENIED && !bReadOnly && !isElevated() ) {
+			if( !saveToFileElevated(sFile) )
+				return false;
+			onSaved( sFile, tm, size );
+			return true;
+		}
+		SetLastError(err);
 		MsgBoxError( wstring()<<tr(L"Can't save to file")<<" '"<<sFile<<"' !\n"<< GetLastErrorText() );
 		return false;
 	}
 	CWaitCursor cur;
+	writeToFile( f );
+	f.Close();
+	onSaved( sFile, tm, size );
+	return true;
+}
+
+// the text in the current encoding, with its BOM
+void CSciWrapper::writeToFile( CFile& f ) {
 	f.WriteEncodingBOM(m_encoding);
 	char data[BLOCK_SIZE+1];
 	int grabSize;
@@ -345,12 +363,58 @@ bool CSciWrapper::saveToFile( const string& sFile, CTime& tm, int64_t& size )
 		} else
 			f.Write( data, grabSize );
 	}
-	f.Close();
+}
 
+void CSciWrapper::onSaved( const string& sFile, CTime& tm, int64_t& size ) {
 	m_encLoaded = m_encoding;
 	Call(SCI_SETSAVEPOINT);
 
 	vGetFileTimeSize( sFile, tm, size );
+}
+
+// the text is written to a temp file, an elevated APE++ (-elevated-save) copies it over sFile
+bool CSciWrapper::saveToFileElevated( const string& sFile ) {
+	// the UAC prompt deactivates the main window: no second prompt from a nested save
+	static bool s_bBusy = false;
+	if( s_bBusy )
+		return false;
+
+	wstring msg = wstring()<<tr(L"Access denied to file")<<" '"<<sFile<<"'.\n"<<tr(L"Save as Administrator?");
+	if( MessageBoxW( hSci, msg.c_str(), tr(L"Confirm").c_str(), MB_YESNO|MB_ICONQUESTION ) != IDYES )
+		return false;
+
+	wchar_t szDir[MAX_PATH], szTemp[MAX_PATH];
+	if( !GetTempPathW( MAX_PATH, szDir ) || !GetTempFileNameW( szDir, L"ape", 0, szTemp ) ) {
+		MsgBoxError( wstring()<<tr(L"Can't create a temp file")<<" !\n"<< GetLastErrorText() );
+		return false;
+	}
+	string sTemp = w2utf(szTemp);
+	{
+		CFile f;
+		if( !f.Open( sTemp, false ) ) {
+			MsgBoxError( wstring()<<tr(L"Can't save to file")<<" '"<<sTemp<<"' !\n"<< GetLastErrorText() );
+			DeleteFileW( szTemp );
+			return false;
+		}
+		CWaitCursor cur;
+		writeToFile( f );
+	}
+
+	s_bBusy = true;
+	DWORD exitCode = 0;
+	string sParams = string(_ELEVATED_WRITE) + " \"" + sTemp + "\" \"" + sFile + "\"";
+	bool bRun = runSelfElevated( GetAncestor(hSci, GA_ROOT), sParams, &exitCode );
+	DWORD err = bRun ? exitCode : GetLastError();
+	s_bBusy = false;
+	DeleteFileW( szTemp );
+
+	if( err ) {
+		if( err!=ERROR_CANCELLED ) { // not: the user declined the UAC prompt
+			SetLastError(err);
+			MsgBoxError( wstring()<<tr(L"Can't save to file")<<" '"<<sFile<<"' !\n"<< GetLastErrorText() );
+		}
+		return false;
+	}
 	return true;
 }
 

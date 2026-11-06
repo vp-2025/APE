@@ -446,6 +446,22 @@ CLexerStyle styleCaddy[] = {
 	{0}
 };
 
+/* style ids must match LexerVMOptions.L */
+CLexerStyle styleVMOptions[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_ITALIC( 1, "Comment", clrComment ),
+	STYLE_BOLD( 2, "Option", clrKeyword ),
+	STYLE2( 3, "Name", clrLabel ),
+	STYLE2_BOLD( 4, "Enabled", RGB(0x00,0x90,0x00) ),
+	STYLE2_BOLD( 5, "Disabled", RGB(0xD0,0x00,0x00) ),
+	STYLE2( 6, "Value", clrString ),
+	STYLE2( 7, "Number", clrNumber ),
+	STYLE2_BOLD( 8, "Symbol", clrSymbol ),
+	STYLE2( 9, "Variable", clrVar ),
+	{0}
+};
+
 /* style ids must match LexerTEXT.L */
 CLexerStyle styleText[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
@@ -563,6 +579,7 @@ CLexerStyles g_styles[] = {
 	{"Ini", "ini", styleIni},
 	{"YAML", "yaml", styleYAML},
 	{"Caddyfile", "caddy", styleCaddy},
+	{"VM Options", "vmoptions", styleVMOptions},
 	{"Text","txt", styleTxt},
 	{"Text Document", "text", styleText},
 	{"NSIS", "nsis", styleNSIS},
@@ -602,6 +619,7 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_INI: return styleIni;
 		case LEX_YAML: return styleYAML;
 		case LEX_CADDY: return styleCaddy;
+		case LEX_VMOPTIONS: return styleVMOptions;
 //		case LEX_TXT_NOQUOTE:
 //		case LEX_TXT: return styleTxt;
 		case LEX_TEXT: return styleText;

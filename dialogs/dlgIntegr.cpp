@@ -88,49 +88,12 @@ void setNotepadReplacement(bool b, bool bShowError) {
 
 ///////////////////////////////////////////////////////////
 
-bool isElevated() {
-    HANDLE hToken = nullptr;
-    if( !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken) )
-        return false;
-    TOKEN_ELEVATION te{};
-    DWORD cb = sizeof(te);
-    bool b = GetTokenInformation(hToken, TokenElevation, &te, sizeof(te), &cb) && te.TokenIsElevated;
-    CloseHandle(hToken);
-    return b;
-}
-
 bool runIntegrationElevated(HWND hParent) {
-    wstring wsExe = a2w(GetExeFileName(), CP_UTF8);
-    wstring wsParam = a2w(_INTEGR);
-    if( hParent )
-        wsParam += L" " + to_wstring((UINT_PTR) hParent);
-    SHELLEXECUTEINFOW sei{ .cbSize = sizeof(sei),
-        .fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS,
-        .lpVerb = L"runas",
-        .lpFile = wsExe.c_str(),
-        .lpParameters = wsParam.c_str(),
-        .nShow = SW_SHOWNORMAL };
-    if( !ShellExecuteExW(&sei) ) {
+    string sParams = string(_ELEVATED_INTGR) + " " + to_string((UINT_PTR) hParent);
+    if( !runSelfElevated(hParent, sParams) ) {
         if( GetLastError() != ERROR_CANCELLED ) // user declined the UAC prompt
             MsgBoxError("Error in runIntegrationElevated");
         return false;
-    }
-
-    if( hParent )
-        EnableWindow(hParent, FALSE);
-    if( sei.hProcess ) {
-        while( MsgWaitForMultipleObjects(1, &sei.hProcess, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0 ) {
-            MSG msg;
-            while( PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) ) {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-            }
-        }
-        CloseHandle(sei.hProcess);
-    }
-    if( hParent ) {
-        EnableWindow(hParent, TRUE);
-        SetForegroundWindow(hParent);
     }
     return true;
 }

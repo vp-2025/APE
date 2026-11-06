@@ -60,6 +60,19 @@ bool apeInstanceCopyData(HWND hWnd, const string &s) {
 	return SendMessage(hWnd, WM_COPYDATA, 0, (LPARAM) &cds) != 0;
 }
 
+// -elevated-save "tempFile" "file": the elevated part of CSciWrapper::saveToFileElevated.
+// The file is overwritten in place, so it keeps its ACL and attributes.  Returns a Win32 error code.
+int elevatedSave(const string& sTemp, const string& sFile) {
+	CFile src, dst;
+	if( !src.Open(sTemp, true) || !dst.Open(sFile, false) )
+		return (int) GetLastError();
+	char buf[64 * 1024];
+	while( DWORD len = src.Read(buf, sizeof(buf)) )
+		if( dst.Write(buf, len) != len )
+			return (int) GetLastError();
+	return dst.Close() ? 0 : (int) GetLastError();
+}
+
 int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int) {
 #ifdef _DEBUG
 	void testShared(); testShared();
@@ -72,11 +85,15 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPWSTR lpCmdLine, int) {
 		string sCmdLine = w2utf(lpCmdLine);
 		splitQ(sCmdLine, vCmdLine, ' ');
 
-		if( !vCmdLine.empty() && vCmdLine[0] == _INTEGR ) {
+		if( vCmdLine.size() == 3 && vCmdLine[0] == _ELEVATED_WRITE ) {
+			return elevatedSave(vCmdLine[1], vCmdLine[2]);
+		}
+
+		if( vCmdLine.size() == 2  && vCmdLine[0] == _ELEVATED_INTGR ) {
 			g_hInst = hInstance;
 			HWND hParent = nullptr;
 			if( vCmdLine.size() > 1 ) {
-				hParent = (HWND) (UINT_PTR) stoull(vCmdLine[1]);
+				hParent = (HWND) stoull(vCmdLine[1]);
 				if( !IsWindow(hParent) )
 					hParent = nullptr;
 			}

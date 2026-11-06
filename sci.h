@@ -170,6 +170,11 @@ public:
 
 	bool loadFromFile( const string& sFile, CTime& tm, int64_t& size, bool bReload=false );
 	bool saveToFile( const string& sFile, CTime& tm, int64_t& size );
+private:
+	void writeToFile( CFile& f );
+	bool saveToFileElevated( const string& sFile );
+	void onSaved( const string& sFile, CTime& tm, int64_t& size );
+public:
 	void stripTrailingSpaces(bool bMsgBox=false);
 
 	string GetFileNameFromPoint( int x, int y );

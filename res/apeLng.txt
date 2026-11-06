@@ -139,3 +139,6 @@ Context Menu : Edit with APE++	Системное меню : Редактиро�
 
 Can't load from file	Не могу загрузить из файла
 Can't save to file	Не могу сохранить в файл
+Can't create a temp file	Не могу создать временный файл
+Access denied to file	Нет доступа к файлу
+Save as Administrator?	Сохранить с правами администратора?

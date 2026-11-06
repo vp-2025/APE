@@ -27,6 +27,7 @@ constexpr auto _NEW = "-new";
 constexpr auto _TOP = "-top=";
 constexpr auto _POS = "-pos=";
 
-constexpr auto _INTEGR = "-integration";
+constexpr auto _ELEVATED_INTGR = "-elevated-intgr"; // -elevated-intgr <winHandle>
+constexpr auto _ELEVATED_WRITE = "-elevated-write"; // -elevated-save "tempFile" "file"
 
 constexpr auto INSTANCE_CODE = 0xDEADBEEF;

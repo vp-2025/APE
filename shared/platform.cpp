@@ -2,6 +2,7 @@
 #include <io.h>
 #include "str.h"
 #include "win.h"
+#include <shellapi.h> // ShellExecuteExW (WIN32_LEAN_AND_MEAN excludes shellapi.h)
 using namespace std;
 
 extern HINSTANCE g_hInst; // needed for dlgOpenFile & dlgSaveFile
@@ -65,6 +66,53 @@ string GetLastErrorText() {
     LocalFree(szMsgBuf);
 
     return s;
+}
+
+bool isElevated() {
+    HANDLE hToken = nullptr;
+    if( !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken) )
+        return false;
+    TOKEN_ELEVATION te{};
+    DWORD cb = sizeof(te);
+    bool b = GetTokenInformation(hToken, TokenElevation, &te, sizeof(te), &cb) && te.TokenIsElevated;
+    CloseHandle(hToken);
+    return b;
+}
+
+bool runSelfElevated(HWND hParent, const string& sParams, DWORD* pExitCode) {
+    wstring wsExe = utf2w(GetExeFileName());
+    wstring wsParams = utf2w(sParams);
+    SHELLEXECUTEINFOW sei{ .cbSize = sizeof(sei),
+        .fMask = SEE_MASK_FLAG_NO_UI | SEE_MASK_NOCLOSEPROCESS,
+        .hwnd = hParent,
+        .lpVerb = L"runas",
+        .lpFile = wsExe.c_str(),
+        .lpParameters = wsParams.c_str(),
+        .nShow = SW_SHOWNORMAL };
+    if( !ShellExecuteExW(&sei) )
+        return false;
+
+    if( hParent )
+        EnableWindow(hParent, FALSE);
+    DWORD exitCode = 0;
+    if( sei.hProcess ) {
+        while( MsgWaitForMultipleObjects(1, &sei.hProcess, FALSE, INFINITE, QS_ALLINPUT) != WAIT_OBJECT_0 ) {
+            MSG msg;
+            while( PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE) ) {
+                TranslateMessage(&msg);
+                DispatchMessage(&msg);
+            }
+        }
+        GetExitCodeProcess(sei.hProcess, &exitCode);
+        CloseHandle(sei.hProcess);
+    }
+    if( hParent ) {
+        EnableWindow(hParent, TRUE);
+        SetForegroundWindow(hParent);
+    }
+    if( pExitCode )
+        *pExitCode = exitCode;
+    return true;
 }
 
 void MsgBox(const char* szMsg) {
