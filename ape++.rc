@@ -108,6 +108,8 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Find Next",                   ID_SEARCH_FINDNEXT
         MENUITEM "Find Previous",               ID_SEARCH_FINDPREV
+        MENUITEM "Next Result",                 ID_SEARCH_NEXTRESULT
+        MENUITEM "Previous Result",             ID_SEARCH_PREVRESULT
         MENUITEM SEPARATOR
         MENUITEM "Go to...",                    ID_SEARCH_GOTO
         MENUITEM "Go to Matching Brace",        ID_SEARCH_MATCHBRACE
@@ -118,6 +120,7 @@ BEGIN
     POPUP "&View"
     BEGIN
         MENUITEM "Toolbar",                     ID_VIEW_TOOLBAR
+        MENUITEM "Search Results",              ID_VIEW_RESULTS
         MENUITEM SEPARATOR
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN
@@ -382,6 +385,8 @@ BEGIN
     "F",            ID_SEARCH_FINDFILE,     VIRTKEY, SHIFT, CONTROL, NOINVERT
     VK_F3,          ID_SEARCH_FINDNEXT,     VIRTKEY, NOINVERT
     VK_F3,          ID_SEARCH_FINDPREV,     VIRTKEY, SHIFT, NOINVERT
+    VK_F4,          ID_SEARCH_NEXTRESULT,   VIRTKEY, NOINVERT
+    VK_F4,          ID_SEARCH_PREVRESULT,   VIRTKEY, SHIFT, NOINVERT
     "G",            ID_SEARCH_GOTO,         VIRTKEY, CONTROL, NOINVERT
     "B",            ID_SEARCH_MATCHBRACE,   VIRTKEY, CONTROL, NOINVERT
     "H",            ID_SEARCH_REPLACE,      VIRTKEY, CONTROL, NOINVERT

@@ -40,11 +40,14 @@ Find in Files...	Поиск в Файлах...	Suchen in Dateien...
 Replace in Files...	Замена в файлах...	Ersetzen in Dateien...
 Find Next	Поиск Следующий	Weitersuchen 
 Find Previous	Поиск Предыдущий	Rückwärts suchen
+Next Result	Следующий Результат	Nächstes Ergebnis
+Previous Result	Предыдущий Результат	Vorheriges Ergebnis
 Go to...	Переход...	Springen...
 Go to Matching Brace	Перейти на парную скобку	Springen Matching Brace
 Go to Matching Fold	Перейти на парный слой	Springen Passende Fold
 
 &View	Вид	Anzeigen
+Search Results	Результаты Поиска	Suchergebnisse
 Always on Top	Всегда на Верху
 Full Screen	Весь Экран
 Whitespace Off	Пробелы Выкл
@@ -118,6 +121,14 @@ Passed the end of the file	Проход через конец файла
 Cannot find the string	Невозможно найти текст
 Search string is part of Replace, operation can be recursive, Continue?	Текст для поиска является частью замены, операция может быть рекурсивной, Продолжить?
 %i Replacements were made	Было сделано %i замен
+%i matches	совпадений: %i	%i Treffer
+%i replacements	замен: %i	%i Ersetzungen
+%i lines	строк: %i	%i Zeilen
+%i files	файлов: %i	%i Dateien
+%i files searched	просмотрено файлов: %i	%i Dateien durchsucht
+Folder not found	Папка не найдена	Ordner nicht gefunden
+Invalid regular expression	Неверное регулярное выражение	Ungültiger regulärer Ausdruck
+Clear	Очистить	Leeren
 
 ; goto dialog
 Goto	Переход	Springen

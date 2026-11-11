@@ -176,6 +176,9 @@
     <ClInclude Include="tabs.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="findResults.h">
+      <Filter>windows</Filter>
+    </ClInclude>
     <ClInclude Include="theme.h">
       <Filter>windows</Filter>
     </ClInclude>
@@ -305,6 +308,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="tabs.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="findResults.cpp">
       <Filter>windows</Filter>
     </ClCompile>
     <ClCompile Include="theme.cpp">

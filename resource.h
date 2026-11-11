@@ -246,6 +246,10 @@
 #define ID_VIEW_TOOLBAR                 33651
 #define ID_VIEW_EOL2                    33652
 #define ID_VIEW_WRAPLINES2              33653
+#define ID_VIEW_RESULTS                 33654
+#define ID_SEARCH_NEXTRESULT            33655
+#define ID_SEARCH_PREVRESULT            33656
+#define ID_SEARCH_RESULTS_CLEAR         33657
 
 // Next default values for new objects
 // 
@@ -253,7 +257,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        231
-#define _APS_NEXT_COMMAND_VALUE         33654
+#define _APS_NEXT_COMMAND_VALUE         33658
 #define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           110
 #endif

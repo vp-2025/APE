@@ -119,6 +119,10 @@ void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
 	m_pnl.Create( hWnd );
 	m_pnl.SetVisible( true );
 
+// Find Results =======================
+	m_results.Create( hWnd );
+	m_results.m_height = LoadIntVal( "main", "ResultsHeight", g_dpi.scale(m_results.m_height) );
+
 	g_theme.subclassReBar( m_rebar.hWnd(), m_toolbar.hWnd() );
 	g_theme.subclassStatusbar( m_statusbar.hWnd() );
 	onThemeChanged( true );
@@ -177,6 +181,7 @@ void CEditor::onDestroy()
 	m_findDlg.Destroy();
 	SaveBool( "main", "SortFuncsByName", m_bSortFuncsByName );
 	SaveBool( "main", "Toolbar", m_bToolbar );
+	SaveInt( "main", "ResultsHeight", m_results.m_height );
 }
 
 void CEditor::ResizeScintilla()
@@ -186,7 +191,7 @@ void CEditor::ResizeScintilla()
 		return;
 
 	CRect r = GetClientRect();
-	MoveWindow( m_vTabs[iTab].sci.hWnd(), 0,TAB_H+TOOLBAR_H, r.width(), r.height()-TAB_H-TOOLBAR_H-STATUSBAR_H, TRUE );
+	MoveWindow( m_vTabs[iTab].sci.hWnd(), 0,TAB_H+TOOLBAR_H, r.width(), r.height()-TAB_H-TOOLBAR_H-STATUSBAR_H-ResultsH(), TRUE );
 }
 
 void CEditor::onSize( int w, int h )
@@ -196,7 +201,12 @@ void CEditor::onSize( int w, int h )
 	TOOLBAR_H = m_rebar.IsVisible() ? m_rebar.getHeight() : 0;	// View > Toolbar
 	STATUSBAR_H = m_statusbar.getHeight();
 	m_tabs.Move( 0, TOOLBAR_H, w, TAB_H );
-	m_pnl.Move( 0, TOOLBAR_H, w, h-TOOLBAR_H-STATUSBAR_H );
+	m_pnl.Move( 0, TOOLBAR_H, w, h-TOOLBAR_H-STATUSBAR_H-ResultsH() );
+	if( m_results.m_bVisible ) {
+		CRect rs = ResultsSplitterRect();
+		MoveWindow( m_results.hWnd(), 0, rs.bottom, w, h-STATUSBAR_H-rs.bottom, TRUE );
+		InvalidateRect( m_hWnd, &rs, TRUE );
+	}
 
 	int t = (TOOLBAR_H - m_cmbFunc.getHeight())/2;
 	if( TOOLBAR_H && t )
@@ -249,6 +259,17 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 {
 	if( !cmd ) return;
 
+	// the edit accelerators go to the editor, in the find results only copy & select all are done
+	if( notify==1 && ::GetFocus()==m_results.hWnd() )
+		switch( cmd ) {
+		case ID_EDIT_COPY: m_results.sci().Copy(); return;
+		case ID_EDIT_SELECTALL: m_results.sci().SelectAll(); return;
+		case ID_EDIT_UNDO: case ID_EDIT_REDO: case ID_EDIT_CUT: case ID_EDIT_PASTE: case ID_EDIT_DELETE:
+		case ID_EDIT_READONLY: case ID_EDIT_UPPERCASE: case ID_EDIT_LOWERCASE:
+		case ID_EDIT_AUTOC: case ID_EDIT_CALLTIP: case ID_EDIT_JUMP:
+			return;
+		}
+
 	bool b=true;
 	switch( cmd )
 	{
@@ -284,6 +305,10 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 	case ID_VIEW_ALWAYSONTOP: ViewAlwaysOnTop(); break;
 	case ID_VIEW_FULLSCREEN: ViewFullScreen(); break;
 	case ID_VIEW_TOOLBAR: ViewToolbar(); break;
+	case ID_VIEW_RESULTS: ShowResults( !m_results.m_bVisible ); break;
+	case ID_SEARCH_NEXTRESULT: onResultNext( true ); break;
+	case ID_SEARCH_FINDFILE: m_findDlg.Find( false, true ); break; // also without an opened file
+	case ID_SEARCH_PREVRESULT: onResultNext( false ); break;
 
 	case ID_VIEW_THEME_SYSTEM: onSetTheme( themeSystem ); break;
 	case ID_VIEW_THEME_LIGHT: onSetTheme( themeLight ); break;
@@ -398,8 +423,11 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 	case ID_SEARCH_FIND:
 	case ID_SEARCH_FINDFILE:
 	case ID_SEARCH_REPLACE:
-	case ID_SEARCH_REPLACEFILE:
-		m_findDlg.Find( cmd==ID_SEARCH_REPLACE||cmd==ID_SEARCH_REPLACEFILE, cmd==ID_SEARCH_FINDFILE||cmd==ID_SEARCH_REPLACEFILE );
+	case ID_SEARCH_REPLACEFILE: {
+			bool bReplace = cmd == ID_SEARCH_REPLACE || cmd == ID_SEARCH_REPLACEFILE;
+			bool inFiles = cmd == ID_SEARCH_FINDFILE || cmd == ID_SEARCH_REPLACEFILE;
+			m_findDlg.Find(bReplace, inFiles);
+		}
 		break;
 
 	case ID_SEARCH_FINDPREV:
@@ -683,6 +711,9 @@ void CEditor::onNotification( NMHDR* pNMHdr )
 			case TCN_SELCHANGING: onTabChanging(); break;
 			case TCN_SELCHANGE: onTabChanged(); break;
 		}
+	} else
+	if( pNMHdr->hwndFrom==m_results.hWnd() ) {
+		onResultsNotification( (SCNotification*)pNMHdr );
 	} else {
 		for( unsigned i=0; i < m_vTabs.size(); i++ )
 			if( pNMHdr->hwndFrom == m_vTabs[i].sci.hWnd() )
@@ -1134,6 +1165,28 @@ void CEditor::onPopupStatusbar( int part, CTabPage& page )
 
 void CEditor::onPopup( HWND hCtrl, int x, int y )
 {
+	if( hCtrl==m_results.hWnd() ) {
+		CMenu popup;
+		popup.Create(true);
+		popup.Append( ID_EDIT_COPY, tr(L"Copy"), m_results.sci().hasSel() );
+		popup.Append( ID_EDIT_SELECTALL, tr(L"Select All") );
+		popup.AppendSeparator();
+		popup.Append( ID_FOLDING_COLLAPSEALL, tr(L"Collapse All"), m_results.hasFolding() );
+		popup.Append( ID_FOLDING_EXPANDALL, tr(L"Expand All"), m_results.hasFolding() );
+		popup.AppendSeparator();
+		popup.Append( ID_SEARCH_RESULTS_CLEAR, tr(L"Clear") );
+		popup.Append( ID_VIEW_RESULTS, tr(L"Close") );
+		switch( popup.TrackPopup(TPM_RETURNCMD, x, y, m_hWnd) ) {
+		case ID_EDIT_COPY: m_results.sci().Copy(); break;
+		case ID_EDIT_SELECTALL: m_results.sci().SelectAll(); break;
+		case ID_FOLDING_COLLAPSEALL: m_results.FoldAll( true ); break;
+		case ID_FOLDING_EXPANDALL: m_results.FoldAll( false ); break;
+		case ID_SEARCH_RESULTS_CLEAR: m_results.Clear(); break;
+		case ID_VIEW_RESULTS: ShowResults( false ); break;
+		}
+		return;
+	}
+
 	int iTab = m_tabs.GetCurSel();
 	if( iTab<0 || iTab>=(int)m_vTabs.size() )
 		return;
@@ -1252,6 +1305,12 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.Enable( ID_SEARCH_MATCHBRACE, pPage!=0 && pPage->sci.isBraceMatched() );
 	menu.Enable( ID_SEARCH_MATCHFOLD, pPage!=0 && pPage->sci.isFoldMatched() );
 	menu.Enable( ID_SEARCH_CLEARINDIC, pPage!=0 );
+	menu.Enable( ID_SEARCH_NEXTRESULT, !m_results.isEmpty() );
+	menu.Enable( ID_SEARCH_PREVRESULT, !m_results.isEmpty() );
+	if( ::GetFocus()==m_results.hWnd() ) { // the accelerators are for the find results
+		menu.Enable( ID_EDIT_COPY, m_results.sci().hasSel() );
+		menu.Enable( ID_EDIT_SELECTALL, true );
+	}
 
 	menu.Enable( ID_FILE_SAVE, pPage && pPage->sci.isModified() );
 	menu.Enable( ID_FILE_SAVEAS, pPage!=0 );
@@ -1320,6 +1379,7 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.EnableCheck( ID_ENCODING_ANSI_CYR, b, enc==encAnsiCyr );
 
 	menu.EnableCheck( ID_VIEW_TOOLBAR, true, m_bToolbar );
+	menu.EnableCheck( ID_VIEW_RESULTS, true, m_results.m_bVisible );
 
 	menu.EnableCheck( ID_VIEW_THEME_SYSTEM, true, g_theme.getMode()==themeSystem );
 	menu.EnableCheck( ID_VIEW_THEME_LIGHT, true, g_theme.getMode()==themeLight );
@@ -1408,6 +1468,42 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	case WM_SIZE:
 		onSize( LOWORD(lParam), HIWORD(lParam) );
+		break;
+
+	case WM_ERASEBKGND: // the rest is covered by the children
+		if( m_results.m_bVisible ) {
+			CRect rs = ResultsSplitterRect();
+			FillRect( (HDC)wParam, &rs, g_theme.isDark() ? g_theme.brBack() : GetSysColorBrush(COLOR_BTNFACE) );
+		}
+		return DefWindowProcW(hWnd, msg, wParam, lParam);
+
+	case WM_SETCURSOR:
+		if( (HWND)wParam==hWnd && LOWORD(lParam)==HTCLIENT && m_results.m_bVisible ) {
+			CPoint pt = GetCursorPos();
+			ScreenToClient( pt );
+			if( ResultsSplitterRect().in(pt) ) {
+				SetCursor( LoadCursor(nullptr, IDC_SIZENS) );
+				return TRUE;
+			}
+		}
+		return DefWindowProcW(hWnd, msg, wParam, lParam);
+
+	case WM_LBUTTONDOWN:
+	case WM_MOUSEMOVE:
+	case WM_LBUTTONUP:
+	case WM_CAPTURECHANGED:
+		if( !onSplitterMouse(msg, CPoint(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam))) )
+			return DefWindowProcW(hWnd, msg, wParam, lParam);
+		break;
+
+	case WM_RESULTS_KEY:
+		if( wParam==VK_RETURN ) {
+			if( m_results.ToggleFoldAtCaret() ) // on a file: collapse/expand
+				break;
+			m_results.isNewResult();
+			onResultGoto( true );
+		} else
+			ShowResults( false );
 		break;
 
 	case WM_COMMAND:
@@ -1741,6 +1837,7 @@ bool CEditor::WindowClose_int(int iTab)
 	if( !WindowCanClose_int(iTab) )
 		return false;
 	CTabPage& tabPage = m_vTabs[iTab];
+	m_results.onSciClosed( tabPage.sci.hWnd() );
 	tabPage.sci.Destroy();
 	m_vTabs.erase(m_vTabs.begin() + iTab, m_vTabs.begin() + iTab + 1 );
 	m_tabs.DeleteItem( iTab );
@@ -2008,6 +2105,8 @@ void CEditor::onThemeChanged( bool bInit ) {
 		SetupLexerStyles( tabPage.sci );
 		SetupIndicators( tabPage.sci );
 	}
+	g_theme.applySci( m_results.hWnd() );
+	m_results.SetupStyles();
 	ResizeScintilla();
 	DrawMenuBar( m_hWnd );
 	RedrawWindow( m_hWnd, nullptr, nullptr, RDW_INVALIDATE|RDW_ERASE|RDW_FRAME|RDW_ALLCHILDREN );
@@ -2058,6 +2157,148 @@ void CEditor::ShowToolbar( bool bShow ) {
 
 	CRect r = GetClientRect();
 	onSize( r.width(), r.height() );	// TOOLBAR_H changed, lay everything out again
+}
+
+/////////////////////////////////////////////////////////////////////
+// find/replace results
+
+void CEditor::ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges ) {
+	int iTab = m_tabs.GetCurSel();
+	if( iTab<0 || iTab>=(int)m_vTabs.size() )
+		return;
+	CTabPage& page = m_vTabs[iTab];
+	m_results.Fill( sWhat, sMatches, page.sci, page.sFile, ranges );
+	ShowResults( true );
+}
+
+CTabPage* CEditor::FindPage( const string& sFile ) {
+	string s = sFile;
+	replaceStr( s, "/", "\\" );
+	for( auto& page : m_vTabs ) {
+		string sPage = page.sFile;
+		replaceStr( sPage, "/", "\\" );
+		if( !page.bNew && equalsToIC(s, sPage) )
+			return &page;
+	}
+	return nullptr;
+}
+
+void CEditor::ShowResults( bool bShow ) {
+	m_results.m_bVisible = bShow;
+	::ShowWindow( m_results.hWnd(), bShow ? SW_SHOW : SW_HIDE );
+	CRect r = GetClientRect();
+	onSize( r.width(), r.height() );
+	if( !bShow ) {
+		int iTab = m_tabs.GetCurSel();
+		if( iTab>=0 && iTab<(int)m_vTabs.size() )
+			::SetFocus( m_vTabs[iTab].sci.hWnd() );
+	}
+}
+
+int CEditor::ResultsH() {
+	if( !m_results.m_bVisible )
+		return 0;
+	CRect r = GetClientRect();
+	int hMin = g_dpi.scale(50);
+	int hMax = r.height()-TOOLBAR_H-TAB_H-STATUSBAR_H-hMin; // the editor keeps some lines
+	return max( min(m_results.m_height, hMax), hMin );
+}
+
+CRect CEditor::ResultsSplitterRect() {
+	CRect r = GetClientRect();
+	int y = r.height()-STATUSBAR_H-ResultsH();
+	return CRect( 0, y, r.width(), y+CFindResults::SplitterH() );
+}
+
+bool CEditor::onSplitterMouse( UINT msg, const CPoint& pt ) {
+	switch( msg ) {
+	case WM_LBUTTONDOWN:
+		if( !m_results.m_bVisible || !ResultsSplitterRect().in(pt) )
+			return false;
+		m_splitDrag = pt.y - ResultsSplitterRect().top;
+		SetCapture( m_hWnd );
+		return true;
+	case WM_MOUSEMOVE:
+		if( m_splitDrag<0 )
+			return false;
+		{
+			CRect r = GetClientRect();
+			m_results.m_height = r.height()-STATUSBAR_H-(pt.y-m_splitDrag);
+			m_results.m_height = ResultsH(); // within the limits
+			onSize( r.width(), r.height() );
+		}
+		return true;
+	case WM_LBUTTONUP:
+		if( m_splitDrag<0 )
+			return false;
+		ReleaseCapture(); // -> WM_CAPTURECHANGED
+		return true;
+	case WM_CAPTURECHANGED:
+		m_splitDrag = -1;
+		return false;
+	}
+	return false;
+}
+
+void CEditor::onResultsNotification( SCNotification* pNS ) {
+	switch( pNS->nmhdr.code ) {
+	case SCN_UPDATEUI: // arrows or click: the result is shown, the focus stays in the results
+		if( (pNS->updated & SC_UPDATE_SELECTION) && !m_results.isFilling() && m_results.isNewResult() )
+			onResultGoto( false );
+		break;
+	case SCN_DOUBLECLICK: // on a file: collapse/expand
+		if( m_results.ToggleFoldAtCaret() )
+			break;
+		m_results.isNewResult();
+		onResultGoto( true );
+		break;
+	}
+}
+
+void CEditor::onResultGoto( bool bFocus ) {
+	int iMatch;
+	const CFindResult* pRes = m_results.GetCurResult( iMatch );
+	if( !pRes || iMatch<0 )
+		return;
+	CFindResult res = *pRes; // FileOpen() can do anything
+
+	int iTab = -1;
+	for( size_t i=0; i<m_vTabs.size(); i++ )
+		if( res.hSci && m_vTabs[i].sci.hWnd()==res.hSci )
+			iTab = (int)i;
+	if( iTab<0 ) { // the tab is closed: open the file again, or switch to it, if it is opened again
+		if( !FileOpen(res.sFile, false) )
+			return;
+		iTab = m_tabs.GetCurSel();
+	} else
+	if( iTab!=m_tabs.GetCurSel() )
+		SwitchToTab( iTab );
+	if( iTab<0 || iTab>=(int)m_vTabs.size() )
+		return;
+
+	// the file could be changed since the search: the line is kept, the positions are cut
+	CSciWrapper& sci = m_vTabs[iTab].sci;
+	const CFindMatch& m = res.matches[iMatch];
+	int line = min( res.line, sci.GetLineCount()-1 );
+	int len = sci.GetTextLength();
+	int p1 = min( sci.PositionFromLine(line)+m.offset, len );
+	int p2 = min( p1+m.len, len );
+	sci.EnsureVisible( p1, p2 ); // unfold
+	sci.SetSel( p1, p2 );
+	::SetFocus( bFocus ? sci.hWnd() : m_results.hWnd() );
+}
+
+void CEditor::onResultNext( bool bNext ) {
+	if( m_results.isEmpty() )
+		return;
+	if( !m_results.m_bVisible )
+		ShowResults( true );
+	if( !m_results.SelectNext(bNext) ) {
+		MessageBeep( MB_OK );
+		return;
+	}
+	m_results.isNewResult();
+	onResultGoto( true );
 }
 
 void CEditor::SetFullScreen(bool bOn)

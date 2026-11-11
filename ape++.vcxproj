@@ -652,6 +652,7 @@
     <ClInclude Include="xmlMatchedTagHL.h" />
     <ClInclude Include="xpm_img.h" />
     <ClInclude Include="tabs.h" />
+    <ClInclude Include="findResults.h" />
     <ClInclude Include="theme.h" />
   </ItemGroup>
   <ItemGroup>
@@ -678,6 +679,7 @@
     <ClCompile Include="progress.cpp" />
     <ClCompile Include="sci.cpp" />
     <ClCompile Include="tabs.cpp" />
+    <ClCompile Include="findResults.cpp" />
     <ClCompile Include="theme.cpp" />
     <ClCompile Include="xmlMatchedTagHL.cpp" />
     <ClCompile Include="xpm_img.cpp" />

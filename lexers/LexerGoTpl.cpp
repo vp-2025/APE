@@ -737,7 +737,7 @@ bool isJSKeyword( const char* szKW );
 static CKeywords kwTplBlock( "if range with define block", true );
 static CKeywords kwTpl( "else end template break continue nil true false", true );
 static CKeywords kwTplBuiltin("and or not len index slice print printf println html js urlquery call eq ne lt le gt ge", true );
-static CKeywords kwTplFunc( "tr dueCal frameKey hasDay weekDays nextRun", true );
+static CKeywords kwTplFunc( "tr dueCal frameKey hasDay weekDays isOK dayNames nextRun", true );
 
 #line 743 "C:/work/ape++/src/lexers/LexerGoTpl.cpp"
 /* end of data tables for the DFA and the user's section 1 definitions go here   */

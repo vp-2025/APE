@@ -10,6 +10,7 @@
 #include "AccelMenu.h"
 #include "dlgFind.h"
 #include "tabPage.h"
+#include "findResults.h"
 
 class CEditor : public CWindow
 {
@@ -27,6 +28,8 @@ class CEditor : public CWindow
 	CComboBox m_cmbFunc;
 	bool m_bSortFuncsByName;
 	bool m_bToolbar;	// View > Toolbar
+	CFindResults m_results;	// at the bottom, View > Search Results
+	int m_splitDrag;	// the splitter above the results is dragged: mouse y - splitter y, or -1
 public:
 	vector<CTabPage> m_vTabs;
 	CFindDlg m_findDlg;
@@ -36,7 +39,7 @@ public:
 		, m_pin(ID_PIN_FIRST,ID_PIN_LAST)
 		, m_accelMenu(IDC_ACCEL)
 		, m_findDlg(this)
-	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; }
+	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; m_splitDrag=-1; }
 
 	void onCreate( HWND hWnd, bool bNewInstance );	// bNewInstance - started via "-new"
 	void onDestroy();
@@ -123,8 +126,27 @@ public:
 	void ViewToolbar();
 	void ShowToolbar(bool bShow);
 
+	// find/replace results
+	void ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges );
+	void ShowResults( bool bShow );
+private:
+	int ResultsH();	// height of the results with the splitter, 0 if hidden
+	CRect ResultsSplitterRect();
+	void onResultsNotification( SCNotification* pNS );
+	void onResultGoto( bool bFocus );
+	void onResultNext( bool bNext );
+	bool onSplitterMouse( UINT msg, const CPoint& pt );
+public:
+
 	void onAutoComplete( CSciWrapper& sci );
 	void onCallTip( CSciWrapper& sci );
+
+	CFindResults& Results() { return m_results; }
+	CTabPage* GetCurPage() {
+		int iTab = m_tabs.GetCurSel();
+		return iTab>=0 && iTab<(int)m_vTabs.size() ? &m_vTabs[iTab] : nullptr;
+	}
+	CTabPage* FindPage( const string& sFile );	// the tab of the opened file
 
 	CSciWrapper* GetScintilla() { 
 		int iTab = m_tabs.GetCurSel();

@@ -46,11 +46,13 @@ private:
 
     int getFindFlags();
     string getFindStr();
+    string getFindStr(const wstring& ws, bool bAnsi); // for a file with this encoding
     string getReplaceStr();
 
     bool onFind();
     void onReplace();
     void onFindAll();
+    void onFindInFiles();
     void onReplaceAll();
 
     static void popupOptRE(CREOpt* opts, HWND hDlg, HWND hBtn, HWND hEdit);

@@ -4,6 +4,9 @@
 #include "lang.h"
 #include "main.h"
 #include "ShellContextMenu.h"
+#include "fileMask.h"
+#include "shared/platform.h"
+#include <regex>
 
 CREOpt findOptsExt[] = {
     {"Cr",  "\\r"},
@@ -110,7 +113,7 @@ void CFindDlg::Find(bool bReplace, bool bInFiles) {
     if( !pEditor )
         return;
     CSciWrapper* pSci = pEditor->GetScintilla();
-    if( !pSci )
+    if( !pSci && !bInFiles )
         return;
 
     if( !m_hWnd || !IsWindow(m_hWnd) )
@@ -118,23 +121,28 @@ void CFindDlg::Find(bool bReplace, bool bInFiles) {
     CenterWindow(m_hWnd);
     ShowWindow(SW_SHOW);
 
-    string sSearch;
-    if( pSci->hasSelection(100) )
-        sSearch = pSci->GetSelText();
-    else
-        sSearch = pSci->GetWordFromPosition(pSci->GetCurrentPos());
-
     bFind = false;
-    cmbSearch.SetCurSel(-1);
-    if( pSci->isEncodingUtf() )
-        cmbSearch.SetText(utf2w(sSearch));
-    else
-        cmbSearch.SetText(sSearch);
+    if( pSci ) {
+        string sSearch;
+        if( pSci->hasSelection(100) )
+            sSearch = pSci->GetSelText();
+        else
+            sSearch = pSci->GetWordFromPosition(pSci->GetCurrentPos());
+        cmbSearch.SetCurSel(-1);
+        if( pSci->isEncodingUtf() )
+            cmbSearch.SetText(utf2w(sSearch));
+        else
+            cmbSearch.SetText(sSearch);
+        pSci->ClearTarget();
+    }
     chkReplace.SetCheck(bReplace);
     chkInFiles.SetCheck(bInFiles);
     ::SetFocus(cmbSearch.hWnd());
 
-    pSci->ClearTarget();
+    // the folder of the current file, if no folder is given
+    CTabPage* pPage = pEditor->GetCurPage();
+    if( bInFiles && cmbPath.GetTextW().empty() && pPage && !pPage->bNew )
+        cmbPath.SetText(utf2w(ExtractFilePath(pPage->sFile)));
 
     UpdateControls(true);
 }
@@ -181,7 +189,7 @@ void CFindDlg::onInit() {
     cmbMode.Attach(m_hWnd, IDC_FIND_MODE);
     cmbMode.AddString(tr("Normal"));
     cmbMode.AddString(tr(R"(Extended \r \n \t)"));
-    cmbMode.AddString(tr("Scintilla RegExp"));
+    cmbMode.AddString(tr("Scintilla regex"));
     cmbMode.AddString(tr("std::regex"));
     cmbMode.SetCurSel(0);
 
@@ -252,10 +260,14 @@ void CFindDlg::onCommand(int cmd, int code) {
         }
             break;
         case IDC_FIND_BTN:
-            onFind();
-            break;
         case IDC_FINDALL_BTN:
-            onFindAll();
+            if( chkInFiles.IsChecked() )
+                onFindInFiles();
+            else
+            if( cmd == IDC_FIND_BTN )
+                onFind();
+            else
+                onFindAll();
             break;
         case IDC_FIND_REPLACE_BTN:
             onReplace();
@@ -270,9 +282,9 @@ void CFindDlg::onCommand(int cmd, int code) {
 
 void CFindDlg::UpdateControls(bool bPrepare) {
     CSciWrapper* pSci = pEditor->GetScintilla();
-    if( !pSci ) return;
-    chkInFiles.Enable(false); // NYI
-    chkInFiles.SetCheck(false);
+    chkInFiles.Enable(pSci != nullptr); // without an editor only in files
+    if( !pSci )
+        chkInFiles.SetCheck(true);
 
     cmbReplace.Enable(chkReplace.IsChecked());
     btnReplaceOpt.Enable(chkReplace.IsChecked());
@@ -297,9 +309,9 @@ void CFindDlg::UpdateControls(bool bPrepare) {
     if( !rbtnDown.IsChecked() && !rbtnUp.IsChecked() )
         rbtnDown.SetCheck(true);
 
-    rbtnSelection.Enable(!chkInFiles.IsChecked() && pSci->hasSel());
+    rbtnSelection.Enable(!chkInFiles.IsChecked() && pSci && pSci->hasSel());
     rbtnWhole.Enable(!chkInFiles.IsChecked());
-    if( bPrepare && rbtnSelection.IsEnabled() && pSci->hasSelLines() ) {
+    if( bPrepare && rbtnSelection.IsEnabled() && pSci && pSci->hasSelLines() ) {
         rbtnSelection.SetCheck(true);
         rbtnWhole.SetCheck(false);
     }
@@ -311,12 +323,12 @@ void CFindDlg::UpdateControls(bool bPrepare) {
         rbtnWhole.SetCheck(true);
 
     chkSubFolders.Enable(chkInFiles.IsChecked());
-    chkNewPane.Enable(chkInFiles.IsChecked());
-    chkCreateBak.Enable(chkInFiles.IsChecked());
+    chkNewPane.Enable(false);   // NYI
+    chkCreateBak.Enable(false); // NYI: replace in files
 
     btnSearch.Enable(true);
-    btnReplace.Enable(chkReplace.IsChecked());
-    btnReplaceAll.Enable(chkReplace.IsChecked());
+    btnReplace.Enable(chkReplace.IsChecked() && !chkInFiles.IsChecked());
+    btnReplaceAll.Enable(chkReplace.IsChecked() && !chkInFiles.IsChecked());
 
     btnSearchOpt.SetVisible(!isModeNormal());
     btnReplaceOpt.SetVisible(!isModeNormal());
@@ -343,6 +355,13 @@ string CFindDlg::getFindStr() {
         if( isModeExt() )
             extended2string(s);
     }
+    return s;
+}
+
+string CFindDlg::getFindStr(const wstring& ws, bool bAnsi) {
+    string s = bAnsi ? w2a(ws) : w2utf(ws);
+    if( isModeExt() )
+        extended2string(s);
     return s;
 }
 
@@ -442,6 +461,23 @@ void CFindDlg::onReplace() {
     bFind = false;
 }
 
+// all the matches in [from, to); std::regex_error for a bad std::regex
+static vector<Sci_CharacterRange> findAll(CSciWrapper* pSci, int flags, const string& s, bool bStdRE, int from, int to) {
+    vector<Sci_CharacterRange> ranges;
+    Sci_TextToFind ttf = {0};
+    ttf.lpstrText = (char*) s.c_str();
+    ttf.chrg.cpMin = from;
+    ttf.chrg.cpMax = to;
+    while( ttf.chrg.cpMin < ttf.chrg.cpMax && pSci->FindText(flags, ttf, bStdRE) >= 0 ) { // -2: bad Scintilla RegExp
+        if( ttf.chrgText.cpMax > ttf.chrgText.cpMin ) {
+            ranges.push_back(ttf.chrgText);
+            ttf.chrg.cpMin = ttf.chrgText.cpMax;
+        } else // an empty match (^, $): go on from the next char
+            ttf.chrg.cpMin = pSci->Call(SCI_POSITIONAFTER, ttf.chrgText.cpMax);
+    }
+    return ranges;
+}
+
 void CFindDlg::onFindAll() {
     CSciWrapper* pSci = pEditor->GetScintilla();
     if( !pSci ) return;
@@ -452,32 +488,30 @@ void CFindDlg::onFindAll() {
     string s = getFindStr();
     if( s.empty() ) return;
 
-    Sci_TextToFind ttf = {0};
-    ttf.lpstrText = (char*) s.c_str();
-    if( rbtnWhole.IsChecked() ) {
-        ttf.chrg.cpMin = 0;
-        ttf.chrg.cpMax = pSci->GetTextLength();
-    } else {
-        ttf.chrg.cpMin = pSci->GetSelectionStart();
-        ttf.chrg.cpMax = pSci->GetSelectionEnd();
+    vector<Sci_CharacterRange> ranges;
+    try {
+        if( rbtnWhole.IsChecked() )
+            ranges = findAll(pSci, flags, s, isModeStdRE(), 0, pSci->GetTextLength());
+        else
+            ranges = findAll(pSci, flags, s, isModeStdRE(), pSci->GetSelectionStart(), pSci->GetSelectionEnd());
+    } catch( std::regex_error& ) {
+        pEditor->UpdateStatusText(tr(L"Invalid regular expression"));
+        MessageBeep(MB_ICONASTERISK);
+        return;
     }
-
-    int cnt = 0;
-    while( pSci->FindText(flags, ttf, isModeStdRE()) != -1 ) {
-        cnt++;
-        pSci->IndicatorFillRange(ttf.chrgText);
-        ttf.chrg.cpMin = ttf.chrgText.cpMax;
-        if( ttf.chrg.cpMin == ttf.chrg.cpMax ) break;
-    }
+    for( const auto& r : ranges )
+        pSci->IndicatorFillRange(r);
+    int cnt = (int)ranges.size();
     pEditor->UpdateStatusText(Format(tr(L"%i Results were found").c_str(), cnt));
     if( !cnt )
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
     pSci->ClearTarget();
+    pEditor->ShowFindResults('"' + s + '"', tr("%i matches"), ranges);
 }
 
 int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sReplace, bool bWholeFile, bool isModeSciRE,
-        bool isModeStdRE) {
+        bool isModeStdRE, vector<Sci_CharacterRange>* pRanges = nullptr) {
     if( !pSci ) return 0;
     pSci->clearIndicator(INDIC_FIND);
     pSci->clearIndicator(INDIC_REPLACE);
@@ -509,6 +543,8 @@ int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sRe
             pSci->ReplaceTarget(sReplace, isModeSciRE);
         int l2 = pSci->GetTargetLength();
         pSci->IndicatorFillRange(pSci->GetTargetStart(), pSci->GetTargetLength());
+        if( pRanges ) // the next replacements are after it, so the positions stay valid
+            pRanges->push_back({pSci->GetTargetStart(), pSci->GetTargetEnd()});
         ttf.chrg.cpMin = pSci->GetTargetEnd();
         if( bWholeFile )
             ttf.chrg.cpMax = pSci->GetTextLength();
@@ -535,10 +571,156 @@ void replaceNormal(CSciWrapper* pSci, const string& sFind, const string& sReplac
 }
 
 void CFindDlg::onReplaceAll() {
-    int cnt = replace(pEditor->GetScintilla(), getFindFlags(), getFindStr(), getReplaceStr(),
-                      rbtnWhole.IsChecked(), isModeSciRE(), isModeStdRE());
+    string sFind = getFindStr(), sReplace = getReplaceStr();
+    vector<Sci_CharacterRange> ranges;
+    int cnt = replace(pEditor->GetScintilla(), getFindFlags(), sFind, sReplace,
+                      rbtnWhole.IsChecked(), isModeSciRE(), isModeStdRE(), &ranges);
     pEditor->UpdateStatusText(Format( tr(L"%i Replacements were made").c_str(), cnt));
     if( !cnt )
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
+    if( !sFind.empty() )
+        pEditor->ShowFindResults('"' + sFind + "\" -> \"" + sReplace + '"', tr("%i replacements"), ranges);
+}
+
+/////////////////////////////////////////////////////////////////////
+// find in files
+
+// not too big and not binary (0 chars, but UTF-16 with BOM is text)
+static bool isTextFile(const string& sFile) {
+    if( vGetFileSize(sFile) > 50 * 1024 * 1024 )
+        return false;
+    CFile f;
+    if( !f.Open(sFile, true) )
+        return false;
+    unsigned char buf[8192];
+    DWORD len = f.Read(buf, sizeof(buf));
+    if( len >= 2 && ((buf[0] == 0xFF && buf[1] == 0xFE) || (buf[0] == 0xFE && buf[1] == 0xFF)) )
+        return true;
+    return memchr(buf, 0, len) == nullptr;
+}
+
+// the files of sDir matching the masks; the folders .git, .idea, ... are skipped
+static void collectFiles(const string& sDir, const vector<string>& masks, bool bSubDirs, vector<string>& files) {
+    WIN32_FIND_DATAW fd;
+    HANDLE h = FindFirstFileW(utf2w(sDir + "\\*").c_str(), &fd);
+    if( h == INVALID_HANDLE_VALUE )
+        return;
+    vector<string> dirs;
+    do {
+        string sName = w2utf(fd.cFileName);
+        if( fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
+            if( bSubDirs && sName[0] != '.' && !(fd.dwFileAttributes & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_REPARSE_POINT)) )
+                dirs.push_back(sName);
+        } else
+            for( const auto& sMask : masks )
+                if( sMask == "*" || isFileMask(sMask, sName) ) {
+                    files.push_back(sDir + '\\' + sName);
+                    break;
+                }
+    } while( FindNextFileW(h, &fd) );
+    FindClose(h);
+    for( const auto& sSub : dirs ) // files first, then the subfolders
+        collectFiles(sDir + '\\' + sSub, masks, bSubDirs, files);
+}
+
+void CFindDlg::onFindInFiles() {
+    wstring wsFind = cmbSearch.GetTextW();
+    if( wsFind.empty() )
+        return;
+    cmbSearch.UpdateMRU();
+
+    // folder: the folder of the current file by default
+    string sDir = trimc(w2utf(cmbPath.GetTextW()));
+    CTabPage* pCur = pEditor->GetCurPage();
+    if( sDir.empty() && pCur && !pCur->bNew ) {
+        sDir = ExtractFilePath(pCur->sFile);
+        cmbPath.SetText(utf2w(sDir));
+    }
+    while( !sDir.empty() && (sDir.back() == '\\' || sDir.back() == '/') )
+        sDir.pop_back();
+    if( !IsDirExists(sDir) ) {
+        pEditor->UpdateStatusText(tr(L"Folder not found") + L" '" + utf2w(sDir) + L"'");
+        MessageBeep(MB_ICONASTERISK);
+        return;
+    }
+    cmbPath.UpdateMRU();
+
+    // masks: "*.cpp;*.h", empty is all the files
+    string sMasks = trimc(w2utf(cmbFile.GetTextW()));
+    if( !sMasks.empty() )
+        cmbFile.UpdateMRU();
+    vector<string> masks;
+    string sMask;
+    for( char ch : sMasks + ';' )
+        if( ch == ';' || ch == ',' || ch == ' ' ) {
+            if( sMask == "*.*" )
+                sMask = "*"; // also the files without extension
+            if( !sMask.empty() )
+                masks.push_back(toLowerVal(sMask));
+            sMask.clear();
+        } else
+            sMask += ch;
+    if( masks.empty() )
+        masks.push_back("*");
+
+    CWaitCursor cur;
+    vector<string> files;
+    collectFiles(sDir, masks, chkSubFolders.IsChecked(), files);
+
+    int flags = getFindFlags();
+    bool bStdRE = isModeStdRE();
+    CFindResults& results = pEditor->Results();
+    if( pCur )
+        results.UseFontOf(pCur->sci);
+    results.Begin();
+    CSciWrapper sciDisk; // a file, which isn't opened in the editor, is loaded here
+    bool bBadRE = false;
+    try {
+        for( const auto& sFile : files ) {
+            CTabPage* pPage = pEditor->FindPage(sFile);
+            CSciWrapper* pSrc = &sciDisk;
+            if( pPage ) // the text in the editor, also not saved yet
+                pSrc = &pPage->sci;
+            else {
+                if( !isTextFile(sFile) )
+                    continue;
+                if( !sciDisk.hWnd() )
+                    sciDisk.Create(pEditor->hWnd());
+                CTime tm;
+                int64_t size;
+                if( !sciDisk.loadFromFile(sFile, tm, size) )
+                    continue;
+            }
+            string s = getFindStr(wsFind, pSrc->getEncoding() == encAnsi);
+            vector<Sci_CharacterRange> ranges = findAll(pSrc, flags, s, bStdRE, 0, pSrc->GetTextLength());
+            results.AddFile(*pSrc, pPage ? pPage->sci.hWnd() : nullptr, sFile, ranges, true);
+        }
+    } catch( std::regex_error& ) {
+        bBadRE = true;
+    }
+    if( sciDisk.hWnd() )
+        sciDisk.Destroy();
+
+    // "foo" - 12 matches, 9 lines, 3 files - Z:\src [*.cpp;*.h] - 120 files searched
+    string sTitle = CFindResults::EscapeTitle('"' + w2utf(wsFind) + '"') + " - ";
+    if( bBadRE )
+        sTitle += tr("Invalid regular expression");
+    else {
+        sTitle += Format(tr("%i matches").c_str(), results.cntMatches());
+        if( results.cntMatches() )
+            sTitle += ", " + Format(tr("%i lines").c_str(), results.cntLines())
+                    + ", " + Format(tr("%i files").c_str(), results.cntFiles());
+    }
+    sTitle += " - " + sDir + " [" + (sMasks.empty() ? "*.*" : sMasks) + "] - "
+            + Format(tr("%i files searched").c_str(), (int)files.size());
+    results.End(sTitle);
+    pEditor->ShowResults(true);
+
+    if( bBadRE )
+        pEditor->UpdateStatusText(tr(L"Invalid regular expression"));
+    else
+        pEditor->UpdateStatusText(Format(tr(L"%i Results were found").c_str(), results.cntMatches()));
+    if( !results.cntMatches() )
+        MessageBeep(MB_ICONASTERISK);
 }

@@ -259,15 +259,6 @@ CLexerStyle styleHTML[] = {
 	STYLE_CHILD_EOL( STYLE_JS_DEF, 48, "Unquoted Values", -1, clrUnquoted ),
 	STYLE_CHILD2( STYLE_JS_DEF, 49, "Number", clrNumber ),
 
-// PHP 70-79
-	STYLE_PARENT( STYLE_PHP_DEF, "PHP", 0xFFF0FB ),
-	STYLE_CHILD_BOLD( STYLE_PHP_DEF, 71, "Keyword", clrKeyword ),
-	STYLE_CHILD_ITALIC( STYLE_PHP_DEF, 72, "Comment", clrComment ),
-	STYLE_CHILD_BOLD( STYLE_PHP_DEF, 73, "Symbol", RGB(0,0x80,0) ),
-	STYLE_CHILD2( STYLE_PHP_DEF, 74, "String", clrString ),
-	STYLE_CHILD2( STYLE_PHP_DEF, 75, "Char",	clrChar ),
-	STYLE_CHILD_EOL( STYLE_PHP_DEF, 76, "Unquoted Values", -1, clrUnquoted ),
-	STYLE_CHILD2( STYLE_PHP_DEF, 77, "Number", clrNumber ),
 	{0}
 };
 
@@ -322,7 +313,7 @@ CLexerStyle styleGoTpl[] = {
 	STYLE_CHILD( STYLE_TPL_DEF, 81, "Text" ),
 	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 82, "Delimiter", RGB(0xC0,0x60,0x00) ),
 	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 83, "Keyword", clrKeyword ),
-	STYLE_CHILD2( STYLE_TPL_DEF, 84, "Builtin Function", RGB(0x80,0x00,0x80) ),
+	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 84, "Builtin Function", RGB(0x80,0x00,0x80) ),
 	STYLE_CHILD_BOLD( STYLE_TPL_DEF, 85, "Function", clrLabel ),
 	STYLE_CHILD2( STYLE_TPL_DEF, 86, "Variable", clrVar ),
 	STYLE_CHILD2( STYLE_TPL_DEF, 87, "Field", RGB(0x80,0x40,0x00) ),
@@ -736,6 +727,13 @@ void applyStyle( CSciWrapper& sci, CLexerStyle* pStyle, int id=0  ) {
 }
 
 #include "xpm_img.h"
+
+void SetupDefaultStyle( CSciWrapper& sci ) {
+	sci.StyleResetDefault();
+	applyStyle( sci, findStyle(styleGlobal,STYLE_DEFAULT) );
+	sci.Call(SCI_STYLESETCHARACTERSET, STYLE_DEFAULT, SC_CHARSET_ANSI);
+	sci.StylesClear();
+}
 
 void SetupLexerStyles( CSciWrapper& sci )
 {

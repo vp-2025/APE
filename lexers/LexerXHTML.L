@@ -30,8 +30,6 @@ STYLE		[sS][tT][yY][lL][eE]
 %x CSS CSS_SELECTOR CSS_ATTR CSS_VALUE CSS_COMMENT CSS_SL_COMMENT CSS_COMMENTA CSS_SL_COMMENTA CSS_STRING CSS_CHAR
 	// JS States
 %x JS JS_SLCOMMENT JS_COMMENT JS_STRING JS_CHAR JS_REGEXP
-	// PHP States
-%x PHP PHP_KEYWORD PHP_SLCOMMENT PHP_COMMENT PHP_STRING PHP_CHAR
 
 %{
 
@@ -46,12 +44,6 @@ bool isCssValue( const char* text );
 
 extern bool g_isJSRegExp;
 bool isJSKeyword( const char* szKW );
-
-bool isPHPKeyword( const char* szKW )
-{
-	static CKeywords php("if else elseif define defined function return echo switch case default break foreach for substr strtolower strtoupper strlen empty true false global importClass class_exists new exit abstract class extends public protected private static array is_array",true);
-	return php.is(szKW); 
-}
 
 %}
 
@@ -74,10 +66,6 @@ bool isPHPKeyword( const char* szKW )
 		SetStyle( MatchStart(), MatchStart()+2, STYLE_SYMBOL );
 		SetStyle( MatchStart()+2, MatchEnd(), STYLE_TAG_NAME );
 		BEGIN(INTAG); 
-}
-
-<INITIAL,UNDEF>\<\?php	{
-	BEGIN(PHP); SetStyle();
 }
 
 <INITIAL,UNDEF>\<\??{SPACE}{TAG_NAME}	{
@@ -288,38 +276,6 @@ bool isPHPKeyword( const char* szKW )
 }
 
  /* ========================================================================================
- // PHP
- // ========================================================================================*/
-
- <PHP>{
-	\?\>		BEGIN(INITIAL); SetStyle();
-	\/\/		BEGIN(PHP_SLCOMMENT); SetStyle();
-	\/\*		BEGIN(PHP_COMMENT); SetStyle(); levelIncrease();
-	\"			BEGIN(PHP_STRING); SetStyle();
-	'			BEGIN(PHP_CHAR); SetStyle();
-	{WORD}		if( isPHPKeyword(yytext) ) SetStyle( STYLE_PHP_KW ); else SetStyle();
-	[0-9]+		SetStyle(STYLE_PHP_NUMBER);
-	[{}]		SetStyle(STYLE_PHP_SYMBOL); if( *yytext=='{' ) levelIncrease(); else levelDecrease();
- 	{SYMB}		SetStyle(STYLE_PHP_SYMBOL);
-}
-
-<PHP_SLCOMMENT>{
-	{EOL}		BEGIN(PHP); SetStyle( CSciStyler::styleEOL );
-}
-<PHP_COMMENT>{
-	\*\/		SetStyle(); BEGIN(PHP); levelDecrease();
-}
-<PHP_STRING,PHP_CHAR>{
-	{EOL}		SetStyle(STYLE_PHP_UNQ); BEGIN(PHP);
-}
-<PHP_STRING>{
-	\"			SetStyle(); BEGIN(PHP);
-}
-<PHP_CHAR>{
-	'			SetStyle(); BEGIN(PHP);
-}
-
- /* ========================================================================================
  // default rule
  // ========================================================================================*/
 
@@ -361,12 +317,6 @@ int CSciLexer<yyFlexLexer>::StateToStyle(int nState) {
 		case JS_STRING:		return STYLE_JS_STRING;
 		case JS_CHAR:		return STYLE_JS_CHAR;
 		case JS_REGEXP:		return STYLE_JS_REGEXP;
-// PHP		
-		case PHP:			return STYLE_PHP;
-		case PHP_SLCOMMENT:
-		case PHP_COMMENT:	return STYLE_PHP_COMMENT;
-		case PHP_STRING:	return STYLE_PHP_STRING;
-		case PHP_CHAR:		return STYLE_PHP_CHAR;
 	}
 	return 0;
 }
