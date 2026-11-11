@@ -27,7 +27,7 @@ class CEditor : public CWindow {
 	CComboBox m_cmbFunc;
 	bool m_bSortFuncsByName;
 	bool m_bToolbar;	// View > Toolbar
-	CFindResults m_results;	// at the bottom, View > Search Results
+	CResultsTabs m_results;	// at the bottom, View > Search Results
 	int m_splitDrag;	// the splitter above the results is dragged: mouse y - splitter y, or -1
 public:
 	vector<CTabPage> m_vTabs;
@@ -126,8 +126,10 @@ public:
 	void ShowToolbar(bool bShow);
 
 	// find/replace results
-	void ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges );
+	// sCaption: the tab caption, sWhat: the start of the title; both in the encoding of the current file
+	void ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges, const string& sCaption, bool bNewTab );
 	void ShowResults( bool bShow );
+	void CloseResultsTab( int i );
 private:
 	int ResultsH();	// height of the results with the splitter, 0 if hidden
 	CRect ResultsSplitterRect();
@@ -140,7 +142,7 @@ public:
 	void onAutoComplete( CSciWrapper& sci );
 	void onCallTip( CSciWrapper& sci );
 
-	CFindResults& Results() { return m_results; }
+	CResultsTabs& Results() { return m_results; }
 	CTabPage* GetCurPage() {
 		int iTab = m_tabs.GetCurSel();
 		return iTab>=0 && iTab<(int)m_vTabs.size() ? &m_vTabs[iTab] : nullptr;

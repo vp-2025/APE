@@ -1,6 +1,8 @@
 #pragma once
 
 #include "sci.h"
+#include "tabs.h"
+#include <memory>
 
 // Find/Replace results: a read-only Scintilla at the bottom of the main window
 //   "foo" - 3 matches, 2 lines - main.cpp
@@ -8,6 +10,7 @@
 //    140  the other foo
 // in files, every file has a header line: "Z:\src\main.cpp (2)", it folds the lines of the file
 // matches are bold, a result line shows/opens the file in the editor
+// CResultsTabs: every search can have its own tab, the caption is the search string
 
 #define WM_RESULTS_KEY (WM_USER+10) // to the parent: Enter or Escape in the results, wParam is the key
 
@@ -39,11 +42,10 @@ class CFindResults {
 	void addLine();
 public:
 	enum { stDefault, stLineNo, stMatch, stTitle, stFile, stSymbol, stMatchSymbol }; // styleFindResults[]
-	static int SplitterH() { return g_dpi.scale(5); }
-	int m_height{200}; // with the splitter
-	bool m_bVisible{};
+	string m_sTitle; // the first line, utf-8: the tooltip of the tab
 
 	void Create(HWND hParent);
+	void Destroy() { m_sci.Destroy(); }
 	HWND hWnd() { return m_sci.hWnd(); }
 	CSciWrapper& sci() { return m_sci; }
 	bool isEmpty() const { return m_results.empty(); }
@@ -82,4 +84,42 @@ public:
 	bool hasFolding() const { return m_bHeaders; }
 
 	bool isFilling() const { return m_bFilling; }
+};
+
+#define ID_RESULTS_TABS 223 // the id of the tab control, wParam of WM_TAB_*
+
+// the find results at the bottom of the main window: tabs, the current tab's results under them
+class CResultsTabs {
+	CTabCtrlAdv m_tabs;
+	vector<unique_ptr<CFindResults>> m_vTabs; // in the order of the tabs
+	int m_iCur{-1};
+	HWND m_hParent{};
+	CRect m_rect; // tabs + results, in the parent
+public:
+	static int SplitterH() { return g_dpi.scale(5); }
+	int m_height{200}; // with the splitter
+	bool m_bVisible{};
+
+	void Create(HWND hParent);
+	CTabCtrlAdv& tabs() { return m_tabs; }
+	int count() const { return (int)m_vTabs.size(); }
+	CFindResults* Cur() { return m_iCur >= 0 ? m_vTabs[m_iCur].get() : nullptr; }
+	CFindResults* Get(int i) { return 0 <= i && i < count() ? m_vTabs[i].get() : nullptr; }
+	CFindResults* FromHwnd(HWND hSci); // the results with this Scintilla
+	HWND hWndCur() { return Cur() ? Cur()->hWnd() : nullptr; }
+	bool hasFocus() { return hWndCur() && ::GetFocus() == hWndCur(); }
+	bool isEmpty() { return !Cur() || Cur()->isEmpty(); }
+
+	// the tab for the next search: a new one or the current one; sCaption is the search string, utf-8
+	CFindResults& Prepare(const string& sCaption, bool bNewTab);
+	void Select(int i);
+	void Close(int i);
+	void Reorder(); // after drag & drop of a tab
+	void Show(bool bShow);
+	void Move(int x, int y, int w, int h);
+	void DrawItem(DRAWITEMSTRUCT* pDIS) { m_tabs.DrawItem(pDIS, false, false); }
+
+	void SetupStyles();
+	void applyTheme(); // + scrollbars, border, tooltips
+	void onSciClosed(HWND hSci);
 };

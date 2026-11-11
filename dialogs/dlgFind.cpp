@@ -194,7 +194,7 @@ void CFindDlg::onInit() {
     cmbMode.SetCurSel(0);
 
     chkSubFolders.Attach(m_hWnd, IDC_FIND_FILE_SUBDIRS);
-    chkNewPane.Attach(m_hWnd, IDC_FIND_FILE_OUT2);
+    chkNewTab.Attach(m_hWnd, IDC_FIND_FILE_OUT2);
     chkCreateBak.Attach(m_hWnd, IDC_FIND_FILE_BACKUP);
 
     rbtnUp.Attach(m_hWnd, IDC_FIND_UP);
@@ -216,6 +216,9 @@ void CFindDlg::onInit() {
     cmbReplace.LoadCombo(REPLACE_CMB);
     cmbFile.LoadCombo(FILE_CMB);
     cmbPath.LoadCombo(PATH_CMB);
+    bool bNewTab = false;
+    LoadBool(FIND_DLG, "NewTab", bNewTab);
+    chkNewTab.SetCheck(bNewTab);
 }
 
 void CFindDlg::onDestroy() {
@@ -224,6 +227,7 @@ void CFindDlg::onDestroy() {
     cmbReplace.SaveCombo(REPLACE_CMB);
     cmbFile.SaveCombo(FILE_CMB);
     cmbPath.SaveCombo(PATH_CMB);
+    SaveBool(FIND_DLG, "NewTab", chkNewTab.IsChecked());
 }
 
 void CFindDlg::onCommand(int cmd, int code) {
@@ -275,6 +279,11 @@ void CFindDlg::onCommand(int cmd, int code) {
         case IDC_FIND_REPLACEALL_BTN:
             onReplaceAll();
             break;
+        case IDC_FIND_SEARCHTEXT:
+            if( code == CBN_SELCHANGE ) // a string from the history: its options
+                setOptions(cmbSearch.GetItemData(cmbSearch.GetCurSel()));
+            UpdateControls();
+            break;
         default:
             UpdateControls();
     }
@@ -323,7 +332,6 @@ void CFindDlg::UpdateControls(bool bPrepare) {
         rbtnWhole.SetCheck(true);
 
     chkSubFolders.Enable(chkInFiles.IsChecked());
-    chkNewPane.Enable(false);   // NYI
     chkCreateBak.Enable(false); // NYI: replace in files
 
     btnSearch.Enable(true);
@@ -342,6 +350,26 @@ int CFindDlg::getFindFlags() {
     return flags;
 }
 
+#define OPT_CASE  0x01
+#define OPT_WORD  0x02
+#define OPT_MODE  4      // shift of the mode
+#define OPT_VALID 0x100  // the strings from the older versions have no options
+
+LPARAM CFindDlg::getOptions() {
+    LPARAM opts = OPT_VALID | (cmbMode.GetCurSel() << OPT_MODE);
+    if( chkMatchCase.IsChecked() ) opts |= OPT_CASE;
+    if( chkWholeWord.IsChecked() ) opts |= OPT_WORD;
+    return opts;
+}
+
+void CFindDlg::setOptions(LPARAM opts) {
+    if( !(opts & OPT_VALID) )
+        return;
+    chkMatchCase.SetCheck((opts & OPT_CASE) != 0);
+    chkWholeWord.SetCheck((opts & OPT_WORD) != 0);
+    cmbMode.SetCurSel((int)(opts >> OPT_MODE) & 0x0F);
+}
+
 string CFindDlg::getFindStr() {
     CSciWrapper* pSci = pEditor->GetScintilla();
     string s;
@@ -351,7 +379,7 @@ string CFindDlg::getFindStr() {
     else
         s = cmbSearch.GetText();
     if( !s.empty() ) {
-        cmbSearch.UpdateMRU();
+        cmbSearch.UpdateMRU(10, getOptions());
         if( isModeExt() )
             extended2string(s);
     }
@@ -507,13 +535,13 @@ void CFindDlg::onFindAll() {
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
     pSci->ClearTarget();
-    pEditor->ShowFindResults('"' + s + '"', tr("%i matches"), ranges);
+    pEditor->ShowFindResults('"' + s + '"', tr("%i matches"), ranges, s, chkNewTab.IsChecked());
     closeToResults();
 }
 
 void CFindDlg::closeToResults() {
     ShowWindow(SW_HIDE);
-    ::SetFocus(pEditor->Results().hWnd());
+    ::SetFocus(pEditor->Results().hWndCur());
 }
 
 int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sReplace, bool bWholeFile, bool isModeSciRE,
@@ -586,7 +614,7 @@ void CFindDlg::onReplaceAll() {
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
     if( !sFind.empty() )
-        pEditor->ShowFindResults('"' + sFind + "\" -> \"" + sReplace + '"', tr("%i replacements"), ranges);
+        pEditor->ShowFindResults('"' + sFind + "\" -> \"" + sReplace + '"', tr("%i replacements"), ranges, sFind, chkNewTab.IsChecked());
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -634,7 +662,7 @@ void CFindDlg::onFindInFiles() {
     wstring wsFind = cmbSearch.GetTextW();
     if( wsFind.empty() )
         return;
-    cmbSearch.UpdateMRU();
+    cmbSearch.UpdateMRU(10, getOptions());
 
     // folder: the folder of the current file by default
     string sDir = trimc(w2utf(cmbPath.GetTextW()));
@@ -676,7 +704,7 @@ void CFindDlg::onFindInFiles() {
 
     int flags = getFindFlags();
     bool bStdRE = isModeStdRE();
-    CFindResults& results = pEditor->Results();
+    CFindResults& results = pEditor->Results().Prepare(w2utf(wsFind), chkNewTab.IsChecked());
     results.Begin();
     CSciWrapper sciDisk; // a file, which isn't opened in the editor, is loaded here
     bool bBadRE = false;

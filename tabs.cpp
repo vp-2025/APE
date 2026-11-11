@@ -331,9 +331,9 @@ void CTabCtrlAdv::InvalidateOverRect(int tab) {
 void CTabCtrlAdv::DragStart(int iTab) {
     if( iTab != -1 ) {
         if( iTab != GetCurSel() ) {
-            ::SendMessage(GetParent(), WM_TAB_CHANGING, 0, 0); // tell Editor tab is changing
+            ::SendMessage(GetParent(), WM_TAB_CHANGING, m_id, 0); // tell Editor tab is changing
             SetCurSel(iTab);
-            ::SendMessage(GetParent(), WM_TAB_CHANGED, 0, 0); // tell Editor tab is changed
+            ::SendMessage(GetParent(), WM_TAB_CHANGED, m_id, 0); // tell Editor tab is changed
         }
         m_iDragTab = iTab;
         m_isDragging = true;
@@ -365,7 +365,7 @@ void CTabCtrlAdv::DragDrop(int iTab) {
     SetCursor(LoadCursor(nullptr, IDC_ARROW));
 
     if( iTab == -1 ) {
-        ::SendMessage(GetParent(), WM_TAB_MOVE2NEWAPE, 0, 0);
+        ::SendMessage(GetParent(), WM_TAB_MOVE2NEWAPE, m_id, 0);
     } else if( iTab != m_iDragTab ) {
         // mark tabs before reorder
         for( int i = 0, cnt = GetItemCount(); i < cnt; i++ )
@@ -399,7 +399,7 @@ void CTabCtrlAdv::DragDrop(int iTab) {
         SetCurSel(iTab);
 
         // change order of tabs
-        ::SendMessage(GetParent(), WM_TAB_REORDER, 0, 0);
+        ::SendMessage(GetParent(), WM_TAB_REORDER, m_id, 0);
     }
 
     m_iDragTab = -1;
@@ -458,6 +458,6 @@ void CTabCtrlAdv::CloseBtnUp(int tab, const CPoint& pt) {
     m_iPressedTab = -1;
     if( iTab == tab && GetCloseBtnRect(tab).in(pt) ) {
         InvalidateCloseBtnRect(iTab);
-        ::SendMessage(GetParent(), WM_TAB_CLOSE, 0, iTab); // tell Editor tab is closed
+        ::SendMessage(GetParent(), WM_TAB_CLOSE, m_id, iTab); // tell Editor tab is closed
     }
 }

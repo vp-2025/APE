@@ -10,6 +10,7 @@
 #define WM_TAB_REORDER      (WM_USER+3)
 #define WM_TAB_CLOSE        (WM_USER+4)
 #define WM_TAB_MOVE2NEWAPE  (WM_USER+5)
+// WM_TAB_*: wParam is the id of the tab control
 
 class CTabCtrlAdv : public CTabCtrl {
     bool m_isDragging;

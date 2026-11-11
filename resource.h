@@ -249,7 +249,7 @@
 #define ID_VIEW_RESULTS                 33654
 #define ID_SEARCH_NEXTRESULT            33655
 #define ID_SEARCH_PREVRESULT            33656
-#define ID_SEARCH_RESULTS_CLEAR         33657
+#define ID_SEARCH_RESULTS_CLOSETAB      33657
 
 // Next default values for new objects
 // 

@@ -203,7 +203,7 @@ void CEditor::onSize( int w, int h )
 	m_pnl.Move( 0, TOOLBAR_H, w, h-TOOLBAR_H-STATUSBAR_H-ResultsH() );
 	if( m_results.m_bVisible ) {
 		CRect rs = ResultsSplitterRect();
-		MoveWindow( m_results.hWnd(), 0, rs.bottom, w, h-STATUSBAR_H-rs.bottom, TRUE );
+		m_results.Move( 0, rs.bottom, w, h-STATUSBAR_H-rs.bottom );
 		InvalidateRect( m_hWnd, &rs, TRUE );
 	}
 
@@ -258,11 +258,36 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 {
 	if( !cmd ) return;
 
-	// the edit accelerators go to the editor, in the find results only copy & select all are done
-	if( notify==1 && ::GetFocus()==m_results.hWnd() )
+	// in the find results Ctrl+F4 & co close the results tab, not the file
+	if( (cmd==ID_FILE_CLOSE || cmd==ID_WINDOW_CLOSE) && m_results.hasFocus() ) {
+		CloseResultsTab( m_results.tabs().GetCurSel() );
+		return;
+	}
+
+	// in the find results the folding commands fold the files (one level: children = the file itself)
+	if( m_results.hasFocus() ) {
+		CSciWrapper& sci = m_results.Cur()->sci();
 		switch( cmd ) {
-		case ID_EDIT_COPY: m_results.sci().Copy(); return;
-		case ID_EDIT_SELECTALL: m_results.sci().SelectAll(); return;
+		case ID_FOLDING_TOGGLE: case ID_FOLDING_TOGGLECHILD:
+			sci.doFold( false, false );
+			return;
+		case ID_FOLDING_COLLAPSE: case ID_FOLDING_COLLAPSECHILD:
+			sci.doFold( true, false );
+			return;
+		case ID_FOLDING_EXPAND: case ID_FOLDING_EXPANDCHILD:
+			sci.doFold( false, true );
+			return;
+		case ID_FOLDING_TOGGLEALL: case ID_FOLDING_COLLAPSEALL: case ID_FOLDING_EXPANDALL:
+			sci.doFoldAll( cmd==ID_FOLDING_TOGGLEALL, cmd==ID_FOLDING_COLLAPSEALL, cmd==ID_FOLDING_EXPANDALL );
+			return;
+		}
+	}
+
+	// the edit accelerators go to the editor, in the find results only copy & select all are done
+	if( notify==1 && m_results.hasFocus() )
+		switch( cmd ) {
+		case ID_EDIT_COPY: m_results.Cur()->sci().Copy(); return;
+		case ID_EDIT_SELECTALL: m_results.Cur()->sci().SelectAll(); return;
 		case ID_EDIT_UNDO: case ID_EDIT_REDO: case ID_EDIT_CUT: case ID_EDIT_PASTE: case ID_EDIT_DELETE:
 		case ID_EDIT_READONLY: case ID_EDIT_UPPERCASE: case ID_EDIT_LOWERCASE:
 		case ID_EDIT_AUTOC: case ID_EDIT_CALLTIP: case ID_EDIT_JUMP:
@@ -711,7 +736,11 @@ void CEditor::onNotification( NMHDR* pNMHdr )
 			case TCN_SELCHANGE: onTabChanged(); break;
 		}
 	} else
-	if( pNMHdr->hwndFrom==m_results.hWnd() ) {
+	if( pNMHdr->hwndFrom==m_results.tabs().hWnd() ) {
+		if( pNMHdr->code==TCN_SELCHANGE )
+			m_results.Select( m_results.tabs().GetCurSel() );
+	} else
+	if( pNMHdr->hwndFrom==m_results.hWndCur() ) {
 		onResultsNotification( (SCNotification*)pNMHdr );
 	} else {
 		for( unsigned i=0; i < m_vTabs.size(); i++ )
@@ -1164,23 +1193,33 @@ void CEditor::onPopupStatusbar( int part, CTabPage& page )
 
 void CEditor::onPopup( HWND hCtrl, int x, int y )
 {
-	if( hCtrl==m_results.hWnd() ) {
+	if( hCtrl==m_results.tabs().hWnd() ) { // on a tab: its results
+		CPoint pt(x,y);
+		m_results.tabs().ScreenToClient(pt);
+		int i = m_results.tabs().getItemIndexAt(pt);
+		if( i<0 )
+			return;
+		m_results.Select( i );
+		hCtrl = m_results.hWndCur();
+	}
+	if( hCtrl && hCtrl==m_results.hWndCur() ) {
+		CFindResults& res = *m_results.Cur();
 		CMenu popup;
 		popup.Create(true);
-		popup.Append( ID_EDIT_COPY, tr(L"Copy"), m_results.sci().hasSel() );
+		popup.Append( ID_EDIT_COPY, tr(L"Copy"), res.sci().hasSel() );
 		popup.Append( ID_EDIT_SELECTALL, tr(L"Select All") );
 		popup.AppendSeparator();
-		popup.Append( ID_FOLDING_COLLAPSEALL, tr(L"Collapse All"), m_results.hasFolding() );
-		popup.Append( ID_FOLDING_EXPANDALL, tr(L"Expand All"), m_results.hasFolding() );
+		popup.Append( ID_FOLDING_COLLAPSEALL, tr(L"Collapse All"), res.hasFolding() );
+		popup.Append( ID_FOLDING_EXPANDALL, tr(L"Expand All"), res.hasFolding() );
 		popup.AppendSeparator();
-		popup.Append( ID_SEARCH_RESULTS_CLEAR, tr(L"Clear") );
-		popup.Append( ID_VIEW_RESULTS, tr(L"Close") );
+		popup.Append( ID_SEARCH_RESULTS_CLOSETAB, tr(L"Close Tab") );
+		popup.Append( ID_VIEW_RESULTS, tr(L"Hide") );
 		switch( popup.TrackPopup(TPM_RETURNCMD, x, y, m_hWnd) ) {
-		case ID_EDIT_COPY: m_results.sci().Copy(); break;
-		case ID_EDIT_SELECTALL: m_results.sci().SelectAll(); break;
-		case ID_FOLDING_COLLAPSEALL: m_results.FoldAll( true ); break;
-		case ID_FOLDING_EXPANDALL: m_results.FoldAll( false ); break;
-		case ID_SEARCH_RESULTS_CLEAR: m_results.Clear(); break;
+		case ID_EDIT_COPY: res.sci().Copy(); break;
+		case ID_EDIT_SELECTALL: res.sci().SelectAll(); break;
+		case ID_FOLDING_COLLAPSEALL: res.FoldAll( true ); break;
+		case ID_FOLDING_EXPANDALL: res.FoldAll( false ); break;
+		case ID_SEARCH_RESULTS_CLOSETAB: CloseResultsTab( m_results.tabs().GetCurSel() ); break;
 		case ID_VIEW_RESULTS: ShowResults( false ); break;
 		}
 		return;
@@ -1306,8 +1345,8 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.Enable( ID_SEARCH_CLEARINDIC, pPage!=0 );
 	menu.Enable( ID_SEARCH_NEXTRESULT, !m_results.isEmpty() );
 	menu.Enable( ID_SEARCH_PREVRESULT, !m_results.isEmpty() );
-	if( ::GetFocus()==m_results.hWnd() ) { // the accelerators are for the find results
-		menu.Enable( ID_EDIT_COPY, m_results.sci().hasSel() );
+	if( m_results.hasFocus() ) { // the accelerators are for the find results
+		menu.Enable( ID_EDIT_COPY, m_results.Cur()->sci().hasSel() );
 		menu.Enable( ID_EDIT_SELECTALL, true );
 	}
 
@@ -1339,21 +1378,26 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 	menu.Enable( ID_VIEW_ZOOMOUT, pPage!=0 );
 	menu.Enable( ID_VIEW_ZOOMRESET, pPage!=0 && pPage->sci.GetZoom()!=0 );
 
+	// folding: of the find results, if they have the focus
+	bool bResultsFold = m_results.hasFocus();
+	CSciWrapper* pFold = bResultsFold ? &m_results.Cur()->sci() : pPage ? &pPage->sci : nullptr;
 	int foldExpanded = -1;
-	if( pPage ) {
-		int line = pPage->sci.GetCurrentLine();
-		if( pPage->sci.IsFoldHeader(line) )
-			foldExpanded = pPage->sci.GetFoldExpanded(line) ? 1 : 0;
+	if( pFold ) {
+		int line = pFold->GetCurrentLine();
+		if( bResultsFold && !pFold->IsFoldHeader(line) ) // a result line: its file
+			line = pFold->GetFoldParent(line);
+		if( line>=0 && pFold->IsFoldHeader(line) )
+			foldExpanded = pFold->GetFoldExpanded(line) ? 1 : 0;
 	}
-	menu.Enable( ID_FOLDING_COLLAPSE, pPage!=0 && foldExpanded==1 );
-	menu.Enable( ID_FOLDING_COLLAPSECHILD, pPage!=0 && foldExpanded==1 );
-	menu.Enable( ID_FOLDING_EXPAND, pPage!=0 && foldExpanded==0 );
-	menu.Enable( ID_FOLDING_EXPANDCHILD, pPage!=0 && foldExpanded==0 );
-	menu.Enable( ID_FOLDING_TOGGLE, pPage!=0 && foldExpanded>=0 );
-	menu.Enable( ID_FOLDING_TOGGLECHILD, pPage!=0 && foldExpanded>=0 );
-	menu.Enable( ID_FOLDING_COLLAPSEALL, pPage!=0 );
-	menu.Enable( ID_FOLDING_EXPANDALL, pPage!=0 );
-	menu.Enable( ID_FOLDING_TOGGLEALL, pPage!=0 );
+	menu.Enable( ID_FOLDING_COLLAPSE, pFold!=0 && foldExpanded==1 );
+	menu.Enable( ID_FOLDING_COLLAPSECHILD, pFold!=0 && foldExpanded==1 );
+	menu.Enable( ID_FOLDING_EXPAND, pFold!=0 && foldExpanded==0 );
+	menu.Enable( ID_FOLDING_EXPANDCHILD, pFold!=0 && foldExpanded==0 );
+	menu.Enable( ID_FOLDING_TOGGLE, pFold!=0 && foldExpanded>=0 );
+	menu.Enable( ID_FOLDING_TOGGLECHILD, pFold!=0 && foldExpanded>=0 );
+	menu.Enable( ID_FOLDING_COLLAPSEALL, pFold!=0 );
+	menu.Enable( ID_FOLDING_EXPANDALL, pFold!=0 );
+	menu.Enable( ID_FOLDING_TOGGLEALL, pFold!=0 );
 
 	menu.EnableCheck( ID_TAB_PIN, pPage!=0, pPage && m_pin.isPinned(pPage->sFile) );
 	menu.Enable( ID_TAB_MOVE2NEWAPE, pPage!=0 && !pPage->bNew && !pPage->sci.isModified() );
@@ -1497,9 +1541,9 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	case WM_RESULTS_KEY:
 		if( wParam==VK_RETURN ) {
-			if( m_results.ToggleFoldAtCaret() ) // on a file: collapse/expand
+			if( !m_results.Cur() || m_results.Cur()->ToggleFoldAtCaret() ) // on a file: collapse/expand
 				break;
-			m_results.isNewResult();
+			m_results.Cur()->isNewResult();
 			onResultGoto( true );
 		} else
 			ShowResults( false );
@@ -1522,6 +1566,14 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 				return TRUE;
 			} else
 			if( pNMHdr->code==TTN_GETDISPINFOW ) {
+				if( pNMHdr->hwndFrom == m_results.tabs().GetToolTips() ) { // the title of the results
+					if( CFindResults* pRes = m_results.Get((int)pNMHdr->idFrom) ) {
+						static wstring wsTip;
+						wsTip = utf2w( pRes->m_sTitle );
+						((NMTTDISPINFOW*)lParam)->lpszText = (LPWSTR)wsTip.c_str();
+					}
+					return 0;
+				}
 				if( pNMHdr->hwndFrom == m_tabs.GetToolTips() ) {
 					unsigned id = pNMHdr->idFrom;
 					if( id < m_vTabs.size() ) {
@@ -1626,6 +1678,9 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 
 	case WM_DRAWITEM:
+		if( wParam==ID_RESULTS_TABS )
+			m_results.DrawItem( (DRAWITEMSTRUCT*)lParam );
+		else
 		if( wParam==m_tabs.m_id ) {
 			unsigned index = ((DRAWITEMSTRUCT*)lParam)->itemID;
 			bool bRO = false;
@@ -1643,13 +1698,33 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		DropFiles( (HDROP)wParam );
 		break;
 
-	case WM_TAB_CHANGING: onTabChanging(); break;
-	case WM_TAB_CHANGED: onTabChanged(); break;
-	case WM_TAB_REORDER: ReorderTabs(); break;
-	case WM_TAB_MOVE2NEWAPE: onMove2NewApe(true); break;
-	case WM_TAB_CLOSE: 
-		WindowClose_int(lParam); 
-		SwitchToTab(m_tabs.GetCurSel()); 
+	case WM_TAB_CHANGING:
+		if( wParam!=ID_RESULTS_TABS )
+			onTabChanging();
+		break;
+	case WM_TAB_CHANGED:
+		if( wParam==ID_RESULTS_TABS )
+			m_results.Select( m_results.tabs().GetCurSel() );
+		else
+			onTabChanged();
+		break;
+	case WM_TAB_REORDER:
+		if( wParam==ID_RESULTS_TABS )
+			m_results.Reorder();
+		else
+			ReorderTabs();
+		break;
+	case WM_TAB_MOVE2NEWAPE:
+		if( wParam!=ID_RESULTS_TABS )
+			onMove2NewApe(true);
+		break;
+	case WM_TAB_CLOSE:
+		if( wParam==ID_RESULTS_TABS ) {
+			CloseResultsTab( (int)lParam );
+			break;
+		}
+		WindowClose_int(lParam);
+		SwitchToTab(m_tabs.GetCurSel());
 		break;
 
 	default:
@@ -2053,7 +2128,7 @@ void CEditor::onGoto(CTabPage& page, bool bGotoLine) {
 void CEditor::onColors( bool bResults ) {
 	CLexerStyle* pStyles=nullptr;
 	int iTab = m_tabs.GetCurSel();
-	if( bResults || ::GetFocus()==m_results.hWnd() )
+	if( bResults || m_results.hasFocus() )
 		pStyles = styleFindResults;
 	else
 	if( iTab>=0 )
@@ -2076,8 +2151,10 @@ void CEditor::onIndicators() {
 
 void CEditor::onOptions() {
 	COptionsDlg dlg;
-	if( dlg.doModal(m_hWnd) )
+	if( dlg.doModal(m_hWnd) ) {
 		m_tabs.applyOptions();
+		m_results.tabs().applyOptions();
+	}
 }
 
 void CEditor::onSort() {
@@ -2101,6 +2178,7 @@ void CEditor::onThemeChanged( bool bInit ) {
 	g_theme.applyCtrl( m_tabs.GetToolTips() );
 	g_theme.applyCtrl( (HWND)m_toolbar.SendMessage(TB_GETTOOLTIPS) );
 	g_theme.applyCtrl( m_cmbFunc.hWnd() );
+	g_theme.applyCtrl( m_results.tabs().GetToolTips() );
 	if( bInit )
 		return;
 
@@ -2109,8 +2187,7 @@ void CEditor::onThemeChanged( bool bInit ) {
 		SetupLexerStyles( tabPage.sci );
 		SetupIndicators( tabPage.sci );
 	}
-	g_theme.applySci( m_results.hWnd() );
-	m_results.SetupStyles();
+	m_results.applyTheme();
 	ResizeScintilla();
 	DrawMenuBar( m_hWnd );
 	RedrawWindow( m_hWnd, nullptr, nullptr, RDW_INVALIDATE|RDW_ERASE|RDW_FRAME|RDW_ALLCHILDREN );
@@ -2166,13 +2243,21 @@ void CEditor::ShowToolbar( bool bShow ) {
 /////////////////////////////////////////////////////////////////////
 // find/replace results
 
-void CEditor::ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges ) {
+void CEditor::ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges,
+		const string& sCaption, bool bNewTab ) {
 	int iTab = m_tabs.GetCurSel();
 	if( iTab<0 || iTab>=(int)m_vTabs.size() )
 		return;
 	CTabPage& page = m_vTabs[iTab];
-	m_results.Fill( sWhat, sMatches, page.sci, page.sFile, ranges );
+	string sCaptionUtf = page.sci.getEncoding()==encAnsi ? a2utf(sCaption) : sCaption;
+	m_results.Prepare( sCaptionUtf, bNewTab ).Fill( sWhat, sMatches, page.sci, page.sFile, ranges );
 	ShowResults( true );
+}
+
+void CEditor::CloseResultsTab( int i ) {
+	m_results.Close( i );
+	if( !m_results.count() )
+		ShowResults( false );
 }
 
 CTabPage* CEditor::FindPage( const string& sFile ) {
@@ -2188,8 +2273,7 @@ CTabPage* CEditor::FindPage( const string& sFile ) {
 }
 
 void CEditor::ShowResults( bool bShow ) {
-	m_results.m_bVisible = bShow;
-	::ShowWindow( m_results.hWnd(), bShow ? SW_SHOW : SW_HIDE );
+	m_results.Show( bShow );
 	CRect r = GetClientRect();
 	onSize( r.width(), r.height() );
 	if( !bShow ) {
@@ -2211,7 +2295,7 @@ int CEditor::ResultsH() {
 CRect CEditor::ResultsSplitterRect() {
 	CRect r = GetClientRect();
 	int y = r.height()-STATUSBAR_H-ResultsH();
-	return CRect( 0, y, r.width(), y+CFindResults::SplitterH() );
+	return CRect( 0, y, r.width(), y+CResultsTabs::SplitterH() );
 }
 
 bool CEditor::onSplitterMouse( UINT msg, const CPoint& pt ) {
@@ -2247,21 +2331,23 @@ bool CEditor::onSplitterMouse( UINT msg, const CPoint& pt ) {
 void CEditor::onResultsNotification( SCNotification* pNS ) {
 	switch( pNS->nmhdr.code ) {
 	case SCN_UPDATEUI: // arrows or click: the result is shown, the focus stays in the results
-		if( (pNS->updated & SC_UPDATE_SELECTION) && !m_results.isFilling() && m_results.isNewResult() )
+		if( (pNS->updated & SC_UPDATE_SELECTION) && !m_results.Cur()->isFilling() && m_results.Cur()->isNewResult() )
 			onResultGoto( false );
 		break;
 	case SCN_DOUBLECLICK: // on a file: collapse/expand
-		if( m_results.ToggleFoldAtCaret() )
+		if( m_results.Cur()->ToggleFoldAtCaret() )
 			break;
-		m_results.isNewResult();
+		m_results.Cur()->isNewResult();
 		onResultGoto( true );
 		break;
 	}
 }
 
 void CEditor::onResultGoto( bool bFocus ) {
+	if( !m_results.Cur() )
+		return;
 	int iMatch;
-	const CFindResult* pRes = m_results.GetCurResult( iMatch );
+	const CFindResult* pRes = m_results.Cur()->GetCurResult( iMatch );
 	if( !pRes || iMatch<0 )
 		return;
 	CFindResult res = *pRes; // FileOpen() can do anything
@@ -2289,7 +2375,7 @@ void CEditor::onResultGoto( bool bFocus ) {
 	int p2 = min( p1+m.len, len );
 	sci.EnsureVisible( p1, p2 ); // unfold
 	sci.SetSel( p1, p2 );
-	::SetFocus( bFocus ? sci.hWnd() : m_results.hWnd() );
+	::SetFocus( bFocus ? sci.hWnd() : m_results.hWndCur() );
 }
 
 void CEditor::onResultNext( bool bNext ) {
@@ -2297,11 +2383,11 @@ void CEditor::onResultNext( bool bNext ) {
 		return;
 	if( !m_results.m_bVisible )
 		ShowResults( true );
-	if( !m_results.SelectNext(bNext) ) {
+	if( !m_results.Cur()->SelectNext(bNext) ) {
 		MessageBeep( MB_OK );
 		return;
 	}
-	m_results.isNewResult();
+	m_results.Cur()->isNewResult();
 	onResultGoto( true );
 }
 

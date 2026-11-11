@@ -64,6 +64,8 @@ Collapse	Схлопнуть
 Expand	Развернуть
 Toggle All	Переключить Все	Toggle Alle
 Collapse All	Схлопнуть Все	Collapse Alle
+Close Tab	Закрыть Вкладку	Tab schließen
+Hide	Скрыть	Ausblenden
 Syntax Highlight...	Подсветка синтаксиса...	Syntaxhervorhebung...
 Expand All	Развернуть Все	Expand Alle
 
@@ -112,7 +114,7 @@ Replace in	Заменять в
 &Selection	Выделение
 Whole &file	Весь файл
 Look in subfolders	в подпапках
-Output to new pane	в новую панель
+Open results in new &tab	Результаты в новой вкладке (&T)	Ergebnisse in neuem &Tab
 Create '.bak' files	делать '.bak' файлы 
 &Find	Искать
 &Replace	Заменять

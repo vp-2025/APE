@@ -111,13 +111,16 @@ void CComboBox::SetupComboEx(LPARAM id) {
         }
 }
 
-void CComboBox::UpdateMRU(int cnt) {
+void CComboBox::UpdateMRU(int cnt, LPARAM data) {
     wstring s = GetTextW();
     int idx = FindString(s);
-    if (idx == 0) return;
+    if (idx == 0) {
+        SetItemData(0, data);
+        return;
+    }
     if (idx > 0)
         DeleteString(idx);
-    InsertString(0, s);
+    InsertString(0, s, data);
     SetCurSel(0);
     while (GetCount() > cnt)
         DeleteString(GetCount() - 1);
@@ -131,7 +134,7 @@ void CComboBox::LoadCombo(const string &sSection) {
 
     int cnt = reg.ReadInt("Count");
     for (int i = 0; i < cnt; i++)
-        AddString(reg.ReadStrW("Item" + itoa(i)));
+        AddString(reg.ReadStrW("Item" + itoa(i)), reg.ReadInt("Data" + itoa(i)));
 }
 
 void CComboBox::SaveCombo(const string &sSection) {
@@ -141,8 +144,13 @@ void CComboBox::SaveCombo(const string &sSection) {
 
     int cnt = GetCount();
     reg.WriteInt("Count", cnt);
-    for (int i = 0; i < cnt; i++)
+    for (int i = 0; i < cnt; i++) {
         reg.WriteStr("Item" + itoa(i), GetStringW(i));
+        if (int data = (int) GetItemData(i)) // only the combos, which use it
+            reg.WriteInt("Data" + itoa(i), data);
+        else
+            reg.DeleteValue(("Data" + itoa(i)).c_str());
+    }
 }
 
 

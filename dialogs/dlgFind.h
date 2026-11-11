@@ -14,7 +14,7 @@ class CFindDlg : public CDialog {
     CComboBox cmbSearch, cmbReplace, cmbFile, cmbPath;
     CCheckBox chkReplace, chkInFiles;
     CCheckBox chkWholeWord, chkMatchCase;
-    CCheckBox chkSubFolders, chkNewPane, chkCreateBak;
+    CCheckBox chkSubFolders, chkNewTab, chkCreateBak;
     CButton btnSearchOpt, btnReplaceOpt, btnBrowse;
     CCheckBox rbtnUp, rbtnDown;
     CCheckBox rbtnWhole, rbtnSelection;
@@ -45,6 +45,9 @@ private:
     void UpdateControls(bool bPrepare = false);
 
     int getFindFlags();
+    // options of the search string, kept in the history of cmbSearch: match case, whole word, mode
+    LPARAM getOptions();
+    void setOptions(LPARAM opts);
     string getFindStr();
     string getFindStr(const wstring& ws, bool bAnsi); // for a file with this encoding
     string getReplaceStr();

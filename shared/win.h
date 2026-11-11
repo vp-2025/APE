@@ -627,7 +627,7 @@ public:
         return k != -1 ? GetItemData(k) : (LPARAM) -1;
     }
 
-    void UpdateMRU(int cnt = 10); // most recent usage: store last cnt(10) strings
+    void UpdateMRU(int cnt = 10, LPARAM data = 0); // most recent usage: store last cnt(10) strings + their data
     void LoadCombo(const std::string &sSection);
 
     void SaveCombo(const std::string &sSection);

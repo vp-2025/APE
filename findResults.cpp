@@ -200,6 +200,7 @@ void CFindResults::AddFile(CSciWrapper& src, HWND hSci, const string& sFile, con
 void CFindResults::End(const string& sTitle) {
 	string sBody;
 	sBody.swap(m_cells);
+	m_sTitle = sTitle;
 	add(sTitle, stTitle); // the first line
 	m_cells += sBody;
 
@@ -275,4 +276,124 @@ bool CFindResults::ToggleFoldAtCaret() {
 
 void CFindResults::FoldAll(bool bCollapse) {
 	m_sci.Call(SCI_FOLDALL, bCollapse ? SC_FOLDACTION_CONTRACT : SC_FOLDACTION_EXPAND);
+}
+
+/////////////////////////////////////////////////////////////////////
+// CResultsTabs
+
+extern int TAB_H;
+
+void CResultsTabs::Create(HWND hParent) {
+	m_hParent = hParent;
+	m_tabs.Create(hParent, 0, 0, 0, 0, ID_RESULTS_TABS);
+	m_tabs.SetVisible(false);
+}
+
+CFindResults* CResultsTabs::FromHwnd(HWND hSci) {
+	for( auto& p : m_vTabs )
+		if( p->hWnd() == hSci )
+			return p.get();
+	return nullptr;
+}
+
+// "foo" -> foo, one line, not too long
+static wstring caption(const string& s) {
+	wstring ws = utf2w(CFindResults::EscapeTitle(s));
+	if( ws.size() > 30 )
+		ws = ws.substr(0, 29) + L"\x2026"; // ...
+	return ws;
+}
+
+CFindResults& CResultsTabs::Prepare(const string& sCaption, bool bNewTab) {
+	int i = m_iCur;
+	if( bNewTab || i < 0 ) {
+		auto p = make_unique<CFindResults>();
+		p->Create(m_hParent);
+		g_theme.applySci(p->hWnd());
+		p->SetupStyles();
+		m_vTabs.push_back(std::move(p));
+		i = m_tabs.InsertItem(caption(sCaption));
+	} else
+		m_tabs.UpdateItem(i, caption(sCaption));
+	Select(i);
+	return *m_vTabs[i];
+}
+
+void CResultsTabs::Select(int i) {
+	if( i < 0 || i >= count() )
+		return;
+	if( m_tabs.GetCurSel() != i )
+		m_tabs.SetCurSel(i);
+	if( i == m_iCur )
+		return;
+	if( Cur() )
+		::ShowWindow(Cur()->hWnd(), SW_HIDE);
+	m_iCur = i;
+	Move(m_rect.left, m_rect.top, m_rect.width(), m_rect.height());
+	if( m_bVisible )
+		::ShowWindow(Cur()->hWnd(), SW_SHOW);
+}
+
+void CResultsTabs::Close(int i) {
+	if( i < 0 || i >= count() )
+		return;
+	bool bFocus = hasFocus();
+	m_vTabs[i]->Destroy();
+	m_vTabs.erase(m_vTabs.begin() + i);
+	m_tabs.DeleteItem(i);
+	if( i != m_iCur ) { // another tab: the current one stays
+		if( i < m_iCur )
+			m_iCur--;
+		m_tabs.SetCurSel(m_iCur);
+		return;
+	}
+	m_iCur = -1;
+	Select(min(i, count() - 1)); // the next one, or the last one
+	if( bFocus && Cur() )
+		::SetFocus(Cur()->hWnd());
+}
+
+void CResultsTabs::Reorder() {
+	vector<unique_ptr<CFindResults>> v;
+	CFindResults* pCur = Cur();
+	for( int i = 0; i < m_tabs.GetItemCount(); i++ ) {
+		int idx = (int)m_tabs.GetItemParam(i); // the index before the drag
+		v.push_back(std::move(m_vTabs[idx]));
+		if( v.back().get() == pCur )
+			m_iCur = i;
+	}
+	m_vTabs.swap(v);
+}
+
+void CResultsTabs::Show(bool bShow) {
+	m_bVisible = bShow;
+	m_tabs.SetVisible(bShow);
+	if( Cur() )
+		::ShowWindow(Cur()->hWnd(), bShow ? SW_SHOW : SW_HIDE);
+}
+
+void CResultsTabs::Move(int x, int y, int w, int h) {
+	m_rect = CRect(x, y, w, h, true);
+	m_tabs.Move(x, y, w, TAB_H);
+	if( Cur() )
+		::MoveWindow(Cur()->hWnd(), x, y + TAB_H, w, max(h - TAB_H, 0), TRUE);
+}
+
+void CResultsTabs::SetupStyles() {
+	for( auto& p : m_vTabs )
+		p->SetupStyles();
+}
+
+void CResultsTabs::applyTheme() {
+	g_theme.applyCtrl(m_tabs.GetToolTips());
+	for( auto& p : m_vTabs ) {
+		g_theme.applySci(p->hWnd());
+		p->SetupStyles();
+	}
+	m_tabs.Invalidate();
+}
+
+void CResultsTabs::onSciClosed(HWND hSci) {
+	for( auto& p : m_vTabs )
+		p->onSciClosed(hSci);
 }

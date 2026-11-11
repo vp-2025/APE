@@ -629,8 +629,8 @@ CLexerStyle styleFindResults[] = {
 	STYLE3_BOLD( 2, "Match", -1, RGB(0xFF,0xF0,0xA0) ),
 	STYLE_CHILD2( 2, 6, "Match Symbol", clrSymbol ),
 	STYLE2( 5, "Symbol", clrSymbol ),
-	STYLE2_BOLD( 3, "Title", RGB(0x00,0x00,0x80) ),
-	STYLE2( 4, "File", RGB(0x00,0x60,0x00) ),
+	STYLE2( 3, "Title", RGB(0x00,0x00,0x80) ),
+	STYLE2_BOLD( 4, "File", clrKeyword ),
 	{0}
 };
 
