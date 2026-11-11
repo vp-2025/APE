@@ -508,6 +508,12 @@ void CFindDlg::onFindAll() {
     bFind = false;
     pSci->ClearTarget();
     pEditor->ShowFindResults('"' + s + '"', tr("%i matches"), ranges);
+    closeToResults();
+}
+
+void CFindDlg::closeToResults() {
+    ShowWindow(SW_HIDE);
+    ::SetFocus(pEditor->Results().hWnd());
 }
 
 int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sReplace, bool bWholeFile, bool isModeSciRE,
@@ -671,8 +677,6 @@ void CFindDlg::onFindInFiles() {
     int flags = getFindFlags();
     bool bStdRE = isModeStdRE();
     CFindResults& results = pEditor->Results();
-    if( pCur )
-        results.UseFontOf(pCur->sci);
     results.Begin();
     CSciWrapper sciDisk; // a file, which isn't opened in the editor, is loaded here
     bool bBadRE = false;
@@ -723,4 +727,6 @@ void CFindDlg::onFindInFiles() {
         pEditor->UpdateStatusText(Format(tr(L"%i Results were found").c_str(), results.cntMatches()));
     if( !results.cntMatches() )
         MessageBeep(MB_ICONASTERISK);
+    if( !bBadRE ) // to correct the regular expression
+        closeToResults();
 }

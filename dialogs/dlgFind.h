@@ -53,6 +53,7 @@ private:
     void onReplace();
     void onFindAll();
     void onFindInFiles();
+    void closeToResults(); // the results are filled: the dialog is hidden, the focus goes to the results
     void onReplaceAll();
 
     static void popupOptRE(CREOpt* opts, HWND hDlg, HWND hBtn, HWND hEdit);

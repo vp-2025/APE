@@ -5,8 +5,7 @@
 
 class CButton;
 
-class CProgress
-{
+class CProgress {
 	ITaskbarList3* m_pTaskbarList;
 	CButton* m_btn;
 	int m_min, m_max;

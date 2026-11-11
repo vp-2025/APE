@@ -12,8 +12,7 @@
 #include "tabPage.h"
 #include "findResults.h"
 
-class CEditor : public CWindow
-{
+class CEditor : public CWindow {
 	CReBar m_rebar;
 	CToolbar m_toolbar;
 	CStatusbar m_statusbar;
@@ -111,7 +110,7 @@ public:
 	void onCheckReload();
 
 	void onGoto( CTabPage& page, bool bGotoLine=true );
-	void onColors();
+	void onColors( bool bResults=false );	// bResults: the Search Results styles are selected
 	void onIndicators();
 	void onOptions();
 	void onSort();

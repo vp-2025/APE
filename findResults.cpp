@@ -58,40 +58,11 @@ void CFindResults::Create(HWND hParent) {
 }
 
 void CFindResults::SetupStyles() {
-	SetupDefaultStyle(m_sci);
-	if( !m_sFont.empty() ) {
-		m_sci.StyleDefault().Font(m_sFont);
-		m_sci.Call(SCI_STYLESETSIZEFRACTIONAL, STYLE_DEFAULT, m_fontSize);
-		m_sci.StylesClear();
-	}
-	m_sci.Style(stLineNo).Fore(g_theme.editorFore(RGB(0x80, 0x80, 0x80)));
-	m_sci.Style(stMatch).Bold(true).Back(g_theme.editorBack(RGB(0xFF, 0xF0, 0xA0)));
-	m_sci.Style(stTitle).Bold(true).Fore(g_theme.editorFore(RGB(0, 0, 0x80)));
-	m_sci.Style(stFile).Fore(g_theme.editorFore(RGB(0, 0x60, 0)));
-	COLORREF clrSymbol = g_theme.editorFore(RGB(0, 0x80, 0x80)); // as the operators in the editor
-	m_sci.Style(stSymbol).Fore(clrSymbol);
-	m_sci.Style(stMatchSymbol).Bold(true).Fore(clrSymbol).Back(g_theme.editorBack(RGB(0xFF, 0xF0, 0xA0)));
-	// fold margin, as in the editor
-	m_sci.SetupFoldMarkers();
-	m_sci.Call(SCI_SETFOLDMARGINCOLOUR, g_theme.isDark(), CTheme::clrMargin);
-	m_sci.Call(SCI_SETFOLDMARGINHICOLOUR, g_theme.isDark(), CTheme::clrMargin);
+	SetupLexerStyles(m_sci, styleFindResults); // also the fold margin
 	// the current result line
 	m_sci.Call(SCI_SETCARETLINEBACK, g_theme.isDark() ? RGB(0x60, 0x80, 0xC0) : RGB(0, 0x60, 0xFF));
 	m_sci.Call(SCI_SETCARETLINEBACKALPHA, 0x30);
-	m_sci.Call( SCI_SETCARETLINEVISIBLEALWAYS, true );
-
-}
-
-void CFindResults::UseFontOf(CSciWrapper& src) {
-	char szFont[LF_FACESIZE * 3] = {};
-	if( src.Call(SCI_STYLEGETFONT, STYLE_DEFAULT) < (int)sizeof(szFont) )
-		src.Call(SCI_STYLEGETFONT, STYLE_DEFAULT, (intptr_t)szFont);
-	int fontSize = src.Call(SCI_STYLEGETSIZEFRACTIONAL, STYLE_DEFAULT);
-	if( szFont != m_sFont || fontSize != m_fontSize ) {
-		m_sFont = szFont;
-		m_fontSize = fontSize;
-		SetupStyles();
-	}
+	m_sci.Call( SCI_SETCARETLINEVISIBLEALWAYS, false );
 }
 
 string CFindResults::EscapeTitle(string s) {
@@ -137,7 +108,6 @@ void CFindResults::onSciClosed(HWND hSci) {
 
 void CFindResults::Fill(const string& sWhat, const string& sMatches, CSciWrapper& src, const string& sFile,
 		const vector<Sci_CharacterRange>& ranges) {
-	UseFontOf(src);
 	Begin();
 	AddFile(src, src.hWnd(), sFile, ranges, false);
 

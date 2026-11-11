@@ -621,6 +621,19 @@ CLexerStyle styleMD[] = {
 	{ 0 }
 };
 
+/* the find/replace results pane, ids must match CFindResults::stXXX */
+CLexerStyle styleFindResults[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE2( 1, "Line No", clrGrey ),
+	STYLE3_BOLD( 2, "Match", -1, RGB(0xFF,0xF0,0xA0) ),
+	STYLE_CHILD2( 2, 6, "Match Symbol", clrSymbol ),
+	STYLE2( 5, "Symbol", clrSymbol ),
+	STYLE2_BOLD( 3, "Title", RGB(0x00,0x00,0x80) ),
+	STYLE2( 4, "File", RGB(0x00,0x60,0x00) ),
+	{0}
+};
+
 CLexerStyles g_styles[] = {
 	{"Global", "global", styleGlobal},
 	{"C/C++", "cpp", styleCPP},
@@ -646,6 +659,7 @@ CLexerStyles g_styles[] = {
 	{"Markdown", "markdown", styleMD },
 	{"MSBuild", "msbuild", styleMSBuild},
 	{"Flex", "flex", styleFlex},
+	{"Search Results", "results", styleFindResults},
 	{NULL}
 };
 
@@ -728,17 +742,13 @@ void applyStyle( CSciWrapper& sci, CLexerStyle* pStyle, int id=0  ) {
 
 #include "xpm_img.h"
 
-void SetupDefaultStyle( CSciWrapper& sci ) {
-	sci.StyleResetDefault();
-	applyStyle( sci, findStyle(styleGlobal,STYLE_DEFAULT) );
-	sci.Call(SCI_STYLESETCHARACTERSET, STYLE_DEFAULT, SC_CHARSET_ANSI);
-	sci.StylesClear();
-}
-
 void SetupLexerStyles( CSciWrapper& sci )
 {
-	CLexerStyle* pStyles = GetLexerStyles(sci);
+	SetupLexerStyles( sci, GetLexerStyles(sci) );
+}
 
+void SetupLexerStyles( CSciWrapper& sci, CLexerStyle* pStyles )
+{
 	sci.StyleResetDefault();
 	applyStyle( sci, findStyle(styleGlobal,STYLE_DEFAULT) );
 	applyStyle( sci, findStyle(pStyles,STYLE_DEFAULT) );

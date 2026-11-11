@@ -4,6 +4,8 @@
 
 CLexerStyle* GetLexerStyles( CSciWrapper& sci );
 void SetupLexerStyles( CSciWrapper& sci );
-void SetupDefaultStyle( CSciWrapper& sci ); // only the global default style, for the find results
+void SetupLexerStyles( CSciWrapper& sci, CLexerStyle* pStyles ); // global + pStyles
+
+extern CLexerStyle styleFindResults[]; // the find/replace results pane
 
 void SetupIndicators( CSciWrapper& sci );

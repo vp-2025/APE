@@ -34,12 +34,10 @@ int TOOLBAR_H = 0; // default for 96dpi is 26
 int STATUSBAR_H = 0; // default for 96dpi is 23
 int TAB_H = 26;
 
-template<class T>
-int getVectorIndex( const vector<T>& v, const T& item, int shift )
-{
-	for( size_t i=0; i<v.size(); ++i )
-		if( &v[i]==&item )
-			return i+shift;
+int getVectorIndex(const vector<CTabPage> &vTabs, const CTabPage &tab, int shift) {
+	for (size_t i = 0; i < vTabs.size(); ++i)
+		if (&vTabs[i] == &tab)
+			return i + shift;
 	return -1;
 }
 
@@ -157,6 +155,7 @@ void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
 	DragAcceptFiles( hWnd, TRUE );
 
 	LoadLexerStyles();
+	m_results.SetupStyles(); // it is created before the styles are loaded
 	m_mru.Load();
 	m_pin.Load();
 
@@ -2051,16 +2050,21 @@ void CEditor::onGoto(CTabPage& page, bool bGotoLine) {
     }
 }
 
-void CEditor::onColors() {
+void CEditor::onColors( bool bResults ) {
 	CLexerStyle* pStyles=nullptr;
 	int iTab = m_tabs.GetCurSel();
+	if( bResults || ::GetFocus()==m_results.hWnd() )
+		pStyles = styleFindResults;
+	else
 	if( iTab>=0 )
 		pStyles = GetLexerStyles(m_vTabs[iTab].sci );
 
 	CColorsDlg dlg(pStyles);
-	if( dlg.doModal(m_hWnd) )
+	if( dlg.doModal(m_hWnd) ) {
 		for(auto& tabPage : m_vTabs)
 			SetupLexerStyles(tabPage.sci );
+		m_results.SetupStyles();
+	}
 }
 
 void CEditor::onIndicators() {

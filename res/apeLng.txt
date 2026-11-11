@@ -64,6 +64,7 @@ Collapse	Схлопнуть
 Expand	Развернуть
 Toggle All	Переключить Все	Toggle Alle
 Collapse All	Схлопнуть Все	Collapse Alle
+Syntax Highlight...	Подсветка синтаксиса...	Syntaxhervorhebung...
 Expand All	Развернуть Все	Expand Alle
 
 &Window	Окно	Anzeigen
@@ -115,7 +116,8 @@ Output to new pane	в новую панель
 Create '.bak' files	делать '.bak' файлы 
 &Find	Искать
 &Replace	Заменять
-Replace &All	Заменять Все
+Find &All	Найти Все (&A)	&Alle finden
+Replace A&ll	Заменить Все (&L)	A&lle ersetzen
 Select Directory	Выберете Папку
 Passed the end of the file	Проход через конец файла
 Cannot find the string	Невозможно найти текст

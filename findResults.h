@@ -31,8 +31,6 @@ class CFindResults {
 	string m_cells;             // text + styles for SCI_ADDSTYLEDTEXT
 	int m_iShown{-1}, m_iShownMatch{-1};
 	bool m_bFilling{};
-	string m_sFont; // of the source editor
-	int m_fontSize{};
 	int m_cntMatches{}, m_cntFiles{};
 	bool m_bHeaders{}; // file header lines: folding
 
@@ -40,7 +38,7 @@ class CFindResults {
 	void addText(const string& s, bool bMatch); // source text: the symbols get their own style
 	void addLine();
 public:
-	enum { stDefault, stLineNo, stMatch, stTitle, stFile, stSymbol, stMatchSymbol };
+	enum { stDefault, stLineNo, stMatch, stTitle, stFile, stSymbol, stMatchSymbol }; // styleFindResults[]
 	static int SplitterH() { return g_dpi.scale(5); }
 	int m_height{200}; // with the splitter
 	bool m_bVisible{};
@@ -49,8 +47,7 @@ public:
 	HWND hWnd() { return m_sci.hWnd(); }
 	CSciWrapper& sci() { return m_sci; }
 	bool isEmpty() const { return m_results.empty(); }
-	void SetupStyles(); // on create and on theme change
-	void UseFontOf(CSciWrapper& src); // the font of the editor
+	void SetupStyles(); // Options > Colors > Search Results; on theme change
 
 	// one file: sWhat is the start of the title, in the source encoding: "foo";
 	// sMatches is a format with %i: "%i matches"; ranges are sorted positions in src

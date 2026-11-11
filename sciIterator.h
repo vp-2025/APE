@@ -1,7 +1,6 @@
 #pragma once
 
-class CSciIterator
-{
+class CSciIterator {
 	CSciWrapper* m_pSci;
 	int	m_pos;
 public:
