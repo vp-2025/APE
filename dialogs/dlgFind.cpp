@@ -2,7 +2,7 @@
 #include "resource.h"
 #include "dlgFind.h"
 #include "lang.h"
-#include "main.h"
+#include "apeEditor.h"
 #include "ShellContextMenu.h"
 #include "fileMask.h"
 #include "shared/platform.h"

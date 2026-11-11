@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main.h"
+#include "apeEditor.h"
 #include "shared/win.h"
 
 class CTabListView : public CListCtrl {

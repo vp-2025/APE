@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
-#include "main.h"
+#include "apeEditor.h"
 
 #include "options.h"
 #include "lexers.h"

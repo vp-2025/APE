@@ -638,7 +638,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ctime.h" />
     <ClInclude Include="export2HTML.h" />
-    <ClInclude Include="main.h" />
+    <ClInclude Include="apeEditor.h" />
     <ClInclude Include="options.h" />
     <ClInclude Include="progress.h" />
     <ClInclude Include="sci.h" />
@@ -674,7 +674,7 @@
     <ClCompile Include="lexBase\lexNSIS.cpp" />
     <ClCompile Include="ape++.cpp" />
     <ClCompile Include="export2HTML.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="apeEditor.cpp" />
     <ClCompile Include="options.cpp" />
     <ClCompile Include="progress.cpp" />
     <ClCompile Include="sci.cpp" />

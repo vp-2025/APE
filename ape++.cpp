@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "resource.h"
-#include "main.h"
+#include "apeEditor.h"
 #include "dlgFind.h"
 #include <objbase.h> // CoInitialize
 #include "options.h"
