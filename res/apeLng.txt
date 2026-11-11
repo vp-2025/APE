@@ -104,8 +104,8 @@ Fi&nd what	Что искать
 Re&place with	Заменять на
 In Files	В файлах
 In Folder	В папке
-Match whole &words	целые слова
-Match &case	учитыв. регистр
+Match whole words	Целые слова	Ganze Wörter
+Match case	Учитывать регистр	Groß-/Kleinschreibung
 ;Regular &expression	регулярные выражения
 Direction	Направл.
 &Up	Вверх

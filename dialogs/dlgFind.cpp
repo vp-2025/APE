@@ -6,6 +6,7 @@
 #include "ShellContextMenu.h"
 #include "fileMask.h"
 #include "shared/platform.h"
+#include "theme.h"
 #include <regex>
 
 CREOpt findOptsExt[] = {
@@ -210,6 +211,20 @@ void CFindDlg::onInit() {
 
     CenterWindow(m_hWnd);
     g_lang.translateDlg(m_hWnd);
+
+    // Cc and W are toggle buttons: their meaning is in the tooltips
+    HWND hTip = CreateWindowExW(0, TOOLTIPS_CLASSW, nullptr, WS_POPUP | TTS_ALWAYSTIP, 0, 0, 0, 0,
+                                m_hWnd, nullptr, g_hInst, nullptr);
+    for( auto [id, szTip] : {pair{IDC_FIND_MATCHCASE, L"Match case"}, pair{IDC_FIND_MATCHWORDS, L"Match whole words"}} ) {
+        wstring wsTip = tr(wstring(szTip));
+        TOOLINFOW ti = {sizeof(ti)};
+        ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
+        ti.hwnd = m_hWnd;
+        ti.uId = (UINT_PTR) GetDlgItem(m_hWnd, id);
+        ti.lpszText = (LPWSTR) wsTip.c_str();
+        ::SendMessageW(hTip, TTM_ADDTOOLW, 0, (LPARAM) &ti);
+    }
+    g_theme.applyCtrl(hTip);
 
     LoadWindowXY(m_hWnd, FIND_DLG);
     cmbSearch.LoadCombo(FIND_CMB);
