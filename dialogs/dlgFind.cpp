@@ -187,12 +187,7 @@ void CFindDlg::onInit() {
     chkWholeWord.Attach(m_hWnd, IDC_FIND_MATCHWORDS);
     chkMatchCase.Attach(m_hWnd, IDC_FIND_MATCHCASE);
 
-    cmbMode.Attach(m_hWnd, IDC_FIND_MODE);
-    cmbMode.AddString(tr("Normal"));
-    cmbMode.AddString(tr(R"(Extended \r \n \t)"));
-    cmbMode.AddString(tr("Scintilla regex"));
-    cmbMode.AddString(tr("std::regex"));
-    cmbMode.SetCurSel(0);
+    btnMode.Attach(m_hWnd, IDC_FIND_MODE);
 
     chkSubFolders.Attach(m_hWnd, IDC_FIND_FILE_SUBDIRS);
     chkNewTab.Attach(m_hWnd, IDC_FIND_FILE_OUT2);
@@ -212,10 +207,12 @@ void CFindDlg::onInit() {
     CenterWindow(m_hWnd);
     g_lang.translateDlg(m_hWnd);
 
-    // Cc and W are toggle buttons: their meaning is in the tooltips
-    HWND hTip = CreateWindowExW(0, TOOLTIPS_CLASSW, nullptr, WS_POPUP | TTS_ALWAYSTIP, 0, 0, 0, 0,
+    // Cc, W and the mode are toggle buttons: their meaning is in the tooltips
+    HWND hTip = m_hTip = CreateWindowExW(0, TOOLTIPS_CLASSW, nullptr, WS_POPUP | TTS_ALWAYSTIP, 0, 0, 0, 0,
                                 m_hWnd, nullptr, g_hInst, nullptr);
-    for( auto [id, szTip] : {pair{IDC_FIND_MATCHCASE, L"Match case"}, pair{IDC_FIND_MATCHWORDS, L"Match whole words"}} ) {
+    for( auto [id, szTip] : {pair{IDC_FIND_MATCHCASE, L"Match case"},
+							 pair{IDC_FIND_MATCHWORDS, L"Match whole words"},
+                             pair{IDC_FIND_MODE, L"Normal"}} ) {
         wstring wsTip = tr(wstring(szTip));
         TOOLINFOW ti = {sizeof(ti)};
         ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
@@ -225,6 +222,7 @@ void CFindDlg::onInit() {
         ::SendMessageW(hTip, TTM_ADDTOOLW, 0, (LPARAM) &ti);
     }
     g_theme.applyCtrl(hTip);
+    setMode(0);
 
     LoadWindowXY(m_hWnd, FIND_DLG);
     cmbSearch.LoadCombo(FIND_CMB);
@@ -253,9 +251,9 @@ void CFindDlg::onCommand(int cmd, int code) {
         case IDC_FIND_OPTION_FIND:
             if( code == 0 ) {
                 CREOpt* opts = nullptr;
-                if( cmbMode.GetCurSel() == 1 ) opts = findOptsExt;
-                if( cmbMode.GetCurSel() == 2 ) opts = findOptsSciRE;
-                if( cmbMode.GetCurSel() == 3 ) opts = findOptsStdRE;
+                if( isModeExt() ) opts = findOptsExt;
+                if( isModeSciRE() ) opts = findOptsSciRE;
+                if( isModeStdRE() ) opts = findOptsStdRE;
                 if( opts )
                     popupOptRE(opts, m_hWnd, btnSearchOpt.hWnd(), cmbSearch.hWnd());
                 UpdateControls();
@@ -264,9 +262,9 @@ void CFindDlg::onCommand(int cmd, int code) {
         case IDC_FIND_FILE_REPLACE:
             if( code == 0 ) {
                 CREOpt* opts = nullptr;
-                if( cmbMode.GetCurSel() == 1 ) opts = replaceOptsExt;
-                if( cmbMode.GetCurSel() == 2 ) opts = replaceOptsSciRE;
-                if( cmbMode.GetCurSel() == 3 ) opts = replaceOptsStdRE;
+                if( isModeExt() ) opts = replaceOptsExt;
+                if( isModeSciRE() ) opts = replaceOptsSciRE;
+                if( isModeStdRE() ) opts = replaceOptsStdRE;
                 if( opts )
                     popupOptRE(opts, m_hWnd, btnReplaceOpt.hWnd(), cmbReplace.hWnd());
                 UpdateControls();
@@ -293,6 +291,11 @@ void CFindDlg::onCommand(int cmd, int code) {
             break;
         case IDC_FIND_REPLACEALL_BTN:
             onReplaceAll();
+            break;
+        case IDC_FIND_MODE:
+            if( code == BN_CLICKED )
+                popupMode();
+            UpdateControls();
             break;
         case IDC_FIND_SEARCHTEXT:
             if( code == CBN_SELCHANGE ) // a string from the history: its options
@@ -371,7 +374,7 @@ int CFindDlg::getFindFlags() {
 #define OPT_VALID 0x100  // the strings from the older versions have no options
 
 LPARAM CFindDlg::getOptions() {
-    LPARAM opts = OPT_VALID | (cmbMode.GetCurSel() << OPT_MODE);
+    LPARAM opts = OPT_VALID | (m_mode << OPT_MODE);
     if( chkMatchCase.IsChecked() ) opts |= OPT_CASE;
     if( chkWholeWord.IsChecked() ) opts |= OPT_WORD;
     return opts;
@@ -382,7 +385,36 @@ void CFindDlg::setOptions(LPARAM opts) {
         return;
     chkMatchCase.SetCheck((opts & OPT_CASE) != 0);
     chkWholeWord.SetCheck((opts & OPT_WORD) != 0);
-    cmbMode.SetCurSel((int)(opts >> OPT_MODE) & 0x0F);
+    setMode((int)(opts >> OPT_MODE) & 0x0F);
+}
+
+static const wchar_t* modeNames[] = {L"Normal", LR"(Extended \r \n \t)", L"Scintilla regex", L"std::regex"};
+
+void CFindDlg::setMode(int mode) {
+    if( mode < 0 || mode > 3 )
+        mode = 0;
+    m_mode = mode;
+    btnMode.SetText(isModeExt() ? "\\t" : "*.");
+    btnMode.SetCheck(!isModeNormal());
+
+    wstring wsTip = tr(wstring(modeNames[mode]));
+    TOOLINFOW ti = {sizeof(ti)};
+    ti.hwnd = m_hWnd;
+    ti.uId = (UINT_PTR) btnMode.hWnd();
+    ti.lpszText = (LPWSTR) wsTip.c_str();
+    ::SendMessageW(m_hTip, TTM_UPDATETIPTEXTW, 0, (LPARAM) &ti);
+}
+
+void CFindDlg::popupMode() {
+    CMenu popup;
+    popup.Create(true);
+    for( int i = 0; i < 4; i++ ) {
+        popup.Append(i + 1, tr(wstring(modeNames[i])));
+        popup.Check(i + 1, i == m_mode);
+    }
+    CRect r = btnMode.GetRect();
+    int ret = popup.TrackPopup(TPM_RETURNCMD, r.left, r.bottom, m_hWnd);
+    setMode(ret ? ret - 1 : m_mode); // Escape: the same mode
 }
 
 string CFindDlg::getFindStr() {

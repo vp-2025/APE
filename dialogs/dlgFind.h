@@ -19,15 +19,19 @@ class CFindDlg : public CDialog {
     CCheckBox rbtnUp, rbtnDown;
     CCheckBox rbtnWhole, rbtnSelection;
     CButton btnSearch, btnSearchAll, btnReplace, btnReplaceAll;
-    CComboBox cmbMode;
+    CCheckBox btnMode; // pressed: not Normal; the modes are in its popup
+    int m_mode{};      // 0 Normal, 1 Extended, 2 Scintilla regex, 3 std::regex
+    HWND m_hTip{};     // tooltips of Cc, W, mode
     bool bFind;
     CEditor* pEditor;
 
-    bool isModeNormal() { return cmbMode.GetCurSel() == 0; }
-    bool isModeExt() { return cmbMode.GetCurSel() == 1; }
-    bool isModeSciRE() { return cmbMode.GetCurSel() == 2; }
-    bool isModeStdRE() { return cmbMode.GetCurSel() == 3; }
-    bool isModeRE() { return cmbMode.GetCurSel() >= 2; }
+    bool isModeNormal() { return m_mode == 0; }
+    bool isModeExt() { return m_mode == 1; }
+    bool isModeSciRE() { return m_mode == 2; }
+    bool isModeStdRE() { return m_mode == 3; }
+    bool isModeRE() { return m_mode >= 2; }
+    void setMode(int mode); // + the button: "*." / "\t", pressed, tooltip
+    void popupMode();
 public:
     explicit CFindDlg(CEditor* pEditor_) : bFind(false), pEditor(pEditor_) {
         m_IDD=IDD_FIND;
