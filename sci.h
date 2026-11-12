@@ -241,7 +241,10 @@ public:
 	void ReplaceSel( const string& s ) { Call(SCI_REPLACESEL, 0, (intptr_t)s.c_str() ); }
 
 // Searching
-	int FindText( int flags, Sci_TextToFind& ttf, bool regExp=false );
+	int FindText( int flags, Sci_TextToFind& ttf ) const { return Call(SCI_FINDTEXT, flags, (intptr_t) &ttf); }
+	// SCFIND_CXX11REGEX: Scintilla sets this status for an invalid regular expression
+	bool badRegExp() const { return Call(SCI_GETSTATUS) == SC_STATUS_WARN_REGEX; }
+	void clearStatus() { Call(SCI_SETSTATUS, SC_STATUS_OK); }
 
 // Search and replace using the target
 	bool hasTarget() { return GetTargetStart()!=GetTargetEnd(); }
@@ -258,7 +261,6 @@ public:
 	void ReplaceTarget(const string& s, bool bRegExp=false) { Call( bRegExp?SCI_REPLACETARGETRE:SCI_REPLACETARGET, -1, (intptr_t)s.c_str() ); }
 
 	string getTargetText() { return GetTextRange(GetTargetStart(),GetTargetEnd()); }
-	void replaceTargetRegExp( const string& sFind, const string& sReplace );
 
 // Overtype
 	void SetOverType(bool b) { Call(SCI_SETOVERTYPE,b); }

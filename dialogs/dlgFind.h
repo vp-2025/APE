@@ -8,6 +8,7 @@ class CEditor;
 struct CREOpt {
     const char* szTitle;
     const char* szText;
+    int modes;         // 0: all the modes, else the bits 1 << m_mode
 };
 
 class CFindDlg : public CDialog {
@@ -63,8 +64,8 @@ private:
     void closeToResults(); // the results are filled: the dialog is hidden, the focus goes to the results
     void onReplaceAll();
 
-    static void popupOptRE(CREOpt* opts, HWND hDlg, HWND hBtn, HWND hEdit);
+    static void popupOptRE(CREOpt* opts, int mode, HWND hDlg, HWND hBtn, HWND hEdit);
 };
 
-void replaceSciRegExp(CSciWrapper* pSci, const string& sFind, const string& sReplace);
+void replaceRE(CSciWrapper* pSci, const string& sFind, const string& sReplace);
 void replaceNormal(CSciWrapper* pSci, const string& sFind, const string& sReplace);

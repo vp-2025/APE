@@ -9,8 +9,6 @@
 #include "export2html.h"
 #include "lang.h"
 #include "shared/str.h"
-#include <regex>
-#include "sciIterator.h"
 #include "theme.h"
 
 void CSciWrapper::Create( HWND hParent, int x, int y, int w, int h, WORD id ) {
@@ -483,29 +481,6 @@ void CSciWrapper::GetTextRange( int p1, int p2, string& s )
 	Call(SCI_GETTEXTRANGE,0,(intptr_t)&tr);
 	s = tr.lpstrText;
 	delete[] buf;
-}
-
-int CSciWrapper::FindText( int flags, Sci_TextToFind& ttf, bool bRegExp ) {
-	if( bRegExp ) {
-		std::regex::flag_type reFlags = std::regex_constants::ECMAScript;
-		if( !(flags&SCFIND_MATCHCASE) ) reFlags |= std::regex_constants::icase;
-		std::regex expr(ttf.lpstrText, reFlags);
-		CSciIterator itA(this,ttf.chrg.cpMin), itB(this,ttf.chrg.cpMax);
-		std::match_results<CSciIterator> what;
-		if( !std::regex_search(itA, itB, what, expr ) )
-			return -1;
-		if( what.empty() || !what[0].matched )
-			return -1;
-		ttf.chrgText.cpMin = what[0].first.getPos();
-		ttf.chrgText.cpMax = what[0].second.getPos();
-		return ttf.chrgText.cpMin;
-	}
-	return Call(SCI_FINDTEXT, flags, (intptr_t) &ttf);
-}
-
-void CSciWrapper::replaceTargetRegExp( const string& sFind, const string& sReplace ) {
-	string str = std::regex_replace( getTargetText(), std::regex(sFind), sReplace );
-	ReplaceTarget( str, false );
 }
 
 const char* g_szFileChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-\\/.:!@#$&*+%";

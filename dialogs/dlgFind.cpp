@@ -7,7 +7,6 @@
 #include "fileMask.h"
 #include "shared/platform.h"
 #include "theme.h"
-#include <regex>
 
 CREOpt findOptsExt[] = {
     {"Cr",  "\\r"},
@@ -18,22 +17,42 @@ CREOpt findOptsExt[] = {
 
 CREOpt* replaceOptsExt = findOptsExt;
 
-CREOpt findOptsSciRE[] = {
-    {"Any Charachter",          "."},
-    {"Charachter in Range",     "[ ]"},
-    {"Charachter not in Range", "[^ ]"},
+// the bits for CREOpt::modes, by m_mode
+#define SCI_RE (1 << 2) // Scintilla regex with SCFIND_POSIX
+#define STD_RE (1 << 3) // SCFIND_CXX11REGEX: ECMAScript
+
+CREOpt findOptsRE[] = {
+    {"Any Character",           "."},
+    {"Character in Range",      "[ ]"},
+    {"Character not in Range",  "[^ ]"},
+    {"Digit",                   "\\d"},
+    {"Space",                   "\\s"},
+    {"Word Character",          "\\w"},
+    {"-"},
     {"Start of Line",           "^"},
     {"End of Line",             "$"},
-    {"Start of Word",           "\\<"},
-    {"End of Word",             "\\>"},
+    {"Start of Word",           "\\<",   SCI_RE},
+    {"End of Word",             "\\>",   SCI_RE},
+    {"Word Boundary",           "\\b",   STD_RE}, // Scintilla regex: \b is a backspace char
+    {"-"},
+    {"0 or 1 Matches",          "?"},
     {"0 or more Matches",       "*"},
     {"1 or more Matches",       "+"},
+    {"0 or more, lazy",         "*?"},
+    {"n to m Matches",          "{ , }", STD_RE},
+    {"-"},
     {"Tagged Region",           "( )"},
+    {"Tagged Expression 1",     "\\1"},
+    {"Alternative",             "|",     STD_RE},
+    {"Followed by",             "(?= )", STD_RE},
+    {"Not Followed by",         "(?! )", STD_RE},
     {nullptr}
 };
 
-CREOpt replaceOptsSciRE[] = {
+// SCI_REPLACETARGETRE: the same for SCI_RE and STD_RE (BuiltinRegex::SubstituteByPosition)
+CREOpt replaceOptsRE[] = {
     {"Whole Matching Text", "\\0"},
+    {"-"},
     {"Tagged Expression 1", "\\1"},
     {"Tagged Expression 2", "\\2"},
     {"Tagged Expression 3", "\\3"},
@@ -43,49 +62,37 @@ CREOpt replaceOptsSciRE[] = {
     {"Tagged Expression 7", "\\7"},
     {"Tagged Expression 8", "\\8"},
     {"Tagged Expression 9", "\\9"},
+    {"-"},
+    {"Cr",                  "\\r"},
+    {"Lf",                  "\\n"},
+    {"Tab",                 "\\t"},
+    {"Backslash",           "\\\\"},
     {nullptr}
 };
 
-CREOpt findOptsStdRE[] = {
-    {"Any Charachter",          "."},
-    {"Charachter in Range",     "[ ]"},
-    {"Charachter not in Range", "[^ ]"},
-    {"Start of Line",           "^"},
-    {"End of Line",             "$"},
-    {"Word Boundary",           "\\b"},
-    {"0 or 1 Matches",          "?"},
-    {"0 or more Matches",       "*"},
-    {"1 or more Matches",       "+"},
-    {"Tagged Region",           "( )"},
-    {nullptr}
-};
-
-CREOpt replaceOptsStdRE[] = {
-    {"Whole Matching Text", "$&"},
-    {"Tagged Expression 1", "$1"},
-    {"Tagged Expression 2", "$2"},
-    {"Tagged Expression 3", "$3"},
-    {"Tagged Expression 4", "$4"},
-    {"Tagged Expression 5", "$5"},
-    {"Tagged Expression 6", "$6"},
-    {"Tagged Expression 7", "$7"},
-    {"Tagged Expression 8", "$8"},
-    {"Tagged Expression 9", "$9"},
-    {nullptr}
-};
 
 void InsertText(HWND hEdit, const char* sz) {
     while( *sz )
         SendMessage(hEdit, WM_CHAR, *sz++, 0);
 }
 
-void CFindDlg::popupOptRE(CREOpt* opts, HWND hDlg, HWND hBtn, HWND hEdit) {
+void CFindDlg::popupOptRE(CREOpt* opts, int mode, HWND hDlg, HWND hBtn, HWND hEdit) {
     CMenu popup;
     popup.Create(true);
-    for( int i = 0; opts[i].szTitle && opts[i].szText; i++ ) {
+    bool bSep = true; // no separator at the top, nor two together
+    for( int i = 0; opts[i].szTitle; i++ ) {
+        if( opts[i].modes && !(opts[i].modes & (1 << mode)) )
+            continue;
+        if( !strcmp(opts[i].szTitle, "-") ) {
+            if( !bSep )
+                popup.AppendSeparator();
+            bSep = true;
+            continue;
+        }
         string sText = opts[i].szText;
         replaceStr(sText,"&","&&");
         popup.Append(i + 1, string(opts[i].szTitle) + '\t' + sText);
+        bSep = false;
     }
     CRect r;
     GetWindowRect(hBtn, &r);
@@ -252,10 +259,9 @@ void CFindDlg::onCommand(int cmd, int code) {
             if( code == 0 ) {
                 CREOpt* opts = nullptr;
                 if( isModeExt() ) opts = findOptsExt;
-                if( isModeSciRE() ) opts = findOptsSciRE;
-                if( isModeStdRE() ) opts = findOptsStdRE;
+                if( isModeRE() ) opts = findOptsRE;
                 if( opts )
-                    popupOptRE(opts, m_hWnd, btnSearchOpt.hWnd(), cmbSearch.hWnd());
+                    popupOptRE(opts, m_mode, m_hWnd, btnSearchOpt.hWnd(), cmbSearch.hWnd());
                 UpdateControls();
             }
             break;
@@ -263,10 +269,9 @@ void CFindDlg::onCommand(int cmd, int code) {
             if( code == 0 ) {
                 CREOpt* opts = nullptr;
                 if( isModeExt() ) opts = replaceOptsExt;
-                if( isModeSciRE() ) opts = replaceOptsSciRE;
-                if( isModeStdRE() ) opts = replaceOptsStdRE;
+                if( isModeRE() ) opts = replaceOptsRE;
                 if( opts )
-                    popupOptRE(opts, m_hWnd, btnReplaceOpt.hWnd(), cmbReplace.hWnd());
+                    popupOptRE(opts, m_mode, m_hWnd, btnReplaceOpt.hWnd(), cmbReplace.hWnd());
                 UpdateControls();
             }
             break;
@@ -326,7 +331,7 @@ void CFindDlg::UpdateControls(bool bPrepare) {
     } else
         chkWholeWord.Enable(true);
 
-    bool b = !chkInFiles.IsChecked() && !isModeStdRE();
+    bool b = !chkInFiles.IsChecked();
     rbtnUp.Enable(b);
     rbtnDown.Enable(b);
     if( !rbtnUp.IsEnabled() ) {
@@ -365,30 +370,28 @@ int CFindDlg::getFindFlags() {
     if( chkWholeWord.IsChecked() ) flags |= SCFIND_WHOLEWORD;
     if( chkMatchCase.IsChecked() ) flags |= SCFIND_MATCHCASE;
     if( isModeSciRE() ) flags |= SCFIND_REGEXP | SCFIND_POSIX;
+    if( isModeStdRE() ) flags |= SCFIND_REGEXP | SCFIND_CXX11REGEX;
     return flags;
 }
 
 #define OPT_CASE  0x01
 #define OPT_WORD  0x02
 #define OPT_MODE  4      // shift of the mode
-#define OPT_VALID 0x100  // the strings from the older versions have no options
 
 LPARAM CFindDlg::getOptions() {
-    LPARAM opts = OPT_VALID | (m_mode << OPT_MODE);
+    LPARAM opts = m_mode << OPT_MODE;
     if( chkMatchCase.IsChecked() ) opts |= OPT_CASE;
     if( chkWholeWord.IsChecked() ) opts |= OPT_WORD;
     return opts;
 }
 
 void CFindDlg::setOptions(LPARAM opts) {
-    if( !(opts & OPT_VALID) )
-        return;
     chkMatchCase.SetCheck((opts & OPT_CASE) != 0);
     chkWholeWord.SetCheck((opts & OPT_WORD) != 0);
     setMode((int)(opts >> OPT_MODE) & 0x0F);
 }
 
-static const wchar_t* modeNames[] = {L"Normal", LR"(Extended \r \n \t)", L"Scintilla regex", L"std::regex"};
+static const wchar_t* modeNames[] = {L"Normal", LR"(Extended \r \n \t)", L"Scintilla regexp", L"C++11 regex"};
 
 void CFindDlg::setMode(int mode) {
     if( mode < 0 || mode > 3 )
@@ -487,7 +490,8 @@ bool CFindDlg::onFind() {
 
     CWaitCursor cur;
     bool bLoop = false;
-    int ret = pSci->FindText(flags, ttf, isModeStdRE());
+    pSci->clearStatus();
+    int ret = pSci->FindText(flags, ttf);
     if( ret == -1 && rbtnWhole.IsChecked() ) {
         if( rbtnDown.IsChecked() ) {
             ttf.chrg.cpMin = 0;
@@ -496,7 +500,7 @@ bool CFindDlg::onFind() {
             ttf.chrg.cpMin = pSci->GetTextLength();
             ttf.chrg.cpMax = currentPos;
         }
-        ret = pSci->FindText(flags, ttf, isModeStdRE());
+        ret = pSci->FindText(flags, ttf);
         bLoop = true;
     }
     if( ret != -1 ) {
@@ -509,7 +513,10 @@ bool CFindDlg::onFind() {
         } else
             pEditor->UpdateStatusText("");
     } else {
-        pEditor->UpdateStatusText(tr(L"Cannot find the string") << " '" << ttf.lpstrText << "'");
+        if( pSci->badRegExp() )
+            pEditor->UpdateStatusText(tr(L"Invalid regular expression"));
+        else
+            pEditor->UpdateStatusText(tr(L"Cannot find the string") << " '" << ttf.lpstrText << "'");
         MessageBeep(MB_ICONASTERISK);
     }
     bFind = ret != -1;
@@ -523,33 +530,31 @@ void CFindDlg::onReplace() {
         if( !onFind() )
             return;
 
-    string sFind = getFindStr();
     string sReplace = getReplaceStr();
 
     pSci->TargetFromSelection();
-    if( isModeStdRE() )
-        pSci->replaceTargetRegExp(sFind, sReplace);
-    else
-        pSci->ReplaceTarget(sReplace, isModeSciRE());
+    pSci->ReplaceTarget(sReplace, isModeRE());
     pSci->SelectionFromTarget();
     pSci->SetCurrentPos(pSci->GetTargetEnd());
     bFind = false;
 }
 
-// all the matches in [from, to); std::regex_error for a bad std::regex
-static vector<Sci_CharacterRange> findAll(CSciWrapper* pSci, int flags, const string& s, bool bStdRE, int from, int to) {
+// all the matches in [from, to); bBadRE: an invalid SCFIND_CXX11REGEX
+static vector<Sci_CharacterRange> findAll(CSciWrapper* pSci, int flags, const string& s, int from, int to, bool& bBadRE) {
     vector<Sci_CharacterRange> ranges;
+    pSci->clearStatus();
     Sci_TextToFind ttf = {0};
     ttf.lpstrText = (char*) s.c_str();
     ttf.chrg.cpMin = from;
     ttf.chrg.cpMax = to;
-    while( ttf.chrg.cpMin < ttf.chrg.cpMax && pSci->FindText(flags, ttf, bStdRE) >= 0 ) { // -2: bad Scintilla RegExp
+    while( ttf.chrg.cpMin < ttf.chrg.cpMax && pSci->FindText(flags, ttf) >= 0 ) {
         if( ttf.chrgText.cpMax > ttf.chrgText.cpMin ) {
             ranges.push_back(ttf.chrgText);
             ttf.chrg.cpMin = ttf.chrgText.cpMax;
         } else // an empty match (^, $): go on from the next char
             ttf.chrg.cpMin = pSci->Call(SCI_POSITIONAFTER, ttf.chrgText.cpMax);
     }
+    bBadRE = pSci->badRegExp();
     return ranges;
 }
 
@@ -564,12 +569,12 @@ void CFindDlg::onFindAll() {
     if( s.empty() ) return;
 
     vector<Sci_CharacterRange> ranges;
-    try {
-        if( rbtnWhole.IsChecked() )
-            ranges = findAll(pSci, flags, s, isModeStdRE(), 0, pSci->GetTextLength());
-        else
-            ranges = findAll(pSci, flags, s, isModeStdRE(), pSci->GetSelectionStart(), pSci->GetSelectionEnd());
-    } catch( std::regex_error& ) {
+    bool bBadRE;
+    if( rbtnWhole.IsChecked() )
+        ranges = findAll(pSci, flags, s, 0, pSci->GetTextLength(), bBadRE);
+    else
+        ranges = findAll(pSci, flags, s, pSci->GetSelectionStart(), pSci->GetSelectionEnd(), bBadRE);
+    if( bBadRE ) {
         pEditor->UpdateStatusText(tr(L"Invalid regular expression"));
         MessageBeep(MB_ICONASTERISK);
         return;
@@ -591,13 +596,14 @@ void CFindDlg::closeToResults() {
     ::SetFocus(pEditor->Results().hWndCur());
 }
 
-int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sReplace, bool bWholeFile, bool isModeSciRE,
-        bool isModeStdRE, vector<Sci_CharacterRange>* pRanges = nullptr) {
+// the count of the replacements; -1 for an invalid SCFIND_CXX11REGEX
+int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sReplace, bool bWholeFile,
+        vector<Sci_CharacterRange>* pRanges = nullptr) {
     if( !pSci ) return 0;
     pSci->clearIndicator(INDIC_FIND);
     pSci->clearIndicator(INDIC_REPLACE);
     if( sFind.empty() ) return 0;
-    if( isModeSciRE ) flags |= SCFIND_REGEXP | SCFIND_POSIX;
+    bool bRegExp = flags & SCFIND_REGEXP;
 
     int selStart = pSci->GetSelectionStart();
     int selEnd = pSci->GetSelectionEnd();
@@ -613,29 +619,31 @@ int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sRe
     }
 
     pSci->BeginUndoAction();
+    pSci->clearStatus();
     int cnt = 0;
-    while( pSci->FindText(flags, ttf, isModeStdRE) != -1 ) {
+    while( pSci->FindText(flags, ttf) != -1 ) {
         cnt++;
         pSci->SetTarget(ttf.chrgText);
         int l1 = pSci->GetTargetLength();
-        if( isModeStdRE )
-            pSci->replaceTargetRegExp(sFind, sReplace);
-        else
-            pSci->ReplaceTarget(sReplace, isModeSciRE);
+        pSci->ReplaceTarget(sReplace, bRegExp);
         int l2 = pSci->GetTargetLength();
         pSci->IndicatorFillRange(pSci->GetTargetStart(), pSci->GetTargetLength());
         if( pRanges ) // the next replacements are after it, so the positions stay valid
             pRanges->push_back({pSci->GetTargetStart(), pSci->GetTargetEnd()});
         ttf.chrg.cpMin = pSci->GetTargetEnd();
+        if( l1 == 0 ) // an empty match (^, $, a*): go on from the next char
+            ttf.chrg.cpMin = pSci->Call(SCI_POSITIONAFTER, ttf.chrg.cpMin);
         if( bWholeFile )
             ttf.chrg.cpMax = pSci->GetTextLength();
         else {
             ttf.chrg.cpMax += l2 - l1;
             selEnd += l2 - l1;
         }
-        if( ttf.chrg.cpMin == ttf.chrg.cpMax ) break;
+        if( ttf.chrg.cpMin >= ttf.chrg.cpMax ) break;
     }
     pSci->EndUndoAction();
+    if( pSci->badRegExp() )
+        cnt = -1;
     if( bWholeFile )
         pSci->SetSel(0, 0);
     else
@@ -644,23 +652,26 @@ int replace(CSciWrapper* pSci, int flags, const string& sFind, const string& sRe
     return cnt;
 }
 
-void replaceSciRegExp(CSciWrapper* pSci, const string& sFind, const string& sReplace) {
-    replace(pSci, 0, sFind, sReplace, true, true, false);
+void replaceRE(CSciWrapper* pSci, const string& sFind, const string& sReplace) {
+    replace(pSci, SCFIND_REGEXP | SCFIND_POSIX, sFind, sReplace, true);
 }
 void replaceNormal(CSciWrapper* pSci, const string& sFind, const string& sReplace) {
-    replace(pSci, 0, sFind, sReplace, true, false, false);
+    replace(pSci, 0, sFind, sReplace, true);
 }
 
 void CFindDlg::onReplaceAll() {
     string sFind = getFindStr(), sReplace = getReplaceStr();
     vector<Sci_CharacterRange> ranges;
     int cnt = replace(pEditor->GetScintilla(), getFindFlags(), sFind, sReplace,
-                      rbtnWhole.IsChecked(), isModeSciRE(), isModeStdRE(), &ranges);
-    pEditor->UpdateStatusText(Format( tr(L"%i Replacements were made").c_str(), cnt));
-    if( !cnt )
+                      rbtnWhole.IsChecked(), &ranges);
+    if( cnt < 0 )
+        pEditor->UpdateStatusText(tr(L"Invalid regular expression"));
+    else
+        pEditor->UpdateStatusText(Format( tr(L"%i Replacements were made").c_str(), cnt));
+    if( cnt <= 0 )
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
-    if( !sFind.empty() )
+    if( cnt >= 0 && !sFind.empty() )
         pEditor->ShowFindResults('"' + sFind + "\" -> \"" + sReplace + '"', tr("%i replacements"), ranges, sFind, chkNewTab.IsChecked());
 }
 
@@ -750,33 +761,30 @@ void CFindDlg::onFindInFiles() {
     collectFiles(sDir, masks, chkSubFolders.IsChecked(), files);
 
     int flags = getFindFlags();
-    bool bStdRE = isModeStdRE();
     CFindResults& results = pEditor->Results().Prepare(w2utf(wsFind), chkNewTab.IsChecked());
     results.Begin();
     CSciWrapper sciDisk; // a file, which isn't opened in the editor, is loaded here
     bool bBadRE = false;
-    try {
-        for( const auto& sFile : files ) {
-            CTabPage* pPage = pEditor->FindPage(sFile);
-            CSciWrapper* pSrc = &sciDisk;
-            if( pPage ) // the text in the editor, also not saved yet
-                pSrc = &pPage->sci;
-            else {
-                if( !isTextFile(sFile) )
-                    continue;
-                if( !sciDisk.hWnd() )
-                    sciDisk.Create(pEditor->hWnd());
-                CTime tm;
-                int64_t size;
-                if( !sciDisk.loadFromFile(sFile, tm, size) )
-                    continue;
-            }
-            string s = getFindStr(wsFind, pSrc->getEncoding() == encAnsi);
-            vector<Sci_CharacterRange> ranges = findAll(pSrc, flags, s, bStdRE, 0, pSrc->GetTextLength());
-            results.AddFile(*pSrc, pPage ? pPage->sci.hWnd() : nullptr, sFile, ranges, true);
+    for( const auto& sFile : files ) {
+        CTabPage* pPage = pEditor->FindPage(sFile);
+        CSciWrapper* pSrc = &sciDisk;
+        if( pPage ) // the text in the editor, also not saved yet
+            pSrc = &pPage->sci;
+        else {
+            if( !isTextFile(sFile) )
+                continue;
+            if( !sciDisk.hWnd() )
+                sciDisk.Create(pEditor->hWnd());
+            CTime tm;
+            int64_t size;
+            if( !sciDisk.loadFromFile(sFile, tm, size) )
+                continue;
         }
-    } catch( std::regex_error& ) {
-        bBadRE = true;
+        string s = getFindStr(wsFind, pSrc->getEncoding() == encAnsi);
+        vector<Sci_CharacterRange> ranges = findAll(pSrc, flags, s, 0, pSrc->GetTextLength(), bBadRE);
+        if( bBadRE )
+            break;
+        results.AddFile(*pSrc, pPage ? pPage->sci.hWnd() : nullptr, sFile, ranges, true);
     }
     if( sciDisk.hWnd() )
         sciDisk.Destroy();
