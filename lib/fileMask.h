@@ -2,4 +2,4 @@
 
 #include <string>
 
-bool isFileMask(std::string sMask, std::string sFile);
+bool isFileMask(const std::string& sMask, const std::string& sFile);
