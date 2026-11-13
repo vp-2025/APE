@@ -65,6 +65,8 @@ Expand	Развернуть
 Toggle All	Переключить Все	Toggle Alle
 Collapse All	Схлопнуть Все	Collapse Alle
 Close Tab	Закрыть Вкладку	Tab schließen
+Close Other Tabs	Закрыть Другие Вкладки	Andere Tabs schließen
+Rerun...	Повторить...	Erneut ausführen...
 Hide	Скрыть	Ausblenden
 Syntax Highlight...	Подсветка синтаксиса...	Syntaxhervorhebung...
 Expand All	Развернуть Все	Expand Alle

@@ -20,6 +20,16 @@ struct CFindMatch {
 	int col;    // where it is shown in the result line, -1 if it is cut
 };
 
+// the search, which filled the results: Rerun opens the find dialog with it
+struct CFindParams {
+	wstring wsFind, wsReplace, wsFiles, wsPath; // as typed in the dialog
+	LPARAM opts{};       // match case, whole word, mode: CFindDlg::getOptions()
+	bool bReplace{};     // Replace All
+	bool bInFiles{};
+	bool bSubFolders{};
+	bool bSelection{};   // in the selection, not in the whole file
+};
+
 struct CFindResult {
 	string sFile;   // to open the file, if its tab is closed
 	HWND hSci;      // source editor, to find the tab (also an untitled one); nullptr: file on disk
@@ -43,6 +53,7 @@ class CFindResults {
 public:
 	enum { stDefault, stLineNo, stMatch, stTitle, stFile, stSymbol, stMatchSymbol }; // styleFindResults[]
 	string m_sTitle; // the first line, utf-8: the tooltip of the tab
+	CFindParams m_params;
 
 	void Create(HWND hParent);
 	void Destroy() { m_sci.Destroy(); }
@@ -106,6 +117,7 @@ public:
 	CFindResults* Cur() { return m_iCur >= 0 ? m_vTabs[m_iCur].get() : nullptr; }
 	CFindResults* Get(int i) { return 0 <= i && i < count() ? m_vTabs[i].get() : nullptr; }
 	CFindResults* FromHwnd(HWND hSci); // the results with this Scintilla
+	int IndexOf(const CFindResults* p) const; // -1 if it is closed
 	HWND hWndCur() { return Cur() ? Cur()->hWnd() : nullptr; }
 	bool hasFocus() { return hWndCur() && ::GetFocus() == hWndCur(); }
 	bool isEmpty() { return !Cur() || Cur()->isEmpty(); }

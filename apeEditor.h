@@ -68,6 +68,7 @@ public:
 	void onPopupStatusbar( int part, CTabPage& page );
 	void onPopupGoto( CTabPage& page, const CPoint& pt );
 	void onPopup( HWND hCtrl, int x, int y );
+	void onPopupResultsTab( int i, const CPoint& pt ); // Rerun, Close, Close Other Tabs, Close All
 
 	void UpdateToolbar();
 	void UpdateMenu( HMENU hMenu, CTabPage* pPage=nullptr );

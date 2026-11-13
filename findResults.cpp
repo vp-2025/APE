@@ -296,12 +296,19 @@ CFindResults* CResultsTabs::FromHwnd(HWND hSci) {
 	return nullptr;
 }
 
-// "foo" -> foo, one line, not too long
+int CResultsTabs::IndexOf(const CFindResults* p) const {
+	for( int i = 0; i < count(); i++ )
+		if( m_vTabs[i].get() == p )
+			return i;
+	return -1;
+}
+
+// "foo" -> 'foo', one line, not too long
 static wstring caption(const string& s) {
 	wstring ws = utf2w(CFindResults::EscapeTitle(s));
 	if( ws.size() > 30 )
 		ws = ws.substr(0, 29) + L"\x2026"; // ...
-	return ws;
+	return L"\"" + ws + L"\"";
 }
 
 CFindResults& CResultsTabs::Prepare(const string& sCaption, bool bNewTab) {

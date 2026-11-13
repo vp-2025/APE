@@ -4,6 +4,8 @@
 #include "shared/win.h"
 
 class CEditor;
+class CFindResults;
+struct CFindParams;
 
 struct CREOpt {
     const char* szTitle;
@@ -25,6 +27,7 @@ class CFindDlg : public CDialog {
     HWND m_hTip{};     // tooltips of Cc, W, mode
     bool bFind;
     CEditor* pEditor;
+    CFindResults* m_pRerun{}; // the results tab of Rerun: the next results go to it
 
     bool isModeNormal() { return m_mode == 0; }
     bool isModeExt() { return m_mode == 1; }
@@ -40,6 +43,9 @@ public:
     bool isDlgMsg(MSG& msg);
 
     void Find(bool bReplace, bool bInFiles);
+    // the dialog with the search of these results; the next Find All / Replace All / Find in Files fills them
+    void Rerun(CFindResults* pResults);
+    void onResultsClosed(CFindResults* pResults) { if( m_pRerun == pResults ) m_pRerun = nullptr; }
     void FindNext(bool bNext);
     void ClearIndicators();
 private:
@@ -56,6 +62,8 @@ private:
     string getFindStr();
     string getFindStr(const wstring& ws, bool bAnsi); // for a file with this encoding
     string getReplaceStr();
+    CFindParams getParams();
+    bool resultsInNewTab(); // also selects the tab of Rerun
 
     bool onFind();
     void onReplace();

@@ -118,6 +118,7 @@ bool CFindDlg::isDlgMsg(MSG& msg) {
 }
 
 void CFindDlg::Find(bool bReplace, bool bInFiles) {
+    m_pRerun = nullptr;
     if( !pEditor )
         return;
     CSciWrapper* pSci = pEditor->GetScintilla();
@@ -153,6 +154,25 @@ void CFindDlg::Find(bool bReplace, bool bInFiles) {
         cmbPath.SetText(utf2w(ExtractFilePath(pPage->sFile)));
 
     UpdateControls(true);
+}
+
+void CFindDlg::Rerun(CFindResults* pResults) {
+    const CFindParams& params = pResults->m_params;
+    Find(params.bReplace, params.bInFiles);
+    if( !m_hWnd || !IsWindowVisible(m_hWnd) ) // no file to search in
+        return;
+    m_pRerun = pResults;
+    cmbSearch.SetCurSel(-1);
+    cmbSearch.SetText(params.wsFind);
+    cmbReplace.SetText(params.wsReplace);
+    cmbFile.SetText(params.wsFiles);
+    cmbPath.SetText(params.wsPath);
+    chkSubFolders.SetCheck(params.bSubFolders);
+    setOptions(params.opts);
+    UpdateControls();
+    bool bSelection = params.bSelection && rbtnSelection.IsEnabled();
+    rbtnSelection.SetCheck(bSelection);
+    rbtnWhole.SetCheck(!bSelection);
 }
 
 void CFindDlg::FindNext(bool bNext) {
@@ -457,6 +477,29 @@ string CFindDlg::getReplaceStr() {
     return s;
 }
 
+CFindParams CFindDlg::getParams() {
+    CFindParams params;
+    params.wsFind = cmbSearch.GetTextW();
+    params.wsReplace = cmbReplace.GetTextW();
+    params.wsFiles = cmbFile.GetTextW();
+    params.wsPath = cmbPath.GetTextW();
+    params.opts = getOptions();
+    params.bReplace = chkReplace.IsChecked();
+    params.bInFiles = chkInFiles.IsChecked();
+    params.bSubFolders = chkSubFolders.IsChecked();
+    params.bSelection = rbtnSelection.IsChecked();
+    return params;
+}
+
+bool CFindDlg::resultsInNewTab() {
+    int i = pEditor->Results().IndexOf(m_pRerun);
+    m_pRerun = nullptr;
+    if( i < 0 )
+        return chkNewTab.IsChecked();
+    pEditor->Results().Select(i);
+    return false;
+}
+
 bool CFindDlg::onFind() {
     CSciWrapper* pSci = pEditor->GetScintilla();
     if( !pSci ) return false;
@@ -587,7 +630,9 @@ void CFindDlg::onFindAll() {
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
     pSci->ClearTarget();
-    pEditor->ShowFindResults('"' + s + '"', tr("%i matches"), ranges, s, chkNewTab.IsChecked());
+    pEditor->ShowFindResults('"' + s + '"', tr("%i matches"), ranges, s, resultsInNewTab());
+    if( CFindResults* pResults = pEditor->Results().Cur() )
+        pResults->m_params = getParams();
     closeToResults();
 }
 
@@ -671,8 +716,11 @@ void CFindDlg::onReplaceAll() {
     if( cnt <= 0 )
         MessageBeep(MB_ICONASTERISK);
     bFind = false;
-    if( cnt >= 0 && !sFind.empty() )
-        pEditor->ShowFindResults('"' + sFind + "\" -> \"" + sReplace + '"', tr("%i replacements"), ranges, sFind, chkNewTab.IsChecked());
+    if( cnt >= 0 && !sFind.empty() ) {
+        pEditor->ShowFindResults('"' + sFind + "\" -> \"" + sReplace + '"', tr("%i replacements"), ranges, sFind, resultsInNewTab());
+        if( CFindResults* pResults = pEditor->Results().Cur() )
+            pResults->m_params = getParams();
+    }
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -761,7 +809,8 @@ void CFindDlg::onFindInFiles() {
     collectFiles(sDir, masks, chkSubFolders.IsChecked(), files);
 
     int flags = getFindFlags();
-    CFindResults& results = pEditor->Results().Prepare(w2utf(wsFind), chkNewTab.IsChecked());
+    CFindResults& results = pEditor->Results().Prepare(w2utf(wsFind), resultsInNewTab());
+    results.m_params = getParams();
     results.Begin();
     CSciWrapper sciDisk; // a file, which isn't opened in the editor, is loaded here
     bool bBadRE = false;

@@ -1191,6 +1191,34 @@ void CEditor::onPopupStatusbar( int part, CTabPage& page )
 	}
 }
 
+void CEditor::onPopupResultsTab( int i, const CPoint& pt )
+{
+	CMenu popup;
+	popup.Create(true);
+	popup.Append( ID_SEARCH_RESULTS_RERUN, tr(L"Rerun..."), !m_results.Get(i)->m_params.wsFind.empty() );
+	popup.AppendSeparator();
+	popup.Append( ID_SEARCH_RESULTS_CLOSETAB, tr(L"Close") );
+	popup.Append( ID_SEARCH_RESULTS_CLOSEOTHERS, tr(L"Close Other Tabs"), m_results.count()>1 );
+	popup.Append( ID_SEARCH_RESULTS_CLOSEALL, tr(L"Close All") );
+	switch( popup.TrackPopup(TPM_RETURNCMD|TPM_RIGHTBUTTON, pt, m_hWnd) ) {
+	case ID_SEARCH_RESULTS_RERUN:
+		m_findDlg.Rerun( m_results.Get(i) );
+		break;
+	case ID_SEARCH_RESULTS_CLOSETAB:
+		CloseResultsTab( i );
+		break;
+	case ID_SEARCH_RESULTS_CLOSEOTHERS:
+		for( int j = m_results.count()-1; j>=0; j-- )
+			if( j!=i )
+				CloseResultsTab( j );
+		break;
+	case ID_SEARCH_RESULTS_CLOSEALL:
+		while( m_results.count() )
+			CloseResultsTab( m_results.count()-1 );
+		break;
+	}
+}
+
 void CEditor::onPopup( HWND hCtrl, int x, int y )
 {
 	if( hCtrl==m_results.tabs().hWnd() ) { // on a tab: its results
@@ -1200,7 +1228,11 @@ void CEditor::onPopup( HWND hCtrl, int x, int y )
 		if( i<0 )
 			return;
 		m_results.Select( i );
-		hCtrl = m_results.hWndCur();
+		CRect r = m_results.tabs().GetItemRect(i); // under the tab, like the editor tabs
+		pt = CPoint(r.left, r.bottom);
+		m_results.tabs().ClientToScreen(pt);
+		onPopupResultsTab( i, pt );
+		return;
 	}
 	if( hCtrl && hCtrl==m_results.hWndCur() ) {
 		CFindResults& res = *m_results.Cur();
@@ -2255,6 +2287,7 @@ void CEditor::ShowFindResults( const string& sWhat, const string& sMatches, cons
 }
 
 void CEditor::CloseResultsTab( int i ) {
+	m_findDlg.onResultsClosed( m_results.Get(i) );
 	m_results.Close( i );
 	if( !m_results.count() )
 		ShowResults( false );
