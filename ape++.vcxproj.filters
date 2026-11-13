@@ -278,9 +278,6 @@
     <ClInclude Include="lib\ShellContextMenu.h">
       <Filter>Lib</Filter>
     </ClInclude>
-    <ClInclude Include="lib\versionInfo.h">
-      <Filter>Lib</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ape++.cpp">
@@ -590,9 +587,6 @@
       <Filter>Lib</Filter>
     </ClCompile>
     <ClCompile Include="lib\testLib.cpp">
-      <Filter>Lib</Filter>
-    </ClCompile>
-    <ClCompile Include="lib\versionInfo.cpp">
       <Filter>Lib</Filter>
     </ClCompile>
   </ItemGroup>

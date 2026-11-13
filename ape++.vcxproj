@@ -203,6 +203,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <None Include="ape++.rc2" />
     <None Include="res\ape.ico" />
     <None Include="res\ape_sm.ico" />
     <None Include="res\ilCloseBtn.bmp" />
@@ -634,7 +635,7 @@
     <ClInclude Include="lib\lang.h" />
     <ClInclude Include="lib\mru.h" />
     <ClInclude Include="lib\ShellContextMenu.h" />
-    <ClInclude Include="lib\versionInfo.h" />
+    <ClInclude Include="apeVersion.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ctime.h" />
     <ClInclude Include="export2HTML.h" />
@@ -726,12 +727,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="lib\testLib.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="lib\versionInfo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>

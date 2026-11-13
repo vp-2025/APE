@@ -1,0 +1,37 @@
+// edited by hand: the resource editor doesn't touch it (ape++.rc includes it by TEXTINCLUDE 3)
+#include "apeVersion.h"
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION APE_VER_MAJOR,APE_VER_MINOR,APE_VER_PATCH,APE_VER_BUILD
+ PRODUCTVERSION APE_VER_MAJOR,APE_VER_MINOR,APE_VER_PATCH,APE_VER_BUILD
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041904b0"
+        BEGIN
+            VALUE "CompanyName", APE_COMPANY
+            VALUE "FileDescription", APE_PRODUCT
+            VALUE "FileVersion", APE_VERSION_STR
+            VALUE "InternalName", "ape++"
+            VALUE "LegalCopyright", APE_COPYRIGHT
+            VALUE "OriginalFilename", "ape++.exe"
+            VALUE "ProductName", APE_PRODUCT
+            VALUE "ProductVersion", APE_VERSION_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x419, 1200
+    END
+END

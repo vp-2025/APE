@@ -3,7 +3,7 @@
 #include "dlgAbout.h"
 #include "lang.h"
 #include "shared/str.h"
-#include "versionInfo.h"
+#include "apeVersion.h"
 
 using namespace std;
 
@@ -13,15 +13,10 @@ void CAboutDlg::onInit() {
     CenterWindow(m_hWnd);
     g_lang.translateDlg(m_hWnd);
     {
-        CVersionInfo vi;
-        string version = vi.getFileVersion();
-        replaceStr(version, ", ", ".");
         string label;
-        label << vi.getFileDescription() << ' '
-              << 'v' << version << "\n"
+        label << APE_PRODUCT " v" APE_VERSION_STR "\n"
               << "Scintilla " SCINTILLA_VERSION_STR "\n\n"
-              << vi.getLegalCopyright() << ' '
-              << vi.getCompanyName() << "\n\n"
+              << APE_COPYRIGHT " " APE_COMPANY "\n\n"
               << "Built on " << __DATE__ << ' ' << __TIME__;
         label << "\nwith "
 #ifdef CLION
