@@ -42,7 +42,7 @@
 #ifndef __FLEX_LEXER_H
 // Never included before - need to define base class.
 #define __FLEX_LEXER_H
-#include <iostream>
+#include <iosfwd>
 
 extern "C++" {
 

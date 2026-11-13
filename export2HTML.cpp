@@ -5,6 +5,7 @@
 #include "lexers.h"
 #include "lexerStyles.h"
 #include "shared/str.h"
+#include "shared/cfile.h"
 
 string clr2html( int clr )
 {
@@ -225,12 +226,9 @@ void export2HTML_int( CSciWrapper& sci, int pos, int len, string& s, const strin
 	  << "</HTML>";
 }
 
-void export2HTML( CSciWrapper& sci, const string& sFile ) 
-{
-	ofstream f;
-	f.open( sFile.c_str() );
-	if( f.bad() )
-	{
+void export2HTML( CSciWrapper& sci, const string& sFile ) {
+	CFile f;
+	if( !f.Open( sFile, false ) ) {
 		string msg;
 		msg << "Error while open file '"<<sFile<<"' for Export to HTML!";
 		MsgBoxError( msg );
@@ -241,11 +239,10 @@ void export2HTML( CSciWrapper& sci, const string& sFile )
 	sTitle << "<title>"<< sFile <<"</title>\n";
 	string s;
 	export2HTML_int( sci, 0, -1, s, sTitle );
-	f << s;
+	f.Write( s );
 }
 
-string export2HTMLSelected( CSciWrapper& sci ) 
-{
+string export2HTMLSelected( CSciWrapper& sci ) {
 	int p = sci.GetSelectionStart();
 	int p2 = sci.GetSelectionEnd();
 	string s;

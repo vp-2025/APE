@@ -122,7 +122,9 @@
       <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_WINDOWS;SCI_LEXER;NDEBUG;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/Zc:referenceBinding- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zc:referenceBinding- /Gw %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
@@ -174,7 +176,9 @@
       <AdditionalIncludeDirectories>scintilla\include;scintilla\lexlib;scintilla\src;.;flex;lexBase;lexers;dialogs;lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;SCI_LEXER;_HAS_STD_BYTE=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalOptions>/Zc:referenceBinding- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Zc:referenceBinding- /Gw %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>

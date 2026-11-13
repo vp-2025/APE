@@ -1223,10 +1223,10 @@ YY_DECL
             yy_start = 1;   /* first start state */
 
         if( !yyin )
-            yyin = &cin;
+            ; // no default stream: LexerInput() is overridden (avoids linking iostream)
 
         if( !yyout )
-            yyout = &cout;
+            ; // no default stream: LexerOutput() is overridden (avoids linking iostream)
 
         if( !yy_current_buffer )
             yy_current_buffer = yy_create_buffer( yyin, YY_BUF_SIZE );
@@ -1722,34 +1722,14 @@ void yyFlexLexer::switch_streams( std::istream* new_in, std::ostream* new_out )
         yyout = new_out;
 }
 
-#ifdef YY_INTERACTIVE
-int yyFlexLexer::LexerInput( char* buf, int /* max_size */ )
-#else
-int yyFlexLexer::LexerInput( char* buf, int max_size )
-#endif /* !YY_INTERACTIVE */
+// the stream I/O is not used (LexerInput/LexerOutput are overridden), so do not pull in iostream
+int yyFlexLexer::LexerInput( char* /* buf */, int /* max_size */ )
 {
-    if( yyin->eof() || yyin->fail() )
-        return 0;
-
-#ifdef YY_INTERACTIVE
-    yyin->get( buf[0] );
-    if( yyin->eof() )
-        return 0;
-    if( yyin->bad() )
-        return -1;
-    return 1;
-#else  /* YY_INTERACTIVE */
-    (void) yyin->read( buf, max_size );
-    if( yyin->bad() )
-        return -1;
-    else
-        return yyin->gcount();
-#endif /* !YY_INTERACTIVE */
+    return 0;
 }
 
-void yyFlexLexer::LexerOutput( const char* buf, int size )
+void yyFlexLexer::LexerOutput( const char* /* buf */, int /* size */ )
 {
-    (void) yyout->write( buf, size );
 }
 
 /* yy_get_next_buffer - try to read in a new buffer
@@ -2212,7 +2192,7 @@ int yyFlexLexer::yy_top_state()
 
 void yyFlexLexer::LexerError(yyconst char msg[])
 {
-    cerr << msg << '\n';
+    (void) msg;
     exit( YY_EXIT_FAILURE );
 }
 

@@ -263,15 +263,24 @@ string clr2str(int clr) {
     return Format("#%02X%02X%02X", GetRValue(clr), GetGValue(clr), GetBValue(clr));
 }
 
-int str2clr(const string& str) {
-    if( startsWith(str, "#") ) {
-        int R, G, B;
-        if( str.size() == 4 && sscanf(str.c_str(), "#%1X%1X%1X", &R, &G, &B) == 3 )
-            return RGB(R, G, B);
-        if( str.size() == 7 && sscanf(str.c_str(), "#%02X%02X%02X", &R, &G, &B) == 3 )
-            return RGB(R, G, B);
-    }
+static int hexDigit(char c) {
+    if( c >= '0' && c <= '9' ) return c - '0';
+    if( c >= 'A' && c <= 'F' ) return c - 'A' + 10;
+    if( c >= 'a' && c <= 'f' ) return c - 'a' + 10;
     return -1;
+}
+
+// "#RGB" (one hex digit per component, as is) or "#RRGGBB"; parsed by hand: sscanf would link the CRT scanf engine
+int str2clr(const string& str) {
+    if( !startsWith(str, "#") || (str.size() != 4 && str.size() != 7) )
+        return -1;
+    int d[6];
+    for( size_t i = 1; i < str.size(); i++ )
+        if( (d[i - 1] = hexDigit(str[i])) < 0 )
+            return -1;
+    if( str.size() == 4 )
+        return RGB(d[0], d[1], d[2]);
+    return RGB(d[0] * 16 + d[1], d[2] * 16 + d[3], d[4] * 16 + d[5]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

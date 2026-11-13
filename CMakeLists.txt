@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if(MSVC)
 	# "using namespace std" + the SDK's byte typedef conflict with std::byte in c++17+
 	add_definitions(-D_HAS_STD_BYTE=0)
+	# Release: optimize for size; /Gy /Gw let /OPT:REF /OPT:ICF drop unused functions + data; /GL + /LTCG: whole program
+	set(CMAKE_CXX_FLAGS_RELEASE "/O1 /Gy /Gw /GL /DNDEBUG")
+	set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /LTCG")
 endif()
 
 add_definitions(-DWIN32)
