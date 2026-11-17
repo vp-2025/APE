@@ -28,6 +28,7 @@ struct CFindParams {
 	bool bInFiles{};
 	bool bSubFolders{};
 	bool bSelection{};   // in the selection, not in the whole file
+	HWND hSci{};         // the editor searched in (not in files): Rerun searches there again
 };
 
 struct CFindResult {
@@ -53,6 +54,8 @@ class CFindResults {
 public:
 	enum { stDefault, stLineNo, stMatch, stTitle, stFile, stSymbol, stMatchSymbol }; // styleFindResults[]
 	string m_sTitle; // the first line, utf-8: the tooltip of the tab
+	string m_sCaption; // the search string, utf-8: the caption of the tab: "foo" (matches | lines) [files / all files]
+	int m_cntAllFiles{-1}; // in files: the files searched; -1: one file, the caption has no [files]
 	CFindParams m_params;
 
 	void Create(HWND hParent);
@@ -110,6 +113,7 @@ public:
 	static int SplitterH() { return g_dpi.scale(5); }
 	int m_height{200}; // with the splitter
 	bool m_bVisible{};
+	bool m_bSelectLine{true}; // moving in the results selects the match in the editor, else only double-click/Enter
 
 	void Create(HWND hParent);
 	CTabCtrlAdv& tabs() { return m_tabs; }
@@ -124,6 +128,7 @@ public:
 
 	// the tab for the next search: a new one or the current one; sCaption is the search string, utf-8
 	CFindResults& Prepare(const string& sCaption, bool bNewTab);
+	void UpdateCaption(const CFindResults& res); // after the search: "foo" (12 | 9) [3 / 120]
 	void Select(int i);
 	void Close(int i);
 	void Reorder(); // after drag & drop of a tab

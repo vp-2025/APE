@@ -156,12 +156,32 @@ void CFindDlg::Find(bool bReplace, bool bInFiles) {
     UpdateControls(true);
 }
 
-void CFindDlg::Rerun(CFindResults* pResults) {
-    const CFindParams& params = pResults->m_params;
-    Find(params.bReplace, params.bInFiles);
-    if( !m_hWnd || !IsWindowVisible(m_hWnd) ) // no file to search in
+void CFindDlg::Rerun(CFindResults* pResults, bool bDialog) {
+    const CFindParams params = pResults->m_params; // a copy: the results are filled again
+    if( bDialog ) {
+        Find(params.bReplace, params.bInFiles);
+        if( m_hWnd && IsWindowVisible(m_hWnd) ) // else no file to search in
+            loadParams(params);
         return;
+    }
+    if( params.bReplace ) // replacing again is not a refresh
+        return;
+    if( !m_hWnd || !IsWindow(m_hWnd) ) {
+        m_hWnd = CreateDialogParam(g_hInst, MAKEINTRESOURCE(IDD_FIND), pEditor->hWnd(), CFindDlg::Proc, (LPARAM) this);
+        ShowWindow(SW_HIDE); // WS_VISIBLE in the template
+    }
+    chkReplace.SetCheck(false);
+    chkInFiles.SetCheck(params.bInFiles);
+    loadParams(params);
     m_pRerun = pResults;
+    if( params.bInFiles )
+        onFindInFiles();
+    else
+        onFindAll();
+    m_pRerun = nullptr; // also if nothing was filled: an empty search string, a bad regex
+}
+
+void CFindDlg::loadParams(const CFindParams& params) {
     cmbSearch.SetCurSel(-1);
     cmbSearch.SetText(params.wsFind);
     cmbReplace.SetText(params.wsReplace);
@@ -488,6 +508,8 @@ CFindParams CFindDlg::getParams() {
     params.bInFiles = chkInFiles.IsChecked();
     params.bSubFolders = chkSubFolders.IsChecked();
     params.bSelection = rbtnSelection.IsChecked();
+    if( CSciWrapper* pSci = pEditor->GetScintilla() )
+        params.hSci = pSci->hWnd();
     return params;
 }
 
@@ -846,11 +868,12 @@ void CFindDlg::onFindInFiles() {
         sTitle += Format(tr("%i matches").c_str(), results.cntMatches());
         if( results.cntMatches() )
             sTitle += ", " + Format(tr("%i lines").c_str(), results.cntLines())
-                    + ", " + Format(tr("%i files").c_str(), results.cntFiles());
+                    + ", " + Format(tr("[%i of %i] files").c_str(), results.cntFiles(), (int)files.size());
     }
-    sTitle += " - " + sDir + " [" + (sMasks.empty() ? "*.*" : sMasks) + "] - "
-            + Format(tr("%i files searched").c_str(), (int)files.size());
+    sTitle += " - " + sDir + "\\" + (sMasks.empty() ? "*.*" : sMasks);
     results.End(sTitle);
+    results.m_cntAllFiles = (int)files.size();
+    pEditor->Results().UpdateCaption(results);
     pEditor->ShowResults(true);
 
     if( bBadRE )

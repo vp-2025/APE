@@ -48,6 +48,9 @@ Go to Matching Fold	Перейти на парный слой	Springen Passende 
 
 &View	Вид	Anzeigen
 Search Results	Результаты Поиска	Suchergebnisse
+Outline	Структура	Gliederung
+Show Closing Lines	Показать Закрывающие Строки	Schließende Zeilen anzeigen
+Select Line on Navigate	Выделять Строку при Навигации	Zeile bei Navigation markieren
 Always on Top	Всегда на Верху
 Full Screen	Весь Экран
 Whitespace Off	Пробелы Выкл
@@ -66,7 +69,9 @@ Toggle All	Переключить Все	Toggle Alle
 Collapse All	Схлопнуть Все	Collapse Alle
 Close Tab	Закрыть Вкладку	Tab schließen
 Close Other Tabs	Закрыть Другие Вкладки	Andere Tabs schließen
+Rerun	Повторить	Erneut ausführen
 Rerun...	Повторить...	Erneut ausführen...
+The file of the search is closed	Файл поиска закрыт	Die Datei der Suche ist geschlossen
 Hide	Скрыть	Ausblenden
 Syntax Highlight...	Подсветка синтаксиса...	Syntaxhervorhebung...
 Expand All	Развернуть Все	Expand Alle

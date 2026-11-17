@@ -46,12 +46,11 @@ void CFindResults::Create(HWND hParent) {
 	m_sci.setTokenHL(false);
 	m_sci.setWrapLongLines(false);
 	m_sci.Call(SCI_SETMARGINLEFT, 0, g_dpi.scale(4));
-	m_sci.Call(SCI_SETCARETSTYLE, CARETSTYLE_INVISIBLE);
+	m_sci.Call(SCI_SETCARETSTYLE, CARETSTYLE_LINE); // shown only when focused, read-only: just to see where you are
 	m_sci.Call(SCI_SETUNDOCOLLECTION, false);
 	m_sci.Call(SCI_SETSCROLLWIDTH, 1); // the horizontal scrollbar only for long lines
 	m_sci.Call(SCI_SETSCROLLWIDTHTRACKING, true);
 	m_sci.SetCarretLineVisible(true);
-	m_sci.Call(SCI_SETCARETLINEVISIBLEALWAYS, true);
 	m_sci.Call(SCI_SETAUTOMATICFOLD, SC_AUTOMATICFOLD_SHOW | SC_AUTOMATICFOLD_CLICK | SC_AUTOMATICFOLD_CHANGE);
 	m_sci.SetReadOnly(true);
 	SetupStyles();
@@ -60,9 +59,9 @@ void CFindResults::Create(HWND hParent) {
 void CFindResults::SetupStyles() {
 	SetupLexerStyles(m_sci, styleFindResults); // also the fold margin
 	// the current result line
-	m_sci.Call(SCI_SETCARETLINEBACK, g_theme.isDark() ? RGB(0x60, 0x80, 0xC0) : RGB(0, 0x60, 0xFF));
-	m_sci.Call(SCI_SETCARETLINEBACKALPHA, 0x30);
-	m_sci.Call( SCI_SETCARETLINEVISIBLEALWAYS, false );
+	m_sci.Call( SCI_SETCARETLINEBACK, RGB(0xFF,0,0) );
+	m_sci.Call( SCI_SETCARETLINEBACKALPHA, 10 );
+	m_sci.Call( SCI_SETCARETLINEVISIBLEALWAYS, true );
 }
 
 string CFindResults::EscapeTitle(string s) {
@@ -127,6 +126,7 @@ void CFindResults::Begin() {
 	m_lineToResult.push_back(-1); // the title
 	m_cells.clear();
 	m_cntMatches = m_cntFiles = 0;
+	m_cntAllFiles = -1;
 	m_bHeaders = false;
 	ResetShown();
 }
@@ -303,12 +303,17 @@ int CResultsTabs::IndexOf(const CFindResults* p) const {
 	return -1;
 }
 
-// "foo" -> 'foo', one line, not too long
-static wstring caption(const string& s) {
+// "foo" -> "foo" or "foo" (matches | lines) [files / all files], one line, not too long; cnt<0: still searching
+static wstring caption(const string& s, int cnt = -1, int lines = 0, int files = 0, int allFiles = -1) {
 	wstring ws = utf2w(CFindResults::EscapeTitle(s));
 	if( ws.size() > 30 )
 		ws = ws.substr(0, 29) + L"\x2026"; // ...
-	return L"\"" + ws + L"\"";
+	ws = L"\"" + ws + L"\"";
+	if( cnt >= 0 )
+		ws += L" (" + to_wstring(cnt) + L" | " + to_wstring(lines) + L")";
+	if( cnt >= 0 && allFiles >= 0 ) // in files
+		ws += L" [" + to_wstring(files) + L" / " + to_wstring(allFiles) + L"]";
+	return ws;
 }
 
 CFindResults& CResultsTabs::Prepare(const string& sCaption, bool bNewTab) {
@@ -322,8 +327,15 @@ CFindResults& CResultsTabs::Prepare(const string& sCaption, bool bNewTab) {
 		i = m_tabs.InsertItem(caption(sCaption));
 	} else
 		m_tabs.UpdateItem(i, caption(sCaption));
+	m_vTabs[i]->m_sCaption = sCaption;
 	Select(i);
 	return *m_vTabs[i];
+}
+
+void CResultsTabs::UpdateCaption(const CFindResults& res) {
+	int i = IndexOf(&res);
+	if( i >= 0 )
+		m_tabs.UpdateItem(i, caption(res.m_sCaption, res.cntMatches(), res.cntLines(), res.cntFiles(), res.m_cntAllFiles));
 }
 
 void CResultsTabs::Select(int i) {

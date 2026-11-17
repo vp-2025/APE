@@ -43,8 +43,9 @@ public:
     bool isDlgMsg(MSG& msg);
 
     void Find(bool bReplace, bool bInFiles);
-    // the dialog with the search of these results; the next Find All / Replace All / Find in Files fills them
-    void Rerun(CFindResults* pResults);
+    // the search of these results again; bDialog: the dialog with it, the results go as "new tab" says;
+    // else without the dialog into these results (Find All in the current editor or Find in Files)
+    void Rerun(CFindResults* pResults, bool bDialog);
     void onResultsClosed(CFindResults* pResults) { if( m_pRerun == pResults ) m_pRerun = nullptr; }
     void FindNext(bool bNext);
     void ClearIndicators();
@@ -63,6 +64,7 @@ private:
     string getFindStr(const wstring& ws, bool bAnsi); // for a file with this encoding
     string getReplaceStr();
     CFindParams getParams();
+    void loadParams(const CFindParams& params); // the controls as they were for the search
     bool resultsInNewTab(); // also selects the tab of Rerun
 
     bool onFind();

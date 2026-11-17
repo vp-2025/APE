@@ -61,6 +61,14 @@ public:
     void CloseBtnUp(int tab, const CPoint& pt);
 
     void applyOptions(bool bSelf = false);
+
+    // active: its view has the focus, the current tab has the color; else it is grey (editor <-> search results)
+    bool m_bActive{true};
+    void SetActive(bool b) {
+        if( m_bActive == b ) return;
+        m_bActive = b;
+        if( m_hWnd ) Invalidate();
+    }
 };
 
 class CShellImageList {

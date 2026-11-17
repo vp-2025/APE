@@ -217,7 +217,8 @@ void CTabCtrlAdv::DrawItem(DRAWITEMSTRUCT* pDIS, bool bRO, bool bNotExist) {
         r2.top += g_dpi.scale(2);
         r2.right -= g_dpi.scale(1);
         r2.setHeight(g_dpi.scale(4));
-        FillSolidRect(hDC, &r2, RGB(128, 212, 178));
+        COLORREF clrInactive = bDark ? RGB(0x60, 0x60, 0x60) : RGB(0xB8, 0xB8, 0xB8);
+        FillSolidRect(hDC, &r2, m_bActive ? RGB(128, 212, 178) : clrInactive);
     }
 
     if( m_isDragging && m_iHoverTab == iTab ) {

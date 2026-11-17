@@ -742,13 +742,11 @@ void applyStyle( CSciWrapper& sci, CLexerStyle* pStyle, int id=0  ) {
 
 #include "xpm_img.h"
 
-void SetupLexerStyles( CSciWrapper& sci )
-{
+void SetupLexerStyles( CSciWrapper& sci ) {
 	SetupLexerStyles( sci, GetLexerStyles(sci) );
 }
 
-void SetupLexerStyles( CSciWrapper& sci, CLexerStyle* pStyles )
-{
+void SetupLexerStyles( CSciWrapper& sci, CLexerStyle* pStyles ) {
 	sci.StyleResetDefault();
 	applyStyle( sci, findStyle(styleGlobal,STYLE_DEFAULT) );
 	applyStyle( sci, findStyle(pStyles,STYLE_DEFAULT) );

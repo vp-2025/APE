@@ -157,9 +157,9 @@ CLexerInfo g_lexers[]={
 	{LEX_PROTO,"ProtoBuf", {"*.proto"} },
 	{LEX_GO,"Go", {"*.go","go.mod","go.work"} },
 	{LEX_SEPARATOR},
-	{LEX_GOTPL,"HTML-Go-Tpl", {"*.tpl"} },
-	{LEX_XHTML,"HTML", {"*.html","*.htm","*.php"} },
-	{LEX_XML,"XML", {"*.xml","*.xsl","*.xsd","*.svg","*.osm","*.xul","*.vcproj*","*.vcxproj*"} }, // xsl=XML stylesheet lang xsd=XML schema definition
+	{LEX_GOTPL, "HTML-Go-Tpl", {"*.tpl", "*.html", "*.htm"}},
+	{LEX_XHTML, "HTML", {"*.html", "*.htm"}},
+	{LEX_XML, "XML",{"*.xml", "*.xsl", "*.xsld", "*.xsldx", "*.xsd", "*.svg", "*.osm", "*.xul", "*.vcproj*", "*.vcxproj*"} }, // xsl=XmlStylesheetLang xsd=XmlSchemaDefinition
 	{LEX_CSS,"CSS", {"*.css"} },
 	{LEX_MD,"Markdown", {"*.md","*.markdown","*.mdown","*.mkd","*.mdx"} },
 	{LEX_SEPARATOR},

@@ -179,6 +179,9 @@
     <ClInclude Include="findResults.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="outline.h">
+      <Filter>windows</Filter>
+    </ClInclude>
     <ClInclude Include="theme.h">
       <Filter>windows</Filter>
     </ClInclude>
@@ -308,6 +311,9 @@
       <Filter>windows</Filter>
     </ClCompile>
     <ClCompile Include="findResults.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="outline.cpp">
       <Filter>windows</Filter>
     </ClCompile>
     <ClCompile Include="theme.cpp">

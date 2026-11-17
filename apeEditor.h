@@ -11,6 +11,7 @@
 #include "dlgFind.h"
 #include "tabPage.h"
 #include "findResults.h"
+#include "outline.h"
 
 class CEditor : public CWindow {
 	CReBar m_rebar;
@@ -29,6 +30,8 @@ class CEditor : public CWindow {
 	bool m_bToolbar;	// View > Toolbar
 	CResultsTabs m_results;	// at the bottom, View > Search Results
 	int m_splitDrag;	// the splitter above the results is dragged: mouse y - splitter y, or -1
+	COutline m_outline;	// at the right, View > Outline
+	int m_splitDragV;	// the splitter left of the outline is dragged: mouse x - splitter x, or -1
 public:
 	vector<CTabPage> m_vTabs;
 	CFindDlg m_findDlg;
@@ -38,7 +41,7 @@ public:
 		, m_pin(ID_PIN_FIRST,ID_PIN_LAST)
 		, m_accelMenu(IDC_ACCEL)
 		, m_findDlg(this)
-	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; m_splitDrag=-1; }
+	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; m_splitDrag=m_splitDragV=-1; }
 
 	void onCreate( HWND hWnd, bool bNewInstance );	// bNewInstance - started via "-new"
 	void onDestroy();
@@ -135,9 +138,26 @@ private:
 	int ResultsH();	// height of the results with the splitter, 0 if hidden
 	CRect ResultsSplitterRect();
 	void onResultsNotification( SCNotification* pNS );
+	void SetActiveTabs( bool bEditor );	// the focused view has the colored current tab, the other one is grey
 	void onResultGoto( bool bFocus );
 	void onResultNext( bool bNext );
+	void RerunResults( int i );	// the same search again into the results tab i, without the find dialog
 	bool onSplitterMouse( UINT msg, const CPoint& pt );
+public:
+
+	// outline: the folding of the current file as a tree
+	void ShowOutline( bool bShow );
+private:
+	bool OutlineShown() { return m_outline.m_bVisible && m_tabs.GetItemCount()>0; }	// View > Outline and an editor is opened
+	void UpdateOutlineShown();	// shows/hides the outline when the first tab is opened / the last one is closed
+	int OutlineW();	// width of the outline with the splitter, 0 if hidden
+	CRect OutlineSplitterRect();
+	void FillOutline();	// for the current tab, if the outline is shown
+	void SyncOutline();	// the editor folding and the caret line -> the outline
+	void SyncOutlineLater();	// after a fold/caret change in the editor: ID_OUTLINE_SYNC timer
+	LRESULT onOutlineNotification( NMHDR* pNMHdr );	// returns the WM_NOTIFY result
+	void onOutlineGoto( bool bFocus );	// the selected item -> the line in the editor
+	void onPopupOutline( int x, int y );
 public:
 
 	void onAutoComplete( CSciWrapper& sci );
