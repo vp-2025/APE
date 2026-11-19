@@ -137,8 +137,9 @@ public:
 private:
 	int ResultsH();	// height of the results with the splitter, 0 if hidden
 	CRect ResultsSplitterRect();
-	void onResultsNotification( SCNotification* pNS );
-	void SetActiveTabs( bool bEditor );	// the focused view has the colored current tab, the other one is grey
+	void onNotificationResults( SCNotification* pNS );
+	enum CFocusView { viewEditor, viewResults, viewOutline };
+	void SetActiveTabs( CFocusView view );	// the focused view has the colored current tab, the others are grey; the outline has no tabs
 	void onResultGoto( bool bFocus );
 	void onResultNext( bool bNext );
 	void RerunResults( int i );	// the same search again into the results tab i, without the find dialog
@@ -155,7 +156,7 @@ private:
 	void FillOutline();	// for the current tab, if the outline is shown
 	void SyncOutline();	// the editor folding and the caret line -> the outline
 	void SyncOutlineLater();	// after a fold/caret change in the editor: ID_OUTLINE_SYNC timer
-	LRESULT onOutlineNotification( NMHDR* pNMHdr );	// returns the WM_NOTIFY result
+	LRESULT onNotificationOutline( NMHDR* pNMHdr );	// returns the WM_NOTIFY result
 	void onOutlineGoto( bool bFocus );	// the selected item -> the line in the editor
 	void onPopupOutline( int x, int y );
 public:

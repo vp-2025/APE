@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "outline.h"
 #include "theme.h"
+#include "lexerStyles.h"
 #include "shared/platform.h"
 
 void COutline::Create(HWND hParent, HFONT hFont) {
@@ -11,6 +12,11 @@ void COutline::Create(HWND hParent, HFONT hFont) {
 			0, 0, 0, 0, hParent, nullptr, g_hInst, nullptr);
 	if( hFont )
 		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)hFont, FALSE);
+	LOGFONT lf{}; // the comments
+	if( ::GetObject(hFont ? hFont : (HFONT)::GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf) ) {
+		lf.lfItalic = TRUE;
+		m_hFontItalic = CreateFontIndirect(&lf);
+	}
 	applyTheme();
 }
 
@@ -89,15 +95,22 @@ static bool isBraceHeader(const wstring& ws) {
 }
 
 void COutline::Fill(CSciWrapper& sci) {
+	saveCollapsed();
 	m_bFilling = true;
 	::SendMessage(m_hWnd, WM_SETREDRAW, FALSE, 0);
 	TreeView_DeleteAllItems(m_hWnd);
 	m_lineToItem.clear();
 	m_headers.clear();
+	m_comments.clear();
 	m_hSci = sci.hWnd();
 
 	sci.ColorizeTo(-1); // the fold levels are set by the lexer
-	struct CParent { int level; HTREEITEM h; };
+	set<int> commentStyles; // of the lexer: "Comment", "Doc Comment", "Line Comment" ...
+	for( CLexerStyle* pStyle = GetLexerStyles(sci); pStyle && pStyle->szName; pStyle++ )
+		if( containsIC(pStyle->szName, "comment") )
+			commentStyles.insert(pStyle->id);
+	const set<wstring>& collapsed = m_collapsed[m_hSci];
+	struct CParent { int level; HTREEITEM h; wstring path; };
 	vector<CParent> parents;
 	vector<HTREEITEM> expand; // after the children are inserted
 	int cnt = sci.GetLineCount();
@@ -149,13 +162,17 @@ void COutline::Fill(CSciWrapper& sci) {
 		m_lineToItem[line] = h;
 		if( lineItem != line )
 			m_lineToItem[lineItem] = h;
+		int style = sci.GetStyleAt(sci.GetLineIndentPosition(lineItem)); // the style of the first char
+		if( commentStyles.count(style) )
+			m_comments[h] = { (COLORREF)sci.Call(SCI_STYLEGETFORE, style), sci.Call(SCI_STYLEGETITALIC, style) != 0 };
 		if( !bHeader )
 			continue;
 
 		m_headers[h] = line;
-		if( sci.GetFoldExpanded(line) ) // as in the editor
+		wstring path = (parents.empty() ? wstring() : parents.back().path + L"\n") + ws;
+		if( m_bSyncFold ? sci.GetFoldExpanded(line) : !collapsed.count(path) ) // as in the editor, or as it was
 			expand.push_back(h);
-		parents.push_back({lvl, h});
+		parents.push_back({lvl, h, path});
 	}
 	for( HTREEITEM h : expand ) // the items without children are not expanded by the tree
 		TreeView_Expand(m_hWnd, h, TVE_EXPAND);
@@ -166,17 +183,69 @@ void COutline::Fill(CSciWrapper& sci) {
 }
 
 void COutline::Clear() {
+	saveCollapsed();
 	m_bFilling = true;
 	TreeView_DeleteAllItems(m_hWnd);
 	m_bFilling = false;
 	m_lineToItem.clear();
 	m_headers.clear();
+	m_comments.clear();
 	m_hSci = nullptr;
 }
 
 void COutline::onSciClosed(HWND hSci) {
 	if( m_hSci == hSci )
 		Clear();
+	m_collapsed.erase(hSci);
+}
+
+wstring COutline::ItemText(HTREEITEM h) {
+	wchar_t buf[512]{};
+	TVITEMW tvi{};
+	tvi.hItem = h;
+	tvi.mask = TVIF_TEXT;
+	tvi.pszText = buf;
+	tvi.cchTextMax = 512;
+	::SendMessageW(m_hWnd, TVM_GETITEMW, 0, (LPARAM)&tvi);
+	return buf;
+}
+
+wstring COutline::ItemPath(HTREEITEM h) {
+	wstring path = ItemText(h);
+	while( (h = TreeView_GetParent(m_hWnd, h)) != nullptr )
+		path = ItemText(h) + L"\n" + path;
+	return path;
+}
+
+void COutline::saveCollapsed() {
+	if( m_bSyncFold || !m_hSci )
+		return;
+	set<wstring>& collapsed = m_collapsed[m_hSci];
+	collapsed.clear();
+	for( auto& it : m_headers )
+		if( TreeView_GetChild(m_hWnd, it.first) && !(TreeView_GetItemState(m_hWnd, it.first, TVIS_EXPANDED) & TVIS_EXPANDED) )
+			collapsed.insert(ItemPath(it.first));
+}
+
+void COutline::expandChildren(HTREEITEM h, bool bExpand) {
+	for( HTREEITEM c = TreeView_GetChild(m_hWnd, h); c; c = TreeView_GetNextSibling(m_hWnd, c) )
+		if( TreeView_GetChild(m_hWnd, c) ) {
+			expandChildren(c, bExpand);
+			TreeView_Expand(m_hWnd, c, bExpand ? TVE_EXPAND : TVE_COLLAPSE);
+		}
+}
+
+void COutline::ExpandAll(bool bExpand) {
+	m_bFilling = true;
+	::SendMessage(m_hWnd, WM_SETREDRAW, FALSE, 0);
+	for( auto& it : m_headers )
+		if( TreeView_GetChild(m_hWnd, it.first) )
+			TreeView_Expand(m_hWnd, it.first, bExpand ? TVE_EXPAND : TVE_COLLAPSE);
+	::SendMessage(m_hWnd, WM_SETREDRAW, TRUE, 0);
+	InvalidateRect(m_hWnd, nullptr, TRUE);
+	m_bFilling = false;
+	if( HTREEITEM h = TreeView_GetSelection(m_hWnd) )
+		TreeView_EnsureVisible(m_hWnd, h);
 }
 
 void COutline::SelectLine(CSciWrapper& sci, int line) {
@@ -224,7 +293,7 @@ int COutline::GetLine(HTREEITEM h) {
 }
 
 void COutline::SyncFold(CSciWrapper& sci) {
-	if( sci.hWnd() != m_hSci )
+	if( !m_bSyncFold || sci.hWnd() != m_hSci )
 		return;
 	bool bChanged = false;
 	m_bFilling = true; // no TVN_ITEMEXPANDED back to the editor
@@ -251,6 +320,14 @@ void COutline::SyncFold(CSciWrapper& sci) {
 void COutline::onItemExpanded(const NMTREEVIEWW* p, CSciWrapper& sci) {
 	if( m_bFilling || sci.hWnd() != m_hSci )
 		return;
+	if( !m_bSyncFold ) { // only the tree
+		if( GetKeyState(VK_SHIFT) < 0 ) {
+			m_bFilling = true;
+			expandChildren(p->itemNew.hItem, (p->action & TVE_EXPAND) != 0);
+			m_bFilling = false;
+		}
+		return;
+	}
 	auto it = m_headers.find(p->itemNew.hItem);
 	if( it == m_headers.end() || !sci.IsFoldHeader(it->second) )
 		return;
@@ -260,4 +337,25 @@ void COutline::onItemExpanded(const NMTREEVIEWW* p, CSciWrapper& sci) {
 	else
 	if( sci.GetFoldExpanded(it->second) != bExpand )
 		sci.ToggleFold(it->second);
+}
+
+LRESULT COutline::onCustomDraw(NMTVCUSTOMDRAW* pCD) {
+	switch( pCD->nmcd.dwDrawStage ) {
+	case CDDS_PREPAINT:
+		return m_comments.empty() ? CDRF_DODEFAULT : CDRF_NOTIFYITEMDRAW;
+	case CDDS_ITEMPREPAINT: {
+		auto it = m_comments.find((HTREEITEM)pCD->nmcd.dwItemSpec);
+		if( it == m_comments.end() )
+			return CDRF_DODEFAULT;
+		bool bSelected = (pCD->nmcd.uItemState & CDIS_SELECTED) && ::GetFocus() == m_hWnd;
+		if( !bSelected ) // the highlighted item keeps the highlight text color
+			pCD->clrText = it->second.fore;
+		if( it->second.bItalic && m_hFontItalic ) {
+			SelectObject(pCD->nmcd.hdc, m_hFontItalic);
+			return CDRF_NEWFONT;
+		}
+		return CDRF_DODEFAULT;
+	}
+	}
+	return CDRF_DODEFAULT;
 }

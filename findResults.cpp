@@ -310,9 +310,9 @@ static wstring caption(const string& s, int cnt = -1, int lines = 0, int files =
 		ws = ws.substr(0, 29) + L"\x2026"; // ...
 	ws = L"\"" + ws + L"\"";
 	if( cnt >= 0 )
-		ws += L" (" + to_wstring(cnt) + L" | " + to_wstring(lines) + L")";
+		ws += L" (" + to_wstring(cnt) + L" in " + to_wstring(lines) + L")";
 	if( cnt >= 0 && allFiles >= 0 ) // in files
-		ws += L" [" + to_wstring(files) + L" / " + to_wstring(allFiles) + L"]";
+		ws += L" [" + to_wstring(files) + L" of " + to_wstring(allFiles) + L"]";
 	return ws;
 }
 

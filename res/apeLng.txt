@@ -49,6 +49,7 @@ Go to Matching Fold	Перейти на парный слой	Springen Passende 
 &View	Вид	Anzeigen
 Search Results	Результаты Поиска	Suchergebnisse
 Outline	Структура	Gliederung
+Sync Folding with Editor	Синхронизировать Свёртку с Редактором	Faltung mit Editor synchronisieren
 Show Closing Lines	Показать Закрывающие Строки	Schließende Zeilen anzeigen
 Select Line on Navigate	Выделять Строку при Навигации	Zeile bei Navigation markieren
 Always on Top	Всегда на Верху

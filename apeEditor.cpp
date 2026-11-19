@@ -130,6 +130,7 @@ void CEditor::onCreate(HWND hWnd, bool bNewInstance) {
 	m_outline.m_width = LoadIntVal( "main", "OutlineWidth", g_dpi.scale(m_outline.m_width) );
 	LoadBool( "main", "OutlineSelectLine", m_outline.m_bSelectLine );
 	LoadBool( "main", "OutlineShowClosing", m_outline.m_bShowClosing );
+	LoadBool( "main", "OutlineSyncFold", m_outline.m_bSyncFold );
 	bool bOutline = false;
 	LoadBool( "main", "Outline", bOutline );
 	m_outline.m_bVisible = bOutline; // shown with the first tab by SwitchToTab(), filled by onTabChanged()
@@ -199,6 +200,7 @@ void CEditor::onDestroy()
 	SaveBool( "main", "Outline", m_outline.m_bVisible );
 	SaveBool( "main", "OutlineSelectLine", m_outline.m_bSelectLine );
 	SaveBool( "main", "OutlineShowClosing", m_outline.m_bShowClosing );
+	SaveBool( "main", "OutlineSyncFold", m_outline.m_bSyncFold );
 }
 
 void CEditor::ResizeScintilla()
@@ -695,12 +697,10 @@ void HyperlinkClick( CSciWrapper& sci, int pos )
 		ShellExecute( sci.hWnd(), "open", s.c_str(), NULL, NULL, SW_SHOWNORMAL );
 }
 
-void CEditor::onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab)
-{
-	switch(pNS->nmhdr.code)
-	{
+void CEditor::onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab) {
+	switch(pNS->nmhdr.code) {
 		case SCN_FOCUSIN:
-			SetActiveTabs( true );
+			SetActiveTabs( viewEditor );
 			break;
 		case SCN_CHARADDED:
 			UpdateStatusbar();
@@ -761,8 +761,7 @@ void CEditor::onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab)
 	}
 }
 
-void CEditor::onNotification( NMHDR* pNMHdr )
-{
+void CEditor::onNotification( NMHDR* pNMHdr ) {
 	if( pNMHdr->hwndFrom==m_tabs.hWnd() ) {
 		switch( pNMHdr->code ) {
 			case TCN_SELCHANGING: onTabChanging(); break;
@@ -774,7 +773,7 @@ void CEditor::onNotification( NMHDR* pNMHdr )
 			m_results.Select( m_results.tabs().GetCurSel() );
 	} else
 	if( pNMHdr->hwndFrom==m_results.hWndCur() ) {
-		onResultsNotification( (SCNotification*)pNMHdr );
+		onNotificationResults( (SCNotification*)pNMHdr );
 	} else {
 		for( unsigned i=0; i < m_vTabs.size(); i++ )
 			if( pNMHdr->hwndFrom == m_vTabs[i].sci.hWnd() )
@@ -1645,7 +1644,7 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		{
 			auto* pNMHdr = (NMHDR*)lParam;
 			if( pNMHdr->hwndFrom==m_outline.hWnd() && m_outline.hWnd() )
-				return onOutlineNotification( pNMHdr );
+				return onNotificationOutline( pNMHdr );
 			if( pNMHdr->code==NM_CLICK && pNMHdr->hwndFrom==m_statusbar.hWnd() ) {
 				int iTab = m_tabs.GetCurSel();
 				if( iTab>=0 && iTab<(int)m_vTabs.size() ) {
@@ -1653,7 +1652,7 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					onPopupStatusbar(p->dwItemSpec, m_vTabs[iTab] );
 				}
 				return TRUE;
-			} else
+			}
 			if( pNMHdr->code==TTN_GETDISPINFOW ) {
 				if( pNMHdr->hwndFrom == m_results.tabs().GetToolTips() ) { // the title of the results
 					if( CFindResults* pRes = m_results.Get((int)pNMHdr->idFrom) ) {
@@ -1669,9 +1668,9 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 						auto* pNMTip = (NMTTDISPINFOW*)lParam;
 						wstring ws;
 						ws << utf2w(m_vTabs[id].sFile)
-                          << "  " << vFileAttrs2Str(m_vTabs[id].sFile)
-                          << "  " << vGetFileSize(m_vTabs[id].sFile)
-                          << "  " << vGetFileTime(m_vTabs[id].sFile).Format("%d/%m/%Y %H:%M:%S");
+								<< "  " << vFileAttrs2Str(m_vTabs[id].sFile)
+								<< "  " << vGetFileSize(m_vTabs[id].sFile)
+								<< "  " << vGetFileTime(m_vTabs[id].sFile).Format("%d/%m/%Y %H:%M:%S");
 						static wchar_t szTemp[1024];
 						wcsncpy( szTemp, ws.c_str(), ws.size() );
 						pNMTip->lpszText = szTemp;
@@ -1838,12 +1837,10 @@ LRESULT CALLBACK CEditor::WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPAR
 
 /////////////////////////////////////////////////////////////////////
 
-bool CEditor::FileOpen( const string& sFile, bool bNew, int idx, int top, int pos )
-{
+bool CEditor::FileOpen( const string& sFile, bool bNew, int idx, int top, int pos ) {
 	ASSERT(m_tabs.GetItemCount() == m_vTabs.size() );
 
-	if( !bNew )
-	{
+	if( !bNew ) {
 		if( !IsFileExists(sFile) ) {
 			UpdateStatusText( "Can't open: "+sFile );
 			return false;
@@ -2238,6 +2235,7 @@ void CEditor::onColors( bool bResults ) {
 		for(auto& tabPage : m_vTabs)
 			SetupLexerStyles(tabPage.sci );
 		m_results.SetupStyles();
+		FillOutline(); // the colors of the comments
 	}
 }
 
@@ -2288,6 +2286,7 @@ void CEditor::onThemeChanged( bool bInit ) {
 	}
 	m_results.applyTheme();
 	m_outline.applyTheme();
+	FillOutline(); // the colors of the comments are from the editor
 	ResizeScintilla();
 	DrawMenuBar( m_hWnd );
 	RedrawWindow( m_hWnd, nullptr, nullptr, RDW_INVALIDATE|RDW_ERASE|RDW_FRAME|RDW_ALLCHILDREN );
@@ -2511,7 +2510,7 @@ void CEditor::SyncOutline() {
 		m_outline.SelectLine( pPage->sci, pPage->sci.GetCurrentLine() );
 }
 
-LRESULT CEditor::onOutlineNotification( NMHDR* pNMHdr ) {
+LRESULT CEditor::onNotificationOutline( NMHDR* pNMHdr ) {
 	HWND hTree = m_outline.hWnd();
 	switch( pNMHdr->code ) {
 	case TVN_SELCHANGEDA:
@@ -2525,6 +2524,11 @@ LRESULT CEditor::onOutlineNotification( NMHDR* pNMHdr ) {
 			m_outline.onItemExpanded( (NMTREEVIEWW*)pNMHdr, pPage->sci );
 		SyncOutlineLater(); // Shift: the children are folded in the editor, the tree follows
 		break;
+	case NM_SETFOCUS: // the editor tabs and the results tabs are grey
+		SetActiveTabs( viewOutline );
+		break;
+	case NM_CUSTOMDRAW: // the comments as in the editor
+		return m_outline.onCustomDraw( (NMTVCUSTOMDRAW*)pNMHdr );
 	case NM_CLICK: // on the selected item there is no TVN_SELCHANGED: select its line again
 		if( m_outline.m_bSelectLine ) {
 			TVHITTESTINFO hti{};
@@ -2600,6 +2604,8 @@ void CEditor::onPopupOutline( int x, int y ) {
 	popup.Create(true);
 	popup.Append( ID_VIEW_OUTLINE_SELECTLINE, tr(L"Select Line on Navigate") );
 	popup.EnableCheck( ID_VIEW_OUTLINE_SELECTLINE, true, m_outline.m_bSelectLine );
+	popup.Append( ID_VIEW_OUTLINE_SYNCFOLD, tr(L"Sync Folding with Editor") );
+	popup.EnableCheck( ID_VIEW_OUTLINE_SYNCFOLD, true, m_outline.m_bSyncFold );
 	popup.Append( ID_VIEW_OUTLINE_SHOWCLOSING, tr(L"Show Closing Lines") );
 	popup.EnableCheck( ID_VIEW_OUTLINE_SHOWCLOSING, true, m_outline.m_bShowClosing );
 	popup.AppendSeparator();
@@ -2614,8 +2620,17 @@ void CEditor::onPopupOutline( int x, int y ) {
 		m_outline.m_bShowClosing = !m_outline.m_bShowClosing;
 		FillOutline();
 		break;
-	case ID_FOLDING_COLLAPSEALL: // in the editor, the outline follows it
+	case ID_VIEW_OUTLINE_SYNCFOLD: // on: the tree gets the folding of the editor; off: the tree keeps its folding
+		m_outline.m_bSyncFold = !m_outline.m_bSyncFold;
+		if( m_outline.m_bSyncFold )
+			FillOutline();
+		break;
+	case ID_FOLDING_COLLAPSEALL: // in the editor, the outline follows it; not synced: only the outline
 	case ID_FOLDING_EXPANDALL:
+		if( !m_outline.m_bSyncFold ) {
+			m_outline.ExpandAll( cmd==ID_FOLDING_EXPANDALL );
+			break;
+		}
 		if( CTabPage* pPage = GetCurPage() )
 			pPage->sci.doFoldAll( false, cmd==ID_FOLDING_COLLAPSEALL, cmd==ID_FOLDING_EXPANDALL );
 		SyncOutline();
@@ -2624,15 +2639,15 @@ void CEditor::onPopupOutline( int x, int y ) {
 	}
 }
 
-void CEditor::SetActiveTabs( bool bEditor ) {
-	m_tabs.SetActive( bEditor );
-	m_results.tabs().SetActive( !bEditor );
+void CEditor::SetActiveTabs( CFocusView view ) {
+	m_tabs.SetActive( view==viewEditor );
+	m_results.tabs().SetActive( view==viewResults );
 }
 
-void CEditor::onResultsNotification( SCNotification* pNS ) {
+void CEditor::onNotificationResults( SCNotification* pNS ) {
 	switch( pNS->nmhdr.code ) {
 	case SCN_FOCUSIN:
-		SetActiveTabs( false );
+		SetActiveTabs( viewResults );
 		break;
 	case SCN_UPDATEUI: // arrows or click: the result is shown, the focus stays in the results (if m_bSelectLine)
 		if( m_results.m_bSelectLine && (pNS->updated & SC_UPDATE_SELECTION) && !m_results.Cur()->isFilling() && m_results.Cur()->isNewResult() )

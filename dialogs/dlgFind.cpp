@@ -867,7 +867,7 @@ void CFindDlg::onFindInFiles() {
     else {
         sTitle += Format(tr("%i matches").c_str(), results.cntMatches());
         if( results.cntMatches() )
-            sTitle += ", " + Format(tr("%i lines").c_str(), results.cntLines())
+            sTitle += " in " + Format(tr("%i lines").c_str(), results.cntLines())
                     + ", " + Format(tr("[%i of %i] files").c_str(), results.cntFiles(), (int)files.size());
     }
     sTitle += " - " + sDir + "\\" + (sMasks.empty() ? "*.*" : sMasks);

@@ -257,7 +257,8 @@
 #define ID_VIEW_OUTLINE_SELECTLINE      33662
 #define ID_VIEW_OUTLINE_SHOWCLOSING     33663
 #define ID_SEARCH_RESULTS_RERUNDLG      33664
-#define ID_SEARCH_RESULTS_SELECTLINE    33665
+#define ID_VIEW_OUTLINE_SYNCFOLD        33665
+#define ID_SEARCH_RESULTS_SELECTLINE    33666
 
 // Next default values for new objects
 // 
@@ -265,7 +266,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        231
-#define _APS_NEXT_COMMAND_VALUE         33666
+#define _APS_NEXT_COMMAND_VALUE         33667
 #define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
