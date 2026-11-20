@@ -17,7 +17,7 @@
 #define IDC_FIND_MATCHCASE              155
 #define IDC_FIND_MODE                   156
 #define IDC_FIND_FILE_SUBDIRS           157
-#define IDC_FIND_FILE_OUT2              159
+#define IDC_FIND_NEWTAB                 159
 #define IDC_FIND_FILE_BACKUP            160
 #define IDC_FIND_UP                     161
 #define IDC_FIND_DOWN                   162

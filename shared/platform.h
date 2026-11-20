@@ -47,15 +47,15 @@ inline std::string GetExePath() {
     return ExtractFilePath(GetExeFileName());
 }
 
-inline bool hasTailSlash(const std::string& sPath) {
+template<class T> bool hasTailSlash(const T& sPath) {
     size_t len = sPath.size();
     return len && (sPath[len - 1] == '\\' || sPath[len - 1] == '/');
 }
-inline void addTailSlash(std::string& sPath) {
-    if( !hasTailSlash(sPath) )
+template<class T> void addTailSlash(T& sPath) {
+    if( !sPath.empty() && !hasTailSlash(sPath) )
         sPath += '\\';
 }
-inline void delTailSlash(std::string& sPath) {
+template<class T>  void delTailSlash(T& sPath) {
     if( hasTailSlash(sPath) )
         sPath.erase(sPath.end() - 1, sPath.end());
 }

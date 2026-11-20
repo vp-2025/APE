@@ -133,8 +133,10 @@ void CComboBox::LoadCombo(const string &sSection) {
         return;
 
     int cnt = reg.ReadInt("Count");
-    for (int i = 0; i < cnt; i++)
-        AddString(reg.ReadStrW("Item" + itoa(i)), reg.ReadInt("Data" + itoa(i)));
+    for (int i = 0; i < cnt; i++) {
+        string sI = itoa(i);
+        AddString(reg.ReadStrW("Item" + sI), reg.ReadInt("Data" + sI));
+    }
 }
 
 void CComboBox::SaveCombo(const string &sSection) {
@@ -145,11 +147,12 @@ void CComboBox::SaveCombo(const string &sSection) {
     int cnt = GetCount();
     reg.WriteInt("Count", cnt);
     for (int i = 0; i < cnt; i++) {
-        reg.WriteStr("Item" + itoa(i), GetStringW(i));
+        string sI = itoa(i);
+        reg.WriteStr("Item" + sI, GetStringW(i));
         if (int data = (int) GetItemData(i)) // only the combos, which use it
-            reg.WriteInt("Data" + itoa(i), data);
+            reg.WriteInt("Data" + sI, data);
         else
-            reg.DeleteValue(("Data" + itoa(i)).c_str());
+            reg.DeleteValue("Data" + sI);
     }
 }
 

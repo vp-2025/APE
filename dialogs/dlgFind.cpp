@@ -153,6 +153,14 @@ void CFindDlg::Find(bool bReplace, bool bInFiles) {
     if( bInFiles && cmbPath.GetTextW().empty() && pPage && !pPage->bNew )
         cmbPath.SetText(utf2w(ExtractFilePath(pPage->sFile)));
 
+    // the file mask from the current file: "*.ini", or the name of a file without extension ("Makefile")
+    if( pPage && !pPage->bNew ) {
+        string sName = ExtractFileName(pPage->sFile);
+        size_t pos = sName.rfind('.');
+        cmbFile.SetCurSel(-1);
+        cmbFile.SetText(utf2w(pos != string::npos ? "*" + sName.substr(pos) : sName));
+    }
+
     UpdateControls(true);
 }
 
@@ -237,7 +245,7 @@ void CFindDlg::onInit() {
     btnMode.Attach(m_hWnd, IDC_FIND_MODE);
 
     chkSubFolders.Attach(m_hWnd, IDC_FIND_FILE_SUBDIRS);
-    chkNewTab.Attach(m_hWnd, IDC_FIND_FILE_OUT2);
+    chkNewTab.Attach(m_hWnd, IDC_FIND_NEWTAB);
     chkCreateBak.Attach(m_hWnd, IDC_FIND_FILE_BACKUP);
 
     rbtnUp.Attach(m_hWnd, IDC_FIND_UP);
@@ -273,17 +281,18 @@ void CFindDlg::onInit() {
 
     LoadWindowXY(m_hWnd, FIND_DLG);
     cmbSearch.LoadCombo(FIND_CMB);
+    loadSearchCtx();
     cmbReplace.LoadCombo(REPLACE_CMB);
     cmbFile.LoadCombo(FILE_CMB);
     cmbPath.LoadCombo(PATH_CMB);
-    bool bNewTab = false;
-    LoadBool(FIND_DLG, "NewTab", bNewTab);
-    chkNewTab.SetCheck(bNewTab);
+    chkNewTab.SetCheck(LoadBoolDef(FIND_DLG, "NewTab", true));
+    chkSubFolders.SetCheck(true); // search in the subfolders by default
 }
 
 void CFindDlg::onDestroy() {
     SaveWindowXY(m_hWnd, FIND_DLG);
     cmbSearch.SaveCombo(FIND_CMB);
+    saveSearchCtx();
     cmbReplace.SaveCombo(REPLACE_CMB);
     cmbFile.SaveCombo(FILE_CMB);
     cmbPath.SaveCombo(PATH_CMB);
@@ -315,11 +324,9 @@ void CFindDlg::onCommand(int cmd, int code) {
                 UpdateControls();
             }
             break;
-        case IDC_FIND_FILE_BRW: {
-            string s = cmbPath.GetText();
-            if( BrowseForFolder(m_hWnd, s) )
-                cmbPath.SetText(s);
-        }
+        case IDC_FIND_FILE_BRW:
+            if(wstring ws = cmbPath.GetTextW(); BrowseForFolder(m_hWnd, ws) )
+                cmbPath.SetText(ws);
             break;
         case IDC_FIND_BTN:
         case IDC_FINDALL_BTN:
@@ -343,8 +350,8 @@ void CFindDlg::onCommand(int cmd, int code) {
             UpdateControls();
             break;
         case IDC_FIND_SEARCHTEXT:
-            if( code == CBN_SELCHANGE ) // a string from the history: its options
-                setOptions(cmbSearch.GetItemData(cmbSearch.GetCurSel()));
+            if( code == CBN_SELCHANGE ) // a string from the history: its options, mask, folder
+                applySearchMRU(cmbSearch.GetCurSel());
             UpdateControls();
             break;
         default:
@@ -401,7 +408,7 @@ void CFindDlg::UpdateControls(bool bPrepare) {
     btnReplace.Enable(chkReplace.IsChecked() && !chkInFiles.IsChecked());
     btnReplaceAll.Enable(chkReplace.IsChecked() && !chkInFiles.IsChecked());
 
-    btnSearchOpt.SetVisible(!isModeNormal());
+    btnSearchOpt.SetVisible(!isModeNormal()); // in their own column: the rows keep their width
     btnReplaceOpt.SetVisible(!isModeNormal());
 }
 
@@ -431,13 +438,81 @@ void CFindDlg::setOptions(LPARAM opts) {
     setMode((int)(opts >> OPT_MODE) & 0x0F);
 }
 
+// in the item data of the search history only
+#define OPT_INFILES  0x100
+#define OPT_SUBDIRS  0x200
+
+void CFindDlg::updateSearchMRU() {
+    LPARAM opts = getOptions();
+    if( chkInFiles.IsChecked() ) opts |= OPT_INFILES;
+    if( chkSubFolders.IsChecked() ) opts |= OPT_SUBDIRS;
+    cmbSearch.UpdateMRU(10, opts);
+    m_searchCtx[cmbSearch.GetTextW()] = {cmbFile.GetTextW(), cmbPath.GetTextW()};
+}
+
+void CFindDlg::applySearchMRU(int idx) {
+    if( idx < 0 )
+        return;
+    LPARAM opts = cmbSearch.GetItemData(idx);
+    setOptions(opts);
+    auto it = m_searchCtx.find(cmbSearch.GetStringW(idx));
+    if( it == m_searchCtx.end() ) // an item of an older version: only the options
+        return;
+    cmbFile.SetCurSel(-1);
+    cmbFile.SetText(it->second.wsFiles);
+    cmbPath.SetCurSel(-1);
+    cmbPath.SetText(it->second.wsPath);
+    chkSubFolders.SetCheck((opts & OPT_SUBDIRS) != 0);
+    chkInFiles.SetCheck((opts & OPT_INFILES) != 0); // without an editor UpdateControls() checks it anyway
+}
+
+void CFindDlg::loadSearchCtx() {
+    m_searchCtx.clear();
+    CRegistry reg;
+    if( !reg.Open(g_hKey, string(g_szPath) + FIND_CMB) )
+        return;
+    for( int i = 0; i < cmbSearch.GetCount(); i++ ) {
+        string sI = itoa(i);
+        m_searchCtx[cmbSearch.GetStringW(i)] = {reg.ReadStrW("Files"+sI), reg.ReadStrW("Path"+sI)};
+    }
+}
+
+void CFindDlg::saveSearchCtx() {
+    CRegistry reg;
+    if( !reg.Create(g_hKey, string(g_szPath) + FIND_CMB) )
+        return;
+    for( int i = 0; i < 20; i++ ) { // also the values of the items, which dropped out of the history
+        string sI = itoa(i);
+        reg.DeleteValue("Files" + sI);
+        reg.DeleteValue("Path" + sI);
+    }
+    map<wstring, CSearchCtx> ctx; // only the strings in the history
+    for( int i = 0; i < cmbSearch.GetCount(); i++ ) {
+        auto it = m_searchCtx.find(cmbSearch.GetStringW(i));
+        if( it == m_searchCtx.end() )
+            continue;
+        string sI = itoa(i);
+        reg.WriteStr("Files" + sI, it->second.wsFiles);
+        reg.WriteStr("Path" + sI, it->second.wsPath);
+        ctx.insert(*it);
+    }
+    m_searchCtx.swap(ctx);
+}
+
 static const wchar_t* modeNames[] = {L"Normal", LR"(Extended \r \n \t)", L"Scintilla regexp", L"C++11 regex"};
 
 void CFindDlg::setMode(int mode) {
     if( mode < 0 || mode > 3 )
         mode = 0;
     m_mode = mode;
-    btnMode.SetText(isModeExt() ? "\\t" : "*.");
+    string s="plain";
+    if (isModeExt())
+        s = R"(\r \n \t)";
+    if ( isModeSciRE())
+        s = "sci *.";
+    if ( isModeStdRE())
+        s = "c++ *.";
+    btnMode.SetText(s);
     btnMode.SetCheck(!isModeNormal());
 
     wstring wsTip = tr(wstring(modeNames[mode]));
@@ -469,7 +544,7 @@ string CFindDlg::getFindStr() {
     else
         s = cmbSearch.GetText();
     if( !s.empty() ) {
-        cmbSearch.UpdateMRU(10, getOptions());
+        updateSearchMRU();
         if( isModeExt() )
             extended2string(s);
     }
@@ -790,7 +865,7 @@ void CFindDlg::onFindInFiles() {
     wstring wsFind = cmbSearch.GetTextW();
     if( wsFind.empty() )
         return;
-    cmbSearch.UpdateMRU(10, getOptions());
+    updateSearchMRU();
 
     // folder: the folder of the current file by default
     string sDir = trimc(w2utf(cmbPath.GetTextW()));

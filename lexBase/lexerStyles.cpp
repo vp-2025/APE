@@ -435,31 +435,34 @@ CLexerStyle styleConf[] = {
    sections are a copy of the even ones, shifted by STYLE_ODD (LexerINI.L),
    under a parent style that carries the background.
    ids must match STYLE_* / STYLE_ODD in LexerINI.L */
-#define STYLE_INI_ODD		41 // the odd styles are 42..53: jump over STYLE_DEFAULT 32
+#define STYLE_INI_EVEN		1 // the odd styles are 42..53: jump over STYLE_DEFAULT 32
+#define STYLE_INI_ODD		21 // the odd styles are 42..53: jump over STYLE_DEFAULT 32
 
 CLexerStyle styleIni[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
-	STYLE( 0, "Text" ),
-	STYLE_ITALIC( 1, "Comment", clrComment ),
-	STYLE2_BOLD( 2, "Section", RGB(0xA0,0,0) ),
-	STYLE2( 3, "Key", RGB(0x80,0x00,0x80) ),
-	STYLE2( 4, "Symbol", clrSymbol ),
-	STYLE2( 5, "Value", RGB(0x00,0xA0,0x40) ),
-	STYLE2( 6, "String", clrString ),
-	STYLE2( 7, "Number", clrNumber ),
-	STYLE2_BOLD( 11, "Directive", clrPrepocessor ),
+
+	STYLE_PARENT( STYLE_INI_EVEN, "Even Section", RGB(0xF3,0xFB,0xEE) ),
+	STYLE_CHILD( STYLE_INI_EVEN, 2, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_INI_EVEN, 3, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_INI_EVEN, 4, "Section", RGB(0xA0,0,0) ),
+	STYLE_CHILD2( STYLE_INI_EVEN, 5, "Key", RGB(0x80,0x00,0x80) ),
+	STYLE_CHILD2( STYLE_INI_EVEN, 6, "Symbol", clrSymbol ),
+	STYLE_CHILD2( STYLE_INI_EVEN, 7, "Value", RGB(0x00,0xA0,0x40) ),
+	STYLE_CHILD2( STYLE_INI_EVEN, 8, "String", clrString ),
+	STYLE_CHILD2( STYLE_INI_EVEN, 9, "Number", clrNumber ),
+	STYLE_CHILD_BOLD( STYLE_INI_EVEN, 10, "Directive", clrPrepocessor ),
 
 	 /* odd sections - slightly blue */
 	STYLE_PARENT( STYLE_INI_ODD, "Odd Section", RGB(0xEE,0xF3,0xFB) ),
-	STYLE_CHILD( STYLE_INI_ODD,				42, "Text" ),
-	STYLE_CHILD_ITALIC( STYLE_INI_ODD,		43, "Comment", clrComment ),
-	STYLE_CHILD_BOLD( STYLE_INI_ODD,		44, "Section", RGB(0xA0,0,0) ),
-	STYLE_CHILD2( STYLE_INI_ODD,			45, "Key", RGB(0x80,0x00,0x80) ),
-	STYLE_CHILD2( STYLE_INI_ODD,			46, "Symbol", clrSymbol ),
-	STYLE_CHILD2( STYLE_INI_ODD,			47, "Value", RGB(0x00,0xA0,0x40) ),
-	STYLE_CHILD2( STYLE_INI_ODD,			48, "String", clrString ),
-	STYLE_CHILD2( STYLE_INI_ODD,			49, "Number", clrNumber ),
-	STYLE_CHILD_BOLD( STYLE_INI_ODD,		53, "Directive", clrPrepocessor ),
+	STYLE_CHILD( STYLE_INI_ODD,			22, "Text" ),
+	STYLE_CHILD_ITALIC( STYLE_INI_ODD,	23, "Comment", clrComment ),
+	STYLE_CHILD_BOLD( STYLE_INI_ODD,		24, "Section", RGB(0xA0,0,0) ),
+	STYLE_CHILD2( STYLE_INI_ODD,			25, "Key", RGB(0x80,0x00,0x80) ),
+	STYLE_CHILD2( STYLE_INI_ODD,			26, "Symbol", clrSymbol ),
+	STYLE_CHILD2( STYLE_INI_ODD,			27, "Value", RGB(0x00,0xA0,0x40) ),
+	STYLE_CHILD2( STYLE_INI_ODD,			28, "String", clrString ),
+	STYLE_CHILD2( STYLE_INI_ODD,			29, "Number", clrNumber ),
+	STYLE_CHILD_BOLD( STYLE_INI_ODD,		30, "Directive", clrPrepocessor ),
 	{0}
 };
 

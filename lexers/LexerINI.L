@@ -33,24 +33,25 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 
 %{
 /* style ids - keep in sync with styleIni[] in lexBase/lexerStyles.cpp */
-#define STYLE_TEXT			0
-#define STYLE_COMMENT		1
-#define STYLE_SECTION		2
-#define STYLE_KEY			3
-#define STYLE_SYMBOL		4
-#define STYLE_VALUE			5
-#define STYLE_STRING		6
-#define STYLE_NUMBER		7
-#define STYLE_DIRECTIVE		11
+#define STYLE_TEXT			1
+#define STYLE_COMMENT		2
+#define STYLE_SECTION		3
+#define STYLE_KEY			4
+#define STYLE_SYMBOL		5
+#define STYLE_VALUE			6
+#define STYLE_STRING		7
+#define STYLE_NUMBER		8
+#define STYLE_DIRECTIVE		9
+
+/* odd sections use the styles shifted by STYLE_ODD - the ids 21..30 */
+#define STYLE_EVEN			1
+#define STYLE_ODD			21
+#define SEC( styl )			( bOddSection ? STYLE_ODD + (styl) : STYLE_EVEN + (styl) )
 
 /* m_langId - the dialect, chosen by the file name in lexers.cpp */
 #define LANG_INI			0
 #define LANG_PROPERTIES		1
 #define LANG_REG			2
-
-/* odd sections use the styles shifted by STYLE_ODD - the ids 42..53 */
-#define STYLE_ODD			42
-#define SEC( styl )			( bOddSection ? STYLE_ODD + (styl) : (styl) )
 
 /* yy_start keeps the start condition in its low 8 bits only.  The parity of
    the current section is kept above them and serialized into the line state

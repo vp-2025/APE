@@ -761,7 +761,48 @@ void CEditor::onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab) {
 	}
 }
 
-void CEditor::onNotification( NMHDR* pNMHdr ) {
+LRESULT CEditor::onNotification( NMHDR* pNMHdr ) {
+	if( pNMHdr->hwndFrom==m_outline.hWnd() && m_outline.hWnd() )
+		return onNotificationOutline( pNMHdr );
+	if( pNMHdr->code==NM_CLICK && pNMHdr->hwndFrom==m_statusbar.hWnd() ) {
+		int iTab = m_tabs.GetCurSel();
+		if( iTab>=0 && iTab<(int)m_vTabs.size() ) {
+			auto* p = (NMMOUSE*)pNMHdr;
+			onPopupStatusbar(p->dwItemSpec, m_vTabs[iTab] );
+		}
+		return TRUE;
+	}
+	if( pNMHdr->code==TTN_GETDISPINFOW ) {
+		if( pNMHdr->hwndFrom == m_results.tabs().GetToolTips() ) { // the title of the results
+			if( CFindResults* pRes = m_results.Get((int)pNMHdr->idFrom) ) {
+				static wstring wsTip;
+				wsTip = utf2w( pRes->m_sTitle );
+				((NMTTDISPINFOW*)pNMHdr)->lpszText = (LPWSTR)wsTip.c_str();
+			}
+			return 0;
+		}
+		if( pNMHdr->hwndFrom == m_tabs.GetToolTips() ) {
+			unsigned id = pNMHdr->idFrom;
+			if( id < m_vTabs.size() ) {
+				auto* pNMTip = (NMTTDISPINFOW*)pNMHdr;
+				wstring ws;
+				ws << utf2w(m_vTabs[id].sFile)
+						<< "  " << vFileAttrs2Str(m_vTabs[id].sFile)
+						<< "  " << vGetFileSize(m_vTabs[id].sFile)
+						<< "  " << vGetFileTime(m_vTabs[id].sFile).Format("%d/%m/%Y %H:%M:%S");
+				static wchar_t szTemp[1024];
+				wcsncpy( szTemp, ws.c_str(), ws.size() );
+				pNMTip->lpszText = szTemp;
+			}
+			return 0;
+		}
+	}
+	if( pNMHdr->code==TTN_NEEDTEXTW || pNMHdr->code==TTN_NEEDTEXTA ) {
+		if( 0<=pNMHdr->idFrom && pNMHdr->idFrom<=0xFFFF )
+			HandleDialogTooltips( pNMHdr, GetMenu(m_hWnd) );
+		return 0;
+	}
+
 	if( pNMHdr->hwndFrom==m_tabs.hWnd() ) {
 		switch( pNMHdr->code ) {
 			case TCN_SELCHANGING: onTabChanging(); break;
@@ -779,6 +820,7 @@ void CEditor::onNotification( NMHDR* pNMHdr ) {
 			if( pNMHdr->hwndFrom == m_vTabs[i].sci.hWnd() )
 				onNotificationSci((SCNotification*)pNMHdr, m_vTabs[i], i );
 	}
+	return 0;
 }
 
 void AppendWord( CMenu& popup, int cmd, const string& sWord, const wchar_t* szFrom, const wchar_t* szTo )
@@ -1231,9 +1273,9 @@ void CEditor::onPopupResultsTab( int i, const CPoint& pt )
 	popup.Append( ID_SEARCH_RESULTS_RERUN, tr(L"Refresh"), !params.wsFind.empty() && !params.bReplace ); // replacing again is not a refresh
 	popup.Append( ID_SEARCH_RESULTS_RERUNDLG, tr(L"Rerun..."), !params.wsFind.empty() );
 	popup.AppendSeparator();
-	popup.Append( ID_SEARCH_RESULTS_CLOSETAB, tr(L"Close") );
+	popup.Append( ID_SEARCH_RESULTS_CLOSETAB, tr(L"Close Tab") );
+	popup.Append( ID_SEARCH_RESULTS_CLOSEALL, tr(L"Close All Tabs") );
 	popup.Append( ID_SEARCH_RESULTS_CLOSEOTHERS, tr(L"Close Other Tabs"), m_results.count()>1 );
-	popup.Append( ID_SEARCH_RESULTS_CLOSEALL, tr(L"Close All") );
 	switch( popup.TrackPopup(TPM_RETURNCMD|TPM_RIGHTBUTTON, pt, m_hWnd) ) {
 	case ID_SEARCH_RESULTS_RERUN:
 		RerunResults( i );
@@ -1410,7 +1452,7 @@ void CEditor::UpdateMenu( HMENU hMenu, CTabPage* pPage )
 
 	menu.Enable( ID_SEARCH_FIND, pPage!=0 );
 	menu.Enable( ID_SEARCH_REPLACE, pPage!=0 );
-	menu.Enable( ID_SEARCH_FINDFILE, pPage!=0 );
+	menu.Enable( ID_SEARCH_FINDFILE, true ); // also without an opened file
 	menu.Enable( ID_SEARCH_REPLACEFILE, pPage!=0 );
 	menu.Enable( ID_SEARCH_FINDNEXT, pPage!=0 );
 	menu.Enable( ID_SEARCH_FINDPREV, pPage!=0 );
@@ -1641,50 +1683,7 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		break;
 
 	case WM_NOTIFY:
-		{
-			auto* pNMHdr = (NMHDR*)lParam;
-			if( pNMHdr->hwndFrom==m_outline.hWnd() && m_outline.hWnd() )
-				return onNotificationOutline( pNMHdr );
-			if( pNMHdr->code==NM_CLICK && pNMHdr->hwndFrom==m_statusbar.hWnd() ) {
-				int iTab = m_tabs.GetCurSel();
-				if( iTab>=0 && iTab<(int)m_vTabs.size() ) {
-					auto* p = (NMMOUSE*)lParam;
-					onPopupStatusbar(p->dwItemSpec, m_vTabs[iTab] );
-				}
-				return TRUE;
-			}
-			if( pNMHdr->code==TTN_GETDISPINFOW ) {
-				if( pNMHdr->hwndFrom == m_results.tabs().GetToolTips() ) { // the title of the results
-					if( CFindResults* pRes = m_results.Get((int)pNMHdr->idFrom) ) {
-						static wstring wsTip;
-						wsTip = utf2w( pRes->m_sTitle );
-						((NMTTDISPINFOW*)lParam)->lpszText = (LPWSTR)wsTip.c_str();
-					}
-					return 0;
-				}
-				if( pNMHdr->hwndFrom == m_tabs.GetToolTips() ) {
-					unsigned id = pNMHdr->idFrom;
-					if( id < m_vTabs.size() ) {
-						auto* pNMTip = (NMTTDISPINFOW*)lParam;
-						wstring ws;
-						ws << utf2w(m_vTabs[id].sFile)
-								<< "  " << vFileAttrs2Str(m_vTabs[id].sFile)
-								<< "  " << vGetFileSize(m_vTabs[id].sFile)
-								<< "  " << vGetFileTime(m_vTabs[id].sFile).Format("%d/%m/%Y %H:%M:%S");
-						static wchar_t szTemp[1024];
-						wcsncpy( szTemp, ws.c_str(), ws.size() );
-						pNMTip->lpszText = szTemp;
-					}
-					return 0;
-				}
-			}
-			if( pNMHdr->code==TTN_NEEDTEXTW || pNMHdr->code==TTN_NEEDTEXTA ) {
-				if( 0<=pNMHdr->idFrom && pNMHdr->idFrom<=0xFFFF )
-					HandleDialogTooltips( pNMHdr, GetMenu(hWnd) );
-			} else
-				onNotification( pNMHdr );
-		}
-		break;
+		return onNotification( (NMHDR*)lParam );
 
 	case WM_CONTEXTMENU:
 		onPopup( (HWND)wParam, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );

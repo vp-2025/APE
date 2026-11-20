@@ -53,7 +53,7 @@ public:
 private:
 	void UpdateTab( int iTab );
 public:
-	void onNotification( NMHDR* pNMHdr );
+	LRESULT onNotification( NMHDR* pNMHdr );	// WM_NOTIFY: returns its result
 	void onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab);
 
 	void UpdateLexersMenu( HMENU hMenu );

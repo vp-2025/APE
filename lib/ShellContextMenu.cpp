@@ -365,26 +365,27 @@ void OpenFolder( const string& sFolder, const string& sFile ) {
 
 /////////////////////////////////////////////////////////////////////////////
 
+// pData: the folder to select, wchar_t*
 int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData) {
-	TCHAR szDir[MAX_PATH]; // todo unicode
+	wchar_t szDir[MAX_PATH];
 
 	switch( uMsg ) {
 		case BFFM_INITIALIZED: {
 			// WParam is TRUE since you are passing a path.
 			// It would be FALSE if you were passing a pidl.
-			if( pData && ((TCHAR*) pData)[0] ) {
-				SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) pData);
+			if( pData && ((wchar_t*) pData)[0] ) {
+				SendMessageW(hwnd, BFFM_SETSELECTIONW, TRUE, pData);
 			} else {
-				if( GetCurrentDirectory(sizeof(szDir) / sizeof(TCHAR), szDir) ) {
-					SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM) szDir);
+				if( GetCurrentDirectoryW(MAX_PATH, szDir) ) {
+					SendMessageW(hwnd, BFFM_SETSELECTIONW, TRUE, (LPARAM) szDir);
 				}
 			}
 			break;
 		}
 		case BFFM_SELCHANGED: {
 			// Set the status window to the currently selected path.
-			if( SHGetPathFromIDList((LPITEMIDLIST) lp, szDir) ) {
-				SendMessage(hwnd, BFFM_SETSTATUSTEXT, 0, (LPARAM) szDir);
+			if( SHGetPathFromIDListW((LPITEMIDLIST) lp, szDir) ) {
+				SendMessageW(hwnd, BFFM_SETSTATUSTEXTW, 0, (LPARAM) szDir);
 			}
 			break;
 		}
@@ -403,10 +404,24 @@ void _SHFree(void* p) {
 	}
 }
 
-bool BrowseForFolder(HWND hWnd, string& sPath) {
-	string str = sPath;
-	delTailSlash(str);
-	wstring wstr = utf2w(str);
+bool BrowseForFolder(HWND hWnd, wstring& wsPath) {
+	wstring wstr = wsPath;
+	size_t pos = wstr.find_first_not_of(L" \t");
+	wstr.erase(0, pos == wstring::npos ? wstr.size() : pos);
+	auto isDir = [](const wstring& ws) {
+		DWORD dw = GetFileAttributesW(ws.c_str());
+		return dw != INVALID_FILE_ATTRIBUTES && (dw & FILE_ATTRIBUTE_DIRECTORY);
+	};
+	while( !wstr.empty() ) { // a typo or a deleted folder: it's nearest existing parent
+		while( !wstr.empty() && (wstr.back() == '\\' || wstr.back() == '/' || wstr.back() == ' ' || wstr.back() == '\t') )
+			wstr.pop_back();
+		if( wstr.empty() || isDir(wstr) )
+			break;
+		pos = wstr.find_last_of(L"\\/");
+		wstr.erase(pos == wstring::npos ? 0 : pos);
+	}
+	if( wstr.size() == 2 && wstr[1] == ':' ) // "Z:" is the current folder of the drive
+		addTailSlash(wstr);
 
 	BROWSEINFOW bi {};
 	bi.hwndOwner = hWnd;
@@ -416,14 +431,12 @@ bool BrowseForFolder(HWND hWnd, string& sPath) {
 	bi.lpfn = BrowseCallbackProc;
 	bi.lParam = (LPARAM)wstr.c_str();
 
-	LPITEMIDLIST pIdl = SHBrowseForFolderW(&bi);
-
-	if( pIdl ) {
+	if( LPITEMIDLIST pIdl = SHBrowseForFolderW(&bi) ) {
 		wstrbuf sBuf(MAX_PATH);
 		SHGetPathFromIDListW(pIdl, sBuf.buf());
-		sPath = w2utf(sBuf.str()); // no len
+		wsPath = sBuf.str(); // no len
 		_SHFree(pIdl);
-		addTailSlash(sPath);
+		addTailSlash(wsPath); // a virtual folder has no path: it stays empty
 		return true;
 	}
 

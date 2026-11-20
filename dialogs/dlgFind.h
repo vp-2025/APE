@@ -2,6 +2,7 @@
 
 #include "sci.h"
 #include "shared/win.h"
+#include <map>
 
 class CEditor;
 class CFindResults;
@@ -29,6 +30,11 @@ class CFindDlg : public CDialog {
     CEditor* pEditor;
     CFindResults* m_pRerun{}; // the results tab of Rerun: the next results go to it
 
+    // the search history (cmbSearch) keeps with each string, besides the options in the item data,
+    // the file mask and the folder of the search
+    struct CSearchCtx { wstring wsFiles, wsPath; };
+    std::map<wstring, CSearchCtx> m_searchCtx;
+
     bool isModeNormal() { return m_mode == 0; }
     bool isModeExt() { return m_mode == 1; }
     bool isModeSciRE() { return m_mode == 2; }
@@ -49,17 +55,22 @@ public:
     void onResultsClosed(CFindResults* pResults) { if( m_pRerun == pResults ) m_pRerun = nullptr; }
     void FindNext(bool bNext);
     void ClearIndicators();
-private:
+protected:
     void onInit() override;
     void onDestroy() override;
     void onCommand(int cmd, int code) override;
 
+private:
     void UpdateControls(bool bPrepare = false);
 
     int getFindFlags();
     // options of the search string, kept in the history of cmbSearch: match case, whole word, mode
     LPARAM getOptions();
     void setOptions(LPARAM opts);
+    void updateSearchMRU();         // the search string to the top of the history, with its options, mask, folder
+    void applySearchMRU(int idx);   // the controls as they were for this history item
+    void loadSearchCtx();
+    void saveSearchCtx();
     string getFindStr();
     string getFindStr(const wstring& ws, bool bAnsi); // for a file with this encoding
     string getReplaceStr();

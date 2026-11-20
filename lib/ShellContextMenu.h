@@ -33,4 +33,4 @@ private:
 };
 
 void OpenFolder( const std::string& sFolder, const std::string& sFile={} );
-bool BrowseForFolder(HWND hWnd, std::string& sPath);
+bool BrowseForFolder(HWND hWnd, std::wstring& wsPath); // opens at wsPath (or its nearest existing parent); the result ends with '\\'

@@ -1721,6 +1721,13 @@ inline void LoadBool(const char *szSection, const char *szKey, bool &val) {
         val = reg.ReadInt(szKey, val) != 0;
 }
 
+inline bool LoadBoolDef(const char *szSection, const char *szKey, bool bDef) {
+    CRegistry reg;
+    if (reg.Open(g_hKey, std::string(g_szPath) + szSection))
+        return reg.ReadInt(szKey, bDef?1:0) != 0;
+    return bDef;
+}
+
 inline void SaveBool(const char *szSection, const char *szKey, bool val) {
     CRegistry reg;
     if (reg.Create(g_hKey, std::string(g_szPath) + szSection))

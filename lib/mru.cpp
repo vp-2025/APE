@@ -60,8 +60,6 @@ void CMRU::UpdateMenu( HMENU hMenu )
 {
 	for( int i=m_cmdFirst; i<=m_cmdLast; i++ )
 		DeleteMenu( hMenu, i, MF_BYCOMMAND );
-	string sCur = toLowerVal(GetCurDir());
-	addTailSlash(sCur);
 	int cnt = GetMenuItemCount(hMenu);
 	for( unsigned i=0; i<m_list.size(); i++ )
 	{
