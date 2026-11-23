@@ -4,6 +4,7 @@
 #include "theme.h"
 #include "lang.h"
 #include "shared/platform.h"
+#include "options.h"
 
 #define MAX_LINE_LEN 512 // longer source lines are cut
 
@@ -25,6 +26,15 @@ static LRESULT CALLBACK ResultsProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 			}
 		}
 		break;
+	case WM_LBUTTONDOWN: // Ctrl+click: the caret to the clicked match, then go to it like Enter
+		if( wParam & MK_CONTROL ) {
+			auto pos = ::SendMessage(hWnd, SCI_POSITIONFROMPOINT, (short)LOWORD(lParam), (short)HIWORD(lParam));
+			::SetFocus(hWnd);
+			::SendMessage(hWnd, SCI_SETEMPTYSELECTION, pos, 0);
+			::PostMessage(::GetParent(hWnd), WM_RESULTS_KEY, VK_RETURN, 0);
+			return 0;
+		}
+		break;
 	case WM_CHAR:
 		if( wParam == '\r' || wParam == VK_ESCAPE )
 			return 0;
@@ -38,7 +48,7 @@ void CFindResults::Create(HWND hParent) {
 	SetWindowSubclass(m_sci.hWnd(), ResultsProc, 1, 0);
 	m_sci.ViewFold(false);
 	m_sci.ViewNums(false);
-	m_sci.SetViewWS(SCWS_INVISIBLE);
+	m_sci.SetViewWS(g_options.iViewWS); // as in the editor: View > Whitespace
 	m_sci.SetViewEOL(false);
 	m_sci.BraceHL(false);
 	m_sci.ViewIndentGuides(false);

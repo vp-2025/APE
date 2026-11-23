@@ -573,6 +573,8 @@ void CEditor::onCommand( int cmd, int notify, CTabPage* pPage, int iTab )
 		g_options.Save();
 		for(auto& tabPage : m_vTabs)
 			tabPage.sci.SetViewWS(g_options.iViewWS);
+		for( int i=0; i<m_results.count(); i++ )
+			m_results.Get(i)->sci().SetViewWS(g_options.iViewWS);
 		break;
 	case ID_VIEW_EOL2:
 		g_options.bViewEOL = !page.sci.GetViewEOL();
@@ -2552,9 +2554,8 @@ LRESULT CEditor::onNotificationOutline( NMHDR* pNMHdr ) {
 		onOutlineGoto( true );
 		return TRUE;
 	case TVN_KEYDOWN:
-		if( ((NMTVKEYDOWN*)pNMHdr)->wVKey==VK_ESCAPE ) {
-			if( CTabPage* pPage = GetCurPage() )
-				::SetFocus( pPage->sci.hWnd() );
+		if( ((NMTVKEYDOWN*)pNMHdr)->wVKey==VK_ESCAPE ) { // close the outline, the focus goes to the editor
+			ShowOutline( false );
 			return TRUE;
 		}
 		break;
@@ -2652,13 +2653,9 @@ void CEditor::onNotificationResults( SCNotification* pNS ) {
 		if( m_results.m_bSelectLine && (pNS->updated & SC_UPDATE_SELECTION) && !m_results.Cur()->isFilling() && m_results.Cur()->isNewResult() )
 			onResultGoto( false );
 		break;
-	case SCN_DOUBLECLICK: // on a file: collapse/expand
-		if( pNS->position>=0 ) // the double-clicked line, the caret can be elsewhere yet
-			m_results.Cur()->sci().Call( SCI_SETEMPTYSELECTION, pNS->position );
-		if( m_results.Cur()->ToggleFoldAtCaret() )
-			break;
-		m_results.Cur()->isNewResult();
-		onResultGoto( true );
+	case SCN_DOUBLECLICK: // on a file: collapse/expand; else Scintilla selects word > line > none; Ctrl+click goes to the result
+		if( pNS->line>=0 && m_results.Cur()->sci().IsFoldHeader( (int)pNS->line ) )
+			m_results.Cur()->sci().ToggleFold( (int)pNS->line );
 		break;
 	}
 }
