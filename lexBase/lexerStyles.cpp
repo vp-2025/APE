@@ -51,6 +51,9 @@
 #define STYLE_EOL(id,szName,clrFore,clrBack){id,szName,STL_EOL,clrFore,clrBack}
 #define STYLE_LINK(id,szName,clrFore)		{id,szName,STL_HOTSPOT|STL_UNDERLINE,clrFore,-1}
 
+// the style of the autocomplete list (SCI_AUTOCSETSTYLE): 39 is STYLE_FOLDDISPLAYTEXT, which isn't used
+#define STYLE_AUTOCOMPLETE	39
+
 CLexerStyle styleGlobal[] = {
 	STYLE3_EX( STYLE_DEFAULT, "Default", 0x0, 0xFFFFFF, 11, "Consolas"), // 32
 	STYLE2_BOLD( STYLE_BRACELIGHT, "Brace Highlight", RGB(0xFF,0,0) ), // 34
@@ -58,9 +61,9 @@ CLexerStyle styleGlobal[] = {
 //	STYLE3( STYLE_INVALID, "Invalid Style", clrInvalidFore, clrInvalidBack ), // 31
 	STYLE2( STYLE_INDENTGUIDE, "White Space", RGB(0xD0,0xD0,0xD0) ), // 37, IndentGuide, WhiteSpace: fore & back, +LineEnding
 	STYLE2_EX( STYLE_LINENUMBER, "Line Number", RGB(0x40,0x40,0x40), 9, "Tahoma" ), // 33
-	STYLE3_EX( STYLE_CALLTIP, "Calltip Style", RGB(0,0,0), RGB(245,245,210), 8, "Tahoma" ), // 38
+	STYLE2_EX( STYLE_AUTOCOMPLETE, "AutoComplete", RGB(0,0,0), 10, "Tahoma" ), // 39: the list uses font, size, fore, back
+	STYLE3_EX( STYLE_CALLTIP, "Calltip", RGB(0,0,0), RGB(245,245,210), 8, "Tahoma" ), // 38
 //	STYLE( STYLE_CONTROLCHAR, "Control Chars" ), // 36, only: font size bold italic
-// no 39 ?
 	{0}
 };
 
@@ -140,10 +143,18 @@ CLexerStyle styleMSBuild[] = {
 #define STYLE_CHILD(parentId,id,szName)						{id,szName,0,-1,-1,0,"",parentId}
 #define STYLE_CHILD2(parentId,id,szName,clrFore)			{id,szName,0,clrFore,-1,0,"",parentId}
 #define STYLE_CHILD3(parentId,id,szName,clrFore,clrBack)	{id,szName,0,clrFore,clrBack,0,"",parentId}
-
 #define STYLE_CHILD_BOLD(parentId,id,szName,clrFore)		{id,szName,STL_BOLD,clrFore,-1,0,"",parentId}
 #define STYLE_CHILD_ITALIC(parentId,id,szName,clrFore)		{id,szName,STL_ITALIC,clrFore,-1,0,"",parentId}
 #define STYLE_CHILD_EOL(parentId,id,szName,clrFore,clrBack)	{id,szName,STL_EOL,clrFore,clrBack,0,"",parentId}
+#define STYLE_CHILD_UNDERLINE(parentId,id,szName,flags,clrFore)	{id,szName,STL_UNDERLINE|(flags),clrFore,-1,0,"",parentId}
+
+#define STYLE_KID(parentId,id,szName)							{parentId+id,szName,0,-1,-1,0,"",parentId}
+#define STYLE_KID2(parentId,id,szName,clrFore)					{parentId+id,szName,0,clrFore,-1,0,"",parentId}
+#define STYLE_KID3(parentId,id,szName,clrFore,clrBack)			{parentId+id,szName,0,clrFore,clrBack,0,"",parentId}
+#define STYLE_KID_BOLD(parentId,id,szName,clrFore)				{parentId+id,szName,STL_BOLD,clrFore,-1,0,"",parentId}
+#define STYLE_KID_ITALIC(parentId,id,szName,clrFore)			{parentId+id,szName,STL_ITALIC,clrFore,-1,0,"",parentId}
+#define STYLE_KID_EOL(parentId,id,szName,clrFore,clrBack)		{parentId+id,szName,STL_EOL,clrFore,clrBack,0,"",parentId}
+#define STYLE_KID_UNDERLINE(parentId,id,szName,flags,clrFore)	{parentId+id,szName,STL_UNDERLINE|(flags),clrFore,-1,0,"",parentId}
 
 /* flex - every token style exists once per file section, so that each of the
    three sections (definitions / rules / user code) gets its own background.
@@ -431,38 +442,38 @@ CLexerStyle styleConf[] = {
 	{0}
 };
 
-/* ini - sections alternate their background: the token styles of the odd
-   sections are a copy of the even ones, shifted by STYLE_ODD (LexerINI.L),
-   under a parent style that carries the background.
-   ids must match STYLE_* / STYLE_ODD in LexerINI.L */
-#define STYLE_INI_EVEN		1 // the odd styles are 42..53: jump over STYLE_DEFAULT 32
-#define STYLE_INI_ODD		21 // the odd styles are 42..53: jump over STYLE_DEFAULT 32
+#define STYLE_INI_EVEN		1  // the even styles are 1..11 > 2..12
+#define STYLE_INI_ODD		41 // the odd  styles are 1..11 > 42..52  (jump over STYLE_DEFAULT 32..40)
 
 CLexerStyle styleIni[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 
 	STYLE_PARENT( STYLE_INI_EVEN, "Even Section", RGB(0xF3,0xFB,0xEE) ),
-	STYLE_CHILD( STYLE_INI_EVEN, 2, "Text" ),
-	STYLE_CHILD_ITALIC( STYLE_INI_EVEN, 3, "Comment", clrComment ),
-	STYLE_CHILD_BOLD( STYLE_INI_EVEN, 4, "Section", RGB(0xA0,0,0) ),
-	STYLE_CHILD2( STYLE_INI_EVEN, 5, "Key", RGB(0x80,0x00,0x80) ),
-	STYLE_CHILD2( STYLE_INI_EVEN, 6, "Symbol", clrSymbol ),
-	STYLE_CHILD2( STYLE_INI_EVEN, 7, "Value", RGB(0x00,0xA0,0x40) ),
-	STYLE_CHILD2( STYLE_INI_EVEN, 8, "String", clrString ),
-	STYLE_CHILD2( STYLE_INI_EVEN, 9, "Number", clrNumber ),
-	STYLE_CHILD_BOLD( STYLE_INI_EVEN, 10, "Directive", clrPrepocessor ),
+	STYLE_KID( STYLE_INI_EVEN,			1, "Text" ),
+	STYLE_KID_ITALIC( STYLE_INI_EVEN,	2, "Comment", clrComment ),
+	STYLE_KID_BOLD( STYLE_INI_EVEN,		3, "Section", RGB(0xA0,0,0) ),
+	STYLE_KID2( STYLE_INI_EVEN,			4, "Key", RGB(0x80,0x00,0x80) ),
+	STYLE_KID2( STYLE_INI_EVEN,			5, "Symbol", clrSymbol ),
+	STYLE_KID2( STYLE_INI_EVEN,			6, "Value", RGB(0x00,0xA0,0x40) ),
+	STYLE_KID2( STYLE_INI_EVEN,			7, "String", clrString ),
+	STYLE_KID2( STYLE_INI_EVEN,			8, "Number", clrNumber ),
+	STYLE_KID_BOLD( STYLE_INI_EVEN,		9, "Directive", clrPrepocessor ),
+	STYLE_KID_UNDERLINE( STYLE_INI_EVEN, 10, "Unknown Key", 0, RGB(0xE0,0,0) ),
+	STYLE_KID_UNDERLINE( STYLE_INI_EVEN, 11, "Unknown Section", STL_BOLD, RGB(0xE0,0,0) ),
 
 	 /* odd sections - slightly blue */
 	STYLE_PARENT( STYLE_INI_ODD, "Odd Section", RGB(0xEE,0xF3,0xFB) ),
-	STYLE_CHILD( STYLE_INI_ODD,			22, "Text" ),
-	STYLE_CHILD_ITALIC( STYLE_INI_ODD,	23, "Comment", clrComment ),
-	STYLE_CHILD_BOLD( STYLE_INI_ODD,		24, "Section", RGB(0xA0,0,0) ),
-	STYLE_CHILD2( STYLE_INI_ODD,			25, "Key", RGB(0x80,0x00,0x80) ),
-	STYLE_CHILD2( STYLE_INI_ODD,			26, "Symbol", clrSymbol ),
-	STYLE_CHILD2( STYLE_INI_ODD,			27, "Value", RGB(0x00,0xA0,0x40) ),
-	STYLE_CHILD2( STYLE_INI_ODD,			28, "String", clrString ),
-	STYLE_CHILD2( STYLE_INI_ODD,			29, "Number", clrNumber ),
-	STYLE_CHILD_BOLD( STYLE_INI_ODD,		30, "Directive", clrPrepocessor ),
+	STYLE_KID( STYLE_INI_ODD,			1, "Text" ),
+	STYLE_KID_ITALIC( STYLE_INI_ODD,		2, "Comment", clrComment ),
+	STYLE_KID_BOLD( STYLE_INI_ODD,		3, "Section", RGB(0xA0,0,0) ),
+	STYLE_KID2( STYLE_INI_ODD,			4, "Key", RGB(0x80,0x00,0x80) ),
+	STYLE_KID2( STYLE_INI_ODD,			5, "Symbol", clrSymbol ),
+	STYLE_KID2( STYLE_INI_ODD,			6, "Value", RGB(0x00,0xA0,0x40) ),
+	STYLE_KID2( STYLE_INI_ODD,			7, "String", clrString ),
+	STYLE_KID2( STYLE_INI_ODD,			8, "Number", clrNumber ),
+	STYLE_KID_BOLD( STYLE_INI_ODD,		9, "Directive", clrPrepocessor ),
+	STYLE_KID_UNDERLINE( STYLE_INI_ODD,	10, "Unknown Key", 0, RGB(0xE0,0,0) ),
+	STYLE_KID_UNDERLINE( STYLE_INI_ODD,	11, "Unknown Section", STL_BOLD, RGB(0xE0,0,0) ),
 	{0}
 };
 
@@ -767,6 +778,7 @@ void SetupLexerStyles( CSciWrapper& sci, CLexerStyle* pStyles ) {
 		if( pStyle->id!=STYLE_DEFAULT )
 			applyStyle( sci, pStyle );
 	}
+	sci.AutoCSetStyle( STYLE_AUTOCOMPLETE );
 
 	for( CLexerStyle* pStyle=pStyles; pStyle && pStyle->szName; pStyle++ )
 		if( pStyle->id!=STYLE_DEFAULT ) {

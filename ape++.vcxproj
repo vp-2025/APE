@@ -625,6 +625,7 @@
     <ClInclude Include="dialogs\dlgTabs.h" />
     <ClInclude Include="lexBase\lexBase.h" />
     <ClInclude Include="lexBase\lexCSS.h" />
+    <ClInclude Include="lexBase\lexIniDg.h" />
     <ClInclude Include="lexBase\lexers.h" />
     <ClInclude Include="lexBase\lexerStyles.h" />
     <ClInclude Include="lexBase\lexJS.h" />
@@ -674,6 +675,7 @@
     <ClCompile Include="dialogs\dlgTabs.cpp" />
     <ClCompile Include="lexBase\lexBase.cpp" />
     <ClCompile Include="lexBase\lexCSS.cpp" />
+    <ClCompile Include="lexBase\lexIniDg.cpp" />
     <ClCompile Include="lexBase\lexers.cpp" />
     <ClCompile Include="lexBase\lexerStyles.cpp" />
     <ClCompile Include="lexBase\lexJS.cpp" />

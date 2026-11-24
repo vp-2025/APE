@@ -239,6 +239,9 @@
     <ClInclude Include="lexBase\lexCSS.h">
       <Filter>lexBase</Filter>
     </ClInclude>
+    <ClInclude Include="lexBase\lexIniDg.h">
+      <Filter>lexBase</Filter>
+    </ClInclude>
     <ClInclude Include="lexBase\lexers.h">
       <Filter>lexBase</Filter>
     </ClInclude>
@@ -557,6 +560,9 @@
       <Filter>lexBase</Filter>
     </ClCompile>
     <ClCompile Include="lexBase\lexCSS.cpp">
+      <Filter>lexBase</Filter>
+    </ClCompile>
+    <ClCompile Include="lexBase\lexIniDg.cpp">
       <Filter>lexBase</Filter>
     </ClCompile>
     <ClCompile Include="lexBase\lexers.cpp">

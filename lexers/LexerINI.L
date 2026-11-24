@@ -7,6 +7,8 @@
 *   key = value   key: value        key, separator and value
 *   "key"="value"  @=dword:0000001  registry values (m_langId == LANG_REG)
 *   key value  ! comment            java properties (m_langId == LANG_PROPERTIES)
+*   mea.ini with mea-dg.ini         an ini with a meta file (m_langId == LANG_DG, see lexIniDg.h):
+*                                   unknown sections and keys unknown in their section are marked
 *   !include file                   MySQL style directive
 *
 * The whole value is styled as a number, a quoted string or a plain value.
@@ -18,6 +20,7 @@
 * tinted copy for odd sections (see styleIni[] in lexBase/lexerStyles.cpp).
 ******************************************************************************/
 #include "LexBase.h"
+#include "lexIniDg.h"
 %}
 
 %option  c++
@@ -42,21 +45,27 @@ QKEY	(\"([^"\\\r\n]|\\.)*\"|@)
 #define STYLE_STRING		7
 #define STYLE_NUMBER		8
 #define STYLE_DIRECTIVE		9
+#define STYLE_UNKNOWN_KEY	10		/* LANG_DG: not in the meta file for this section */
+#define STYLE_UNKNOWN_SEC	11		/* LANG_DG: not in the meta file */
 
-/* odd sections use the styles shifted by STYLE_ODD - the ids 21..30 */
+/* even sections use the ids 2..12, odd ones are shifted by STYLE_ODD - the ids 42..52 (jump over STYLE_DEFAULT 32..39) */
 #define STYLE_EVEN			1
-#define STYLE_ODD			21
+#define STYLE_ODD			41
 #define SEC( styl )			( bOddSection ? STYLE_ODD + (styl) : STYLE_EVEN + (styl) )
 
 /* m_langId - the dialect, chosen by the file name in lexers.cpp */
 #define LANG_INI			0
 #define LANG_PROPERTIES		1
 #define LANG_REG			2
+#define LANG_DG				3		/* ini with a meta file: g_pIniDgLexing */
+
+/* LANG_DG: the section of the line in m_stateExt: 0 before the first one, else its index+1 in the meta file */
+#define SECTION_UNKNOWN		0xFFF
 
 /* yy_start keeps the start condition in its low 8 bits only.  The parity of
    the current section is kept above them and serialized into the line state
    at every newline, so that styling can resume in the middle of the file. */
-#define LINE_STATE			((yy_start & 0xFF) | (bOddSection ? 0x100 : 0))
+#define LINE_STATE			((yy_start & 0xFF) | (bOddSection ? 0x100 : 0) | (m_stateExt << 16))
 
 /* StateToStyle() is called by the rules - declare the specialization first */
 template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
@@ -78,6 +87,18 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 	bool bContLine = YY_START == VALUE;		// the line continues the value of the previous one
 
 	auto isWS = []( char ch ) { return ch == ' ' || ch == '\t'; };
+
+	const bool bIni = m_langId == LANG_INI || m_langId == LANG_DG;	// ; comments after a value, indented continuations
+	const CIniDgSchema* pSchema = m_langId == LANG_DG ? g_pIniDgLexing : nullptr;
+
+	// LANG_DG: the key is known in its section; an unknown section is marked itself
+	auto isKnownKey = [&]( const char* p, int n ) {
+		if( !pSchema || m_stateExt == SECTION_UNKNOWN )
+			return true;
+		if( m_stateExt <= 0 || m_stateExt > (int)pSchema->sections.size() )
+			return false;							// before the first section
+		return pSchema->sections[m_stateExt-1].Find( std::string(p, n) ) != nullptr;
+	};
 
 	auto beginValue = [&]() {
 		BEGIN( VALUE );
@@ -142,7 +163,12 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 				return;
 			}
 		}
-		SetStyle( SEC(STYLE_KEY) );
+		int b = 0;
+		while( b < yyleng && isWS(yytext[b]) )
+			b++;
+		if( b )
+			SetStyle( MatchStart(), MatchStart()+b, SEC(STYLE_TEXT) );
+		SetStyle( MatchStart()+b, MatchEnd(), SEC(isKnownKey(yytext+b, yyleng-b) ? STYLE_KEY : STYLE_UNKNOWN_KEY) );
 	};
 
 %}
@@ -168,6 +194,8 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 
 	^{WS}*\[				{
 		bOddSection = !bOddSection;
+		if( pSchema )
+			m_stateExt = SECTION_UNKNOWN;	// till its name is known
 		SetStyle( SEC(STYLE_SYMBOL) );
 		BEGIN( SECTION );
 		if( GetLevel() )
@@ -181,7 +209,7 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 	 /* a line without a separator: a flag ("skip-networking"), a properties "key value"
 	    or the indented continuation of the previous value (hgrc, python configparser) */
 	^{WS}*{KEY}				{
-		if( m_langId == LANG_INI && isWS(*yytext) ) {
+		if( bIni && isWS(*yytext) ) {
 			beginValue();
 			yyless( 0 );
 		} else
@@ -195,7 +223,16 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 
 <SECTION>{
 	\"([^"\\\r\n]|\\.)*\"	SetStyle( SEC(STYLE_STRING) );
-	[^\]"\r\n]+				SetStyle( SEC(STYLE_SECTION) );
+	[^\]"\r\n]+				{
+		int style = STYLE_SECTION;
+		if( pSchema ) {
+			int i = pSchema->FindSection( std::string(yytext, yyleng) );
+			m_stateExt = i >= 0 ? i+1 : SECTION_UNKNOWN;
+			if( i < 0 )
+				style = STYLE_UNKNOWN_SEC;
+		}
+		SetStyle( SEC(style) );
+	}
 	\]						SetStyle( SEC(STYLE_SYMBOL) ); BEGIN( INITIAL );
 }
 
@@ -206,7 +243,7 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 	while( b < n && isWS(yytext[b]) )
 		b++;
 	int e = n;							// value end
-	if( m_langId == LANG_INI ) {
+	if( bIni ) {
 		int q = quotedEnd( yytext+b, n-b );
 		for( int i = q > 0 ? b+q : b; i < n; i++ )
 			if( yytext[i] == ';' && (i == b || isWS(yytext[i-1])) ) {
@@ -219,7 +256,7 @@ template<> int CSciLexer<yyFlexLexer>::StateToStyle(int nState);
 		e--;
 
 	int style = STYLE_VALUE;
-	if( m_langId != LANG_INI && e > b && yytext[e-1] == '\\' )
+	if( !bIni && e > b && yytext[e-1] == '\\' )
 		bContinue = true;				// a multi-line value is a plain one
 	else if( !bContLine ) {
 		if( isNumber( yytext+b, e-b ) )

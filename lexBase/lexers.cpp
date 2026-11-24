@@ -3,6 +3,7 @@
 #include "fileMask.h"
 
 #include "lexBase.h"
+#include "lexIniDg.h"
 #include "myLexers.h"
 
 #undef	yyFlexLexerOnce
@@ -293,6 +294,8 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo ) {
 			int lang=0;
 			if( endsWithIC(sFile, ".properties") ) lang=1; // java properties
 			else if( endsWithIC(sFile, ".reg") ) lang=2; // registry
+			g_pIniDgLexing = lang==0 ? iniDgSchemaFor(sFile) : nullptr;
+			if( g_pIniDgLexing ) lang=3; // mea.ini with mea-dg.ini
 			CLexerIni lexer( &styler, lang ); lexer.Style( posTo );
 		} break;
 		case LEX_YAML:	{ CLexerYAML lexer( &styler, 0 ); lexer.Style( posTo ); } break;

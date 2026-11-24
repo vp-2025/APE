@@ -413,9 +413,47 @@ public:
 	void SetLexer(int l);
 
 // autoComplete
-	void AutoCShow(int len, const string& s) { Call(SCI_AUTOCSHOW,len,(intptr_t)s.c_str()); }
+	void AutoCShow(int len, const string& s) { Call(SCI_AUTOCSHOW,len,(intptr_t)s.c_str()); } // len: the chars already typed
 	void AutoCSelect(const string& s) { Call(SCI_AUTOCSELECT,0,(intptr_t)s.c_str()); }
 	void AutoComplete(const string& sItems, const string& sSelect) { if(sItems.empty()) return; AutoCShow(sSelect.size(), sItems); if(!sSelect.empty()) AutoCSelect(sSelect); }
+	void AutoCComplete() { Call(SCI_AUTOCCOMPLETE); }
+	void AutoCCancel() { Call(SCI_AUTOCCANCEL); }
+	bool AutoCActive() { return Call(SCI_AUTOCACTIVE)!=0; }
+	int AutoCPosStart() { return Call(SCI_AUTOCPOSSTART); }
+	void AutoCStops(const string& sChars) { Call(SCI_AUTOCSTOPS,0,(intptr_t)sChars.c_str()); }
+	void AutoCSetSeparator(char ch) { Call(SCI_AUTOCSETSEPARATOR,(unsigned char)ch); }
+	char AutoCGetSeparator() { return (char)Call(SCI_AUTOCGETSEPARATOR); }
+	int AutoCGetCurrent() { return Call(SCI_AUTOCGETCURRENT); }
+	string AutoCGetCurrentText() { int n=Call(SCI_AUTOCGETCURRENTTEXT); string s(n+1,'\0'); Call(SCI_AUTOCGETCURRENTTEXT,0,(intptr_t)s.data()); s.resize(n); return s; }
+	void AutoCSetCancelAtStart(bool b) { Call(SCI_AUTOCSETCANCELATSTART,b); }
+	bool AutoCGetCancelAtStart() { return Call(SCI_AUTOCGETCANCELATSTART)!=0; }
+	void AutoCSetFillUps(const string& sChars) { Call(SCI_AUTOCSETFILLUPS,0,(intptr_t)sChars.c_str()); }
+	void AutoCSetChooseSingle(bool b) { Call(SCI_AUTOCSETCHOOSESINGLE,b); }
+	bool AutoCGetChooseSingle() { return Call(SCI_AUTOCGETCHOOSESINGLE)!=0; }
+	void AutoCSetIgnoreCase(bool b) { Call(SCI_AUTOCSETIGNORECASE,b); }
+	bool AutoCGetIgnoreCase() { return Call(SCI_AUTOCGETIGNORECASE)!=0; }
+	void AutoCSetCaseInsensitiveBehaviour(int behaviour) { Call(SCI_AUTOCSETCASEINSENSITIVEBEHAVIOUR,behaviour); } // SC_CASEINSENSITIVEBEHAVIOUR_*
+	int AutoCGetCaseInsensitiveBehaviour() { return Call(SCI_AUTOCGETCASEINSENSITIVEBEHAVIOUR); }
+	void AutoCSetMulti(int multi) { Call(SCI_AUTOCSETMULTI,multi); } // SC_MULTIAUTOC_*
+	int AutoCGetMulti() { return Call(SCI_AUTOCGETMULTI); }
+	void AutoCSetOrder(int order) { Call(SCI_AUTOCSETORDER,order); } // SC_ORDER_*
+	int AutoCGetOrder() { return Call(SCI_AUTOCGETORDER); }
+	void AutoCSetAutoHide(bool b) { Call(SCI_AUTOCSETAUTOHIDE,b); }
+	bool AutoCGetAutoHide() { return Call(SCI_AUTOCGETAUTOHIDE)!=0; }
+	void AutoCSetOptions(int options) { Call(SCI_AUTOCSETOPTIONS,options); } // SC_AUTOCOMPLETE_*
+	int AutoCGetOptions() { return Call(SCI_AUTOCGETOPTIONS); }
+	void AutoCSetDropRestOfWord(bool b) { Call(SCI_AUTOCSETDROPRESTOFWORD,b); }
+	bool AutoCGetDropRestOfWord() { return Call(SCI_AUTOCGETDROPRESTOFWORD)!=0; }
+	void AutoCSetTypeSeparator(char ch) { Call(SCI_AUTOCSETTYPESEPARATOR,(unsigned char)ch); }
+	char AutoCGetTypeSeparator() { return (char)Call(SCI_AUTOCGETTYPESEPARATOR); }
+	void AutoCSetMaxWidth(int chars) { Call(SCI_AUTOCSETMAXWIDTH,chars); } // 0: as wide as the longest item
+	int AutoCGetMaxWidth() { return Call(SCI_AUTOCGETMAXWIDTH); }
+	void AutoCSetMaxHeight(int rows) { Call(SCI_AUTOCSETMAXHEIGHT,rows); }
+	int AutoCGetMaxHeight() { return Call(SCI_AUTOCGETMAXHEIGHT); }
+	void AutoCSetStyle(int style) { Call(SCI_AUTOCSETSTYLE,style); } // the list: font, size, fore, back of this style
+	int AutoCGetStyle() { return Call(SCI_AUTOCGETSTYLE); }
+	void AutoCSetImageScale(int percent) { Call(SCI_AUTOCSETIMAGESCALE,percent); }
+	int AutoCGetImageScale() { return Call(SCI_AUTOCGETIMAGESCALE); }
 
 	void ClearRegisteredImages() { Call(SCI_CLEARREGISTEREDIMAGES); }
 	void RegisterImage(int idx, const char** sz) { Call(SCI_REGISTERIMAGE,idx,(intptr_t)sz); }

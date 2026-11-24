@@ -21,6 +21,7 @@
 #include "lexNSIS.h"
 #include "lexJS.h"
 #include "lexCSS.h"
+#include "lexIniDg.h"
 #include <regex>
 #include "sciIterator.h"
 #include "theme.h"
@@ -709,6 +710,12 @@ void CEditor::onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab) {
 			page.sci.CheckIndent(pNS);
 			if( pNS->ch=='.' )
 				onAutoComplete(page.sci);
+			if( page.sci.Lexer()==LEX_INI ) // mea.ini with mea-dg.ini: the sections, the keys, the calltip after '='
+				iniDgCharAdded( page.sci, page.sFile, pNS->ch );
+			break;
+		case SCN_AUTOCCOMPLETED: // a key of mea-dg.ini is inserted: its default and description
+			if( page.sci.Lexer()==LEX_INI )
+				iniDgCallTip( page.sci, page.sFile );
 			break;
 		case SCN_MODIFIED:
 			page.sci.DoTokenHLSkip();
@@ -2801,6 +2808,13 @@ void parseJsCallTip( CSciWrapper& sci, int pos, string& sObject, string& sMember
 
 void CEditor::onAutoComplete( CSciWrapper& sci )
 {
+	if( sci.Lexer()==LEX_INI ) {
+		CTabPage* pPage = GetCurPage();
+		if( pPage && &pPage->sci==&sci && iniDgAutoComplete(sci, pPage->sFile) )
+			return;
+	}
+	sci.AutoCSetIgnoreCase( false ); // the ini lists set it
+	sci.AutoCSetOrder( SC_ORDER_PRESORTED );
 	int pos = sci.GetCurrentPos();
 	string str, sSelect;
 	if( isJSCode(sci) )
@@ -2832,6 +2846,11 @@ void CEditor::onAutoComplete( CSciWrapper& sci )
 void CEditor::onCallTip( CSciWrapper& sci )
 {
 	sci.CalltipCancel();
+	if( sci.Lexer()==LEX_INI ) {
+		CTabPage* pPage = GetCurPage();
+		if( pPage && &pPage->sci==&sci && iniDgCallTip(sci, pPage->sFile) )
+			return;
+	}
 
 	int pos = sci.GetCurrentPos();
 	string str;
