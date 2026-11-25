@@ -45,6 +45,9 @@ URLCH		[^ \t\r\n<>()\[\]]
 #define STYLE_REF			23
 #define STYLE_FRONT			24
 
+/* m_stateExt in a fenced code block: the length of its fence, FENCE_TILDE: ~~~ else ``` */
+#define FENCE_TILDE			0x100
+
 /* style a span, putting its leading/trailing delimiters into STYLE_MARK */
 #define STYLE_SPAN(nPre,nPost,nStyle) \
 	do { \
@@ -140,19 +143,36 @@ URLCH		[^ \t\r\n<>()\[\]]
 		SetStyle( MatchStart()+nClose+2, MatchEnd(), STYLE_URL );
 	}
 
- /* fenced code block: ``` or ~~~.
+ /* fenced code block: ``` or ~~~, also indented (in a list item).
+    The fence is kept in m_stateExt (saved in the line state): its char and length,
+    only the same char, at least as many times, closes it.
     NOTE: no {EOL} here - the fold level a rule sets is applied when the line
     end is matched separately (see CSciLexer::BeforeAction). */
-^[ \t]{0,3}(`{3,}|~{3,})[^\r\n]*	{
+^{SPACE}*(`{3,}|~{3,})[^\r\n]*	{
+		int n = 0;
+		while( yytext[n]==' ' || yytext[n]=='\t' ) n++;
+		char ch = yytext[n];
+		int len = 0;
+		while( yytext[n+len]==ch ) len++;
+		m_stateExt = (ch=='~' ? FENCE_TILDE : 0) | (len < 0xFF ? len : 0xFF);
 		levelIncrease();
 		BEGIN(FENCE);
 		SetStyle( STYLE_CODEBLOCK );
 	}
 
-<FENCE>^[ \t]{0,3}(`{3,}|~{3,}){SPACE}*	{
-		levelDecrease();
-		BEGIN(FENCEEND);
-		SetStyle( STYLE_CODEBLOCK );
+<FENCE>^{SPACE}*(`{3,}|~{3,}){SPACE}*	{
+		int n = 0;
+		while( yytext[n]==' ' || yytext[n]=='\t' ) n++;
+		char ch = yytext[n];
+		int len = 0;
+		while( yytext[n+len]==ch ) len++;
+		bool bSame = (ch=='~') == ((m_stateExt & FENCE_TILDE) != 0);
+		if( bSame && len >= (m_stateExt & 0xFF) ) {
+			m_stateExt = 0;
+			levelDecrease();
+			BEGIN(FENCEEND);
+		}
+		SetStyle( STYLE_CODEBLOCK );		// else a line of the code
 	}
 
  /* the line ends of a code block keep its style: it is filled to the end of the line */
