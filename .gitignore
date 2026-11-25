@@ -16,3 +16,4 @@
 
 # Visual Studio user settings
 *.user
+/lexers/Lexer*.cpp
