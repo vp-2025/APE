@@ -128,6 +128,24 @@ typedef  CSciLexer<vmoptions_FlexLexer>	CLexerVMOptions;
 
 #undef	yyFlexLexerOnce
 #undef   yyFlexLexer
+#define  yyFlexLexer	py_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<py_FlexLexer>	CLexerPython;
+
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
+#define  yyFlexLexer	cmd_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<cmd_FlexLexer>	CLexerCmd;
+
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
+#define  yyFlexLexer	ts_FlexLexer
+#include "FlexLexer.h"
+typedef  CSciLexer<ts_FlexLexer>	CLexerTS;
+
+#undef	yyFlexLexerOnce
+#undef   yyFlexLexer
 #define  yyFlexLexer	go_FlexLexer
 #include "FlexLexer.h"
 typedef  CSciLexer<go_FlexLexer>	CLexerGo;
@@ -154,9 +172,11 @@ CLexerInfo g_lexers[]={
 	{LEX_RC,"Resource", {"*.rc"} },
 	{LEX_JAVA,"Java", {"*.java"} },
 	{LEX_JS,"JavaScript", {"*.js"} },
+	{LEX_TS,"TypeScript", {"*.ts","*.mts","*.cts"} },
 	{LEX_JSON,"JSON", {"*.json"} },
 	{LEX_PROTO,"ProtoBuf", {"*.proto"} },
 	{LEX_GO,"Go", {"*.go","go.mod","go.work"} },
+	{LEX_PYTHON,"Python", {"*.py","*.pyw","*.pyi","SConstruct","SConscript"} },
 	{LEX_SEPARATOR},
 	{LEX_GOTPL, "HTML-Go-Tpl", {"*.tpl", "*.html", "*.htm"}},
 	{LEX_XHTML, "HTML", {"*.html", "*.htm"}},
@@ -172,7 +192,8 @@ CLexerInfo g_lexers[]={
 	{LEX_CADDY,"Caddyfile", {"caddyfile"} },
 	{LEX_VMOPTIONS,"VM Options", {"*.vmoptions"} },
 	{LEX_NSIS,"NSIS", {"*.nsi"}, {"*.nsh"} },
-	{LEX_BATCH,"Batch", {"*.bat","*.cmd"} },
+	{LEX_BATCH,"Batch", {"*.bat"} },
+	{LEX_CMD,"Cmd", {"*.cmd"} },
 	{LEX_MAKE,"Makefile", {"*.mk","*.mak","makefile", "makefile.*"} },
 	{LEX_CMAKE,"CMake", {"cmakelists.txt"} },
 	{LEX_GRADLE,"Gradle",{ "*.gradle"} },
@@ -301,6 +322,9 @@ void onStyleNeeded( CSciWrapper& sci, const string& sFile, int posTo ) {
 		case LEX_YAML:	{ CLexerYAML lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_CADDY:	{ CLexerCaddy lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 		case LEX_VMOPTIONS:	{ CLexerVMOptions lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_PYTHON:	{ CLexerPython lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_CMD:	{ CLexerCmd lexer( &styler, 0 ); lexer.Style( posTo ); } break;
+		case LEX_TS:	{ CLexerTS lexer( &styler, 0 ); lexer.Style( posTo ); } break;
 
 //		case LEX_TXT: { CMyLexerText lexer(sci); lexer.StyleTo( posTo ); } break;
 //		case LEX_TXT_NOQUOTE:	{ CMyLexerText lexer(sci); lexer.setQuote(false); lexer.StyleTo( posTo ); } break;

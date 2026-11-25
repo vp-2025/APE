@@ -427,6 +427,44 @@ CLexerStyle styleBatch[] = {
 	{0}
 };
 
+/* style ids must match LexerTS.L */
+CLexerStyle styleTS[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_BOLD( 1, "Keyword", clrKeyword ),
+	STYLE2( 9, "Type", RGB(0x80,0x00,0x80) ),
+	STYLE_ITALIC( 2, "Comment", clrComment ),
+	STYLE_ITALIC( 11, "Doc Comment", RGB(0x30,0x80,0x30) ),
+	STYLE2( 3, "Symbol", clrSymbol ),
+	STYLE2( 4, "String", clrString ),
+	STYLE2( 5, "Template", RGB(0x00,0x80,0x00) ),
+	STYLE2_BOLD( 12, "Template ${ }", RGB(0x00,0x60,0x00) ),
+	STYLE2( 10, "RegExp", clrChar ),
+	STYLE2( 6, "Number", clrNumber ),
+	STYLE2( 7, "Decorator", clrPrepocessor ),
+	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
+	{0}
+};
+
+/* style ids must match LexerCMD.L */
+CLexerStyle styleCMD[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_BOLD( 1, "Internal Command", clrKeyword ),
+	STYLE2( 10, "Keyword", RGB(0x00,0x00,0xA0) ),
+	STYLE2( 2, "External Command", clrNumber ),
+	STYLE2( 11, "Option", RGB(0x80,0x00,0x80) ),
+	STYLE_ITALIC( 3, "Comment", clrComment ),
+	STYLE2( 4, "Echo", RGB(0x60,0x60,0x60) ),
+	STYLE2( 5, "String", clrString ),
+	STYLE2( 6, "Variable", RGB(0x80,0,0) ),
+	STYLE2_BOLD( 7, "Label", clrChar ),
+	STYLE2( 12, "Label Reference", clrChar ),
+	STYLE2( 8, "Symbol", clrSymbol ),
+	STYLE_EOL( 9, "Unquoted Values", -1, clrUnquoted ),
+	{0}
+};
+
 CLexerStyle styleConf[] = {
 	STYLE( STYLE_DEFAULT, "Default"),
 	STYLE( 0, "Text" ),
@@ -514,6 +552,23 @@ CLexerStyle styleCaddy[] = {
 	STYLE2_BOLD( 12, "Env Variable", clrVar ),
 	STYLE2( 13, "Number", clrNumber ),
 	STYLE2_BOLD( 14, "Symbol", clrSymbol ),
+	{0}
+};
+
+/* style ids must match LexerPython.L */
+CLexerStyle stylePython[] = {
+	STYLE( STYLE_DEFAULT, "Default"),
+	STYLE( 0, "Text" ),
+	STYLE_BOLD( 1, "Keyword", clrKeyword ),
+	STYLE_ITALIC( 2, "Comment", clrComment ),
+	STYLE2( 3, "Symbol", clrSymbol ),
+	STYLE2( 4, "String", clrString ),
+	STYLE2( 5, "Triple String", RGB(0x00,0x80,0x00) ),
+	STYLE2( 6, "Number", clrNumber ),
+	STYLE2( 7, "Decorator", clrPrepocessor ),
+	STYLE_EOL( 8, "Unquoted Values", -1, clrUnquoted ),
+	STYLE2( 9, "Builtin", RGB(0x80,0x00,0x80) ),
+	STYLE2_BOLD( 10, "Definition", clrLabel ),
 	{0}
 };
 
@@ -665,6 +720,9 @@ CLexerStyles g_styles[] = {
 	{"YAML", "yaml", styleYAML},
 	{"Caddyfile", "caddy", styleCaddy},
 	{"VM Options", "vmoptions", styleVMOptions},
+	{"Python", "python", stylePython},
+	{"Cmd", "cmd", styleCMD},
+	{"TypeScript", "ts", styleTS},
 	{"Text","txt", styleTxt},
 	{"Text Document", "text", styleText},
 	{"NSIS", "nsis", styleNSIS},
@@ -707,6 +765,9 @@ CLexerStyle* GetLexerStyles( CSciWrapper& sci )
 		case LEX_YAML: return styleYAML;
 		case LEX_CADDY: return styleCaddy;
 		case LEX_VMOPTIONS: return styleVMOptions;
+		case LEX_PYTHON: return stylePython;
+		case LEX_CMD: return styleCMD;
+		case LEX_TS: return styleTS;
 //		case LEX_TXT_NOQUOTE:
 //		case LEX_TXT: return styleTxt;
 		case LEX_TEXT: return styleText;
@@ -848,4 +909,3 @@ void SetupIndicators( CSciWrapper& sci )
 			.Under(true);
 	}
 }
-

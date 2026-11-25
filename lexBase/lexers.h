@@ -37,7 +37,10 @@ enum {
 	LEX_VMOPTIONS,
 	LEX_GO,
 	LEX_TEXT,
-	LEX_JSON
+	LEX_JSON,
+	LEX_PYTHON,
+	LEX_CMD,
+	LEX_TS
 };
 
 struct CLexerInfo {
