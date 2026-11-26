@@ -259,6 +259,12 @@
 #define ID_SEARCH_RESULTS_RERUNDLG      33664
 #define ID_VIEW_OUTLINE_SYNCFOLD        33665
 #define ID_SEARCH_RESULTS_SELECTLINE    33666
+#define ID_VIEW_TABLE                   33667
+#define ID_TABLE_SEP_AUTO               33668
+#define ID_TABLE_SEP_TAB                33669
+#define ID_TABLE_SEP_SEMICOLON          33670
+#define ID_TABLE_SEP_COMMA              33671
+#define ID_TABLE_REFRESH                33672
 
 // Next default values for new objects
 // 
@@ -266,7 +272,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        231
-#define _APS_NEXT_COMMAND_VALUE         33667
+#define _APS_NEXT_COMMAND_VALUE         33673
 #define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           110
 #endif

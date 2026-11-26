@@ -122,6 +122,7 @@ BEGIN
         MENUITEM "Toolbar",                     ID_VIEW_TOOLBAR
         MENUITEM "Search Results",              ID_VIEW_RESULTS
         MENUITEM "Outline",                     ID_VIEW_OUTLINE
+        MENUITEM "Table",                       ID_VIEW_TABLE
         MENUITEM SEPARATOR
         MENUITEM "Always on Top",               ID_VIEW_ALWAYSONTOP
         MENUITEM "Full Screen",                 ID_VIEW_FULLSCREEN

@@ -12,6 +12,18 @@
 #include "tabPage.h"
 #include "findResults.h"
 #include "outline.h"
+#include "table.h"
+
+// the timers of the main window
+#define ID_CHECK_RELOAD	1234 // timer onCheckReload
+#define ID_CMB_FUNC		1235 // ctrl cmbFunc
+#define ID_FILL_FUNC	1236 // timer FillFuncCombo
+#define ID_TOKEN_HL		1237 // timer page.sci.DoTokenHL
+#define ID_OUTLINE		1238 // timer FillOutline
+#define ID_OUTLINE_SYNC	1239 // timer SyncOutline
+#define ID_TABLE		1240 // timer FillTable
+
+extern int TOOLBAR_H, STATUSBAR_H, TAB_H; // the heights of the bars, apeEditor.cpp
 
 class CEditor : public CWindow {
 	CReBar m_rebar;
@@ -32,6 +44,9 @@ class CEditor : public CWindow {
 	int m_splitDrag;	// the splitter above the results is dragged: mouse y - splitter y, or -1
 	COutline m_outline;	// at the right, View > Outline
 	int m_splitDragV;	// the splitter left of the outline is dragged: mouse x - splitter x, or -1
+	CTable m_table;	// under the editor, above the results, View > Table
+	int m_splitDragT;	// the splitter above the table is dragged: mouse y - splitter y, or -1
+	bool m_bTableAuto;	// the table is shown by a .csv/.tsv tab, not by the user: hidden again by another file
 public:
 	vector<CTabPage> m_vTabs;
 	CFindDlg m_findDlg;
@@ -41,7 +56,7 @@ public:
 		, m_pin(ID_PIN_FIRST,ID_PIN_LAST)
 		, m_accelMenu(IDC_ACCEL)
 		, m_findDlg(this)
-	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; m_splitDrag=m_splitDragV=-1; }
+	{ m_bWasZoomed=m_bSortFuncsByName=false; m_bToolbar=true; m_splitDrag=m_splitDragV=m_splitDragT=-1; m_bTableAuto=false; }
 
 	void onCreate( HWND hWnd, bool bNewInstance );	// bNewInstance - started via "-new"
 	void onDestroy();
@@ -138,7 +153,7 @@ private:
 	int ResultsH();	// height of the results with the splitter, 0 if hidden
 	CRect ResultsSplitterRect();
 	void onNotificationResults( SCNotification* pNS );
-	enum CFocusView { viewEditor, viewResults, viewOutline };
+	enum CFocusView { viewEditor, viewResults, viewOutline, viewTable };
 	void SetActiveTabs( CFocusView view );	// the focused view has the colored current tab, the others are grey; the outline has no tabs
 	void onResultGoto( bool bFocus );
 	void onResultNext( bool bNext );
@@ -159,6 +174,22 @@ private:
 	LRESULT onNotificationOutline( NMHDR* pNMHdr );	// returns the WM_NOTIFY result
 	void onOutlineGoto( bool bFocus );	// the selected item -> the line in the editor
 	void onPopupOutline( int x, int y );
+public:
+
+	// table: the lines of the current file split by tab/';'/',' in a list view, under the editor
+	void ShowTable( bool bShow );	// by the user: View > Table, Escape, Hide
+	static bool isTableFile( const string& sFile );	// .csv, .tsv, .tab: the table is shown with the file
+private:
+	bool TableShown() { return m_table.m_bVisible && m_tabs.GetItemCount()>0; }	// View > Table and an editor is opened
+	void UpdateTableShown();	// shows/hides the table when the first tab is opened / the last one is closed
+	int TableH();	// height of the table with the splitter, 0 if hidden
+	CRect TableSplitterRect();
+	int BottomH() { return ResultsH()+TableH(); }	// under the editor: the table and the results
+	void FillTable();	// for the current tab, if the table is shown
+	void AutoShowTable( const CTabPage& page );	// on a tab change: shown for a table file, hidden again for another one
+	LRESULT onNotificationTable( NMHDR* pNMHdr );	// returns the WM_NOTIFY result
+	void onTableGoto( int row, int col, bool bFocus );	// the cell (col<0: the line) -> selected in the editor
+	void onPopupTable( int x, int y );
 public:
 
 	void onAutoComplete( CSciWrapper& sci );

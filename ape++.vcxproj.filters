@@ -182,6 +182,9 @@
     <ClInclude Include="outline.h">
       <Filter>windows</Filter>
     </ClInclude>
+    <ClInclude Include="table.h">
+      <Filter>windows</Filter>
+    </ClInclude>
     <ClInclude Include="theme.h">
       <Filter>windows</Filter>
     </ClInclude>
@@ -319,6 +322,18 @@
     <ClCompile Include="outline.cpp">
       <Filter>windows</Filter>
     </ClCompile>
+    <ClCompile Include="table.cpp">
+      <Filter>windows</Filter>
+    </ClCompile>
+    <ClCompile Include="apeEditorResults.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="apeEditorOutline.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="apeEditorTable.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="theme.cpp">
       <Filter>windows</Filter>
     </ClCompile>
@@ -383,6 +398,15 @@
       <Filter>lexers\cpp</Filter>
     </ClCompile>
     <ClCompile Include="lexers\LexerVMOptions.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerPython.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerCMD.cpp">
+      <Filter>lexers\cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerTS.cpp">
       <Filter>lexers\cpp</Filter>
     </ClCompile>
     <ClCompile Include="lexers\LexerGoTpl.cpp">
@@ -664,6 +688,15 @@
       <Filter>lexers\L</Filter>
     </CustomBuild>
     <CustomBuild Include="lexers\LexerVMOptions.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerPython.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerCMD.L">
+      <Filter>lexers\L</Filter>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerTS.L">
       <Filter>lexers\L</Filter>
     </CustomBuild>
     <CustomBuild Include="lexers\LexerGoTpl.L">

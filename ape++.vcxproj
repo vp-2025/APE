@@ -593,6 +593,60 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <CustomBuild Include="lexers\LexerPython.L">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerCMD.L">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="lexers\LexerTS.L">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building lexer from %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(RootDir)%(Directory)%(Filename).cpp;%(Outputs)</Outputs>
+    </CustomBuild>
     <CustomBuild Include="lexers\LexerGoTpl.L">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building lexer from %(Filename)</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">flex -Sflex\flexLexer.skl -o%(RootDir)%(Directory)%(Filename).cpp %(RootDir)%(Directory)%(Filename).L
@@ -660,6 +714,7 @@
     <ClInclude Include="tabs.h" />
     <ClInclude Include="findResults.h" />
     <ClInclude Include="outline.h" />
+    <ClInclude Include="table.h" />
     <ClInclude Include="theme.h" />
   </ItemGroup>
   <ItemGroup>
@@ -689,6 +744,10 @@
     <ClCompile Include="tabs.cpp" />
     <ClCompile Include="findResults.cpp" />
     <ClCompile Include="outline.cpp" />
+    <ClCompile Include="table.cpp" />
+    <ClCompile Include="apeEditorResults.cpp" />
+    <ClCompile Include="apeEditorOutline.cpp" />
+    <ClCompile Include="apeEditorTable.cpp" />
     <ClCompile Include="theme.cpp" />
     <ClCompile Include="xmlMatchedTagHL.cpp" />
     <ClCompile Include="xpm_img.cpp" />
@@ -1125,6 +1184,24 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="lexers\LexerVMOptions.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerPython.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerCMD.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="lexers\LexerTS.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>

@@ -18,8 +18,9 @@ static bool isValidUtf8(const string& s) {
     for( size_t i = 0; i < s.size(); ) {
         unsigned char c = s[i];
         int n = c < 0x80 ? 0 : (c & 0xE0) == 0xC0 ? 1 : (c & 0xF0) == 0xE0 ? 2 : (c & 0xF8) == 0xF0 ? 3 : -1;
-        if( n < 0 || i + n >= s.size() + (n ? 0 : 1) )
-            return false;
+        if (n != 0)
+            if (n < 0 || i + n >= s.size())
+                return false;
         for( int k = 1; k <= n; k++ )
             if( ((unsigned char)s[i + k] & 0xC0) != 0x80 )
                 return false;

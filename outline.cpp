@@ -12,20 +12,18 @@ void COutline::Create(HWND hParent, HFONT hFont) {
 			0, 0, 0, 0, hParent, nullptr, g_hInst, nullptr);
 	if( hFont )
 		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)hFont, FALSE);
-	LOGFONT lf{}; // the comments
+	LOGFONT lf{}; // the comments, the template lines: bold, italic, bold italic
 	if( ::GetObject(hFont ? hFont : (HFONT)::GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf) ) {
-		lf.lfItalic = TRUE;
-		m_hFontItalic = CreateFontIndirect(&lf);
+		LOGFONT lfBold = lf, lfItalic = lf, lfBoldItalic = lf;
+		lfBold.lfWeight = FW_BOLD;
+		lfItalic.lfItalic = 1;
+		lfBoldItalic.lfWeight = FW_BOLD;
+		lfBoldItalic.lfItalic = 1;
+		m_hFonts[1] = CreateFontIndirect(&lfBold);
+		m_hFonts[2] = CreateFontIndirect(&lfItalic);
+		m_hFonts[3] = CreateFontIndirect(&lfBoldItalic);
 	}
 	applyTheme();
-}
-
-void COutline::Show(bool bShow) {
-	::ShowWindow(m_hWnd, bShow ? SW_SHOW : SW_HIDE);
-}
-
-void COutline::Move(int x, int y, int w, int h) {
-	::MoveWindow(m_hWnd, x, y, max(w, 0), max(h, 0), TRUE);
 }
 
 void COutline::applyTheme() {
@@ -40,7 +38,7 @@ void COutline::applyTheme() {
 // the line as the item text: trimmed, tabs as spaces, not longer than maxLen
 static wstring lineText(CSciWrapper& sci, int line, size_t maxLen = 200) {
 	string s = sci.GetTextRange(sci.GetLineIndentPosition(line), sci.GetLineEndPosition(line));
-	wstring ws = sci.getEncoding() == encAnsi ? utf2w(a2utf(s)) : utf2w(s);
+	wstring ws = sci.getEncoding() == encAnsi ? a2w(s) : utf2w(s);
 	for( auto& ch : ws )
 		if( ch == '\t' )
 			ch = ' ';
@@ -49,6 +47,59 @@ static wstring lineText(CSciWrapper& sci, int line, size_t maxLen = 200) {
 	if( ws.size() > maxLen )
 		ws = ws.substr(0, maxLen) + L"\x2026"; // ...
 	return ws;
+}
+
+// the attributes of the styles of the editor, read once per Fill()
+struct CStyleAttrs {
+	struct CAttr { bool bInit; COLORREF fore, back; bool bBack; int font; } attrs[256]{};
+	COLORREF backDef;
+	explicit CStyleAttrs(CSciWrapper& sci) : backDef((COLORREF)sci.Call(SCI_STYLEGETBACK, STYLE_DEFAULT)) {}
+	const CAttr& get(CSciWrapper& sci, int style) {
+		CAttr& a = attrs[style & 0xFF];
+		if( !a.bInit ) {
+			a.bInit = true;
+			a.fore = (COLORREF)sci.Call(SCI_STYLEGETFORE, style);
+			a.back = (COLORREF)sci.Call(SCI_STYLEGETBACK, style);
+			a.bBack = a.back != backDef; // the background of the tree, else: JS/CSS in HTML, {{...}}
+			a.font = (sci.Call(SCI_STYLEGETBOLD, style) ? 1 : 0) | (sci.Call(SCI_STYLEGETITALIC, style) ? 2 : 0);
+		}
+		return a;
+	}
+};
+
+// appends the styles of a line as runs of its item text, which is size chars (trimmed, a long line is cut)
+static void lineRuns(CSciWrapper& sci, int line, int size, CStyleAttrs& attrs, vector<COutline::CRun>& runs) {
+	int a = sci.GetLineIndentPosition(line), b = sci.GetLineEndPosition(line);
+	vector<COutline::CRun> v;
+	if( a < b ) {
+		string cells(2 * (b - a) + 2, '\0'); // char, style
+		Sci_TextRange tr;
+		tr.chrg.cpMin = a;
+		tr.chrg.cpMax = b;
+		tr.lpstrText = &cells[0];
+		sci.Call(SCI_GETSTYLEDTEXT, 0, (intptr_t)&tr);
+		bool bAnsi = sci.getEncoding() == encAnsi;
+		for( int i = 0; i < b - a; ) {
+			int style = (unsigned char)cells[2 * i + 1];
+			string s;
+			for( ; i < b - a && (unsigned char)cells[2 * i + 1] == style; i++ )
+				s += cells[2 * i];
+			int len = (int)(bAnsi ? a2w(s) : utf2w(s)).size(); // tabs are spaces in the item: the same length
+			const auto& attr = attrs.get(sci, style);
+			v.push_back({len, attr.fore, attr.back, attr.bBack, attr.font});
+		}
+	}
+	int total = 0;
+	for( auto& run : v ) {
+		int len = min(run.len, size - total);
+		if( len <= 0 )
+			break;
+		run.len = len;
+		runs.push_back(run);
+		total += len;
+	}
+	if( total < size ) // "..." of a long line, "(12)" of an empty header
+		runs.push_back({size - total, (COLORREF)-1, 0, false, 0});
 }
 
 static bool isBlank(CSciWrapper& sci, int line) {
@@ -98,17 +149,14 @@ void COutline::Fill(CSciWrapper& sci) {
 	saveCollapsed();
 	m_bFilling = true;
 	::SendMessage(m_hWnd, WM_SETREDRAW, FALSE, 0);
-	TreeView_DeleteAllItems(m_hWnd);
+	deleteAll();
 	m_lineToItem.clear();
 	m_headers.clear();
-	m_comments.clear();
+	m_styled.clear();
 	m_hSci = sci.hWnd();
 
 	sci.ColorizeTo(-1); // the fold levels are set by the lexer
-	set<int> commentStyles; // of the lexer: "Comment", "Doc Comment", "Line Comment" ...
-	for( CLexerStyle* pStyle = GetLexerStyles(sci); pStyle && pStyle->szName; pStyle++ )
-		if( containsIC(pStyle->szName, "comment") )
-			commentStyles.insert(pStyle->id);
+	CStyleAttrs attrs(sci);
 	const set<wstring>& collapsed = m_collapsed[m_hSci];
 	struct CParent { int level; HTREEITEM h; wstring path; };
 	vector<CParent> parents;
@@ -124,6 +172,7 @@ void COutline::Fill(CSciWrapper& sci) {
 
 		int lineItem = line; // the item goes there
 		wstring ws;
+		size_t lenPrev = 0; // "void foo()" of "void foo() {"
 		if( bHeader ) {
 			ws = lineText(sci, line);
 			if( isBraceHeader(ws) ) {
@@ -131,7 +180,9 @@ void COutline::Fill(CSciWrapper& sci) {
 				while( prev >= 0 && isBlank(sci, prev) )
 					prev--;
 				if( prev >= 0 && !sci.IsFoldHeader(prev) ) {
-					ws = lineText(sci, prev) + L" " + ws;
+					wstring wsPrev = lineText(sci, prev);
+					lenPrev = wsPrev.size();
+					ws = wsPrev + L" " + ws;
 					lineItem = prev;
 				}
 			}
@@ -162,9 +213,14 @@ void COutline::Fill(CSciWrapper& sci) {
 		m_lineToItem[line] = h;
 		if( lineItem != line )
 			m_lineToItem[lineItem] = h;
-		int style = sci.GetStyleAt(sci.GetLineIndentPosition(lineItem)); // the style of the first char
-		if( commentStyles.count(style) )
-			m_comments[h] = { (COLORREF)sci.Call(SCI_STYLEGETFORE, style), sci.Call(SCI_STYLEGETITALIC, style) != 0 };
+		vector<CRun> runs; // as in the editor
+		if( lineItem != line ) {
+			lineRuns(sci, lineItem, (int)lenPrev, attrs, runs);
+			runs.push_back({1, (COLORREF)-1, 0, false, 0}); // " "
+			lineRuns(sci, line, (int)(ws.size() - lenPrev - 1), attrs, runs);
+		} else
+			lineRuns(sci, line, (int)ws.size(), attrs, runs);
+		m_styled[h] = std::move(runs);
 		if( !bHeader )
 			continue;
 
@@ -182,14 +238,23 @@ void COutline::Fill(CSciWrapper& sci) {
 	m_bFilling = false;
 }
 
+// fast: without a selection the tree does not select the next item for every deleted one
+void COutline::deleteAll() {
+	TreeView_SelectItem(m_hWnd, nullptr);
+	TreeView_DeleteAllItems(m_hWnd);
+}
+
 void COutline::Clear() {
 	saveCollapsed();
 	m_bFilling = true;
-	TreeView_DeleteAllItems(m_hWnd);
+	::SendMessage(m_hWnd, WM_SETREDRAW, FALSE, 0);
+	deleteAll();
+	::SendMessage(m_hWnd, WM_SETREDRAW, TRUE, 0);
+	InvalidateRect(m_hWnd, nullptr, TRUE);
 	m_bFilling = false;
 	m_lineToItem.clear();
 	m_headers.clear();
-	m_comments.clear();
+	m_styled.clear();
 	m_hSci = nullptr;
 }
 
@@ -342,20 +407,65 @@ void COutline::onItemExpanded(const NMTREEVIEWW* p, CSciWrapper& sci) {
 LRESULT COutline::onCustomDraw(NMTVCUSTOMDRAW* pCD) {
 	switch( pCD->nmcd.dwDrawStage ) {
 	case CDDS_PREPAINT:
-		return m_comments.empty() ? CDRF_DODEFAULT : CDRF_NOTIFYITEMDRAW;
-	case CDDS_ITEMPREPAINT: {
-		auto it = m_comments.find((HTREEITEM)pCD->nmcd.dwItemSpec);
-		if( it == m_comments.end() )
-			return CDRF_DODEFAULT;
-		bool bSelected = (pCD->nmcd.uItemState & CDIS_SELECTED) && ::GetFocus() == m_hWnd;
-		if( !bSelected ) // the highlighted item keeps the highlight text color
-			pCD->clrText = it->second.fore;
-		if( it->second.bItalic && m_hFontItalic ) {
-			SelectObject(pCD->nmcd.hdc, m_hFontItalic);
-			return CDRF_NEWFONT;
-		}
+		return m_styled.empty() ? CDRF_DODEFAULT : CDRF_NOTIFYITEMDRAW;
+	case CDDS_ITEMPOSTPAINT: { // over the text drawn by the tree
+		auto it = m_styled.find((HTREEITEM)pCD->nmcd.dwItemSpec);
+		if( it != m_styled.end() )
+			drawStyled(pCD, it->second);
 		return CDRF_DODEFAULT;
 	}
+	case CDDS_ITEMPREPAINT: // also the selected item: as the others, with a border around its text
+		return m_styled.count((HTREEITEM)pCD->nmcd.dwItemSpec) ? CDRF_NOTIFYPOSTPAINT : CDRF_DODEFAULT;
 	}
 	return CDRF_DODEFAULT;
+}
+
+// the text of the item by the runs: the colors, the backgrounds and the fonts of the editor;
+// the selected item has a border: the highlight color if the tree has the focus, else grey
+void COutline::drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs) {
+	auto h = (HTREEITEM)pCD->nmcd.dwItemSpec;
+	CRect r;
+	if( !TreeView_GetItemRect(m_hWnd, h, &r, TRUE) )
+		return;
+	CRect rc;
+	::GetClientRect(m_hWnd, &rc);
+	r.right = rc.right; // a bold run is wider than the text of the tree
+	COLORREF clrBack = TreeView_GetBkColor(m_hWnd);
+	if( clrBack == (COLORREF)-1 )
+		clrBack = GetSysColor(COLOR_WINDOW);
+	COLORREF clrText = TreeView_GetTextColor(m_hWnd);
+	if( clrText == (COLORREF)-1 )
+		clrText = GetSysColor(COLOR_WINDOWTEXT);
+
+	HDC hDC = pCD->nmcd.hdc;
+	SetBkColor(hDC, clrBack);
+	ExtTextOutW(hDC, 0, 0, ETO_OPAQUE, &r, nullptr, 0, nullptr); // the text of the tree is erased
+	wstring ws = ItemText(h);
+	auto hFont = (HFONT)::SendMessage(m_hWnd, WM_GETFONT, 0, 0);
+	HGDIOBJ hOld = SelectObject(hDC, hFont);
+	int x = r.left + 2 * GetSystemMetrics(SM_CXBORDER); // as the tree
+	int pos = 0;
+	for( const CRun& run : runs ) {
+		if( pos + run.len > (int)ws.size() )
+			break;
+		SelectObject(hDC, run.font && m_hFonts[run.font] ? m_hFonts[run.font] : hFont);
+		SIZE size{};
+		GetTextExtentPoint32W(hDC, ws.c_str() + pos, run.len, &size);
+		CRect rr(x, r.top, x + size.cx, r.bottom);
+		SetBkColor(hDC, run.bBack ? run.back : clrBack);
+		SetTextColor(hDC, run.fore == (COLORREF)-1 ? clrText : run.fore);
+		ExtTextOutW(hDC, x, r.top + (r.height() - size.cy) / 2, ETO_OPAQUE, &rr, ws.c_str() + pos, run.len, nullptr);
+		x += size.cx;
+		pos += run.len;
+	}
+	SelectObject(hDC, hOld);
+
+	if( pCD->nmcd.uItemState & (CDIS_SELECTED | CDIS_FOCUS) ) {
+		CRect rf(r.left, r.top, x + 2 * GetSystemMetrics(SM_CXBORDER), r.bottom);
+		COLORREF clr = ::GetFocus() == m_hWnd ? GetSysColor(COLOR_HIGHLIGHT)
+				: g_theme.isDark() ? CTheme::clrTextDisabled : GetSysColor(COLOR_BTNSHADOW);
+		HBRUSH hbr = CreateSolidBrush(clr);
+		FrameRect(hDC, &rf, hbr);
+		DeleteObject(hbr);
+	}
 }

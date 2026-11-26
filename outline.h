@@ -11,16 +11,18 @@
 // the item of the caret line is selected; navigating the tree moves the caret to the line (if m_bSelectLine)
 // m_bSyncFold: the folding is the same: expand/collapse in the tree folds the editor, SyncFold() applies the editor folding to the tree;
 // else the tree has its own folding: the collapsed items are kept, when the tree is rebuilt
-// a line, which starts with a comment, has the color (and italic) of the comment style in the editor: NM_CUSTOMDRAW
+// every item is drawn as its line in the editor: the runs of the styles (colors, backgrounds, bold, italic): NM_CUSTOMDRAW
 
 class COutline {
 	HWND m_hWnd{};
 	HWND m_hSci{};                          // the editor, the tree is built for
 	std::map<int, HTREEITEM> m_lineToItem;  // line -> item
 	std::map<HTREEITEM, int> m_headers;     // item of a fold header -> the header line
-	struct CItemStyle { COLORREF fore; bool bItalic; };
-	std::map<HTREEITEM, CItemStyle> m_comments; // the items of the comment lines
-	HFONT m_hFontItalic{};
+public:
+	struct CRun { int len; COLORREF fore, back; bool bBack; int font; }; // fore -1: the text color of the tree
+private:
+	std::map<HTREEITEM, vector<CRun>> m_styled; // every item: its text by the styles of the editor
+	HFONT m_hFonts[4]{};                    // [bold | italic<<1]; [0] is not used: the font of the tree
 	std::map<HWND, std::set<wstring>> m_collapsed; // !m_bSyncFold: per editor, the paths of the collapsed items
 	bool m_bFilling{};
 	static constexpr int maxAllLines = 20000; // a bigger file: only the fold headers, the tree would be too slow
@@ -28,10 +30,11 @@ class COutline {
 	wstring ItemText(HTREEITEM h);
 	wstring ItemPath(HTREEITEM h); // the texts from the root, '\n' separated
 	void saveCollapsed();          // !m_bSyncFold: before the tree is cleared
+	void deleteAll();              // all the items, fast
 	void expandChildren(HTREEITEM h, bool bExpand); // all the children of the item
 
 public:
-	~COutline() { if( m_hFontItalic ) DeleteObject(m_hFontItalic); }
+	~COutline() { for( HFONT h : m_hFonts ) if( h ) DeleteObject(h); }
 	static int SplitterW() { return g_dpi.scale(5); }
 	int m_width{250};         // with the splitter
 	bool m_bVisible{};        // View > Outline; it is shown only if there is an editor
@@ -44,9 +47,9 @@ public:
 	HWND hSci() const { return m_hSci; }
 	bool hasFocus() const { return m_hWnd && ::GetFocus() == m_hWnd; }
 	bool isFilling() const { return m_bFilling; }
-	void Show(bool bShow);    // the window, m_bVisible is not changed
+	void Show(bool bShow) const { ::ShowWindow(m_hWnd, bShow ? SW_SHOW : SW_HIDE); }    // the window, m_bVisible is not changed
 	bool isShown() const { return (GetWindowLong(m_hWnd, GWL_STYLE) & WS_VISIBLE) != 0; }
-	void Move(int x, int y, int w, int h);
+	void Move(int x, int y, int w, int h) { ::MoveWindow(m_hWnd, x, y, max(w, 0), max(h, 0), TRUE); }
 	void applyTheme();
 
 	void Fill(CSciWrapper& sci); // rebuilds the tree from the fold levels
@@ -59,5 +62,7 @@ public:
 	void SyncFold(CSciWrapper& sci); // m_bSyncFold: the editor folding -> expanded/collapsed items
 	void onItemExpanded(const NMTREEVIEWW* p, CSciWrapper& sci); // by the user: folds the editor (m_bSyncFold); with Shift also the children
 	void ExpandAll(bool bExpand);    // only the tree: !m_bSyncFold
-	LRESULT onCustomDraw(NMTVCUSTOMDRAW* pCD); // the comments as in the editor
+	LRESULT onCustomDraw(NMTVCUSTOMDRAW* pCD); // the items as their lines in the editor
+private:
+	void drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs);
 };
