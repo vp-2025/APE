@@ -61,6 +61,8 @@ void CEditor::FillOutline() {
 	m_outline.SelectLine( pPage->sci, pPage->sci.GetCurrentLine() );
 }
 
+// the folding of the editor -> the tree: it walks all the fold headers, so it is done once for many changes
+// (a fold command, holding an arrow key); the item of the caret is selected at once by SCN_UPDATEUI
 void CEditor::SyncOutlineLater() {
 	if( OutlineShown() )
 		SetTimer( ID_OUTLINE_SYNC, 50 ); // many changes at once: synced only once
@@ -72,7 +74,7 @@ void CEditor::SyncOutline() {
 	if( !OutlineShown() || !pPage )
 		return;
 	m_outline.SyncFold( pPage->sci );
-	if( !m_outline.hasFocus() ) // the focus is in the outline: it moves the caret
+	if( !m_outline.hasFocus() ) // again: a collapsed item can be the one to select now; the focus in the outline: it moves the caret
 		m_outline.SelectLine( pPage->sci, pPage->sci.GetCurrentLine() );
 }
 

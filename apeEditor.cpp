@@ -763,7 +763,9 @@ void CEditor::onNotificationSci(SCNotification *pNS, CTabPage& page, int iTab) {
 			UpdateToolbar();
 			UpdateFuncCombo(page);
 			page.sci.XmlMatchedTagHL();
-			SyncOutlineLater();
+			if( OutlineShown() && page.sci.hWnd()==m_outline.hSci() && !m_outline.hasFocus() ) // the item of the caret: at once, it is cheap
+				m_outline.SelectLine( page.sci, page.sci.GetCurrentLine() );
+			SyncOutlineLater(); // the folding: later, once for many changes
 			if( TableShown() && page.sci.hWnd()==m_table.hSci() && !m_table.hasFocus() ) { // the cell of the caret
 				int line = page.sci.GetCurrentLine();
 				m_table.SelectCell( line, page.sci.GetCurrentPos()-page.sci.PositionFromLine(line) );
