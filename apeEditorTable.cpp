@@ -165,8 +165,8 @@ void CEditor::onPopupTable( int x, int y ) {
 	popup.Append( ID_TABLE_SEP_SEMICOLON, tr(sepNames[1]) );
 	popup.Append( ID_TABLE_SEP_COMMA, tr(sepNames[2]) );
 	popup.Check( ID_TABLE_SEP_AUTO+m_table.m_sepMode, true );
-	popup.AppendSeparator();
-	popup.Append( ID_TABLE_REFRESH, tr(L"Refresh") );
+//	popup.AppendSeparator();
+//	popup.Append( ID_TABLE_REFRESH, tr(L"Refresh") );
 	popup.AppendSeparator();
 	popup.Append( ID_VIEW_TABLE, tr(L"Hide") );
 	int cmd = popup.TrackPopup( TPM_RETURNCMD, x, y, m_hWnd );
@@ -175,7 +175,7 @@ void CEditor::onPopupTable( int x, int y ) {
 		m_table.m_sepMode = cmd-ID_TABLE_SEP_AUTO;
 		FillTable();
 		break;
-	case ID_TABLE_REFRESH: FillTable(); break;
+//	case ID_TABLE_REFRESH: FillTable(); break;
 	case ID_VIEW_TABLE: ShowTable( false ); break;
 	}
 }

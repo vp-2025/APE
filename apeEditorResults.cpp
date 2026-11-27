@@ -54,8 +54,7 @@ CRect CEditor::ResultsSplitterRect() {
 	return CRect( 0, y, r.width()-OutlineW(), y+CResultsTabs::SplitterH() ); // the outline is at the right
 }
 
-void CEditor::onPopupResultsTab( int i, const CPoint& pt )
-{
+void CEditor::onPopupResultsTab( int i, const CPoint& pt ) {
 	CMenu popup;
 	popup.Create(true);
 	const CFindParams& params = m_results.Get(i)->m_params;
@@ -84,6 +83,25 @@ void CEditor::onPopupResultsTab( int i, const CPoint& pt )
 		while( m_results.count() )
 			CloseResultsTab( m_results.count()-1 );
 		break;
+	}
+}
+
+void CEditor::onPopupResults( int x, int y ) {
+	CFindResults& res = *m_results.Cur();
+	CMenu popup;
+	popup.Create(true);
+//	popup.Append( ID_SEARCH_RESULTS_SELECTLINE, tr(L"Select Line on Navigate") ); todo
+//	popup.Check( ID_SEARCH_RESULTS_SELECTLINE, m_results.m_bSelectLine );
+//	popup.AppendSeparator();
+	popup.Append( ID_FOLDING_COLLAPSEALL, tr(L"Collapse All"), res.hasFolding() );
+	popup.Append( ID_FOLDING_EXPANDALL, tr(L"Expand All"), res.hasFolding() );
+	popup.AppendSeparator();
+	popup.Append( ID_VIEW_RESULTS, tr(L"Hide") );
+	switch( popup.TrackPopup(TPM_RETURNCMD, x, y, m_hWnd) ) {
+	case ID_FOLDING_COLLAPSEALL: res.FoldAll( true ); break;
+	case ID_FOLDING_EXPANDALL: res.FoldAll( false ); break;
+//	case ID_SEARCH_RESULTS_SELECTLINE: m_results.m_bSelectLine = !m_results.m_bSelectLine; break;
+	case ID_VIEW_RESULTS: ShowResults( false ); break;
 	}
 }
 

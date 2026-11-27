@@ -904,8 +904,7 @@ void CEditor::UpdateLexersMenu( HMENU hMenu ) {
 	FillLexersMenu( popup, pPage );
 }
 
-void CEditor::onPopupLexers( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupLexers( CTabPage& page, const CPoint& pt ) {
 	CMenu popup;
 	popup.Create(true);
 	FillLexersMenu( popup, &page );
@@ -920,8 +919,7 @@ void CEditor::preparePopup( CMenu& menu, CTabPage* pPage )
 	UpdateMenu( menu.hMenu(), pPage );
 }
 
-void CEditor::onPopupOverType( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupOverType( CTabPage& page, const CPoint& pt ) {
 	CSciWrapper& sci = page.sci;
 	CMenu menu(IDC_POPUP_OVR);
 	menu.EnableCheck( ID_OVR, true, sci.GetOverType() );
@@ -935,8 +933,7 @@ void CEditor::onPopupOverType( CTabPage& page, const CPoint& pt )
 	UpdateStatusbar();
 }
 
-void CEditor::onPopupFuncsSort( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupFuncsSort( CTabPage& page, const CPoint& pt ) {
 	CMenu menu(IDC_POPUP_FUNC_COMBO);
 	menu.EnableCheck( ID_SORT_BY_NAME, true, m_bSortFuncsByName );
 	menu.EnableCheck( ID_SORT_BY_LINE, true, !m_bSortFuncsByName );
@@ -961,16 +958,14 @@ void CEditor::onPopupFuncsSort( CTabPage& page, const CPoint& pt )
 	}
 }
 
-void CEditor::onPopupEncodings( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupEncodings( CTabPage& page, const CPoint& pt ) {
 	CMenu menu(IDC_POPUP_ENCODING);
 	preparePopup( menu );
 	int cmd = menu.TrackPopup( TPM_RETURNCMD|TPM_RIGHTBUTTON, pt, m_hWnd );
 	onCommand(cmd);
 }
 
-void CEditor::onPopupEOL( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupEOL( CTabPage& page, const CPoint& pt ) {
 	CMenu menu(IDC_POPUP_EOL);
 	preparePopup( menu );
 	int cmd = menu.TrackPopup( TPM_RETURNCMD|TPM_RIGHTBUTTON, pt, m_hWnd );
@@ -1011,8 +1006,7 @@ bool recalcPath(string& sPath)
 }
 
 
-void CEditor::onPopupShellMenu( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupShellMenu( CTabPage& page, const CPoint& pt ) {
 	string sFile = page.sFile;
 	if( !recalcPath(sFile) )
 		return;
@@ -1021,8 +1015,7 @@ void CEditor::onPopupShellMenu( CTabPage& page, const CPoint& pt )
 	m.ShowContextMenu( m_hWnd, pt );
 }
 
-void CEditor::onPopupTab( CTabPage& page, int iTab, const CPoint& pt )
-{
+void CEditor::onPopupTab( CTabPage& page, int iTab, const CPoint& pt ) {
 	CMenu menu( IDC_POPUP_TAB );
 	preparePopup( menu, &page );
 	string sAlternate = doAlternate(m_vTabs[iTab].sFile);
@@ -1066,8 +1059,7 @@ void CEditor::onPopupTab( CTabPage& page, int iTab, const CPoint& pt )
 	}
 }
 
-void CEditor::onPopupStyles( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupStyles( CTabPage& page, const CPoint& pt ) {
 	CMenu menu( IDC_POPUP_STYLE );
 
 	string sWord;
@@ -1109,8 +1101,7 @@ void CEditor::onPopupStyles( CTabPage& page, const CPoint& pt )
 		onCommand(cmd);
 }
 
-void CEditor::onPopupSci( CTabPage& page, const CPoint& pt )
-{
+void CEditor::onPopupSci( CTabPage& page, const CPoint& pt ) {
 	CMenu menu( IDC_POPUP_SCI );
 
 	bool hasSelection = page.sci.hasSelection(100);
@@ -1149,8 +1140,7 @@ void CEditor::onPopupSci( CTabPage& page, const CPoint& pt )
 	}
 }
 
-void CEditor::onPopupGoto(CTabPage& page, const CPoint& pt)
-{
+void CEditor::onPopupGoto(CTabPage& page, const CPoint& pt) {
 	CMenu menu( IDC_POPUP_GOTO );
 	g_lang.translateMenu( menu.hMenu() );
 	m_accelMenu.proceedMenu( menu.hMenu() );
@@ -1250,8 +1240,7 @@ void parseIncludes(CSciWrapper& sci, vector<CInclude>& v)
 	}
 }
 
-void CEditor::onPopupIncludes(CTabPage& page, const CPoint& pt)
-{
+void CEditor::onPopupIncludes(CTabPage& page, const CPoint& pt) {
 	vector<CInclude> vIncludes;
 	parseIncludes(page.sci, vIncludes);
 
@@ -1284,8 +1273,7 @@ void CEditor::onPopupIncludes(CTabPage& page, const CPoint& pt)
 	}
 }
 
-void CEditor::onPopupStatusbar( int part, CTabPage& page )
-{
+void CEditor::onPopupStatusbar( int part, CTabPage& page ) {
 	int x = m_statusbar.part2x(part);
 	CPoint pt = CPoint(x,-1);
 	m_statusbar.ClientToScreen(pt);
@@ -1299,8 +1287,7 @@ void CEditor::onPopupStatusbar( int part, CTabPage& page )
 	}
 }
 
-void CEditor::onPopup( HWND hCtrl, int x, int y )
-{
+void CEditor::onPopup( HWND hCtrl, int x, int y ) {
 	if( hCtrl && hCtrl==m_outline.hWnd() ) {
 		onPopupOutline( x, y );
 		return;
@@ -1323,27 +1310,7 @@ void CEditor::onPopup( HWND hCtrl, int x, int y )
 		return;
 	}
 	if( hCtrl && hCtrl==m_results.hWndCur() ) {
-		CFindResults& res = *m_results.Cur();
-		CMenu popup;
-		popup.Create(true);
-		popup.Append( ID_SEARCH_RESULTS_SELECTLINE, tr(L"Select Line on Navigate") );
-		popup.Check( ID_SEARCH_RESULTS_SELECTLINE, m_results.m_bSelectLine );
-//		popup.AppendSeparator();
-//		popup.Append( ID_EDIT_COPY, tr(L"Copy"), res.sci().hasSel() );
-//		popup.Append( ID_EDIT_SELECTALL, tr(L"Select All") );
-		popup.AppendSeparator();
-		popup.Append( ID_FOLDING_COLLAPSEALL, tr(L"Collapse All"), res.hasFolding() );
-		popup.Append( ID_FOLDING_EXPANDALL, tr(L"Expand All"), res.hasFolding() );
-		popup.AppendSeparator();
-		popup.Append( ID_VIEW_RESULTS, tr(L"Hide") );
-		switch( popup.TrackPopup(TPM_RETURNCMD, x, y, m_hWnd) ) {
-//		case ID_EDIT_COPY: res.sci().Copy(); break;
-//		case ID_EDIT_SELECTALL: res.sci().SelectAll(); break;
-		case ID_FOLDING_COLLAPSEALL: res.FoldAll( true ); break;
-		case ID_FOLDING_EXPANDALL: res.FoldAll( false ); break;
-		case ID_SEARCH_RESULTS_SELECTLINE: m_results.m_bSelectLine = !m_results.m_bSelectLine; break;
-		case ID_VIEW_RESULTS: ShowResults( false ); break;
-		}
+		onPopupResults( x, y );
 		return;
 	}
 

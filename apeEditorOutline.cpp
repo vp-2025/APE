@@ -164,7 +164,7 @@ void CEditor::onPopupOutline( int x, int y ) {
 	HWND hTree = m_outline.hWnd();
 	if( x==-1 && y==-1 ) { // from the keyboard: under the selected item
 		CRect r;
-		HTREEITEM h = TreeView_GetSelection( hTree );
+		auto h = TreeView_GetSelection( hTree );
 		if( !h || !TreeView_GetItemRect(hTree, h, &r, TRUE) )
 			r = CRect( 0, 0, 0, 0 );
 		POINT pt = { r.left, r.bottom };
@@ -174,8 +174,8 @@ void CEditor::onPopupOutline( int x, int y ) {
 	bool bItems = TreeView_GetCount( hTree )>0;
 	CMenu popup;
 	popup.Create(true);
-	popup.Append( ID_VIEW_OUTLINE_SELECTLINE, tr(L"Select Line on Navigate") );
-	popup.EnableCheck( ID_VIEW_OUTLINE_SELECTLINE, true, m_outline.m_bSelectLine );
+//	popup.Append( ID_VIEW_OUTLINE_SELECTLINE, tr(L"Select Line on Navigate") ); todo
+//	popup.EnableCheck( ID_VIEW_OUTLINE_SELECTLINE, true, m_outline.m_bSelectLine );
 	popup.Append( ID_VIEW_OUTLINE_SYNCFOLD, tr(L"Sync Folding with Editor") );
 	popup.EnableCheck( ID_VIEW_OUTLINE_SYNCFOLD, true, m_outline.m_bSyncFold );
 	popup.Append( ID_VIEW_OUTLINE_SHOWCLOSING, tr(L"Show Closing Lines") );
@@ -187,7 +187,7 @@ void CEditor::onPopupOutline( int x, int y ) {
 	popup.Append( ID_VIEW_OUTLINE, tr(L"Hide") );
 	int cmd = popup.TrackPopup( TPM_RETURNCMD, x, y, m_hWnd );
 	switch( cmd ) {
-	case ID_VIEW_OUTLINE_SELECTLINE: m_outline.m_bSelectLine = !m_outline.m_bSelectLine; break;
+//	case ID_VIEW_OUTLINE_SELECTLINE: m_outline.m_bSelectLine = !m_outline.m_bSelectLine; break;
 	case ID_VIEW_OUTLINE_SHOWCLOSING:
 		m_outline.m_bShowClosing = !m_outline.m_bShowClosing;
 		FillOutline();

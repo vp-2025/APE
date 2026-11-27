@@ -13,14 +13,16 @@ void CTable::Create(HWND hParent, HFONT hFont) {
 	if( hFont )
 		::SendMessage(m_hWnd, WM_SETFONT, (WPARAM)hFont, FALSE);
 	LOGFONT lf{}; // the styles of the editor: bold, italic, bold italic
-	if( ::GetObject(hFont ? hFont : (HFONT)::GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf) )
-		for( int i = 1; i < 4; i++ ) {
-			LOGFONT lfi = lf;
-			if( i & 1 )
-				lfi.lfWeight = FW_BOLD;
-			lfi.lfItalic = (i & 2) != 0;
-			m_hFonts[i] = CreateFontIndirect(&lfi);
-		}
+	if( ::GetObject(hFont ? hFont : (HFONT)::GetStockObject(DEFAULT_GUI_FONT), sizeof(lf), &lf) ) {
+		LOGFONT lfBold = lf, lfItalic = lf, lfBoldItalic = lf;
+		lfBold.lfWeight = FW_BOLD;
+		lfItalic.lfItalic = 1;
+		lfBoldItalic.lfWeight = FW_BOLD;
+		lfBoldItalic.lfItalic = 1;
+		m_hFonts[1] = CreateFontIndirect(&lfBold);
+		m_hFonts[2] = CreateFontIndirect(&lfItalic);
+		m_hFonts[3] = CreateFontIndirect(&lfBoldItalic);
+	}
 	::SendMessage(m_hWnd, CCM_SETUNICODEFORMAT, TRUE, 0); // LVN_GETDISPINFOW
 	// full row select: a click anywhere in the row selects it; only the cell is drawn selected (onCustomDraw)
 	ListView_SetExtendedListViewStyle(m_hWnd, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_DOUBLEBUFFER | LVS_EX_HEADERDRAGDROP);

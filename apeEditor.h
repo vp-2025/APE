@@ -87,6 +87,7 @@ public:
 	void onPopupGoto( CTabPage& page, const CPoint& pt );
 	void onPopup( HWND hCtrl, int x, int y );
 	void onPopupResultsTab( int i, const CPoint& pt ); // Rerun, Close, Close Other Tabs, Close All
+	void onPopupResults( int x, int y ); // in the results: Collapse All, Expand All, Hide
 
 	void UpdateToolbar();
 	void UpdateMenu( HMENU hMenu, CTabPage* pPage=nullptr );
