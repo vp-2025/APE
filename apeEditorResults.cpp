@@ -96,9 +96,18 @@ void CEditor::onNotificationResults( SCNotification* pNS ) {
 		if( m_results.m_bSelectLine && (pNS->updated & SC_UPDATE_SELECTION) && !m_results.Cur()->isFilling() && m_results.Cur()->isNewResult() )
 			onResultGoto( false );
 		break;
-	case SCN_DOUBLECLICK: // on a file: collapse/expand; else Scintilla selects word > line > none; Ctrl+click goes to the result
-		if( pNS->line>=0 && m_results.Cur()->sci().IsFoldHeader( (int)pNS->line ) )
+	case SCN_DOUBLECLICK: // on a file: collapse/expand; on a result: selected in the editor, the focus goes there
+		if( pNS->line>=0 && m_results.Cur()->sci().IsFoldHeader( (int)pNS->line ) ) {
 			m_results.Cur()->sci().ToggleFold( (int)pNS->line );
+			break;
+		}
+		{
+			CSciWrapper& sci = m_results.Cur()->sci();
+			int pos = pNS->position>=0 ? (int)pNS->position : sci.GetCurrentPos();
+			sci.SetSel( pos, pos ); // not the word selected by the double-click: the match at the click
+			m_results.Cur()->isNewResult();
+			onResultGoto( true );
+		}
 		break;
 	}
 }

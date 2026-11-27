@@ -47,6 +47,13 @@ public:
 	COLORREF editorFore(COLORREF clr) const;
 	COLORREF editorBack(COLORREF clr) const;
 
+	// the selection of the panes (outline, table): the selected item/cell, the current row
+	static COLORREF mix(COLORREF a, COLORREF b, int percentA); // a at percentA % over b
+	COLORREF paneBack() const;               // the background of a pane
+	COLORREF selBack(bool bFocus) const;     // the selected item: strong if the pane has the focus, else light
+	COLORREF selText() const;                // the text on selBack(true)
+	COLORREF rowBack(COLORREF back) const;   // the current row: the selection color at 10% over back
+
 	// main window: dark menu bar; returns true if msg is handled
 	bool onMenuBarMsg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT& lr);
 	// WM_CTLCOLOR*: returns brush or nullptr in light mode

@@ -407,21 +407,42 @@ void COutline::onItemExpanded(const NMTREEVIEWW* p, CSciWrapper& sci) {
 LRESULT COutline::onCustomDraw(NMTVCUSTOMDRAW* pCD) {
 	switch( pCD->nmcd.dwDrawStage ) {
 	case CDDS_PREPAINT:
-		return m_styled.empty() ? CDRF_DODEFAULT : CDRF_NOTIFYITEMDRAW;
+		return CDRF_NOTIFYITEMDRAW;
 	case CDDS_ITEMPOSTPAINT: { // over the text drawn by the tree
-		auto it = m_styled.find((HTREEITEM)pCD->nmcd.dwItemSpec);
+		auto h = (HTREEITEM)pCD->nmcd.dwItemSpec;
+		auto it = m_styled.find(h);
 		if( it != m_styled.end() )
 			drawStyled(pCD, it->second);
+		else
+		if( isSelected(h) ) // without the styles: one run in the color of the tree
+			drawStyled(pCD, vector<CRun>{{(int)ItemText(h).size(), (COLORREF)-1, 0, false, 0}});
 		return CDRF_DODEFAULT;
 	}
-	case CDDS_ITEMPREPAINT: // also the selected item: as the others, with a border around its text
-		return m_styled.count((HTREEITEM)pCD->nmcd.dwItemSpec) ? CDRF_NOTIFYPOSTPAINT : CDRF_DODEFAULT;
+	case CDDS_ITEMPREPAINT: { // the selected item: its whole row is tinted, under the lines and the buttons of the tree
+		auto h = (HTREEITEM)pCD->nmcd.dwItemSpec;
+		bool bSel = isSelected(h);
+		if( bSel ) {
+			CRect r;
+			if( TreeView_GetItemRect(m_hWnd, h, &r, FALSE) ) {
+				SetBkColor(pCD->nmcd.hdc, g_theme.rowBack(treeBack()));
+				ExtTextOutW(pCD->nmcd.hdc, 0, 0, ETO_OPAQUE, &r, nullptr, 0, nullptr);
+			}
+			pCD->clrTextBk = g_theme.rowBack(treeBack()); // the tree's own text, until it is drawn over
+		}
+		return bSel || m_styled.count(h) ? CDRF_NOTIFYPOSTPAINT : CDRF_DODEFAULT;
+	}
 	}
 	return CDRF_DODEFAULT;
 }
 
+COLORREF COutline::treeBack() {
+	COLORREF clr = TreeView_GetBkColor(m_hWnd);
+	return clr == (COLORREF)-1 ? GetSysColor(COLOR_WINDOW) : clr;
+}
+
 // the text of the item by the runs: the colors, the backgrounds and the fonts of the editor;
-// the selected item has a border: the highlight color if the tree has the focus, else grey
+// the selected item as the selected cell of the table: its row tinted, its text on the selection color
+// (strong with one readable text color if the tree has the focus, else light with the colors of the editor)
 void COutline::drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs) {
 	auto h = (HTREEITEM)pCD->nmcd.dwItemSpec;
 	CRect r;
@@ -430,12 +451,14 @@ void COutline::drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs) {
 	CRect rc;
 	::GetClientRect(m_hWnd, &rc);
 	r.right = rc.right; // a bold run is wider than the text of the tree
-	COLORREF clrBack = TreeView_GetBkColor(m_hWnd);
-	if( clrBack == (COLORREF)-1 )
-		clrBack = GetSysColor(COLOR_WINDOW);
+	bool bSel = isSelected(h);
+	bool bFocus = ::GetFocus() == m_hWnd;
+	COLORREF clrBack = bSel ? g_theme.rowBack(treeBack()) : treeBack();
 	COLORREF clrText = TreeView_GetTextColor(m_hWnd);
 	if( clrText == (COLORREF)-1 )
 		clrText = GetSysColor(COLOR_WINDOWTEXT);
+	COLORREF clrSelBack = g_theme.selBack(bFocus);
+	COLORREF clrSelText = g_theme.selText();
 
 	HDC hDC = pCD->nmcd.hdc;
 	SetBkColor(hDC, clrBack);
@@ -443,7 +466,13 @@ void COutline::drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs) {
 	wstring ws = ItemText(h);
 	auto hFont = (HFONT)::SendMessage(m_hWnd, WM_GETFONT, 0, 0);
 	HGDIOBJ hOld = SelectObject(hDC, hFont);
-	int x = r.left + 2 * GetSystemMetrics(SM_CXBORDER); // as the tree
+	int pad = 2 * GetSystemMetrics(SM_CXBORDER); // as the tree
+	int x = r.left + pad;
+	if( bSel ) { // the selection starts at the left of the text, as the tree draws it
+		CRect rl(r.left, r.top, x, r.bottom);
+		SetBkColor(hDC, clrSelBack);
+		ExtTextOutW(hDC, 0, 0, ETO_OPAQUE, &rl, nullptr, 0, nullptr);
+	}
 	int pos = 0;
 	for( const CRun& run : runs ) {
 		if( pos + run.len > (int)ws.size() )
@@ -452,20 +481,21 @@ void COutline::drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs) {
 		SIZE size{};
 		GetTextExtentPoint32W(hDC, ws.c_str() + pos, run.len, &size);
 		CRect rr(x, r.top, x + size.cx, r.bottom);
-		SetBkColor(hDC, run.bBack ? run.back : clrBack);
-		SetTextColor(hDC, run.fore == (COLORREF)-1 ? clrText : run.fore);
+		if( bSel ) {
+			SetBkColor(hDC, clrSelBack);
+			SetTextColor(hDC, bFocus ? clrSelText : run.fore == (COLORREF)-1 ? clrText : run.fore);
+		} else {
+			SetBkColor(hDC, run.bBack ? run.back : clrBack);
+			SetTextColor(hDC, run.fore == (COLORREF)-1 ? clrText : run.fore);
+		}
 		ExtTextOutW(hDC, x, r.top + (r.height() - size.cy) / 2, ETO_OPAQUE, &rr, ws.c_str() + pos, run.len, nullptr);
 		x += size.cx;
 		pos += run.len;
 	}
-	SelectObject(hDC, hOld);
-
-	if( pCD->nmcd.uItemState & (CDIS_SELECTED | CDIS_FOCUS) ) {
-		CRect rf(r.left, r.top, x + 2 * GetSystemMetrics(SM_CXBORDER), r.bottom);
-		COLORREF clr = ::GetFocus() == m_hWnd ? GetSysColor(COLOR_HIGHLIGHT)
-				: g_theme.isDark() ? CTheme::clrTextDisabled : GetSysColor(COLOR_BTNSHADOW);
-		HBRUSH hbr = CreateSolidBrush(clr);
-		FrameRect(hDC, &rf, hbr);
-		DeleteObject(hbr);
+	if( bSel ) { // and ends at the right of it
+		CRect rr(x, r.top, x + pad, r.bottom);
+		SetBkColor(hDC, clrSelBack);
+		ExtTextOutW(hDC, 0, 0, ETO_OPAQUE, &rr, nullptr, 0, nullptr);
 	}
+	SelectObject(hDC, hOld);
 }

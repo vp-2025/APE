@@ -26,12 +26,12 @@ static LRESULT CALLBACK ResultsProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM l
 			}
 		}
 		break;
-	case WM_LBUTTONDOWN: // Ctrl+click: the caret to the clicked match, then go to it like Enter
+	case WM_LBUTTONDOWN: // Ctrl+click: the caret to the clicked match, it is selected in the editor, the focus stays here
 		if( wParam & MK_CONTROL ) {
 			auto pos = ::SendMessage(hWnd, SCI_POSITIONFROMPOINT, (short)LOWORD(lParam), (short)HIWORD(lParam));
 			::SetFocus(hWnd);
 			::SendMessage(hWnd, SCI_SETEMPTYSELECTION, pos, 0);
-			::PostMessage(::GetParent(hWnd), WM_RESULTS_KEY, VK_RETURN, 0);
+			::PostMessage(::GetParent(hWnd), WM_RESULTS_KEY, VK_RETURN, 1);
 			return 0;
 		}
 		break;

@@ -126,9 +126,10 @@ void CEditor::onTableGoto( int row, int col, bool bFocus ) {
 		return;
 	CSciWrapper& sci = pPage->sci;
 	int p1, p2;
-	if( col<0 )
-		p1 = p2 = sci.GetLineIndentPosition( row );
-	else
+	if( col<0 ) { // the line number: the whole line, the caret at its start (no horizontal scroll)
+		p1 = sci.GetLineEndPosition( row );
+		p2 = sci.PositionFromLine( row );
+	} else
 	if( !m_table.GetCellRange(sci, row, col, p1, p2) )
 		return;
 	sci.EnsureVisible( p1, p2 ); // unfold
@@ -137,7 +138,7 @@ void CEditor::onTableGoto( int row, int col, bool bFocus ) {
 	if( vis<first || vis>=first+sci.LinesOnScreen() ) // not at the edge of the editor: a third from the top
 		sci.SetFirstVisibleLine( max(vis-sci.LinesOnScreen()/3, 0) );
 	sci.SetSel( p1, p2 );
-	sci.Call( SCI_SCROLLRANGE, p2, p1 ); // a cell far at the right
+	sci.Call( SCI_SCROLLRANGE, max(p1,p2), min(p1,p2) ); // a cell far at the right: its start is seen first
 	::SetFocus( bFocus ? sci.hWnd() : m_table.hWnd() );
 }
 
@@ -152,7 +153,7 @@ void CEditor::onPopupTable( int x, int y ) {
 		::ClientToScreen( hList, &pt );
 		x = pt.x; y = pt.y;
 	}
-	static const wchar_t* sepNames[] = { L"Tab (\t)", L"Semicolon (;)", L"Comma (,)" };
+	static const wchar_t* sepNames[] = { L"Tab (\\t)", L"Semicolon (;)", L"Comma (,)" };
 	char sep = m_table.sep();
 	wstring wsAuto = tr(L"Auto");
 	if( m_table.hSci() && m_table.m_sepMode==CTable::sepAuto ) // the detected one

@@ -65,4 +65,6 @@ public:
 	LRESULT onCustomDraw(NMTVCUSTOMDRAW* pCD); // the items as their lines in the editor
 private:
 	void drawStyled(NMTVCUSTOMDRAW* pCD, const vector<CRun>& runs);
+	COLORREF treeBack();          // the background color of the tree
+	bool isSelected(HTREEITEM h) { return h && h == TreeView_GetSelection(m_hWnd); }  // the selected item: drawn as the selected cell of the table
 };

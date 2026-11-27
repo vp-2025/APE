@@ -341,20 +341,16 @@ LRESULT CTable::onCustomDraw(NMLVCUSTOMDRAW* pCD) {
 		}
 		int col = pCD->iSubItem - 1; // the data column
 		bool bSel = bCurRow && col == m_selCol;
-		bool bDark = g_theme.isDark();
 		COLORREF back, foreSel = (COLORREF)-1; // -1: the text in the colors of the editor
 		if( !bSel ) {
-			back = bDark ? CTheme::clrEditorBack : GetSysColor(COLOR_WINDOW);
-			if( bCurRow ) { // the other cells of the current row: the selection color at 10% over the background
-				COLORREF sel = bDark ? RGB(0x26,0x4F,0x78) : GetSysColor(COLOR_HIGHLIGHT);
-				back = mixColor(sel, back, 10);
-			}
-		} else
-		if( hasFocus() ) { // a strong background: one readable color
-			foreSel = bDark ? RGB(0xFF,0xFF,0xFF) : GetSysColor(COLOR_HIGHLIGHTTEXT);
-			back = bDark ? RGB(0x26,0x4F,0x78) : GetSysColor(COLOR_HIGHLIGHT);
-		} else // the table is not focused: the cell is still seen
-			back = bDark ? CTheme::clrPressed : RGB(0xCC,0xE8,0xFF);
+			back = g_theme.paneBack();
+			if( bCurRow ) // the other cells of the current row: the selection color at 10% over the background
+				back = g_theme.rowBack(back);
+		} else {
+			back = g_theme.selBack(hasFocus()); // not focused: the cell is still seen
+			if( hasFocus() ) // a strong background: one readable color
+				foreSel = g_theme.selText();
+		}
 		drawCell(pCD->nmcd.hdc, row, col, back, foreSel);
 		return CDRF_SKIPDEFAULT;
 	}
@@ -455,10 +451,8 @@ void CTable::drawLineNo(HDC hDC, int row, bool bCurRow) {
 		fore = a.fore;
 		back = a.back;
 	}
-	if( bCurRow ) {
-		COLORREF sel = bDark ? RGB(0x26,0x4F,0x78) : GetSysColor(COLOR_HIGHLIGHT);
-		back = mixColor(sel, back, 10);
-	}
+	if( bCurRow )
+		back = g_theme.rowBack(back);
 	SetBkColor(hDC, back);
 	ExtTextOutW(hDC, 0, 0, ETO_OPAQUE, &r, nullptr, 0, nullptr);
 	wstring ws = to_wstring(row + 1);
@@ -486,8 +480,7 @@ LRESULT CTable::onHeaderDraw(NMCUSTOMDRAW* pCD) {
 		RECT r = pCD->rc;
 		int col = (int)pCD->dwItemSpec;
 		bool bCur = col > 0 && col - 1 == m_selCol && selRow() >= 0; // col: the list column
-		COLORREF clrSel = bDark ? RGB(0x26,0x4F,0x78) : GetSysColor(COLOR_HIGHLIGHT);
-		COLORREF back = bCur ? mixColor(clrSel, clrBack, hasFocus() ? 45 : 25) : clrBack;
+		COLORREF back = bCur ? mixColor(g_theme.selBack(true), clrBack, hasFocus() ? 45 : 25) : clrBack;
 		if( pCD->uItemState & CDIS_SELECTED ) // pressed
 			back = mixColor(bDark ? RGB(0xFF,0xFF,0xFF) : RGB(0,0,0), back, 10);
 		HBRUSH hbr = CreateSolidBrush(back);

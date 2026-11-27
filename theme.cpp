@@ -446,6 +446,29 @@ void CTheme::applySci(HWND hSci) const {
 	}
 }
 
+COLORREF CTheme::mix(COLORREF a, COLORREF b, int percentA) {
+	auto m = [percentA](int x, int y) { return (x * percentA + y * (100 - percentA)) / 100; };
+	return RGB(m(GetRValue(a), GetRValue(b)), m(GetGValue(a), GetGValue(b)), m(GetBValue(a), GetBValue(b)));
+}
+
+COLORREF CTheme::paneBack() const {
+	return m_bDark ? clrEditorBack : GetSysColor(COLOR_WINDOW);
+}
+
+COLORREF CTheme::selBack(bool bFocus) const {
+	if( bFocus )
+		return m_bDark ? RGB(0x26, 0x4F, 0x78) : GetSysColor(COLOR_HIGHLIGHT);
+	return m_bDark ? clrPressed : RGB(0xCC, 0xE8, 0xFF);
+}
+
+COLORREF CTheme::selText() const {
+	return m_bDark ? RGB(0xFF, 0xFF, 0xFF) : GetSysColor(COLOR_HIGHLIGHTTEXT);
+}
+
+COLORREF CTheme::rowBack(COLORREF back) const {
+	return mix(selBack(true), back, 10);
+}
+
 COLORREF CTheme::editorFore(COLORREF clr) const {
 	if( !m_bDark )
 		return clr;

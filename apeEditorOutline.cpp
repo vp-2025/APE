@@ -95,17 +95,28 @@ LRESULT CEditor::onNotificationOutline( NMHDR* pNMHdr ) {
 		break;
 	case NM_CUSTOMDRAW: // the comments as in the editor
 		return m_outline.onCustomDraw( (NMTVCUSTOMDRAW*)pNMHdr );
-	case NM_CLICK: // on the selected item there is no TVN_SELCHANGED: select its line again
-		if( m_outline.m_bSelectLine ) {
+	case NM_CLICK: // Ctrl+click: the line is selected in the editor, the focus stays here;
+		{          // on the selected item there is no TVN_SELCHANGED: select its line again
+			bool bCtrl = (::GetKeyState(VK_CONTROL) & 0x8000) != 0;
+			if( !bCtrl && !m_outline.m_bSelectLine )
+				break;
 			TVHITTESTINFO hti{};
 			::GetCursorPos( &hti.pt );
 			::ScreenToClient( hTree, &hti.pt );
 			HTREEITEM h = TreeView_HitTest( hTree, &hti );
-			if( h && (hti.flags & TVHT_ONITEM) && h==TreeView_GetSelection(hTree) )
+			if( !h || !(hti.flags & TVHT_ONITEM) )
+				break;
+			if( bCtrl ) {
+				if( h!=TreeView_GetSelection(hTree) )
+					TreeView_SelectItem( hTree, h );
+				onOutlineGoto( false );
+				return TRUE;
+			}
+			if( h==TreeView_GetSelection(hTree) )
 				onOutlineGoto( false );
 		}
 		break;
-	case NM_DBLCLK: // go to the line, the item is not expanded/collapsed
+	case NM_DBLCLK: // the line is selected in the editor, the focus goes there; the item is not expanded/collapsed
 		{
 			TVHITTESTINFO hti{};
 			::GetCursorPos( &hti.pt );
@@ -143,14 +154,8 @@ void CEditor::onOutlineGoto( bool bFocus ) {
 	int first = sci.GetFirstVisibleLine();
 	if( vis<first || vis>=first+sci.LinesOnScreen() ) // not at the edge of the editor: a third from the top
 		sci.SetFirstVisibleLine( max(vis-sci.LinesOnScreen()/3, 0) );
-	if( bFocus ) { // to edit there: the caret at the indentation
-		int pos = sci.GetLineIndentPosition( line );
-		sci.SetSel( pos, pos );
-		::SetFocus( sci.hWnd() );
-	} else {
-		sci.SetSel( p2, p1 ); // the whole line, the caret at its start: no horizontal scroll
-		::SetFocus( m_outline.hWnd() );
-	}
+	sci.SetSel( p2, p1 ); // the whole line, the caret at its start: no horizontal scroll
+	::SetFocus( bFocus ? sci.hWnd() : m_outline.hWnd() );
 }
 
 void CEditor::onPopupOutline( int x, int y ) {

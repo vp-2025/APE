@@ -1682,7 +1682,7 @@ LRESULT CEditor::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 			if( !m_results.Cur() || m_results.Cur()->ToggleFoldAtCaret() ) // on a file: collapse/expand
 				break;
 			m_results.Cur()->isNewResult();
-			onResultGoto( true );
+			onResultGoto( lParam==0 ); // Enter: the focus to the editor; Ctrl+click: it stays in the results
 		} else
 			ShowResults( false );
 		break;

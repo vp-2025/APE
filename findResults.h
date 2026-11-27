@@ -12,7 +12,8 @@
 // matches are bold, a result line shows/opens the file in the editor
 // CResultsTabs: every search can have its own tab, the caption is the search string
 
-#define WM_RESULTS_KEY (WM_USER+10) // to the parent: Enter or Escape in the results, wParam is the key
+#define WM_RESULTS_KEY (WM_USER+10) // to the parent: Enter or Escape in the results, wParam is the key;
+                                    // VK_RETURN with lParam 1: Ctrl+click, the match is selected, the focus stays in the results
 
 struct CFindMatch {
 	int offset; // from the start of the source line
