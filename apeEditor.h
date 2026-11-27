@@ -86,8 +86,6 @@ public:
 	void onPopupStatusbar( int part, CTabPage& page );
 	void onPopupGoto( CTabPage& page, const CPoint& pt );
 	void onPopup( HWND hCtrl, int x, int y );
-	void onPopupResultsTab( int i, const CPoint& pt ); // Rerun, Close, Close Other Tabs, Close All
-	void onPopupResults( int x, int y ); // in the results: Collapse All, Expand All, Hide
 
 	void UpdateToolbar();
 	void UpdateMenu( HMENU hMenu, CTabPage* pPage=nullptr );
@@ -145,7 +143,17 @@ public:
 	void ViewToolbar();
 	void ShowToolbar(bool bShow);
 
-	// find/replace results
+	/////////////////////////////////////////////////////////////////
+	// the panes: the search results, the outline, the table
+	// shared by them: apeEditor.cpp
+private:
+	enum CFocusView { viewEditor, viewResults, viewOutline, viewTable };
+	void SetActiveTabs( CFocusView view );	// the focused view has the colored current tab, the others are grey; the outline has no tabs
+	bool onSplitterMouse( UINT msg, const CPoint& pt );
+public:
+
+	/////////////////////////////////////////////////////////////////
+	// find/replace results: apeEditorResults.cpp
 	// sCaption: the tab caption, sWhat: the start of the title; both in the encoding of the current file
 	void ShowFindResults( const string& sWhat, const string& sMatches, const vector<Sci_CharacterRange>& ranges, const string& sCaption, bool bNewTab );
 	void ShowResults( bool bShow );
@@ -154,15 +162,15 @@ private:
 	int ResultsH();	// height of the results with the splitter, 0 if hidden
 	CRect ResultsSplitterRect();
 	void onNotificationResults( SCNotification* pNS );
-	enum CFocusView { viewEditor, viewResults, viewOutline, viewTable };
-	void SetActiveTabs( CFocusView view );	// the focused view has the colored current tab, the others are grey; the outline has no tabs
 	void onResultGoto( bool bFocus );
 	void onResultNext( bool bNext );
 	void RerunResults( int i );	// the same search again into the results tab i, without the find dialog
-	bool onSplitterMouse( UINT msg, const CPoint& pt );
+	void onPopupResultsTab( int i, const CPoint& pt ); // Rerun, Close, Close Other Tabs, Close All
+	void onPopupResults( int x, int y ); // in the results: Collapse All, Expand All, Hide
 public:
 
-	// outline: the folding of the current file as a tree
+	/////////////////////////////////////////////////////////////////
+	// outline: the folding of the current file as a tree: apeEditorOutline.cpp
 	void ShowOutline( bool bShow );
 private:
 	bool OutlineShown() { return m_outline.m_bVisible && m_tabs.GetItemCount()>0; }	// View > Outline and an editor is opened
@@ -177,7 +185,8 @@ private:
 	void onPopupOutline( int x, int y );
 public:
 
-	// table: the lines of the current file split by tab/';'/',' in a list view, under the editor
+	/////////////////////////////////////////////////////////////////
+	// table: the lines of the current file split by tab/';'/',' in a list view, under the editor: apeEditorTable.cpp
 	void ShowTable( bool bShow );	// by the user: View > Table, Escape, Hide
 	static bool isTableFile( const string& sFile );	// .csv, .tsv, .tab: the table is shown with the file
 private:
@@ -192,6 +201,7 @@ private:
 	void onTableGoto( int row, int col, bool bFocus );	// the cell (col<0: the line) -> selected in the editor
 	void onPopupTable( int x, int y );
 public:
+	/////////////////////////////////////////////////////////////////
 
 	void onAutoComplete( CSciWrapper& sci );
 	void onCallTip( CSciWrapper& sci );
